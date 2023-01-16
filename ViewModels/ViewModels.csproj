@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Department\" />
+    <Folder Include="Common\Unit\" />
+    <Folder Include="TomeOnTools\" />
     <Folder Include="Shared\Interfaces\" />
+    <Folder Include="WeldingRodRecord\" />
   </ItemGroup>
 
   <ItemGroup>

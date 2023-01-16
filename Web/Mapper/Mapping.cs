@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Models.Common;
 using ViewModels;
+using ViewModels.Common.Contractor;
 
 namespace Models.Mapper
 {
@@ -7,7 +9,11 @@ namespace Models.Mapper
     {
         public Mapping()
         {
-
+            CreateMap<ContractorModifyViewModel, Contractor>().ReverseMap();
+            CreateMap<Contractor, ContractorDetailViewModel>().ReverseMap();
+            CreateMap<ContractorModifyViewModel, ContractorDetailViewModel>().ReverseMap();
+            CreateMap<Contractor, ContractorBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ContractorBriefViewModel>().ReverseMap();
             //IgnoreGlobalProperties();
         }
         //private void IgnoreGlobalProperties()
