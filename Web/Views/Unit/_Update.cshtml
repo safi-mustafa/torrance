@@ -1,0 +1,36 @@
+﻿@using Enums
+@using ViewModels.Common.Unit;
+@model UnitModifyViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-600"></label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Name" />
+                    <span asp-validation-for="Name" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3 profile-input">
+                    <label asp-for="CostTrackerUnit" class="form-label fw-600"></label>
+                    <input asp-for="CostTrackerUnit" type="text" class="form-control" />
+                    <span asp-validation-for="CostTrackerUnit" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group profile-input">
+                    <label asp-for="Type" class="control-label form-label fw-600"></label>
+                    <select asp-for="Type" asp-items="Html.GetEnumSelectList(typeof(LogType))" class="form-control profile-input"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" asp-for="Id" />

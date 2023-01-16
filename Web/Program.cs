@@ -8,28 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using DataLibrary;
 using Models;
 using IdentityProvider.Seed;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Diagnostics;
-using Microsoft.AspNet.Identity;
+
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repositories.Services.CommonServices.ContractorService;
+using Repositories.Services.CommonServices.UnitService;
+using Repositories.Services.CommonServices.DepartmentService;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ChargieContextConnection") ?? throw new InvalidOperationException("Connection string 'ChargieContextConnection' not found.");
-
-builder.Services.AddDbContext<ToranceContext>(options =>
-    options.UseSqlServer(connectionString));
-
 
 builder.Services.ConfigureServices(builder.Configuration);
-//builder.Services.AddAuthorization(options =>
-//{
-//    // By default, all incoming requests will be authorized according to the default policy.
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
+
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
-//builder.Services.AddRazorPages();
 
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -38,8 +29,11 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
+builder.Services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
 builder.Services.AddHostedService<SeedWorker>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,11 +57,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapControllerRoute(
         name: "default",
-        //pattern: "{controller=Account}/{action=Login}/{id?}");
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
-
-//app.MapRazorPages();
-//app.MapControllers();
 
 app.Run();

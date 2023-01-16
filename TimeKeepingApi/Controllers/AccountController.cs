@@ -9,12 +9,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
+using ViewModels.Employee;
 
 namespace ChargieApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ChargieController
+    public class AccountController : TorranceController
     {
         public IConfiguration _configuration;
         private readonly ToranceContext _db;
@@ -41,77 +42,77 @@ namespace ChargieApi.Controllers
         [HttpPost]
         [Route("/api/Account/Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(int pincode)
+        public async Task<IActionResult> Login(string pincode)
         {
             IRepositoryResponse result;
-            //try
-            //{
-            //    _logger.LogInformation("Entered Login Endpoint", "login method 1");
-            //    if (ModelState.IsValid)
-            //    {
-            //        _logger.LogInformation("Model State is valid", "login method 2");
-            //        var user = await _db.Employees.Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
-            //        if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
-            //        {
-            //            ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
-            //            _logger.LogError("Approval for this account is still pending.");
+            try
+            {
+                _logger.LogInformation("Entered Login Endpoint", "login method 1");
+                if (ModelState.IsValid)
+                {
+                    _logger.LogInformation("Model State is valid", "login method 2");
+                    var user = await _db.Employees.Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
+                    if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
+                    {
+                        ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
+                        _logger.LogError("Approval for this account is still pending.");
 
-            //            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-            //            var check = ReturnProcessedResponse(result);
-            //            return check;
-            //        }
+                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                        var check = ReturnProcessedResponse(result);
+                        return check;
+                    }
 
-            //        if (user != null)
-            //        {
-            //            var name = User?.Identity?.Name;
-            //            _logger.LogInformation("User logged in.", "login method 4");
+                    if (user != null)
+                    {
+                        var name = User?.Identity?.Name;
+                        _logger.LogInformation("User logged in.", "login method 4");
 
-            //            var fullName = $"{user?.FirstName} {user?.LastName}";
+                        var fullName = $"{user?.FirstName} {user?.LastName}";
 
-            //            var authClaims = new List<Claim>
-            //            {
-            //                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //                new Claim(ClaimTypes.Name, user.FirstName),
-            //                new Claim("FullName", fullName),
-            //                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            //            };
+                        var authClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.Name, user.FirstName),
+                            new Claim("FullName", fullName),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
 
-            //            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-            //            var token = new JwtSecurityToken
-            //                (
-            //                    issuer: _configuration["JWT:ValidIssuer"],
-            //                    audience: _configuration["JWT:ValidAudience"],
-            //                    expires: DateTime.Now.AddHours(12),
-            //                    claims: authClaims,
-            //                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            //               );
+                        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                        var token = new JwtSecurityToken
+                            (
+                                issuer: _configuration["JWT:ValidIssuer"],
+                                audience: _configuration["JWT:ValidAudience"],
+                                expires: DateTime.Now.AddHours(12),
+                                claims: authClaims,
+                                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                           );
 
-            //            var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
+                        var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
 
-            //            var responseModel = new RepositoryResponseWithModel<TokenVM>();
-            //            responseModel.ReturnModel = new TokenVM
-            //            {
-            //                Token = new JwtSecurityTokenHandler().WriteToken(token),
-            //                Expiry = token.ValidTo,
-            //                UserDetail = userDetail
-            //            };
-            //            return ReturnProcessedResponse<TokenVM>(responseModel);
-            //        }
+                        var responseModel = new RepositoryResponseWithModel<TokenVM>();
+                        responseModel.ReturnModel = new TokenVM
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            Expiry = token.ValidTo,
+                            UserDetail = userDetail
+                        };
+                        return ReturnProcessedResponse<TokenVM>(responseModel);
+                    }
 
-            //        else
-            //        {
-            //            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            //            _logger.LogError("Invalid login attempt");
-            //            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-            //            return ReturnProcessedResponse(result);
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ModelState.AddModelError(string.Empty, ex.Message);
-            //    _logger.LogError(ex.Message, "Login Endpoint Exception msg");
-            //}
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        _logger.LogError("Invalid login attempt");
+                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                        return ReturnProcessedResponse(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                _logger.LogError(ex.Message, "Login Endpoint Exception msg");
+            }
             result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
             return ReturnProcessedResponse(result);
         }

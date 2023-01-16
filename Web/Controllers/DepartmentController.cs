@@ -1,0 +1,32 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Repositories.Services.CommonServices.DepartmentService;
+using ViewModels.Common.Department;
+using ViewModels.DataTable;
+
+namespace Web.Controllers
+{
+    //[Authorize(Roles = "SuperAdmin")]
+    [Authorize]
+    public class DepartmentController : CrudBaseController<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel, DepartmentDetailViewModel, DepartmentSearchViewModel>
+    {
+        private readonly IDepartmentService _DepartmentService;
+        private readonly ILogger<DepartmentController> _logger;
+
+        public DepartmentController(IDepartmentService DepartmentService, ILogger<DepartmentController> logger, IMapper mapper) : base(DepartmentService, logger, mapper, "Department", "Departments")
+        {
+            _DepartmentService = DepartmentService;
+            _logger = logger;
+        }
+
+        public override List<DataTableViewModel> GetColumns()
+        {
+            return new List<DataTableViewModel>()
+            {
+                new DataTableViewModel{title = "Name",data = "Name"},
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+
+            };
+        }
+    }
+}

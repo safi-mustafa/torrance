@@ -8,7 +8,7 @@ using ViewModels.Shared;
 namespace ChargieApi.Controllers
 {
     [Authorize]
-    public class ChargieController : ControllerBase
+    public class TorranceController : ControllerBase
     {
         protected IActionResult ReturnProcessedResponse(IRepositoryResponse response)
         {

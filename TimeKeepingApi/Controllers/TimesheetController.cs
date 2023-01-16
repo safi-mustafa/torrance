@@ -8,7 +8,7 @@ namespace ChargieApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TimesheetController : ChargieController
+    public class TimesheetController : TorranceController
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;

@@ -13,7 +13,7 @@ namespace Web.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("ChargieContextConnection") ?? throw new InvalidOperationException("Connection string 'ChargieContextConnection' not found.");
+            var connectionString = configuration.GetConnectionString("TorranceConnection") ?? throw new InvalidOperationException("Connection string 'TorranceConnection' not found.");
 
             services.AddDbContext<ToranceContext>(options =>
                 options
@@ -39,7 +39,7 @@ namespace Web.Extensions
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 5;
+                options.Password.RequiredLength = 4;
                 options.Password.RequiredUniqueChars = 0;
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);

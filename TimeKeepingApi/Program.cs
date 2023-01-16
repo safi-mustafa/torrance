@@ -23,15 +23,11 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<ToranceContext>(options =>
 {
-    options.UseSqlServer(
-    configuration.GetConnectionString("ChargieContextConnection")
-    , b => b.MigrationsAssembly("DataLibrary")
-    );
+
+    options.UseSqlServer(configuration.GetConnectionString("TorranceConnection"), b => b.MigrationsAssembly("DataLibrary"))
+    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
 });
 
-builder.Services.AddDbContext<ToranceContext>(options => options
-            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
-            .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(Mapping));
 
@@ -70,7 +66,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 5;
+    options.Password.RequiredLength = 4;
     options.Password.RequiredUniqueChars = 0;
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
