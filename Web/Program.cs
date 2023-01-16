@@ -7,12 +7,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DataLibrary;
 using Models;
+using IdentityProvider.Seed;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Diagnostics;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Repositories.Services.CommonServices.ContractorService;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ChargieContextConnection") ?? throw new InvalidOperationException("Connection string 'ChargieContextConnection' not found.");
 
 builder.Services.AddDbContext<ToranceContext>(options =>
     options.UseSqlServer(connectionString));
+
 
 builder.Services.ConfigureServices(builder.Configuration);
 //builder.Services.AddAuthorization(options =>
@@ -24,13 +31,15 @@ builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 //builder.Services.AddRazorPages();
 
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.Converters.Add(new StringEnumConverter());
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
-//builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddHostedService<SeedWorker>();
+builder.Services.AddScoped<IContractorService, ContractorService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

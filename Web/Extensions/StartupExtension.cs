@@ -1,5 +1,6 @@
 ﻿using DataLibrary;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Mapper;
@@ -21,7 +22,15 @@ namespace Web.Extensions
             services.AddAutoMapper(typeof(Mapping));
 
             services.AddDefaultIdentity<ToranceUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ToranceContext>();
+                .AddUserStore<UserStore<ToranceUser, ToranceRole, ToranceContext, long>>()
+                .AddRoles<ToranceRole>()
+                .AddRoleManager<RoleManager<ToranceRole>>()
+                .AddEntityFrameworkStores<ToranceContext>()
+                .AddSignInManager<SignInManager<ToranceUser>>()
+                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ToranceUser>>()
+                .AddDefaultTokenProviders()
+                 .AddDefaultUI();
+
             //services.AddAuthorization();
             services.Configure<IdentityOptions>(options =>
             {
