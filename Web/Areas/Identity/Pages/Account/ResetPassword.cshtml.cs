@@ -17,9 +17,9 @@ namespace Web.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<ChargieUser> _userManager;
+        private readonly UserManager<ToranceUser> _userManager;
 
-        public ResetPasswordModel(UserManager<ChargieUser> userManager)
+        public ResetPasswordModel(UserManager<ToranceUser> userManager)
         {
             _userManager = userManager;
         }

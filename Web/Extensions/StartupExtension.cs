@@ -14,14 +14,14 @@ namespace Web.Extensions
         {
             var connectionString = configuration.GetConnectionString("ChargieContextConnection") ?? throw new InvalidOperationException("Connection string 'ChargieContextConnection' not found.");
 
-            services.AddDbContext<ChargieContext>(options =>
+            services.AddDbContext<ToranceContext>(options =>
                 options
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(Mapping));
 
-            services.AddDefaultIdentity<ChargieUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ChargieContext>();
+            services.AddDefaultIdentity<ToranceUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ToranceContext>();
             //services.AddAuthorization();
             services.Configure<IdentityOptions>(options =>
             {

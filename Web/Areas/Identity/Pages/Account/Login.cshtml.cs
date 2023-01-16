@@ -20,10 +20,10 @@ namespace Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<ChargieUser> _signInManager;
+        private readonly SignInManager<ToranceUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ChargieUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ToranceUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

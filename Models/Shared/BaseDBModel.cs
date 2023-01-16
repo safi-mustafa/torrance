@@ -2,7 +2,7 @@
 using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Models.Models.Shared
+namespace Helpers.Models.Shared
 {
     public abstract class BaseDBModel : IBaseModel
 

@@ -5,22 +5,40 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Common.Interfaces;
-using Models.Models.Shared;
+using Helpers.Models.Shared;
 using System.Security.Claims;
+using Models.TimeOnTools;
+using Models.Common;
+using Models.WeldingRodRecord;
 
 namespace DataLibrary;
 
-public class ChargieContext : IdentityDbContext<ChargieUser, IdentityRole<long>, long>
+public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ChargieContext(DbContextOptions<ChargieContext> options, IHttpContextAccessor httpContextAccessor)
+    public ToranceContext(DbContextOptions<ToranceContext> options, IHttpContextAccessor httpContextAccessor)
         : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
     }
    
-
+    public DbSet<Contractor> Contractors { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Unit> Units { get; set; }
+    public DbSet<Folder> Folders { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<PermitType> PermitTypes { get; set; }
+    public DbSet<ReworkDelay> ReworkDelays { get; set; }
+    public DbSet<Shift> Shifts { get; set; }
+    public DbSet<ShiftDelay> ShiftDelays { get; set; }
+    public DbSet<StatementOfWork> StatementOfWorks { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<RodType> RodTypes { get; set; }
+    public DbSet<WeldMethod> WeldMethods { get; set; }
+    public DbSet<WRRLog> WRRLogs { get; set; }
+    public DbSet<TOTLog> TOTLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,7 +61,7 @@ public class ChargieContext : IdentityDbContext<ChargieUser, IdentityRole<long>,
         var userId = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var userIdParsed = !string.IsNullOrEmpty(userId) ? long.Parse(userId) : 0;
 
-        var addedList = ChangeTracker.Entries().Where(m => (m.Entity is BaseDBModel || m.Entity is ChargieUser) && m.State == EntityState.Added);
+        var addedList = ChangeTracker.Entries().Where(m => (m.Entity is BaseDBModel || m.Entity is ToranceUser) && m.State == EntityState.Added);
         foreach (var item in addedList)
         {
             if (item.Entity is IBaseModel)
@@ -56,7 +74,7 @@ public class ChargieContext : IdentityDbContext<ChargieUser, IdentityRole<long>,
                 ((IBaseModel)item.Entity).UpdatedOn = DateTime.Now;
             }
         }
-        var updatedList = ChangeTracker.Entries().Where(m => (m.Entity is BaseDBModel || m.Entity is ChargieUser) && m.State == EntityState.Modified);
+        var updatedList = ChangeTracker.Entries().Where(m => (m.Entity is BaseDBModel || m.Entity is ToranceUser) && m.State == EntityState.Modified);
         foreach (var item in updatedList)
         {
             if (item.Entity is BaseDBModel)

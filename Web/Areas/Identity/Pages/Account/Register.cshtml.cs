@@ -24,17 +24,17 @@ namespace Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ChargieUser> _signInManager;
-        private readonly UserManager<ChargieUser> _userManager;
-        private readonly IUserStore<ChargieUser> _userStore;
-        private readonly IUserEmailStore<ChargieUser> _emailStore;
+        private readonly SignInManager<ToranceUser> _signInManager;
+        private readonly UserManager<ToranceUser> _userManager;
+        private readonly IUserStore<ToranceUser> _userStore;
+        private readonly IUserEmailStore<ToranceUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<ChargieUser> userManager,
-            IUserStore<ChargieUser> userStore,
-            SignInManager<ChargieUser> signInManager,
+            UserManager<ToranceUser> userManager,
+            IUserStore<ToranceUser> userStore,
+            SignInManager<ToranceUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -155,27 +155,27 @@ namespace Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ChargieUser CreateUser()
+        private ToranceUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<ChargieUser>();
+                return Activator.CreateInstance<ToranceUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ChargieUser)}'. " +
-                    $"Ensure that '{nameof(ChargieUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ToranceUser)}'. " +
+                    $"Ensure that '{nameof(ToranceUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<ChargieUser> GetEmailStore()
+        private IUserEmailStore<ToranceUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<ChargieUser>)_userStore;
+            return (IUserEmailStore<ToranceUser>)_userStore;
         }
     }
 }

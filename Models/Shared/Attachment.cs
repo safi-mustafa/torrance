@@ -1,6 +1,6 @@
 ﻿using Enums;
 
-namespace Models.Models.Shared
+namespace Helpers.Models.Shared
 {
     public class Attachment : BaseDBModel
     {

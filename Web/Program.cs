@@ -11,7 +11,7 @@ using Models;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ChargieContextConnection") ?? throw new InvalidOperationException("Connection string 'ChargieContextConnection' not found.");
 
-builder.Services.AddDbContext<ChargieContext>(options =>
+builder.Services.AddDbContext<ToranceContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.ConfigureServices(builder.Configuration);

@@ -21,7 +21,7 @@ IWebHostEnvironment environment = builder.Environment;
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<ChargieContext>(options =>
+builder.Services.AddDbContext<ToranceContext>(options =>
 {
     options.UseSqlServer(
     configuration.GetConnectionString("ChargieContextConnection")
@@ -29,7 +29,7 @@ builder.Services.AddDbContext<ChargieContext>(options =>
     );
 });
 
-builder.Services.AddDbContext<ChargieContext>(options => options
+builder.Services.AddDbContext<ToranceContext>(options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
             .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 

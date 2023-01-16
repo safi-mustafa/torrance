@@ -2,6 +2,7 @@
 {
     public enum AttachmentEntityType
     {
-        
+        Folder,
+        Employee
     }
 }

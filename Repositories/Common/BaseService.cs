@@ -3,7 +3,7 @@ using DataLibrary;
 using Helpers.Extensions;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
-using Models.Models.Shared;
+using Helpers.Models.Shared;
 using Pagination;
 using Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -17,11 +17,11 @@ namespace Repositories.Common
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
-        private readonly ChargieContext _db;
+        private readonly ToranceContext _db;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
 
-        public BaseService(ChargieContext db, ILogger logger, IMapper mapper)
+        public BaseService(ToranceContext db, ILogger logger, IMapper mapper)
         {
             _db = db;
             _logger = logger;

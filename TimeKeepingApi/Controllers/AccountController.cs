@@ -17,7 +17,7 @@ namespace ChargieApi.Controllers
     public class AccountController : ChargieController
     {
         public IConfiguration _configuration;
-        private readonly ChargieContext _db;
+        private readonly ToranceContext _db;
         private readonly ILogger<AccountController> _logger;
         private readonly IRepositoryResponse _response;
         private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ namespace ChargieApi.Controllers
         public AccountController
             (
                 IConfiguration configuration, 
-                ChargieContext db, 
+                ToranceContext db, 
                 ILogger<AccountController> logger, 
                 IRepositoryResponse response,
                 IMapper mapper
