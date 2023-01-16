@@ -68,28 +68,27 @@ namespace IdentityProvider.Seed
                 var userId = "";
                 if (!alreadyCreatedUsers)
                 {
-                    var user = CreateUser();
-                    await _userStore.SetUserNameAsync(user, "info@precisionmaterial.net", CancellationToken.None);
-                    user.Email = "info@precisionmaterial.net";
-                    if ((await _userManager.CreateAsync(user, "infoadmin")).Succeeded)
+                    var user = new ToranceUser();
+                    await _userStore.SetUserNameAsync(user, "admin@centangle.com", CancellationToken.None);
+                    user.Email = "admin@centangle.com";
+                    if ((await _userManager.CreateAsync(user, "Admin@123")).Succeeded)
                     {
                         var roleCheck = "SuperAdmin";
                         if ((await _userManager.AddToRoleAsync(user, roleCheck)).Succeeded)
                         {
                             userId = await _userManager.GetUserIdAsync(user);
-
                         }
                     }
                 }
                 else
                 {
-                    var adminId = context.Users.Where(x => x.Email == "info@precisionmaterial.net").Select(x => x.Id).FirstOrDefault();
+                    var adminId = context.Users.Where(x => x.Email == "admin@centangle.com").Select(x => x.Id).FirstOrDefault();
                     userId = adminId.ToString();
                 }
                 var employees = context.Employees.Count();
                 if (employees < 1)
                 {
-                    var empUser = CreateUser();
+                    var empUser = new ToranceUser();
                     await _userStore.SetUserNameAsync(empUser, "nunez_adrian@yahoo.com", CancellationToken.None);
                     empUser.Email = "nunez_adrian@yahoo.com";
                     var empResult = await _userManager.CreateAsync(empUser, "5555");
@@ -141,19 +140,19 @@ namespace IdentityProvider.Seed
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private ToranceUser CreateUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<ToranceUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ToranceUser)}'. " +
-                    $"Ensure that '{nameof(ToranceUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-            }
-        }
+        //private ToranceUser CreateUser()
+        //{
+        //    try
+        //    {
+        //        return Activator.CreateInstance<ToranceUser>();
+        //    }
+        //    catch
+        //    {
+        //        throw new InvalidOperationException($"Can't create an instance of '{nameof(ToranceUser)}'. " +
+        //            $"Ensure that '{nameof(ToranceUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+        //            $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+        //    }
+        //}
        
     }
 }
