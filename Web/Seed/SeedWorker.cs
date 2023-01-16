@@ -140,19 +140,5 @@ namespace IdentityProvider.Seed
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        //private ToranceUser CreateUser()
-        //{
-        //    try
-        //    {
-        //        return Activator.CreateInstance<ToranceUser>();
-        //    }
-        //    catch
-        //    {
-        //        throw new InvalidOperationException($"Can't create an instance of '{nameof(ToranceUser)}'. " +
-        //            $"Ensure that '{nameof(ToranceUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-        //            $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-        //    }
-        //}
-       
     }
 }
