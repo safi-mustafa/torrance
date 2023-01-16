@@ -1,0 +1,122 @@
+﻿.card.datatable {
+    background-color: white;
+    border: 1px solid #8EA69145;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+    .card.datatable .card-body {
+        background-color: transparent;
+        border-color: #194619;
+        border-radius: 25px;
+        padding: 0px;
+    }
+
+.card-header.header-elements-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding-right: 0px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px dotted #194619;
+}
+
+.card.search-filter-container {
+    border: 0px;
+    background-color: transparent;
+}
+
+.badge-datatable-search {
+    border-radius: 20px !important;
+    width: auto;
+    margin-right: 2px;
+    background-color: transparent;
+    border: 1px solid #212529;
+    color: #212529;
+    cursor: pointer;
+}
+
+.datatable-header {
+    padding: 0px;
+}
+
+.card.datatable table thead {
+    color: white;
+    background: #212529;
+}
+
+.datatable-clear-container::before {
+    margin-left: 10px;
+    margin-top: 5px;
+    border-left: 1px solid #212529;
+    content: "";
+    position: absolute;
+    height: 15px;
+}
+
+
+.badge-datatable-clear {
+    border-radius: 20px !important;
+    width: auto;
+    background-color: #212529;
+    color: white;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+    .badge-datatable-clear:before {
+        font-family: "Font Awesome 6 Free";
+        content: "\f00d";
+        display: inline-block;
+        padding: 0px 5px 0px 2px;
+        vertical-align: middle;
+        font-weight: 900;
+    }
+
+table.dataTable tbody tr.even {
+    background-color: #f2f2f2;
+}
+
+div.dt-buttons {
+    position: relative;
+    float: left;
+}
+/*.datatable-action:hover {
+    cursor: pointer;
+}*/
+.datatable-action {
+    margin-right: 1px !important;
+    color: #212529 !important;
+}
+
+.card .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .page-item.current a, .page-item a:hover {
+    color: #212529 !important;
+    border: 1px solid #212529;
+}
+
+.card .dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .page-item a, .page-item a:hover {
+    padding: 3px 8px;
+    margin: 0px 3px;
+    font-size: 12px;
+    font-weight: 600;
+    background: white !important;
+}
+
+.btn.rounded-round.bg-custom-dark {
+    border-radius: 20px !important;
+    width: auto;
+    background-color: #212529;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#datatables_buttons_info {
+    z-index: 10000 !important;
+}
+
+    #datatables_buttons_info, #datatables_buttons_info > h2 {
+        background: black !important;
+    }

@@ -1,0 +1,31 @@
+﻿@using ViewModels.CRUD
+@model CrudListViewModel
+@if (Model.DisableSearch == false)
+{
+    <div class="card search-filter-container" style="display:none;">
+        <div class="card-header header-elements-inline pt-0">
+            <h5 class="card-title">Filters</h5>
+            <div class="header-elements">
+                <button type="button" id="back-to-list" class="btn-circle" data-toggle="tooltip" title="Back"><i class="fa fa-arrow-left"></i></button>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { id = "filter-form", @class = "search-form", data_fouc = true }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="col-md-12">
+                    <fieldset class="mb-3">
+                        @await Html.PartialAsync(Model.SearchViewPath, Model.Filters)
+                    </fieldset>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-danger clear-form-btn">Clear<i class="icon-cross ml-2"></i></button>
+                        <button type="button" class="btn btn-success search-form-btn">Search <i class="icon-search4 ml-2"></i></button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+

@@ -1,0 +1,3 @@
+﻿$(function () {
+    maskCurrency(".input-currency");
+});

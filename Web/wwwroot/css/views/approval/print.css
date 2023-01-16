@@ -1,0 +1,126 @@
+﻿
+
+@media print {
+    p {
+        margin: 5px;
+    }
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 0px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border: 0px;
+    }
+
+    .timesheet-text-main {
+        margin-bottom: 50px;
+    }
+
+    .timesheet-text-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .timesheet-text {
+        margin-bottom: 20px;
+    }
+
+    #signaturename {
+        text-align: center;
+        font-weight: bold;
+        font-size: 150%;
+    }
+
+    #signature {
+        width: 100%;
+        border-bottom: 1px solid black;
+        height: 30px;
+    }
+
+    #approval-app-logo {
+        width: 80px !important;
+    }
+
+    .text-center {
+        text-align: center !important;
+    }
+
+    .table {
+        font-size: 14px;
+        margin-bottom: 0;
+        width: 100%;
+        color: #333;
+        border-collapse: collapse;
+    }
+
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+        .table-responsive > .table-bordered {
+            border: 1px solid #ddd;
+        }
+
+    .table thead th {
+        vertical-align: middle;
+        border-bottom: 1px solid #b7b7b7;
+    }
+
+    .table th {
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #ddd;
+    }
+
+    .table-sm td, .table-sm th {
+        padding: 0.625rem 1.25rem;
+    }
+
+    table input {
+        text-align: center;
+    }
+
+
+    .row {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-right: -0.625rem;
+        margin-left: -0.625rem;
+    }
+
+    .offset-lg-9 {
+        margin-left: 75%;
+    }
+
+    .col-lg-3 {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+
+    .pt-5, .py-5 {
+        padding-top: 3.75rem !important;
+    }
+}

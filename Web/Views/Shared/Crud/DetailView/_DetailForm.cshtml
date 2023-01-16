@@ -1,0 +1,16 @@
+﻿@using ViewModels.CRUD
+@model CrudDetailViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                @await Html.PartialAsync(Model.DetailViewPath, Model.DetailModel, new ViewDataDictionary(ViewData))
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/masking/initiate-masking.js"></script>

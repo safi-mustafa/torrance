@@ -1,0 +1,14 @@
+﻿using Enums;
+
+namespace Models.Models.Shared
+{
+    public class Attachment : BaseDBModel
+    {
+        public string Name { get; set; }
+        public string Url { get; set; }
+        public string Type { get; set; }
+        public long EntityId { get; set; }
+        public AttachmentEntityType EntityType { get; set; }
+        
+    }
+}
