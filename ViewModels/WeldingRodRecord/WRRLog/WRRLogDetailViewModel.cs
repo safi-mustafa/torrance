@@ -1,6 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
@@ -56,6 +57,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        //public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

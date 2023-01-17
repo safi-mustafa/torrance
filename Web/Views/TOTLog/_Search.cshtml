@@ -1,0 +1,46 @@
+﻿@model TOTLogSearchViewModel
+@using ViewModels.TomeOnTools.TOTLog;
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="EquipmentNo" class="control-label form-label fw-600"></label>
+            <input asp-for="EquipmentNo" type="search" class="form-control" placeholder="Search Equipment No" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+        </div>
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+        </div>
+    </div>
+</div>

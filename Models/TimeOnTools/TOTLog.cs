@@ -1,14 +1,7 @@
 ﻿using Enums;
 using Helpers.Models.Shared;
 using Models.Common;
-using Helpers.Models.Shared;
-using Models.WeldingRodRecord;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models.TimeOnTools
 {
@@ -23,7 +16,7 @@ namespace Models.TimeOnTools
         public long ManPower { get; set; }
         public long EquipmentNo { get; set; }
         public double HoursDelayed { get; set; }
-        public ActiveStatus Status { get; set; }
+        public ApproveStatus Status { get; set; }
 
         [ForeignKey("Department")]
         public long DepartmentId { get; set; }

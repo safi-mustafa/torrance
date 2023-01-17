@@ -24,6 +24,8 @@ using Repositories.Services.TimeOnToolServices.ShiftDelayService;
 using Repositories.Services.TimeOnToolServices.SOWService;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Services.WeldRodRecordServices.EmployeeService;
+using Repositories.Services.TimeOnToolServices.TOTLogService;
+using Repositories.Services.TimeOnToolServices.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,8 @@ builder.Services.AddScoped<IShiftDelayService, ShiftDelayService>();
 builder.Services.AddScoped<ISOWService, SOWService>();
 builder.Services.AddScoped<IWRRLogService, WRRLogService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ITOTLogService, TOTLogService>();
+builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -33,17 +33,17 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Employee.Name) || x.Email.ToLower().Contains(searchFilters.Employee.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Employee.Name) || x.Employee.FirstName.ToLower().Contains(searchFilters.Employee.Name.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Department.Name) || x.Email.ToLower().Contains(searchFilters.Department.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Department.Name) || x.Department.Name.ToLower().Contains(searchFilters.Department.Name.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Unit.Name) || x.Email.ToLower().Contains(searchFilters.Unit.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Unit.Name) || x.Unit.Name.ToLower().Contains(searchFilters.Unit.Name.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.RodType.Name) || x.Email.ToLower().Contains(searchFilters.RodType.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.RodType.Name) || x.RodType.Name.ToLower().Contains(searchFilters.RodType.Name.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.WeldMethod.Name) || x.Email.ToLower().Contains(searchFilters.WeldMethod.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.WeldMethod.Name) || x.WeldMethod.Name.ToLower().Contains(searchFilters.WeldMethod.Name.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Location.Name) || x.Email.ToLower().Contains(searchFilters.Location.Name.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Location.Name) || x.Location.Name.ToLower().Contains(searchFilters.Location.Name.ToLower()))
             ;
         }
 

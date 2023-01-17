@@ -1,0 +1,153 @@
+﻿@using Enums;
+@using ViewModels.TomeOnTools.TOTLog;
+@model TOTLogModifyViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Date" class="form-label fw-600"></label>
+                    <input asp-for="Date" type="date" class="form-control" />
+                    <span asp-validation-for="Date" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Twr" class="form-label fw-600"></label>
+                    <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
+                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ManHours" class="form-label fw-600"></label>
+                    <input asp-for="ManHours" type="number" class="form-control" />
+                    <span asp-validation-for="ManHours" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="StartOfWork" class="form-label fw-600"></label>
+                    <input asp-for="StartOfWork" type="date" class="form-control" />
+                    <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+             <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DelayReason" class="form-label fw-600"></label>
+                    <input asp-for="DelayReason" type="text" class="form-control" />
+                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+                </div>
+ </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
+                </div>
+            </div>
+           
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="JobDescription" class="form-label fw-600"></label>
+                    <input asp-for="JobDescription" type="text" class="form-control" />
+                    <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ManPower" class="form-label fw-600"></label>
+                    <input asp-for="ManPower" type="number" class="form-control" />
+                    <span asp-validation-for="ManPower" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentNo" type="number" class="form-control" />
+                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_User.cshtml" for="Foreman" view-data='new ViewDataDictionary(ViewData) { { "Id", "forman-id"}, { "UserTitle", "Foreman"}, {"Type", "Foreman"} }' />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="HoursDelayed" class="form-label fw-600"></label>
+                    <input asp-for="HoursDelayed" type="number" class="form-control" />
+                    <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
+                </div>
+            </div>
+           
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group profile-input">
+                    <label asp-for="Status" class="control-label form-label fw-600"></label>
+                    <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(ApproveStatus))" class="form-control"></select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_User.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" asp-for="Id" />

@@ -2,7 +2,9 @@
 
 namespace ViewModels.Authentication
 {
-    public class UserSearchVM : BaseSearchModel
+    public class UserSearchViewModel : BaseSearchModel
     {
+        public string Type { get; set; }
+        public string Email { get; set; }
     }
 }

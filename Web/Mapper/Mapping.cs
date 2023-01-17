@@ -3,6 +3,7 @@ using Models.Common;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -11,6 +12,7 @@ using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
 using ViewModels.TomeOnTools.SOW;
+using ViewModels.TomeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
@@ -131,6 +133,40 @@ namespace Models.Mapper
             CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
+
+            //TOTLog
+            CreateMap<TOTLogModifyViewModel, TOTLog>()
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(x => x.Department, opt => opt.Ignore())
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
+                .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
+                .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
+                .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+                .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
+                .ForMember(x => x.Shift, opt => opt.Ignore())
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
+                .ForMember(x => x.PermitType, opt => opt.Ignore())
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+                .ForMember(x => x.Foreman, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<TOTLog, TOTLogDetailViewModel>()
+                .ReverseMap();
+            CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>().ReverseMap();
+            CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
+
+
+            //User
+            CreateMap<ToranceUser, UserBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
+                .ReverseMap();
+
 
         }
     }

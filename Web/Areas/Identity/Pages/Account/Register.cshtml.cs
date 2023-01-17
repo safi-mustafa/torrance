@@ -98,6 +98,7 @@ namespace Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public string? Role { get; set; }
         }
 
 
@@ -122,7 +123,7 @@ namespace Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    var roleCheck = "SuperAdmin";
+                    var roleCheck = Input.Role != null ? Input.Role : "SuperAdmin";
                     if ((await _userManager.AddToRoleAsync(user, roleCheck)).Succeeded)
                     {
                         var userId = await _userManager.GetUserIdAsync(user);
