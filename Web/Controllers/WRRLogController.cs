@@ -1,0 +1,46 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using ViewModels.DataTable;
+using ViewModels.WeldingRodRecord.WRRLog;
+
+namespace Web.Controllers
+{
+    [Authorize]
+    public class WRRLogController : CrudBaseController<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
+    {
+        private readonly IWRRLogService _WRRLogService;
+        private readonly ILogger<WRRLogController> _logger;
+
+        public WRRLogController(IWRRLogService WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "WRRLogs")
+        {
+            _WRRLogService = WRRLogService;
+            _logger = logger;
+        }
+
+        public override List<DataTableViewModel> GetColumns()
+        {
+            return new List<DataTableViewModel>()
+            {
+                new DataTableViewModel{title = "Date Rod Returned",data = "DateRodReturned"},
+                new DataTableViewModel{title = "Calibration Date",data = "CalibrationDate"},
+                new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
+                new DataTableViewModel{title = "Twr",data = "Twr"},
+                new DataTableViewModel{title = "Email",data = "Email"},
+                new DataTableViewModel{title = "Rod Checked Out",data = "RodCheckedOut"},
+                new DataTableViewModel{title = "Rod Checked Out lbs",data = "RodCheckedOutLbs"},
+                new DataTableViewModel{title = "Rod Returned Waste lbs",data = "RodReturnedWasteLbs"},
+                //new DataTableViewModel{title = "Department",data = "Department.Name"},
+                //new DataTableViewModel{title = "Employee",data = "Employee.Name"},
+                //new DataTableViewModel{title = "Unit",data = "Unit.Name"},
+                //new DataTableViewModel{title = "RodType",data = "RodType.Name"},
+                //new DataTableViewModel{title = "WeldMethod",data = "WeldMethod.Name"},
+                //new DataTableViewModel{title = "Location",data = "Location.Name"},
+                //new DataTableViewModel{title = "Name",data = "Name"},
+
+
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+            };
+        }
+    }
+}

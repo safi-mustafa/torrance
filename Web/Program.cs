@@ -14,6 +14,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.UnitService;
 using Repositories.Services.CommonServices.DepartmentService;
+using Repositories.Services.WeldRodRecordServices.LocationService;
+using Repositories.Services.WeldRodRecordServices.WeldMethodService;
+using Repositories.Services.WeldRodRecordServices.RodTypeService;
+using Repositories.Services.TimeOnToolServices.PermitTypeService;
+using Repositories.Services.TimeOnToolServices.ReworkService;
+using Repositories.Services.TimeOnToolServices.ShiftService;
+using Repositories.Services.TimeOnToolServices.ShiftDelayService;
+using Repositories.Services.TimeOnToolServices.SOWService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +42,14 @@ builder.Services.AddHostedService<SeedWorker>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IWeldMethodService, WeldMethodService>();
+builder.Services.AddScoped<IRodTypeService, RodTypeService>();
+builder.Services.AddScoped<IPermitTypeService, PermitTypeService>();
+builder.Services.AddScoped<IReworkDelayService, ReworkDelayService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IShiftDelayService, ShiftDelayService>();
+builder.Services.AddScoped<ISOWService, SOWService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
