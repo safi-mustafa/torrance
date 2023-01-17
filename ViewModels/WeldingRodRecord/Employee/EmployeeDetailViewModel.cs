@@ -4,6 +4,7 @@ using Select2.Model;
 using Enums;
 using System.ComponentModel;
 using ViewModels.CRUD;
+using ViewModels.Authentication;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -68,7 +69,7 @@ namespace ViewModels.WeldingRodRecord.Employee
 
 
         [DisplayName("Approver Name")]
-        public BaseBriefVM Approver { get; set; } = new BaseBriefVM();
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
     }
     public class EmployeeSearchViewModel : BaseSearchModel
     {

@@ -1,0 +1,137 @@
+﻿@using ViewModels.WeldingRodRecord.Employee;
+@model EmployeeDetailViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label fw-600"></label>
+            <div>@Model.FirstName</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label fw-600"></label>
+            <div>@Model.LastName</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Telephone" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Telephone?.ToString()) ? "-" : Model.Telephone?.ToString())</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="City" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.City) ? "-" : Model.City)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="State" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.State) ? "-" : Model.State)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="ZipCode" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.ZipCode) ? "-" : Model.ZipCode)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="SocialSecurity" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.SocialSecurity) ? "-" : Model.SocialSecurity)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="DriverLicense" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.DriverLicense) ? "-" : Model.DriverLicense)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="BankAccount" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.BankAccount?.ToString()) ? "-" : Model.BankAccount?.ToString())</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="RoutingNumber" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.RoutingNumber?.ToString()) ? "-" : Model.RoutingNumber?.ToString())</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="EmergencyContactName" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.EmergencyContactName) ? "-" : Model.EmergencyContactName)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="EmergencyContactNumber" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.EmergencyContactNumber?.ToString()) ? "-" : Model.EmergencyContactNumber?.ToString())</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="DateOfHire" class="form-label fw-600"></label>
+            <div>@Model.FormattedDateOfHire</div>
+        </div>
+    </div>
+  
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="EmployeeId" class="form-label fw-600"></label>
+            <div>@Model.EmployeeId</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Approver" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Approver.Name) ? "-" : Model.Approver.Name)</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label asp-for="ActiveStatus" class="form-label fw-600"></label>
+            <div>@Model.FormattedStatus</div>
+        </div>
+    </div>
+    @if (Model.ActiveStatus == Enums.ActiveStatus.Inactive)
+    {
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label asp-for="TerminationDate" class="form-label fw-600"></label>
+                <div>@Model.FormattedTerminationDate</div>
+            </div>
+        </div>
+    }
+</div>
+
+
+

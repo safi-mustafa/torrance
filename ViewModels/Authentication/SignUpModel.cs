@@ -8,6 +8,8 @@ namespace ViewModels.Authentication
     public class SignUpModel : IFileModel
     {
         public long Id { get; set; }
+        public long UserId { get; set; }
+        public string EmployeeId { get; set; }
         [Required]
         [Display(Name = "Email is Required")]
         [DataType(DataType.EmailAddress)]

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 using Helpers.ValidationAttributes;
+using ViewModels.Authentication;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -20,7 +21,7 @@ namespace ViewModels.WeldingRodRecord.Employee
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Employee Id must be of 4-digits.")]
         [Remote(action: "ValidateEmployeeId", controller: "Employee", AdditionalFields = "Id,EmployeeId", ErrorMessage = "Employee Id already in use.")]
         public string EmployeeId { get; set; }
-        //[Required]
+        [Required]
         [DataType(DataType.PhoneNumber)]
         [CustomMobileNumberValidator(ErrorMessage = "Telephone No. must be a valid number")]
         public long? Telephone { get; set; }
@@ -32,6 +33,7 @@ namespace ViewModels.WeldingRodRecord.Employee
         public string? Role { get; set; }
         public long UserId { get; set; }
         public string City { get; set; }
+        public string State { get; set; }
       //  public StateBriefViewModel State { get; set; } = new StateBriefViewModel();
         [DisplayName("Zip Code")]
         [StringLength(5, ErrorMessage = "Zip must be a 5 digit code", MinimumLength = 5)]
@@ -64,7 +66,7 @@ namespace ViewModels.WeldingRodRecord.Employee
             }
         }
 
-        public BaseBriefVM Approver { get; set; } = new BaseBriefVM();
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
     }
 }

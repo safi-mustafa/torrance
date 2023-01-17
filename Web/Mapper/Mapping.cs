@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Helpers.Models.Shared;
 using Models.Common;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
@@ -166,8 +167,34 @@ namespace Models.Mapper
             CreateMap<ToranceUser, UserBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
+            CreateMap<SignUpModel, ToranceUser>().ReverseMap();
 
+            //Employee
+            CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
+            CreateMap<Employee, EmployeeBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
+                .ReverseMap();
+            CreateMap<Employee, BaseBriefVM>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
+                .ReverseMap();
+            CreateMap<EmployeeModifyViewModel, Employee>()
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+               .ReverseMap();
+            CreateMap<Employee, EmployeeDetailViewModel>()
+               .ReverseMap();
+            CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
+            CreateMap<EmployeeModifyViewModel, SignUpModel>()
+                .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
+               .ReverseMap();
 
+            
+            //Folder
+            //CreateMap<FolderModifyViewModel, Folder>()
+            //  .ReverseMap();
+            //CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
+            //CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
+            //CreateMap<Folder, BaseBriefVM>().ReverseMap();
         }
     }
 }
