@@ -5,7 +5,7 @@ using Enums;
 using System.ComponentModel;
 using ViewModels.CRUD;
 
-namespace ViewModels.Employee
+namespace ViewModels.WeldingRodRecord.Employee
 {
     public class EmployeeDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
@@ -73,6 +73,7 @@ namespace ViewModels.Employee
     public class EmployeeSearchViewModel : BaseSearchModel
     {
         public ActiveStatus? Status { get; set; }
+        public string? FirstName { get; set; }
         public BaseBriefVM Approver { get; set; } = new BaseBriefVM();
     }
 }

@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
-using ViewModels.Employee;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ChargieApi.Controllers
 {

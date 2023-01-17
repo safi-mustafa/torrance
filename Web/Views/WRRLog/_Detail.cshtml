@@ -1,0 +1,113 @@
+﻿@using ViewModels.WeldingRodRecord.WRRLog;
+@model WRRLogDetailViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DateRodReturned" class="form-label fw-600"></label>
+                    <div>@Model.FormattedDateRodReturned</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="CalibrationDate" class="form-label fw-600"></label>
+                    <div>@Model.FormattedCalibrationDate</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="FumeControlUsed" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.FumeControlUsed) ? "-" : Model.FumeControlUsed)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Twr" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Twr) ? "-" : Model.Twr)</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodCheckedOut" class="form-label fw-600"></label>
+                    <div>@Model.FormattedRodCheckedOut</div>
+                </div>
+            </div>
+        </div>
+         <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodCheckedOutLbs" class="form-label fw-600"></label>
+                    <div>@Model.RodCheckedOutLbs</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodReturnedWasteLbs" class="form-label fw-600"></label>
+                    <div>@Model.RodReturnedWasteLbs</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Department" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Department.Name) ? "-" : Model.Department.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Employee" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Employee.Name) ? "-" : Model.Employee.Name)</div>
+                </div>
+            </div>
+        </div>
+         <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Unit" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodType" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.RodType.Name) ? "-" : Model.RodType.Name)</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="WeldMethod" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.WeldMethod.Name) ? "-" : Model.WeldMethod.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Location.Name) ? "-" : Model.Location.Name)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+
+   
+</div>
+

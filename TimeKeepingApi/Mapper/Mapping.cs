@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Models.Common;
 using Models.WeldingRodRecord;
-using ViewModels;
-using ViewModels.Common.Contractor;
-using ViewModels.Employee;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ChargieApi.Mapper
 {

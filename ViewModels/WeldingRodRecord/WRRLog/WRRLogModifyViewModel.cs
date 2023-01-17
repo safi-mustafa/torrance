@@ -8,33 +8,37 @@ using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using ViewModels.WeldingRodRecord.Location;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
-        [DisplayName("Date Rod Returned")]
-        public DateTime DateRodReturned { get; set; }
-        [DisplayName("Calibration Date")]
-        public DateTime CalibrationDate { get; set; }
+        [Display(Name = "Date Rod Returned")]
+        public DateTime DateRodReturned { get; set; } = DateTime.Now;
+        [Display(Name = "Calibration Date")]
+        public DateTime CalibrationDate { get; set; } = DateTime.Now;
         [Required]
-        [DisplayName("Fume Control Used")]
+        [Display(Name = "Fume Control Used", Prompt = "Add Fume Control Used")]
         public string FumeControlUsed { get; set; }
-        [DisplayName("Twr")]
+        [Display(Prompt = "Add Twr")]
         public string Twr { get; set; }
         [EmailAddress]
-        [Remote(action: "ValidateEmployeeEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
+        [Display(Prompt = "Add Email")]
+        [Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
         public string Email { get; set; }
-        [DisplayName("Rod Checked Out")]
-        public DateTime RodCheckedOut { get; set; }
-        [DisplayName("Rod Checked Out lbs")]
+        [Display(Name = "Rod Checked Out")]
+        public DateTime RodCheckedOut { get; set; } = DateTime.Now;
+        [Display(Name = "Rod Checked Out lbs", Prompt = "Add Rod Checked Out lbs")]
+        [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]
         public double RodCheckedOutLbs { get; set; }
-        [DisplayName("Rod Returned Waste lbs")]
+        [Display(Name = "Rod Returned Waste lbs", Prompt = "Add Rod Returned Waste lbs")]
+        [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
         public double RodReturnedWasteLbs { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
-        public EmployeeBriefVM Employee { get; set; } = new EmployeeBriefVM();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

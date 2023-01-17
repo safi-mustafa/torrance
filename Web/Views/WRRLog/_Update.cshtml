@@ -1,0 +1,115 @@
+﻿@using ViewModels.WeldingRodRecord.WRRLog;
+@model WRRLogModifyViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DateRodReturned" class="form-label fw-600"></label>
+                    <input asp-for="DateRodReturned" type="date" class="form-control" />
+                    <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="CalibrationDate" class="form-label fw-600"></label>
+                    <input asp-for="CalibrationDate" type="date" class="form-control" />
+                    <span asp-validation-for="CalibrationDate" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="FumeControlUsed" class="form-label fw-600"></label>
+                    <input asp-for="FumeControlUsed" type="text" class="form-control" />
+                    <span asp-validation-for="FumeControlUsed" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_RodType.cshtml" for="RodType" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Twr" class="form-label fw-600"></label>
+                    <input asp-for="Twr" type="text" class="form-control" />
+                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_WeldMethod.cshtml" for="WeldMethod" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-600"></label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodCheckedOut" class="form-label fw-600"></label>
+                    <input asp-for="RodCheckedOut" type="date" class="form-control" />
+                    <span asp-validation-for="RodCheckedOut" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Location.cshtml" for="Location" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodCheckedOutLbs" class="form-label fw-600"></label>
+                    <input asp-for="RodCheckedOutLbs" type="number" class="form-control" />
+                    <span asp-validation-for="RodCheckedOutLbs" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RodReturnedWasteLbs" class="form-label fw-600"></label>
+                    <input asp-for="RodReturnedWasteLbs" type="number" class="form-control" />
+                    <span asp-validation-for="RodReturnedWasteLbs" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<input type="hidden" asp-for="Id" />

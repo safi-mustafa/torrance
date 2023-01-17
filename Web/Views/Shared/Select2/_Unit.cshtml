@@ -1,12 +1,13 @@
-﻿@model ViewModels.BaseBriefVM
+﻿@using ViewModels.Common.Unit;
+@model UnitBriefViewModel
 
 @{
-    var accessAllowed = ViewData["AccessAllowed"] != null && !string.IsNullOrEmpty(ViewData["AccessAllowed"].ToString()) ? bool.Parse(ViewData["AccessAllowed"].ToString()) : false;
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "sesApprover-id";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "unit-id";
 }
 
+
 <div class="form-group">
-    <label class="form-label fw-600">SES Approver</label>
+    <label class="form-label fw-600">Unit</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
     {
@@ -21,7 +22,7 @@
     data_val_required = Model.ErrorMessage,
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
-    <input type="hidden" name="SESApprover.Name" value="@Model.Name" />
+    <input type="hidden" name="Unit.Name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 
@@ -30,7 +31,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var pageSize = 10;
-        var url = '/SESApprover/Select2';
+        var url = '/Unit/Select2';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
@@ -39,6 +40,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select SES Approver");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Unit");
     });
 </script>

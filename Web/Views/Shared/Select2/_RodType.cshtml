@@ -1,11 +1,13 @@
-﻿@model ViewModels.BaseBriefVM
+﻿@using ViewModels.WeldingRodRecord.RodType;
+@model RodTypeBriefViewModel
 
 @{
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "supervisor-id";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "rodType-id";
 }
 
+
 <div class="form-group">
-    <label class="form-label fw-600">Supervisor</label>
+    <label class="form-label fw-600">Rod Type</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
     {
@@ -20,7 +22,7 @@
     data_val_required = Model.ErrorMessage,
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
-    <input type="hidden" name="Supervisor.Name" value="@Model.Name" />
+    <input type="hidden" name="RodType.Name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 
@@ -29,7 +31,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var pageSize = 10;
-        var url = '/Supervisor/Select2';
+        var url = '/RodType/Select2';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
@@ -38,6 +40,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Supervisor");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select RodType");
     });
 </script>

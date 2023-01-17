@@ -1,13 +1,11 @@
 ﻿using ViewModels.Shared;
 using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using ViewModels.CRUD.Interfaces;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
-using Enums;
 using Helpers.ValidationAttributes;
 
-namespace ViewModels.Employee
+namespace ViewModels.WeldingRodRecord.Employee
 {
     public class EmployeeModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {

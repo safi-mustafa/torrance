@@ -1,6 +1,7 @@
 ﻿using Pagination;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
@@ -12,7 +13,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public string Email { get; set; }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
-        public EmployeeBriefVM Employee { get; set; } = new EmployeeBriefVM();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

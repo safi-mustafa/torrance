@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -22,12 +23,12 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Date Rod Returned",data = "DateRodReturned"},
-                new DataTableViewModel{title = "Calibration Date",data = "CalibrationDate"},
+                new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
+                new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Rod Checked Out",data = "RodCheckedOut"},
+                new DataTableViewModel{title = "Rod Checked Out",data = "FormattedRodCheckedOut"},
                 new DataTableViewModel{title = "Rod Checked Out lbs",data = "RodCheckedOutLbs"},
                 new DataTableViewModel{title = "Rod Returned Waste lbs",data = "RodReturnedWasteLbs"},
                 //new DataTableViewModel{title = "Department",data = "Department.Name"},
@@ -41,6 +42,10 @@ namespace Web.Controllers
 
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             };
+        }
+        public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
+        {
+            return Json(await _WRRLogService.IsWRRLogEmailUnique(id, email));
         }
     }
 }

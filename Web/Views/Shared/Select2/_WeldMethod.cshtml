@@ -1,13 +1,13 @@
-﻿@using ViewModels.WeldingRodRecord.Employee;
-@model EmployeeBriefViewModel
+﻿@using ViewModels.WeldingRodRecord.WeldMethod;
+@model WeldMethodBriefViewModel
 
 @{
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "employee-id";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "weldMethod-id";
 }
 
 
 <div class="form-group">
-    <label class="form-label fw-600">Employee</label>
+    <label class="form-label fw-600">Weld Method</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
     {
@@ -22,7 +22,7 @@
     data_val_required = Model.ErrorMessage,
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
-    <input type="hidden" name="Employee.Name" value="@Model.Name" />
+    <input type="hidden" name="WeldMethod.Name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 
@@ -31,7 +31,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var pageSize = 10;
-        var url = '/Employee/Select2';
+        var url = '/WeldMethod/Select2';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
@@ -40,6 +40,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Employee");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select WeldMethod");
     });
 </script>
