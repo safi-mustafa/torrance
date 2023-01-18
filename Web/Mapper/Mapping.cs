@@ -8,6 +8,7 @@ using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
@@ -188,13 +189,13 @@ namespace Models.Mapper
                 .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
 
-            
+
             //Folder
-            //CreateMap<FolderModifyViewModel, Folder>()
-            //  .ReverseMap();
-            //CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
-            //CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
-            //CreateMap<Folder, BaseBriefVM>().ReverseMap();
+            CreateMap<FolderModifyViewModel, Folder>()
+              .ReverseMap();
+            CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
+            CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
+            CreateMap<Folder, BaseBriefVM>().ReverseMap();
         }
     }
 }

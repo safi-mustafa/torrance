@@ -1,0 +1,28 @@
+﻿@using ViewModels.Shared;
+@model FolderDetailViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Name) ? "-" : Model.Name)</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 50px; height: 200px;">
+            <div class="card-img-actions d-inline-block mb-3" style="margin-left: 10px;">
+                <img class="img-profile-fluid rounded-circle img-style" src="@Model.IconUrl" alt="" width="150" height="110">
+            </div>
+        </div>
+    </div>
+   
+
+
+   
+</div>
+

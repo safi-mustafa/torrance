@@ -27,6 +27,8 @@ using Repositories.Services.WeldRodRecordServices.EmployeeService;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Services.TimeOnToolServices.UserService;
 using Repositories.Shared.AuthenticationService;
+using Repositories.Services.FolderService;
+using Helpers.File;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +62,8 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ITOTLogService, TOTLogService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IFolderService, FolderService>();
+builder.Services.AddScoped<IFileHelper, FileHelper>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
