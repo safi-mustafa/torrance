@@ -13,9 +13,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="DateRodReturned" class="form-label fw-600"></label>
-                    <input asp-for="DateRodReturned" type="date" class="form-control" />
-                    <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
+                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
                 </div>
             </div>
         </div>
@@ -31,6 +29,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -109,6 +108,17 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DateRodReturned" class="form-label fw-600"></label>
+                    <input asp-for="DateRodReturned" type="date" class="form-control" />
+                    <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
+                </div>
+            </div>
+           
+        </div>
+       
     </div>
 </div>
 

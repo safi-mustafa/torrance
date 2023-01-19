@@ -57,9 +57,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
-        //public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
-
+        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();

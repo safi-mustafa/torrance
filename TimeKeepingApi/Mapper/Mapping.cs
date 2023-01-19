@@ -129,6 +129,8 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Location, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<WRRLogCreateViewModel, WRRLog>()
                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
@@ -143,6 +145,8 @@ namespace TorranceApi.Mapper
                .ForMember(x => x.Location, opt => opt.Ignore())
                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                .ForMember(x => x.Unit, opt => opt.Ignore())
+               .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ReverseMap();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
@@ -32,12 +33,11 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
-        //public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
 
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
+        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
     }
 }
