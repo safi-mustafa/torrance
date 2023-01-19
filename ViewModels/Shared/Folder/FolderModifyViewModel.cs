@@ -14,7 +14,12 @@ namespace ViewModels.Shared
         [MaxLength(200)]
         [DisplayName("Name")]
         public string Name { get; set; }
+
         public string? IconUrl { get; set; }
+       
+        [DataType(DataType.Upload)]
+        [MaxFileSize(25 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
         public IFormFile? File { get; set; }
         public string GetBaseFolder()
         {

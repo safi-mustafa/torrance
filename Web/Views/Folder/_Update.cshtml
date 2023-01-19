@@ -13,15 +13,48 @@
                     <span asp-validation-for="Name" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-12">Upload Image</label>
+                    <div class="col-sm-12">
+                        <img class="img-responsive" src="@Model.IconUrl" id="image-thumbnail" alt="" style="max-width:120px;">
+                        <input type="hidden" asp-for="IconUrl" value="@Model.IconUrl" id="hidden-image-url" />
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <input asp-for="File" name="@Model.File" class="form-control" placeholder="Upload Image" id="Image" onchange="ShowImage(this)" />
+                            <span> <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" onclick='RemoveImage()' data-dismiss="fileinput">Remove</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="File" class="form-label fw-600"></label>
                     <input asp-for="File" name="File" type="file" class="form-control" placeholder="Name" />
                     <span asp-validation-for="File" class="validation-invalid-label"></span>
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
 
 <input type="hidden" asp-for="Id" />
+
+<script>
+    function ShowImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#image-thumbnail').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function RemoveImage() {
+        document.getElementById("Image").value = "";
+        $("#image-thumbnail").removeAttr('src');
+        $("#hidden-image-url").val("/Storage/Default/default.png");
+    }
+</script>

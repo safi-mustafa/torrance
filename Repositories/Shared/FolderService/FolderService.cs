@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Helpers.File;
 using Helpers.Models.Shared;
@@ -15,12 +16,14 @@ namespace Repositories.Services.FolderService
         private readonly ToranceContext _db;
         private readonly IMapper _mapper;
         private readonly IFileHelper _fileHelper;
+        private readonly IRepositoryResponse _response;
 
-        public FolderService(ToranceContext db, ILogger<FolderService> logger, IMapper mapper, IFileHelper fileHelper) : base(db, logger, mapper)
+        public FolderService(ToranceContext db, ILogger<FolderService> logger, IMapper mapper, IFileHelper fileHelper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _mapper = mapper;
             _fileHelper = fileHelper;
+            _response = response;
         }
 
         public override Expression<Func<Folder, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -36,13 +39,13 @@ namespace Repositories.Services.FolderService
                         );
         }
 
-        public override Task<long> Create(FolderModifyViewModel model)
+        public override Task<IRepositoryResponse> Create(FolderModifyViewModel model)
         {
             model.IconUrl = model.File != null ? _fileHelper.Save(model) : null;
             return base.Create(model);
         }
 
-        public override Task<long> Update(FolderModifyViewModel model)
+        public override Task<IRepositoryResponse> Update(FolderModifyViewModel model)
         {
             model.IconUrl = model.File != null ? _fileHelper.Save(model) : model.IconUrl;
             return base.Update(model);

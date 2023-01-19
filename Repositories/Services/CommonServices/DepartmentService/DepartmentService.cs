@@ -15,12 +15,14 @@ namespace Repositories.Services.CommonServices.DepartmentService
         private readonly ToranceContext _db;
         private readonly ILogger<DepartmentService> _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryResponse _response;
 
         public DepartmentService(ToranceContext db, ILogger<DepartmentService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
+            _response = response;
         }
 
         public override Expression<Func<Department, bool>> SetQueryFilter(IBaseSearchModel filters)

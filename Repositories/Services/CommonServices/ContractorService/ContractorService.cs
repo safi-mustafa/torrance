@@ -15,12 +15,14 @@ namespace Repositories.Services.CommonServices.ContractorService
         private readonly ToranceContext _db;
         private readonly ILogger<ContractorService> _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryResponse _response;
 
         public ContractorService(ToranceContext db, ILogger<ContractorService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
+            _response = response;
         }
 
         public override Expression<Func<Contractor, bool>> SetQueryFilter(IBaseSearchModel filters)
