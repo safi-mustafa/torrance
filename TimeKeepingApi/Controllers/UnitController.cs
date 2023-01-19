@@ -8,9 +8,9 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UnitController : CrudBaseController<UnitCreateViewModel, UnitModifyViewModel, UnitDetailViewModel, UnitDetailViewModel, UnitSearchViewModel>
+    public class UnitController : CrudBaseController<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel, UnitDetailViewModel, UnitSearchViewModel>
     {
-        public UnitController(IUnitService<UnitCreateViewModel, UnitModifyViewModel, UnitDetailViewModel> unitService) : base(unitService)
+        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> unitService) : base(unitService)
         {
         }
     }

@@ -6,7 +6,7 @@ using Enums;
 
 namespace ViewModels.Common.Unit
 {
-    public class UnitCreateViewModel : BaseCreateVM, IBaseCrudViewModel
+    public class UnitModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [Required]
         [MaxLength(200)]

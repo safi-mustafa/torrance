@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContractorController : CrudBaseBriefController<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel, ContractorDetailViewModel, ContractorSearchViewModel>
+    public class ContractorController : CrudBaseBriefController<ContractorCreateViewModel, ContractorModifyViewModel, ContractorDetailViewModel, ContractorDetailViewModel, ContractorSearchViewModel>
     {
         public ContractorController(IContractorService<ContractorCreateViewModel, ContractorModifyViewModel, ContractorDetailViewModel> contractorService) : base(contractorService)
         {
