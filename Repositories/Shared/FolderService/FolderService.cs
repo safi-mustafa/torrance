@@ -3,6 +3,7 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Helpers.File;
 using Helpers.Models.Shared;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pagination;
 using Repositories.Common;
@@ -39,6 +40,7 @@ namespace Repositories.Services.FolderService
                         );
         }
 
+        [HttpPost]
         public override Task<IRepositoryResponse> Create(FolderModifyViewModel model)
         {
             model.IconUrl = model.File != null ? _fileHelper.Save(model) : null;

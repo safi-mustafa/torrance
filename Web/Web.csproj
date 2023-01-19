@@ -25,6 +25,11 @@
     <None Include="Views\Employee\_Detail.cshtml" />
     <None Include="Views\Employee\_Search.cshtml" />
     <None Include="Views\Employee\_Update.cshtml" />
+    <None Include="wwwroot\js\fileinput\fileinput.min.js" />
+    <None Include="wwwroot\js\fileinput\plugins\piexif.js" />
+    <None Include="wwwroot\js\fileinput\plugins\piexif.min.js" />
+    <None Include="wwwroot\js\fileinput\plugins\sortable.js" />
+    <None Include="wwwroot\js\fileinput\plugins\sortable.min.js" />
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\jquery.unobtrusive-ajax.min.js" />
     <None Include="wwwroot\js\site.js" />

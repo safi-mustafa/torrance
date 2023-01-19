@@ -1,4 +1,7 @@
-﻿function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
+﻿$.getScript("/js/crud/serialize-file.js", function () {
+});
+
+function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
     $.ajax({
         type: "GET",
         url: contentUrl,
@@ -14,7 +17,7 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
     var form = element.closest("form")
     var updateUrl = form.action;
     removeCurrencyMasking();
-    var formData = $(form).serialize();
+    var formData = $(form).serializeFiles();
     $(form).removeData("validator").removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse($(form));
     if ($(form).valid()) {
