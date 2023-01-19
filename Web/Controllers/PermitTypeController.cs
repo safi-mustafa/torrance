@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class PermitTypeController : CrudBaseController<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel, PermitTypeDetailViewModel, PermitTypeSearchViewModel>
     {
-        private readonly IPermitTypeService _PermitTypeService;
+        private readonly IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> _PermitTypeService;
         private readonly ILogger<PermitTypeController> _logger;
 
-        public PermitTypeController(IPermitTypeService PermitTypeService, ILogger<PermitTypeController> logger, IMapper mapper) : base(PermitTypeService, logger, mapper, "PermitType", "PermitTypes")
+        public PermitTypeController(IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> PermitTypeService, ILogger<PermitTypeController> logger, IMapper mapper) : base(PermitTypeService, logger, mapper, "PermitType", "PermitTypes")
         {
             _PermitTypeService = PermitTypeService;
             _logger = logger;

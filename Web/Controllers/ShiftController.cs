@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class ShiftController : CrudBaseController<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel, ShiftDetailViewModel, ShiftSearchViewModel>
     {
-        private readonly IShiftService _ShiftService;
+        private readonly IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> _ShiftService;
         private readonly ILogger<ShiftController> _logger;
 
-        public ShiftController(IShiftService ShiftService, ILogger<ShiftController> logger, IMapper mapper) : base(ShiftService, logger, mapper, "Shift", "Shifts")
+        public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> ShiftService, ILogger<ShiftController> logger, IMapper mapper) : base(ShiftService, logger, mapper, "Shift", "Shifts")
         {
             _ShiftService = ShiftService;
             _logger = logger;

@@ -9,10 +9,10 @@ namespace Web.Controllers
     [Authorize]
     public class LocationController : CrudBaseController<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel, LocationDetailViewModel, LocationSearchViewModel>
     {
-        private readonly ILocationService _LocationService;
+        private readonly ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> _LocationService;
         private readonly ILogger<LocationController> _logger;
 
-        public LocationController(ILocationService LocationService, ILogger<LocationController> logger, IMapper mapper) : base(LocationService, logger, mapper, "Location", "Locations")
+        public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> LocationService, ILogger<LocationController> logger, IMapper mapper) : base(LocationService, logger, mapper, "Location", "Locations")
         {
             _LocationService = LocationService;
             _logger = logger;

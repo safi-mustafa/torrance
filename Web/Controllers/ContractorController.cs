@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Pagination;
 using Repositories.Services.CommonServices.ContractorService;
-using Select2;
 using ViewModels.Common.Contractor;
-using ViewModels.CRUD;
 using ViewModels.DataTable;
 
 namespace Web.Controllers
@@ -15,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class ContractorController : CrudBaseController<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel, ContractorDetailViewModel, ContractorSearchViewModel>
     {
-        private readonly IContractorService _ContractorService;
+        private readonly IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> _ContractorService;
         private readonly ILogger<ContractorController> _logger;
 
-        public ContractorController(IContractorService ContractorService, ILogger<ContractorController> logger, IMapper mapper) : base(ContractorService, logger, mapper, "Contractor", "Contractors")
+        public ContractorController(IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> ContractorService, ILogger<ContractorController> logger, IMapper mapper) : base(ContractorService, logger, mapper, "Contractor", "Contractors")
         {
             _ContractorService = ContractorService;
             _logger = logger;

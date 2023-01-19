@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class TOTLogController : CrudBaseController<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogSearchViewModel>
     {
-        private readonly ITOTLogService _TOTLogService;
+        private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
 
-        public TOTLogController(ITOTLogService TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "TOTLogs")
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "TOTLogs")
         {
             _TOTLogService = TOTLogService;
             _logger = logger;

@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class ReworkDelayController : CrudBaseController<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel, ReworkDelayDetailViewModel, ReworkDelaySearchViewModel>
     {
-        private readonly IReworkDelayService _ReworkDelayService;
+        private readonly IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> _ReworkDelayService;
         private readonly ILogger<ReworkDelayController> _logger;
 
-        public ReworkDelayController(IReworkDelayService ReworkDelayService, ILogger<ReworkDelayController> logger, IMapper mapper) : base(ReworkDelayService, logger, mapper, "ReworkDelay", "ReworkDelays")
+        public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> ReworkDelayService, ILogger<ReworkDelayController> logger, IMapper mapper) : base(ReworkDelayService, logger, mapper, "ReworkDelay", "ReworkDelays")
         {
             _ReworkDelayService = ReworkDelayService;
             _logger = logger;

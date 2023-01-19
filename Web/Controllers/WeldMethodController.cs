@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class WeldMethodController : CrudBaseController<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel, WeldMethodDetailViewModel, WeldMethodSearchViewModel>
     {
-        private readonly IWeldMethodService _WeldMethodService;
+        private readonly IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> _WeldMethodService;
         private readonly ILogger<WeldMethodController> _logger;
 
-        public WeldMethodController(IWeldMethodService WeldMethodService, ILogger<WeldMethodController> logger, IMapper mapper) : base(WeldMethodService, logger, mapper, "WeldMethod", "WeldMethods")
+        public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> WeldMethodService, ILogger<WeldMethodController> logger, IMapper mapper) : base(WeldMethodService, logger, mapper, "WeldMethod", "WeldMethods")
         {
             _WeldMethodService = WeldMethodService;
             _logger = logger;

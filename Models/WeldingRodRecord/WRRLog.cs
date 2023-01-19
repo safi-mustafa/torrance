@@ -43,5 +43,9 @@ namespace Models.WeldingRodRecord
         [ForeignKey("Location")]
         public long LocationId { get; set; }
         public Location Location { get; set; }
+
+        [ForeignKey("Contractor")]
+        public long ContractorId { get; set; }
+        public Contractor Contractor { get; set; }
     }
 }

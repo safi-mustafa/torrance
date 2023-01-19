@@ -10,10 +10,10 @@ namespace Web.Controllers
     [Authorize]
     public class WRRLogController : CrudBaseController<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
     {
-        private readonly IWRRLogService _WRRLogService;
+        private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
         private readonly ILogger<WRRLogController> _logger;
 
-        public WRRLogController(IWRRLogService WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "WRRLogs")
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "WRRLogs")
         {
             _WRRLogService = WRRLogService;
             _logger = logger;

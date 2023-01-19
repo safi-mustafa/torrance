@@ -15,10 +15,10 @@ namespace Web.Controllers
     [Authorize]
     public class UnitController : CrudBaseController<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel, UnitDetailViewModel, UnitSearchViewModel>
     {
-        private readonly IUnitService _UnitService;
+        private readonly IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> _UnitService;
         private readonly ILogger<UnitController> _logger;
 
-        public UnitController(IUnitService UnitService, ILogger<UnitController> logger, IMapper mapper) : base(UnitService, logger, mapper, "Unit", "Units")
+        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> UnitService, ILogger<UnitController> logger, IMapper mapper) : base(UnitService, logger, mapper, "Unit", "Units")
         {
             _UnitService = UnitService;
             _logger = logger;
