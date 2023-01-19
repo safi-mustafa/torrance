@@ -2,26 +2,26 @@
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.TomeOnTools.SOW;
+using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.Location;
 
 namespace Repositories.Services.WeldRodRecordServices.LocationService
 {
-    public class LocationService : BaseService<Location, LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel>, ILocationService
+    public class LocationService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Location, CreateViewModel, UpdateViewModel, DetailViewModel>, ILocationService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<LocationService> _logger;
+        private readonly ILogger<LocationService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
 
-        public LocationService(ToranceContext db, ILogger<LocationService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public LocationService(ToranceContext db, ILogger<LocationService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

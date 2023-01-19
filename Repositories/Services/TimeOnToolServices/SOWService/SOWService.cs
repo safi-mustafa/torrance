@@ -2,21 +2,26 @@
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
+using ViewModels.Shared;
 using ViewModels.TomeOnTools.SOW;
 
 namespace Repositories.Services.TimeOnToolServices.SOWService
 {
-    public class SOWService : BaseService<StatementOfWork, SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel>, ISOWService
+    public class SOWService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<StatementOfWork, CreateViewModel, UpdateViewModel, DetailViewModel>, ISOWService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<SOWService> _logger;
+        private readonly ILogger<SOWService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
 
-        public SOWService(ToranceContext db, ILogger<SOWService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public SOWService(ToranceContext db, ILogger<SOWService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

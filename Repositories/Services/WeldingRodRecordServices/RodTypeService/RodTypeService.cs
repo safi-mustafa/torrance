@@ -2,21 +2,28 @@
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
+using Models.Common;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
+using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
+using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.RodType;
 
 namespace Repositories.Services.WeldRodRecordServices.RodTypeService
 {
-    public class RodTypeService : BaseService<RodType, RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel>, IRodTypeService
+    public class RodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<RodType, CreateViewModel, UpdateViewModel, DetailViewModel>, IRodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<RodTypeService> _logger;
+        private readonly ILogger<RodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
 
-        public RodTypeService(ToranceContext db, ILogger<RodTypeService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public RodTypeService(ToranceContext db, ILogger<RodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

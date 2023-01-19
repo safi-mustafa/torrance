@@ -60,7 +60,6 @@
     <None Remove="Microsoft.AspNetCore.Identity.UI" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\Shared\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

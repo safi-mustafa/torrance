@@ -17,10 +17,17 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
-        public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
-
-        public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
-
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
+    }
+    public class WRRLogAPISearchViewModel : BaseSearchModel
+    {
+        public string Email { get; set; }
+        public long DepartmentId { get; set; } 
+
+        public long EmployeeId { get; set; } 
+
+        public long UnitId { get; set; }
+
+        public long LocationId { get; set; } 
     }
 }

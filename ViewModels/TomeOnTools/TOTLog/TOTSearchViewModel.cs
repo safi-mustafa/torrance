@@ -19,16 +19,22 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
 
-        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
-
-        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
-
-        public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
-
-        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
-
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+    }
+
+    public class TOTLogAPISearchViewModel : BaseSearchModel
+    {
+        public long EquipmentNo { get; set; }
+        public long DepartmentId { get; set; } 
+
+        public long UnitId { get; set; } 
+
+        public long ContractorId { get; set; }
+
+        public long ApproverId { get; set; } 
+
+        public long ForemanId { get; set; }
     }
 }

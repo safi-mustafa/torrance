@@ -11,18 +11,23 @@ using ViewModels.WeldingRodRecord.Employee;
 using Repositories.Shared.AuthenticationService;
 using Centangle.Common.ResponseHelpers.Models;
 using Centangle.Common.ResponseHelpers;
+using Models.Common.Interfaces;
+using ViewModels.Shared;
 
 namespace Repositories.Services.WeldRodRecordServices.EmployeeService
 {
-    public class EmployeeService : BaseService<Employee, EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel>, IEmployeeService
+    public class EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Employee, CreateViewModel, UpdateViewModel, DetailViewModel>, IEmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<EmployeeService> _logger;
+        private readonly ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public EmployeeService(ToranceContext db, ILogger<EmployeeService> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public EmployeeService(ToranceContext db, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
@@ -41,10 +46,14 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                             (string.IsNullOrEmpty(searchFilters.FirstName) || x.FirstName.ToLower().Contains(searchFilters.FirstName.ToLower()))
                             &&
                             (searchFilters.Status == null || x.ActiveStatus == searchFilters.Status)
+                            &&
+                            (searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
+                            &&
+                            (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                         ;
         }
 
-        public override async Task<IRepositoryResponse> Create(EmployeeModifyViewModel model)
+        public override async Task<IRepositoryResponse> Create(CreateViewModel model)
         {
             var transaction = await _db.Database.BeginTransactionAsync();
             try
@@ -75,7 +84,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             }
         }
 
-        public override async Task<IRepositoryResponse> Update(EmployeeModifyViewModel model)
+        public override async Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
             var transaction = await _db.Database.BeginTransactionAsync();
             try

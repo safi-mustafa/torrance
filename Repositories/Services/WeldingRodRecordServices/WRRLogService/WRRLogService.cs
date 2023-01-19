@@ -4,24 +4,27 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
-using ViewModels.Common.Contractor;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Repositories.Services.WeldRodRecordServices.WRRLogService
 {
-    public class WRRLogService : BaseService<WRRLog, WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel>, IWRRLogService
+    public class WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<WRRLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IWRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<WRRLogService> _logger;
+        private readonly ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
 
-        public WRRLogService(ToranceContext db, ILogger<WRRLogService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
@@ -38,17 +41,13 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Employee.Name) || x.Employee.FirstName.ToLower().Contains(searchFilters.Employee.Name.ToLower()))
+                            (searchFilters.Employee.Id == 0 || x.Employee.Id == searchFilters.Employee.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Department.Name) || x.Department.Name.ToLower().Contains(searchFilters.Department.Name.ToLower()))
+                            (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Unit.Name) || x.Unit.Name.ToLower().Contains(searchFilters.Unit.Name.ToLower()))
+                            (searchFilters.Unit.Id ==0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.RodType.Name) || x.RodType.Name.ToLower().Contains(searchFilters.RodType.Name.ToLower()))
-                            &&
-                            (string.IsNullOrEmpty(searchFilters.WeldMethod.Name) || x.WeldMethod.Name.ToLower().Contains(searchFilters.WeldMethod.Name.ToLower()))
-                            &&
-                            (string.IsNullOrEmpty(searchFilters.Location.Name) || x.Location.Name.ToLower().Contains(searchFilters.Location.Name.ToLower()))
+                            (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
             ;
         }
 

@@ -71,10 +71,5 @@ namespace ViewModels.WeldingRodRecord.Employee
         [DisplayName("Approver Name")]
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
     }
-    public class EmployeeSearchViewModel : BaseSearchModel
-    {
-        public ActiveStatus? Status { get; set; }
-        public string? FirstName { get; set; }
-        public BaseBriefVM Approver { get; set; } = new BaseBriefVM();
-    }
+    
 }

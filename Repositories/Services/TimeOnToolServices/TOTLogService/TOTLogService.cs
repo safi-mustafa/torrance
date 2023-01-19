@@ -4,22 +4,27 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
+using ViewModels.Shared;
 using ViewModels.TomeOnTools.TOTLog;
 
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
-    public class TOTLogService : BaseService<TOTLog, TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel>, ITOTLogService
+    public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<TOTLogService> _logger;
+        private readonly ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
@@ -36,17 +41,15 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (searchFilters.EquipmentNo == 0 || x.EquipmentNo == searchFilters.EquipmentNo)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Contractor.Name) || x.Contractor.Name.ToLower().Contains(searchFilters.Contractor.Name.ToLower()))
+                            (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Department.Name) || x.Department.Name.ToLower().Contains(searchFilters.Department.Name.ToLower()))
+                            (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Unit.Name) || x.Unit.Name.ToLower().Contains(searchFilters.Unit.Name.ToLower()))
+                            (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.ReworkDelay.Name) || x.ReworkDelay.Name.ToLower().Contains(searchFilters.ReworkDelay.Name.ToLower()))
+                            (searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
-                            (string.IsNullOrEmpty(searchFilters.ShiftDelay.Name) || x.ShiftDelay.Name.ToLower().Contains(searchFilters.ShiftDelay.Name.ToLower()))
-                            &&
-                            (string.IsNullOrEmpty(searchFilters.Shift.Name) || x.Shift.Name.ToLower().Contains(searchFilters.Shift.Name.ToLower()))
+                            (searchFilters.Foreman.Id == 0 || x.Foreman.Id == searchFilters.Foreman.Id)
             ;
         }
 

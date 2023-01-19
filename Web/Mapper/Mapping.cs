@@ -196,6 +196,10 @@ namespace Models.Mapper
             CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
             CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
+
+
+           
+            
         }
     }
 }

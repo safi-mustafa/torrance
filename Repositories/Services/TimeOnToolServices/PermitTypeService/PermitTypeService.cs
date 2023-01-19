@@ -2,21 +2,27 @@
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
+using Models.Common.Interfaces;
+using Models.Common;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
+using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermitType;
 
 namespace Repositories.Services.TimeOnToolServices.PermitTypeService
 {
-    public class PermitTypeService : BaseService<PermitType, PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel>, IPermitTypeService
+    public class PermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<PermitType, CreateViewModel, UpdateViewModel, DetailViewModel>, IPermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
-        private readonly ILogger<PermitTypeService> _logger;
+        private readonly ILogger<PermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
 
-        public PermitTypeService(ToranceContext db, ILogger<PermitTypeService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public PermitTypeService(ToranceContext db, ILogger<PermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

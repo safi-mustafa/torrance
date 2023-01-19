@@ -130,6 +130,20 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ReverseMap();
+            CreateMap<WRRLogCreateViewModel, WRRLog>()
+               .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+               .ForMember(x => x.Department, opt => opt.Ignore())
+               .ForMember(src => src.WeldMethodId, opt => opt.MapFrom(dest => dest.WeldMethod.Id))
+               .ForMember(x => x.WeldMethod, opt => opt.Ignore())
+               .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+               .ForMember(x => x.Employee, opt => opt.Ignore())
+               .ForMember(src => src.RodTypeId, opt => opt.MapFrom(dest => dest.RodType.Id))
+               .ForMember(x => x.RodType, opt => opt.Ignore())
+               .ForMember(src => src.LocationId, opt => opt.MapFrom(dest => dest.Location.Id))
+               .ForMember(x => x.Location, opt => opt.Ignore())
+               .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+               .ForMember(x => x.Unit, opt => opt.Ignore())
+               .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
@@ -157,6 +171,26 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
                 .ForMember(x => x.Foreman, opt => opt.Ignore())
                 .ReverseMap();
+            CreateMap<TOTLogCreateViewModel, TOTLog>()
+               .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+               .ForMember(x => x.Department, opt => opt.Ignore())
+               .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+               .ForMember(x => x.Contractor, opt => opt.Ignore())
+               .ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
+               .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
+               .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
+               .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+               .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
+               .ForMember(x => x.Shift, opt => opt.Ignore())
+               .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+               .ForMember(x => x.Unit, opt => opt.Ignore())
+               .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
+               .ForMember(x => x.PermitType, opt => opt.Ignore())
+               .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               .ForMember(x => x.Approver, opt => opt.Ignore())
+               .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+               .ForMember(x => x.Foreman, opt => opt.Ignore())
+               .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>().ReverseMap();
@@ -188,6 +222,25 @@ namespace TorranceApi.Mapper
             CreateMap<EmployeeModifyViewModel, SignUpModel>()
                 .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
+
+
+            //SearchModels
+            CreateMap<WRRLogSearchViewModel, WRRLogAPISearchViewModel>()
+                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(src => src.LocationId, opt => opt.MapFrom(dest => dest.Location.Id))
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ReverseMap();
+            CreateMap<EmployeeSearchViewModel, EmployeeAPISearchViewModel>()
+                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ReverseMap();
+            CreateMap<TOTLogSearchViewModel, TOTLogAPISearchViewModel>()
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ReverseMap();
         }
     }
 }
