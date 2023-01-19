@@ -13,7 +13,7 @@
                     <span asp-validation-for="Name" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-md-6">
+           @* <div class="col-md-6">
                 <div class="form-group">
                     <label class="col-sm-12">Upload Image</label>
                     <div class="col-sm-12">
@@ -22,25 +22,25 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                            <input asp-for="File" name="@Model.File" class="form-control" placeholder="Upload Image" id="Image" onchange="ShowImage(this)" />
+                            <input type="file" asp-for="File" name="File" class="form-control" placeholder="Upload Image" id="Image" onchange="ShowImage(this)" />
                             <span> <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" onclick='RemoveImage()' data-dismiss="fileinput">Remove</a></span>
                         </div>
                     </div>
                 </div>
-            </div>
-            @*<div class="col-lg-6">
+            </div>*@
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="File" class="form-label fw-600"></label>
-                    <input asp-for="File" name="File" type="file" class="form-control" placeholder="Name" />
+                    <input type="file" id="file" name="File" class="form-control" />
+                    @*<input name="File" type="file" class="form-control" id="File" />*@
                     <span asp-validation-for="File" class="validation-invalid-label"></span>
                 </div>
-            </div>*@
+            </div>
         </div>
     </div>
 </div>
 
 <input type="hidden" asp-for="Id" />
-
 <script>
     function ShowImage(input) {
         if (input.files && input.files[0]) {
