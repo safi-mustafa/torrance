@@ -2,18 +2,14 @@
 using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
-using Enums;
 
-namespace ViewModels.Common.Unit
+namespace ViewModels.Common.Department
 {
-    public class UnitCreateViewModel : BaseCreateVM, IBaseCrudViewModel
+    public class DepartmentCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
         [Required]
         [MaxLength(200)]
         [DisplayName("Name")]
         public string Name { get; set; }
-        [DisplayName("Cost Tracker Unit")]
-        public string CostTrackerUnit { get; set; }
-        public LogType Type { get; set; }
     }
 }

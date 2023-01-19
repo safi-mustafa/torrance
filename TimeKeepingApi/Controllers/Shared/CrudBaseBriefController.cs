@@ -9,7 +9,7 @@ using System.Net;
 using System.Security.Claims;
 using ViewModels.Shared;
 
-namespace ChargieApi.Controllers
+namespace TorranceApi.Controllers
 {
 
     [Controller]

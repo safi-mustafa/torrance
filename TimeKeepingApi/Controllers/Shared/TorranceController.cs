@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ViewModels.Shared;
 
-namespace ChargieApi.Controllers
+namespace TorranceApi.Controllers
 {
     [Authorize]
     public class TorranceController : ControllerBase

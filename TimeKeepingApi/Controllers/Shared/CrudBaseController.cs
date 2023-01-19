@@ -9,7 +9,7 @@ using System.Net;
 using System.Security.Claims;
 using ViewModels.Shared;
 
-namespace ChargieApi.Controllers
+namespace TorranceApi.Controllers
 {
 
     [Controller]
@@ -49,40 +49,37 @@ namespace ChargieApi.Controllers
             return ReturnProcessedResponse<DetailViewModel>(result);
         }
 
-        //[HttpPost]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        //[ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //public virtual async Task<IActionResult> Post([FromBody] UserRoleCreateVM<TRoleKey, TUserKey, TClientKey> model)
-        //{
-        //    var data = await _service.Create(model);
-        //    await _uow.Commit();
-        //    return ReturnProcessedResponse(data);
-        //}
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public virtual async Task<IActionResult> Post([FromBody] CreateViewModel model)
+        {
+            var data = await _service.Create(model);
+            return ReturnProcessedResponse(data);
+        }
 
-        //[HttpPut]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        //[ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //public virtual async Task<IActionResult> Put([FromBody] UserRoleUpdateVM<TRoleKey, TUserKey> model)
-        //{
-        //    var result = await _service.Update(model);
-        //    await _uow.Commit();
-        //    return ReturnProcessedResponse(result);
-        //}
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public virtual async Task<IActionResult> Put([FromBody] UpdateViewModel model)
+        {
+            var result = await _service.Update(model);
+            return ReturnProcessedResponse(result);
+        }
 
-        //[HttpDelete("{id}")]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        //[ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //public virtual async Task<IActionResult> Delete(TRoleKey id)
-        //{
-        //    var property = await _service.Delete(id);
-        //    await _uow.Commit();
-        //    return ReturnProcessedResponse(property);
-        //}
+        [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public virtual async Task<IActionResult> Delete(long id)
+        {
+            var property = await _service.Delete(id);
+            return ReturnProcessedResponse(property);
+        }
     }
 }

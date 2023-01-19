@@ -11,7 +11,7 @@ using System.Text;
 using ViewModels.Authentication;
 using ViewModels.WeldingRodRecord.Employee;
 
-namespace ChargieApi.Controllers
+namespace TorranceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

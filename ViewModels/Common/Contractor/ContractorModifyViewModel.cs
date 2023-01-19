@@ -5,7 +5,7 @@ using ViewModels.Shared;
 
 namespace ViewModels.Common.Contractor
 {
-    public class ContractorModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class ContractorCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
         [Required]
         [MaxLength(200)]

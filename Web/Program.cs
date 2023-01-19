@@ -45,27 +45,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
-builder.Services.AddScoped<IRepositoryResponse, RepositoryResponse>();
-builder.Services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
-builder.Services.AddHostedService<SeedWorker>();
-builder.Services.AddScoped<IContractorService, ContractorService>();
-builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-builder.Services.AddScoped<IUnitService, UnitService>();
-builder.Services.AddScoped<ILocationService, LocationService>();
-builder.Services.AddScoped<IWeldMethodService, WeldMethodService>();
-builder.Services.AddScoped<IRodTypeService, RodTypeService>();
-builder.Services.AddScoped<IPermitTypeService, PermitTypeService>();
-builder.Services.AddScoped<IReworkDelayService, ReworkDelayService>();
-builder.Services.AddScoped<IShiftService, ShiftService>();
-builder.Services.AddScoped<IShiftDelayService, ShiftDelayService>();
-builder.Services.AddScoped<ISOWService, SOWService>();
-builder.Services.AddScoped<IWRRLogService, WRRLogService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<ITOTLogService, TOTLogService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IIdentityService, IdentityService>();
-builder.Services.AddScoped<IFolderService, FolderService>();
-builder.Services.AddScoped<IFileHelper, FileHelper>();
+builder.Services.ConfigureDependencies();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
