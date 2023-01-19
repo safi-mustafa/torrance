@@ -17,8 +17,7 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
     var form = element.closest("form")
     var updateUrl = form.action;
     removeCurrencyMasking();
-    var formData = $(form).serialize();
-    //var formData = $(form).serializeFiles();
+    var formData = $(form).serializeFiles();
     $(form).removeData("validator").removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse($(form));
     if ($(form).valid()) {
@@ -27,6 +26,8 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
             type: "POST",
             url: updateUrl,
             data: formData,
+            processData: false,
+            contentType: false,
             beforeSend: function () {
                 disableControls(form);
             },
@@ -105,11 +106,11 @@ function enableControls(form) {
         });
         $(modalPanel).find("fieldset").unblock();
     }
-    
+
 }
 
 function removeCurrencyMasking() {
-    $(".input-currency").each(function (index,element) {
+    $(".input-currency").each(function (index, element) {
         $(element).inputmask("remove");
     });
 }

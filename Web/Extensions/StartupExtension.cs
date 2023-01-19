@@ -1,5 +1,6 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Helpers.File;
 using IdentityProvider.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Converters;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
+using Repositories.Services.FolderService;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
 using Repositories.Services.TimeOnToolServices.ReworkService;
 using Repositories.Services.TimeOnToolServices.ShiftDelayService;
@@ -98,6 +100,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped<IFileHelper, FileHelper>();
+            services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
         }
