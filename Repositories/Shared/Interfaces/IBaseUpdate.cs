@@ -1,11 +1,12 @@
-﻿using ViewModels.Shared;
+﻿using Centangle.Common.ResponseHelpers.Models;
+using ViewModels.Shared;
 
 namespace Repositories.Interfaces
 {
     public interface IBaseUpdate<UpdateViewModel>
         where UpdateViewModel : class, IBaseCrudViewModel, new()
     {
-        Task<long> Update(UpdateViewModel model);
+        Task<IRepositoryResponse> Update(UpdateViewModel model);
     }
 
 }

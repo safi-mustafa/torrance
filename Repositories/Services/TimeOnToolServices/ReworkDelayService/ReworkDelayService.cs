@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
 using Models.TimeOnTools;
@@ -15,7 +16,7 @@ namespace Repositories.Services.TimeOnToolServices.ReworkService
         private readonly ILogger<ReworkDelayService> _logger;
         private readonly IMapper _mapper;
 
-        public ReworkDelayService(ToranceContext db, ILogger<ReworkDelayService> logger, IMapper mapper) : base(db, logger, mapper)
+        public ReworkDelayService(ToranceContext db, ILogger<ReworkDelayService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

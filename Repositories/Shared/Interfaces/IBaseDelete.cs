@@ -1,8 +1,10 @@
-﻿namespace Repositories.Interfaces
+﻿using Centangle.Common.ResponseHelpers.Models;
+
+namespace Repositories.Interfaces
 {
     public interface IBaseDelete
     {
-        Task<bool> Delete(long id);
+        Task<IRepositoryResponse> Delete(long id);
     }
 
 }

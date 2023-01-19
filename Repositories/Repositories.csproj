@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Pagination\Pagination.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+    <ProjectReference Include="..\ResponseHelpers\ResponseHelpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

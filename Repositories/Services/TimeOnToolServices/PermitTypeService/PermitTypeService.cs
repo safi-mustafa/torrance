@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
 using Models.TimeOnTools;
@@ -15,7 +16,7 @@ namespace Repositories.Services.TimeOnToolServices.PermitTypeService
         private readonly ILogger<PermitTypeService> _logger;
         private readonly IMapper _mapper;
 
-        public PermitTypeService(ToranceContext db, ILogger<PermitTypeService> logger, IMapper mapper) : base(db, logger, mapper)
+        public PermitTypeService(ToranceContext db, ILogger<PermitTypeService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

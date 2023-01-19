@@ -27,7 +27,7 @@ namespace Pagination
         public PaginationMeta _meta { get; set; }
     }
 
- 
+
     public interface IBaseSearchModel
     {
         bool CalculateTotal { get; set; }
@@ -57,7 +57,7 @@ namespace Pagination
         public bool CalculateTotal { get; set; } = true;
         public int CurrentPage { get; set; } = 1;
         public bool DisablePagination { get; set; } = false;
-        public string OrderByColumn { get; set; }
+        public virtual string OrderByColumn { get; set; }
         public PaginationOrderCatalog OrderDir { get; set; } = PaginationOrderCatalog.Asc;
         [IgnoreDataMember]
         public int Draw { get; set; }

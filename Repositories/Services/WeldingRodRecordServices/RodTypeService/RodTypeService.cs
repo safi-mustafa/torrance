@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
 using Models.WeldingRodRecord;
@@ -15,7 +16,7 @@ namespace Repositories.Services.WeldRodRecordServices.RodTypeService
         private readonly ILogger<RodTypeService> _logger;
         private readonly IMapper _mapper;
 
-        public RodTypeService(ToranceContext db, ILogger<RodTypeService> logger, IMapper mapper) : base(db, logger, mapper)
+        public RodTypeService(ToranceContext db, ILogger<RodTypeService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

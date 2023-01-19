@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Centangle.Common.ResponseHelpers.Models;
 
 namespace Repositories.Interfaces
 {
-    public interface IBaseDetail<DetailViewModel>
-        where DetailViewModel:class,new()
+    public interface IBaseDetail
     {
-        Task<DetailViewModel> GetById(long id);
+        Task<IRepositoryResponse> GetById(long id);
     }
 }

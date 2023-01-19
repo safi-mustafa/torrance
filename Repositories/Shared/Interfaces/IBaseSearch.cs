@@ -1,10 +1,11 @@
-﻿using Pagination;
+﻿using Centangle.Common.ResponseHelpers.Models;
+using Pagination;
 
 namespace Repositories.Interfaces
 {
     public interface IBaseSearch
     {
-        Task<PaginatedResultModel<M>> GetAll<M>(IBaseSearchModel model);
+        Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel model);
     }
 
 }
