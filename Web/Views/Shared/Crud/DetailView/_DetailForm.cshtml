@@ -9,6 +9,8 @@
             <div class="col-md-12">
                 @await Html.PartialAsync(Model.DetailViewPath, Model.DetailModel, new ViewDataDictionary(ViewData))
             </div>
+
+            <input type="hidden" id="modal-title" value="@Model.Title" />
         </div>
     </div>
 </div>

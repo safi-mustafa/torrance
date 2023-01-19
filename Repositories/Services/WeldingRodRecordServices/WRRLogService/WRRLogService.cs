@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,6 +9,7 @@ using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Common.Contractor;
+using ViewModels.TomeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Repositories.Services.WeldRodRecordServices.WRRLogService
@@ -16,12 +19,14 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         private readonly ToranceContext _db;
         private readonly ILogger<WRRLogService> _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryResponse _response;
 
-        public WRRLogService(ToranceContext db, ILogger<WRRLogService> logger, IMapper mapper) : base(db, logger, mapper)
+        public WRRLogService(ToranceContext db, ILogger<WRRLogService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
+            _response = response;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -47,7 +52,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
             ;
         }
 
-        public override async Task<WRRLogDetailViewModel> GetById(long id)
+        public override async Task<IRepositoryResponse> GetById(long id)
         {
             try
             {
@@ -62,15 +67,17 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
-                    return mappedModel;
+                    var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
+                    return response;
                 }
                 _logger.LogWarning($"No record found for id:{id} for WRRLog");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetById() for WRRLog threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return new();
         }
 
         public async Task<bool> IsWRRLogEmailUnique(int id, string email)

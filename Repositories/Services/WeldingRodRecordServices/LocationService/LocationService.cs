@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
 using Models.WeldingRodRecord;
@@ -20,7 +21,7 @@ namespace Repositories.Services.WeldRodRecordServices.LocationService
         private readonly ILogger<LocationService> _logger;
         private readonly IMapper _mapper;
 
-        public LocationService(ToranceContext db, ILogger<LocationService> logger, IMapper mapper) : base(db, logger, mapper)
+        public LocationService(ToranceContext db, ILogger<LocationService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.Extensions.Logging;
 using Models.Common;
@@ -16,7 +17,7 @@ namespace Repositories.Services.CommonServices.UnitService
         private readonly ILogger<UnitService> _logger;
         private readonly IMapper _mapper;
 
-        public UnitService(ToranceContext db, ILogger<UnitService> logger, IMapper mapper) : base(db, logger, mapper)
+        public UnitService(ToranceContext db, ILogger<UnitService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

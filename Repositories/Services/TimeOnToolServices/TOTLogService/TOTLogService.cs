@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers;
+using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,12 +17,14 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly ToranceContext _db;
         private readonly ILogger<TOTLogService> _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryResponse _response;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService> logger, IMapper mapper) : base(db, logger, mapper)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
+            _response = response;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -46,7 +50,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             ;
         }
 
-        public override async Task<TOTLogDetailViewModel> GetById(long id)
+        public override async Task<IRepositoryResponse> GetById(long id)
         {
             try
             {
@@ -64,16 +68,18 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                    return mappedModel;
+                    var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
+                    return response;
                 }
                 _logger.LogWarning($"No record found for id:{id} for TOTLog");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetById() for TOTLog threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return new();
         }
-       
+
     }
 }

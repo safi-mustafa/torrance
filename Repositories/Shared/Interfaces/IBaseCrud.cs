@@ -5,13 +5,13 @@ namespace Repositories.Interfaces
 {
     public interface IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> :
         IBaseSearch,
-        IBaseDetail<DetailViewModel>,
+        IBaseDetail,
         IBaseCreate<CreateViewModel>,
         IBaseUpdate<UpdateViewModel>,
         IBaseDelete
         where DetailViewModel : class, new()
-        where CreateViewModel : class,IBaseCrudViewModel, new()
-        where UpdateViewModel : class,IBaseCrudViewModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
 
     }

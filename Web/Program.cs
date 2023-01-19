@@ -29,6 +29,7 @@ using Repositories.Services.TimeOnToolServices.UserService;
 using Repositories.Shared.AuthenticationService;
 using Repositories.Services.FolderService;
 using Helpers.File;
+using Centangle.Common.ResponseHelpers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
+builder.Services.AddScoped<IRepositoryResponse, RepositoryResponse>();
 builder.Services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
 builder.Services.AddHostedService<SeedWorker>();
 builder.Services.AddScoped<IContractorService, ContractorService>();

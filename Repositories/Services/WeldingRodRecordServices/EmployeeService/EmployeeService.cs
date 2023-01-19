@@ -9,6 +9,8 @@ using System.Linq.Expressions;
 using ViewModels.Authentication;
 using ViewModels.WeldingRodRecord.Employee;
 using Repositories.Shared.AuthenticationService;
+using Centangle.Common.ResponseHelpers.Models;
+using Centangle.Common.ResponseHelpers;
 
 namespace Repositories.Services.WeldRodRecordServices.EmployeeService
 {
@@ -18,13 +20,15 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
         private readonly ILogger<EmployeeService> _logger;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
+        private readonly IRepositoryResponse _response;
 
-        public EmployeeService(ToranceContext db, ILogger<EmployeeService> logger, IMapper mapper, IIdentityService identity) : base(db, logger, mapper)
+        public EmployeeService(ToranceContext db, ILogger<EmployeeService> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _identity = identity;
+            _response = response;
         }
 
         public override Expression<Func<Employee, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -40,7 +44,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                         ;
         }
 
-        public override async Task<long> Create(EmployeeModifyViewModel model)
+        public override async Task<IRepositoryResponse> Create(EmployeeModifyViewModel model)
         {
             var transaction = await _db.Database.BeginTransactionAsync();
             try
@@ -56,19 +60,22 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                     if (mappedModel.Id > 0)
                     {
                         await transaction.CommitAsync();
-                        return mappedModel.Id;
+                        var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
+                        return response;
                     }
                 }
+                _logger.LogWarning($"No user for Id:{user.Id} found in Create() Employee");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Exception thrown in Create method of Employee ");
                 await transaction.RollbackAsync();
+                return Response.BadRequestResponse(_response);
             }
-            return -1;
         }
 
-        public override async Task<long> Update(EmployeeModifyViewModel model)
+        public override async Task<IRepositoryResponse> Update(EmployeeModifyViewModel model)
         {
             var transaction = await _db.Database.BeginTransactionAsync();
             try
@@ -79,31 +86,33 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                     if (record != null)
                     {
                         var user = _mapper.Map<SignUpModel>(model);
-                        var response = await _identity.UpdateUser(user, transaction);
-                        if (response)
+                        var result = await _identity.UpdateUser(user, transaction);
+                        if (result)
                         {
                             var dbModel = _mapper.Map(model, record);
                             await _db.SaveChangesAsync();
                             if (dbModel.Id > 0)
                             {
                                 await transaction.CommitAsync();
-                                return dbModel.Id;
+                                var response = new RepositoryResponseWithModel<long> { ReturnModel = dbModel.Id };
+                                return response;
                             }
                         }
                     }
                     _logger.LogWarning($"Record for id: {model?.Id} not found in Employee");
                     await transaction.RollbackAsync();
+                    return Response.NotFoundResponse(_response);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Update() for Employee threw the following exception");
+                await transaction.RollbackAsync();
             }
-            await transaction.RollbackAsync();
-            return -1;
+            return Response.BadRequestResponse(_response);
         }
 
-        public override async Task<EmployeeDetailViewModel> GetById(long id)
+        public override async Task<IRepositoryResponse> GetById(long id)
         {
             try
             {
@@ -112,19 +121,21 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                 {
                     var result = _mapper.Map<EmployeeDetailViewModel>(dbModel);
                     result.State = dbModel.State;
-                    return result;
+                    var response = new RepositoryResponseWithModel<EmployeeDetailViewModel> { ReturnModel = result };
+                    return response;
                     //return await base.GetById(id);
                 }
                 _logger.LogWarning($"No record found for id:{id} for Employee");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetById() for Employee threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return new();
         }
 
-      
+
         public async Task<bool> IsEmployeeIdUnique(long id, string employeeId)
         {
             return (await _db.Employees.Where(x => x.EmployeeId == employeeId && x.Id != id).CountAsync()) < 1;

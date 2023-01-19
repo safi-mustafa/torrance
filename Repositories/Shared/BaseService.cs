@@ -8,6 +8,8 @@ using Pagination;
 using Repositories.Interfaces;
 using System.Linq.Expressions;
 using ViewModels.Shared;
+using Centangle.Common.ResponseHelpers.Models;
+using Centangle.Common.ResponseHelpers;
 
 namespace Repositories.Common
 {
@@ -20,31 +22,34 @@ namespace Repositories.Common
         private readonly ToranceContext _db;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryResponse _response;
 
-        public BaseService(ToranceContext db, ILogger logger, IMapper mapper)
+        public BaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
+            _response = response;
         }
 
-        public virtual async Task<long> Create(CreateViewModel model)
+        public virtual async Task<IRepositoryResponse> Create(CreateViewModel model)
         {
             try
             {
                 var mappedModel = _mapper.Map<TEntity>(model);
                 await _db.Set<TEntity>().AddAsync(mappedModel);
                 await _db.SaveChangesAsync();
-                return mappedModel.Id;
+                var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
+                return response;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Exception thrown in Create method of {typeof(TEntity).FullName}");
-                return -1;
+                return Response.BadRequestResponse(_response);
             }
         }
 
-        public virtual async Task<long> Update(UpdateViewModel model)
+        public virtual async Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
             try
             {
@@ -56,19 +61,21 @@ namespace Repositories.Common
                     {
                         var dbModel = _mapper.Map(model, record);
                         await _db.SaveChangesAsync();
-                        return record.Id;
+                        var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
+                        return response;
                     }
-                    _logger.LogWarning($"Record for id: {updateModel?.Id} not found in {typeof(TEntity).FullName}");
+                    _logger.LogWarning($"Record for id: {updateModel?.Id} not found in {typeof(TEntity).FullName} in Update()");
                 }
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Update() for {typeof(TEntity).FullName} threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return -1;
         }
 
-        public virtual async Task<bool> Delete(long id)
+        public virtual async Task<IRepositoryResponse> Delete(long id)
         {
             try
             {
@@ -77,17 +84,20 @@ namespace Repositories.Common
                 {
                     dbModel.IsDeleted = true;
                     await _db.SaveChangesAsync();
-                    return true;
+                    return _response;
                 }
+                _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
+
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Delete() for {typeof(TEntity).FullName} threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return false;
         }
 
-        public virtual async Task<PaginatedResultModel<M>> GetAll<M>(IBaseSearchModel search)
+        public virtual async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
             try
             {
@@ -95,36 +105,42 @@ namespace Repositories.Common
                 var result = await _db.Set<TEntity>().Where(filters).Paginate(search);
                 if (result != null)
                 {
-                    var response = new PaginatedResultModel<M>();
-                    response.Items = _mapper.Map<List<M>>(result.Items.ToList());
-                    response._meta = result._meta;
-                    response._links = result._links;
+                    var paginatedResult = new PaginatedResultModel<M>();
+                    paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    paginatedResult._meta = result._meta;
+                    paginatedResult._links = result._links;
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
                     return response;
                 }
+                _logger.LogWarning($"No record found for {typeof(TEntity).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetAll() method for {typeof(TEntity).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
             }
-            return new PaginatedResultModel<M>();
         }
 
-        public virtual async Task<DetailViewModel> GetById(long id)
+        public virtual async Task<IRepositoryResponse> GetById(long id)
         {
             try
             {
                 var dbModel = await _db.Set<TEntity>().FindAsync(id);
                 if (dbModel != null)
                 {
-                    return _mapper.Map<DetailViewModel>(dbModel);
+                    var result = _mapper.Map<DetailViewModel>(dbModel);
+                    var response = new RepositoryResponseWithModel<DetailViewModel> { ReturnModel = result };
+                    return response;
                 }
-                _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName}");
+                _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in GetById()");
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetById() for {typeof(TEntity).FullName} threw the following exception");
+                return Response.BadRequestResponse(_response);
             }
-            return new();
         }
 
         public virtual Expression<Func<TEntity, bool>> SetQueryFilter(IBaseSearchModel filters)
