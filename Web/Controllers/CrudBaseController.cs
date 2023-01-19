@@ -97,8 +97,9 @@ namespace Web.Controllers
                 UpdateViewModel model = null;
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    var parsedModel = response as RepositoryResponseWithModel<UpdateViewModel>;
-                    model = _mapper.Map<UpdateViewModel>(parsedModel);
+                    var parsedModel = response as RepositoryResponseWithModel<DetailViewModel>;
+                    var responseModel = parsedModel?.ReturnModel;
+                    model = _mapper.Map<UpdateViewModel>(responseModel);
                 }
                 if (model != null)
                 {
@@ -186,10 +187,12 @@ namespace Web.Controllers
         {
             try
             {
-                var detailModel = await _service.GetById(id);
-                var model = _mapper.Map<DetailViewModel>(detailModel);
-                if (model != null)
+                var response = await _service.GetById(id);
+                if (response.Status == System.Net.HttpStatusCode.OK)
                 {
+                    var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
+                    var model = parsedResponse?.ReturnModel ?? new();
+
                     return DetailView(SetDetailViewModel(model));
                 }
                 else
