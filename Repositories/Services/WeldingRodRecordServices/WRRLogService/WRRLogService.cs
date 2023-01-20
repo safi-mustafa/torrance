@@ -62,6 +62,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                     .Include(x => x.Employee)
                     .Include(x => x.RodType)
                     .Include(x => x.WeldMethod)
+                    .Include(x => x.Contractor)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

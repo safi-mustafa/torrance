@@ -30,6 +30,9 @@ using Repositories.Shared.AuthenticationService;
 using Repositories.Services.FolderService;
 using Helpers.File;
 using Centangle.Common.ResponseHelpers.Models;
+using Microsoft.Extensions.FileProviders;
+using System;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +61,27 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+                    System.IO.Path.Combine(Directory.GetParent(builder.Environment.ContentRootPath).FullName, "Storage")
+                    ),
+    RequestPath = "/Storage"
+});
 
+//app.UseDirectoryBrowser(new DirectoryBrowserOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        System.IO.Path.Combine(Directory.GetParent(environment.ContentRootPath).FullName, "Storage")
+//        ),
+//    RequestPath = "/Storage"
+//});
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//           Path.Combine(builder.Environment.ContentRootPath, "Storage")),
+//    RequestPath = "/Storage"
+//});
 app.UseRouting();
 
 app.UseAuthentication();

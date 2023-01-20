@@ -6,16 +6,18 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label fw-600"></label>
                     <input asp-for="Name" type="text" class="form-control" placeholder="Name" />
                     <span asp-validation-for="Name" class="validation-invalid-label"></span>
                 </div>
             </div>
-           @* <div class="col-md-6">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label class="col-sm-12">Upload Image</label>
+                    <label asp-for="File" class="form-label fw-600">Upload Icon</label>
                     <div class="col-sm-12">
                         <img class="img-responsive" src="@Model.IconUrl" id="image-thumbnail" alt="" style="max-width:120px;">
                         <input type="hidden" asp-for="IconUrl" value="@Model.IconUrl" id="hidden-image-url" />
@@ -26,14 +28,6 @@
                             <span> <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" onclick='RemoveImage()' data-dismiss="fileinput">Remove</a></span>
                         </div>
                     </div>
-                </div>
-            </div>*@
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="File" class="form-label fw-600"></label>
-                    <input type="file" id="file" name="File" class="form-control" />
-                    @*<input name="File" type="file" class="form-control" id="File" />*@
-                    <span asp-validation-for="File" class="validation-invalid-label"></span>
                 </div>
             </div>
         </div>
