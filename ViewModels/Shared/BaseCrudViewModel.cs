@@ -21,4 +21,10 @@ namespace ViewModels.Shared
             }
         }
     }
+
+    public class BaseFileDetailViewModel : BaseCrudViewModel
+    {
+        public long Id { get; set; }
+        public string? Url { get; set; }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Microsoft.EntityFrameworkCore.Storage;
+using Pagination;
 using ViewModels.Authentication;
 
 namespace Repositories.Shared.AuthenticationService
@@ -11,5 +12,7 @@ namespace Repositories.Shared.AuthenticationService
             string optionalUsernamePrefix = "");
         Task<bool> UpdateUser(SignUpModel model,
             IDbContextTransaction transaction);
+
+        Task<PaginatedResultModel<T>> GetAll<T>(BaseSearchModel search);
     }
 }

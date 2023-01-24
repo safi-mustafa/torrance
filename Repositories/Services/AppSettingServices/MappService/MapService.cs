@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using ViewModels.AppSettings.Map;
 using ViewModels.Shared;
 
-namespace Repositories.Services.CommonServices.MapService
+namespace Repositories.Services.AppSettingServices.MappService
 {
     public class MapService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Map, CreateViewModel, UpdateViewModel, DetailViewModel>, IMapService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

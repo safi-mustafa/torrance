@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using DataLibrary;
+using Helpers.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Models;
+using Pagination;
 using ViewModels.Authentication;
 
 namespace Repositories.Shared.AuthenticationService
@@ -15,13 +19,15 @@ namespace Repositories.Shared.AuthenticationService
         private readonly IUserEmailStore<ToranceUser> _emailStore;
         private readonly ILogger<IdentityService> _logger;
         private readonly IMapper _mapper;
-        
+        private readonly ToranceContext _db;
+
         public IdentityService(
             UserManager<ToranceUser> userManager,
             IUserStore<ToranceUser> userStore,
             SignInManager<ToranceUser> signInManager,
             ILogger<IdentityService> logger,
-            IMapper mapper
+            IMapper mapper,
+            ToranceContext db
             )
         {
             _userManager = userManager;
@@ -29,6 +35,7 @@ namespace Repositories.Shared.AuthenticationService
             _signInManager = signInManager;
             _logger = logger;
             _mapper = mapper;
+            _db = db;
         }
 
         public async Task<long> CreateUser(SignUpModel model, IDbContextTransaction transaction, string optionalUsernamePrefix = "")
@@ -114,6 +121,84 @@ namespace Repositories.Shared.AuthenticationService
             }
             await transaction.RollbackAsync();
             return false;
+        }
+
+        public async Task<PaginatedResultModel<T>> GetAll<T>(BaseSearchModel searchFilter)
+        {
+            try
+            {
+                var search = searchFilter as UserSearchViewModel;
+                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
+              
+                var rolesName = search.Roles.Select(x => x.Name).ToList();
+                var userQueryable = (from user in _db.Users
+                                     join userRole in _db.UserRoles on user.Id equals userRole.UserId
+                                     join r in _db.Roles on userRole.RoleId equals r.Id
+                                     where
+                                     (
+                                        (
+                                            string.IsNullOrEmpty(search.Search.value)|| user.Email.ToLower().Contains(search.Search.value.ToLower())
+                                        )
+                                         &&
+                                         (search.Roles.Count == 0 || rolesName.Contains(r.Name))
+                                         &&
+                                         (r.Name != "SuperAdmin")
+                                         &&
+                                         (
+                                            string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
+                                         )
+                                    )
+                                     select new UserDetailVM { Id = user.Id }
+                            ).GroupBy(x => x.Id)
+                            .Select(x => new UserDetailVM { Id = x.Max(m => m.Id) })
+                            .AsQueryable();
+
+                var queryString = userQueryable.ToQueryString();
+
+
+                var users = await userQueryable.Paginate(searchFilter);
+                var filteredUserIds = users.Items.Select(x => x.Id);
+
+
+                var userList = await _db.Users
+                    .Where(x => filteredUserIds.Contains(x.Id))
+                    .Select(x => new UserDetailVM
+                    {
+                        Id = x.Id,
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        PhoneNumber = x.PhoneNumber,
+                    }).ToListAsync();
+                var roles = await _db.UserRoles
+                  .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
+                              ur => ur.RoleId,
+                              r => r.Id,
+                              (ur, r) => new { UR = ur, R = r })
+                  .Where(x => filteredUserIds.Contains(x.UR.UserId))
+                  .Select(x => new UserRoleVM
+                  {
+                      RoleId = x.R.Id,
+                      UserId = x.UR.UserId,
+                      RoleName = x.R.Name
+                  })
+                  .ToListAsync();
+
+                users.Items.ForEach(x =>
+                {
+                    x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
+                    x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
+                    x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
+                    x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
+                    x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
+                });
+                var paginatedModel = new PaginatedResultModel<T> { Items = users.Items as List<T>, _links = users._links, _meta = users._meta };
+                return paginatedModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"BeneficiaryService GetAll method threw an exception, Message: {ex.Message}");
+                return new PaginatedResultModel<T>();
+            }
         }
     }
 }

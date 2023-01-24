@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AppSettings\MobileFiles\" />
     <Folder Include="Shared\Interfaces\" />
   </ItemGroup>
 

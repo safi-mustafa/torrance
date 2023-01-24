@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Repositories.Services.CommonServices.MapService;
+using Repositories.Services.AppSettingServices.MappService;
 using ViewModels.AppSettings.Map;
 using ViewModels.DataTable;
 

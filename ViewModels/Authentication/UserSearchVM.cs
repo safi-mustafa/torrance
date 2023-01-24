@@ -6,5 +6,6 @@ namespace ViewModels.Authentication
     {
         public string Type { get; set; }
         public string Email { get; set; }
+        public List<UserRolesVM> Roles { get; set; } = new List<UserRolesVM>();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Repositories.Services.FolderService;
 using ViewModels.Shared;
 using ViewModels.DataTable;
 using Repositories.Services.AppSettingServices.MobileFileServices;
@@ -9,14 +8,14 @@ namespace Web.Controllers
 {
     [Authorize]
     
-    public class FolderController : CrudBaseController<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel, FolderDetailViewModel, FolderSearchViewModel>
+    public class BadgeRoomController : CrudBaseController<BadgeRoomModifyViewModel, BadgeRoomModifyViewModel, BadgeRoomDetailViewModel, BadgeRoomDetailViewModel, BadgeRoomSearchViewModel>
     {
-        private readonly IFolderService _folderService;
-        private readonly ILogger<FolderController> _logger;
+        private readonly IMobileFileService _badgeRoomService;
+        private readonly ILogger<BadgeRoomController> _logger;
 
-        public FolderController(IFolderService folderService, ILogger<FolderController> logger, IMapper mapper) : base(folderService, logger, mapper, "Folder", "Folders")
+        public BadgeRoomController(IMobileFileService badgeRoomService, ILogger<BadgeRoomController> logger, IMapper mapper) : base(badgeRoomService, logger, mapper, "BadgeRoom", "BadgeRooms")
         {
-            _folderService = folderService;
+            _badgeRoomService = badgeRoomService;
             _logger = logger;
         }
 
@@ -24,7 +23,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Name",data = "Name"},
+                new DataTableViewModel{title = "Url",data = "Url"},
                 new DataTableViewModel{title = "Status",data = "FormattedStatus"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 

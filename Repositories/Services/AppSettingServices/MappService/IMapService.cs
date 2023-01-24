@@ -2,7 +2,7 @@
 using Repositories.Interfaces;
 using ViewModels.Shared;
 
-namespace Repositories.Services.CommonServices.MapService
+namespace Repositories.Services.AppSettingServices.MappService
 {
     public interface IMapService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

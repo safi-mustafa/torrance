@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Pagination;
+using Repositories.Shared.AuthenticationService;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +24,7 @@ namespace TorranceApi.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IRepositoryResponse _response;
         private readonly IMapper _mapper;
+        private readonly IIdentityService _identity;
 
         public AccountController
             (
@@ -29,7 +32,8 @@ namespace TorranceApi.Controllers
                 ToranceContext db, 
                 ILogger<AccountController> logger, 
                 IRepositoryResponse response,
-                IMapper mapper
+                IMapper mapper,
+                IIdentityService identity
             )
         {
             _configuration = configuration;
@@ -37,6 +41,7 @@ namespace TorranceApi.Controllers
             _logger = logger;
             _response = response;
             _mapper = mapper;
+            _identity = identity;
         }
 
         [HttpPost]
@@ -115,6 +120,16 @@ namespace TorranceApi.Controllers
             }
             result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
             return ReturnProcessedResponse(result);
+        }
+
+        [HttpGet]
+        [Route("/api/Account/GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchViewModel model)
+        {
+            var result = await _identity.GetAll<UserDetailVM>(model);
+            var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<UserDetailVM>>();
+            responseModel.ReturnModel = result;
+            return ReturnProcessedResponse<PaginatedResultModel<UserDetailVM>>(responseModel);
         }
     }
 }
