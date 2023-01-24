@@ -10,12 +10,12 @@ namespace Web.Controllers
     
     public class PassportController : CrudBaseController<PassportModifyViewModel, PassportModifyViewModel, PassportDetailViewModel, PassportDetailViewModel, PassportSearchViewModel>
     {
-        private readonly IMobileFileService<PassportModifyViewModel, PassportModifyViewModel, PassportDetailViewModel> _deliveryService;
+        private readonly IMobileFileService<PassportModifyViewModel, PassportModifyViewModel, PassportDetailViewModel> _passportService;
         private readonly ILogger<PassportController> _logger;
 
-        public PassportController(IMobileFileService<PassportModifyViewModel, PassportModifyViewModel, PassportDetailViewModel> deliveryService, ILogger<PassportController> logger, IMapper mapper) : base(deliveryService, logger, mapper, "Passport", "Passport")
+        public PassportController(IMobileFileService<PassportModifyViewModel, PassportModifyViewModel, PassportDetailViewModel> passportService, ILogger<PassportController> logger, IMapper mapper) : base(passportService, logger, mapper, "Passport", "Passport")
         {
-            _deliveryService = deliveryService;
+            _passportService = passportService;
             _logger = logger;
         }
 
