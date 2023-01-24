@@ -1,14 +1,16 @@
-﻿using Pagination;
+﻿using Enums;
+using Pagination;
+using ViewModels.Shared;
 
-namespace ViewModels.Shared
+namespace ViewModels.AppSettings.MobileFiles.BadgeRoom
 {
     public class BadgeRoomDetailViewModel : BaseFileDetailViewModel
     {
-        
     }
 
-    public class BadgeRoomSearchViewModel : BaseSearchModel
+    public class BadgeRoomSearchViewModel : BaseFileSearchViewModel
     {
-       
+        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.BadgeRoom;
+
     }
 }

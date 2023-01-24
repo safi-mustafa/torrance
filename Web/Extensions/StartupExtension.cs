@@ -103,6 +103,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
+            services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<IUserService, UserService>();

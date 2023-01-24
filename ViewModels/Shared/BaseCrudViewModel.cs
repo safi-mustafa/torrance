@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Helpers.Extensions;
 using Models.Common.Interfaces;
+using Pagination;
 using System.ComponentModel;
 
 namespace ViewModels.Shared
@@ -26,5 +27,11 @@ namespace ViewModels.Shared
     {
         public long Id { get; set; }
         public string? Url { get; set; }
+        public virtual AttachmentEntityType Type { get; set; }
+    }
+
+    public class BaseFileSearchViewModel : BaseSearchModel
+    {
+        public virtual AttachmentEntityType Type { get; set; }
     }
 }

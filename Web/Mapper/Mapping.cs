@@ -6,6 +6,8 @@ using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
 using ViewModels.AppSettings.Map;
+using ViewModels.AppSettings.MobileFiles.BadgeRoom;
+using ViewModels.AppSettings.MobileFiles.Passport;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -208,6 +210,23 @@ namespace Models.Mapper
             CreateMap<Map, MapDetailViewModel>().ReverseMap();
             CreateMap<MapModifyViewModel, MapDetailViewModel>().ReverseMap();
             CreateMap<Map, BaseBriefVM>().ReverseMap();
+
+
+            //BadgeRoom
+            CreateMap<BadgeRoomModifyViewModel, MobileFile>().ReverseMap();
+            CreateMap<MobileFile, BadgeRoomDetailViewModel>().ReverseMap();
+            CreateMap<BadgeRoomModifyViewModel, BadgeRoomDetailViewModel>().ReverseMap();
+
+            //Passport
+            CreateMap<PassportModifyViewModel, MobileFile>().ReverseMap();
+            CreateMap<MobileFile, PassportDetailViewModel>().ReverseMap();
+            CreateMap<PassportModifyViewModel, PassportDetailViewModel>().ReverseMap();
+
+
+            //Passport
+            CreateMap<PassportModifyViewModel, MobileFile>().ReverseMap();
+            CreateMap<MobileFile, PassportDetailViewModel>().ReverseMap();
+            CreateMap<PassportModifyViewModel, PassportDetailViewModel>().ReverseMap();
 
         }
     }
