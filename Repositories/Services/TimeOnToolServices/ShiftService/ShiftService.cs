@@ -11,6 +11,7 @@ using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.Shift;
+using ViewModels.AppSettings.Map;
 
 namespace Repositories.Services.TimeOnToolServices.ShiftService
 {

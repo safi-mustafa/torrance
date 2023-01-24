@@ -1,0 +1,25 @@
+﻿@using ViewModels.AppSettings.Map;
+@model MapDetailViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Latitude" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Latitude) ? "-" : Model.Latitude)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Longitude" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Longitude) ? "-" : Model.Longitude)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

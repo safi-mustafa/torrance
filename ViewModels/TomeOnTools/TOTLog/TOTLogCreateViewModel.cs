@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ViewModels.AppSettings.Map;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;

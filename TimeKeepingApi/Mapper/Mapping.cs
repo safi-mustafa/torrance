@@ -4,6 +4,7 @@ using Models.Common;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.AppSettings.Map;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;

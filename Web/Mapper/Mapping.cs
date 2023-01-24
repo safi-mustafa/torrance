@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Helpers.Models.Shared;
+using Models.AppSettings;
 using Models.Common;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.AppSettings.Map;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -200,8 +202,13 @@ namespace Models.Mapper
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
 
 
-           
-            
+            //Map
+            CreateMap<MapModifyViewModel, Map>()
+              .ReverseMap();
+            CreateMap<Map, MapDetailViewModel>().ReverseMap();
+            CreateMap<MapModifyViewModel, MapDetailViewModel>().ReverseMap();
+            CreateMap<Map, BaseBriefVM>().ReverseMap();
+
         }
     }
 }

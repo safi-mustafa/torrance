@@ -11,6 +11,7 @@ using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
 using Enums;
+using ViewModels.AppSettings.Map;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {

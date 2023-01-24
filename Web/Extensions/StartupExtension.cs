@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
+using Repositories.Services.CommonServices.MapService;
 using Repositories.Services.CommonServices.UnitService;
 using Repositories.Services.FolderService;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
@@ -100,6 +101,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<IUserService, UserService>();
