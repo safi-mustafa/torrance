@@ -1,8 +1,8 @@
 ﻿.card.datatable {
     background-color: white;
     border: 1px solid #8EA69145;
-    border-radius: 25px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 20px;
 }
 
     .card.datatable .card-body {
@@ -44,7 +44,8 @@
 
 .card.datatable table thead {
     color: white;
-    background: #212529;
+    background: #0057AF;
+    border: none;
 }
 
 .datatable-clear-container::before {
@@ -88,7 +89,7 @@ div.dt-buttons {
 }*/
 .datatable-action {
     margin-right: 1px !important;
-    color: #212529 !important;
+ 
 }
 
 .card .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .page-item.current a, .page-item a:hover {
@@ -105,9 +106,9 @@ div.dt-buttons {
 }
 
 .btn.rounded-round.bg-custom-dark {
-    border-radius: 20px !important;
+    border-radius: 5px;
     width: auto;
-    background-color: #212529;
+    background-color: #055ab1;
     color: white;
     cursor: pointer;
     margin-left: 10px;
@@ -120,3 +121,13 @@ div.dt-buttons {
     #datatables_buttons_info, #datatables_buttons_info > h2 {
         background: black !important;
     }
+
+
+table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: 500 !important
+}
+
+.datatable .datatable-action .fa-pen-to-square,
+.datatable .datatable-action .fa-folder-open {
+    color: #0057af;
+}

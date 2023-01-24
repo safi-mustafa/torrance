@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Torrance</title>
+    <title>@ViewData["Title"] - Torrance </title>
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <link href="~/css/icons/icomoon/styles.min.css" rel="stylesheet" type="text/css">
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
@@ -23,66 +23,42 @@
     <div class="wrapper">
         <!-- Header -->
         <header class="header">
-            <nav class="main-nav navbar navbar-expand-lg navbar-light">
-                <div class="container-fluid nav-bar-container w-100">
-                    <a class="navbar-brand me-3" href="index.html"><img src="~/img/logo.png" alt=""></a>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
-                            @* <li class="nav-item"><a class="nav-link px-3" href="/Home/Index">Home</a></li>*@
-                            <li class="nav-item"><a class="nav-link px-3" asp-controller="WRRLog" asp-action="Index">WRRLog</a></li>
-                            <li class="nav-item"><a class="nav-link px-3" asp-controller="TOTLog" asp-action="Index">TOTLog</a></li>
-                            @* <li class="nav-item"><a class="nav-link px-3" asp-controller="Contractor" asp-action="Index">Contractors</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="Unit" asp-action="Index">Units</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="Department" asp-action="Index">Departments</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="Location" asp-action="Index">Locations</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="WeldMethod" asp-action="Index">WeldMethods</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="RodType" asp-action="Index">RodTypes</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="SOW" asp-action="Index">SOWs</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="Shift" asp-action="Index">Shifts</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="ShiftDelay" asp-action="Index">ShiftDelays</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="ReworkDelay" asp-action="Index">ReworkDelays</a></li>
-                                <li class="nav-item"><a class="nav-link px-3" asp-controller="PermitType" asp-action="Index">PermitTypes</a></li>*@
-                            @*<li class="nav-item dropdown">
-                                    <a class="nav-link px-3 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">Customers</a></li>
-                                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Change Password</a></li>
-                                    </ul>
-                                </li>*@
-                        </ul>
-                    </div>
-                    <div class="d-flex align-items-center">
+            <div class="container top-logo-bar d-flex flex-wrap justify-content-between">
+                <a class="main-site-logo d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" asp-controller="home" asp-action="index">
+                    <img src="~/img/trc-logo.png" alt="">
+                </a>
 
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div class="px-3 py-2">
-                        @*<div class="col-md-12">*@
-                        <partial name="_LoginPartial.cshtml" />
-                        @*</div>*@
-                    </div>
+
+                <div class="px-3 py-2">
+                    @*<div class="col-md-12">*@
+                    <partial name="_LoginPartial.cshtml" />
+                    @*</div>*@
                 </div>
-            </nav>
+            </div>
+
         </header>
+        <div class="menu-tab-container">
+            <partial name="_MenuTab.cshtml" />
+        </div>
     </div>
 
     <div class="content-body-container container-fluid">
-        <main role="main" class="main mt-3 index-main">
+        <main role="main" class="container main mt-3 index-main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="footer py-2 mt-4">
+    <footer class="footer main-footer py-2 mt-4">
         <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="#" class="footer-logo m-1"><img src="img/logo.png" alt=""></a>
-                <p class="copyright m-0 ps-3">© 2022 Elite Project Management. All Rights Reserved.</p>
+            <div class="d-flex justify-content-center align-items-center">
+                @*<a href="#" class="footer-logo m-1"><img src="img/logo.png" alt=""></a>*@
+                <p class="copyright m-0 ps-3">Copyright © 2023 Torrance. All rights reserved.</p>
             </div>
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>// Currently this uses jQuery, but could be done without
+    <script>
+        // Currently this uses jQuery, but could be done without
         // Pull Requests welcome! :P
         function setNavigation() {
             var path = window.location.pathname;
@@ -101,6 +77,7 @@
         $(function () {
             // when jquery is ready...
             setNavigation();
-        });</script>
+        });
+    </script>
 </body>
 </html>

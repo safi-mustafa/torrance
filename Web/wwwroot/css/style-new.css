@@ -98,7 +98,7 @@ label {
     width: 100%;
     min-height: 100vh;
     /*background-image: url(../img/banner.jpg);*/
-    background-image: url('../img/banner.jpg');
+    background-image: url('../img/login-bg.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -115,17 +115,25 @@ label {
     /**/
     .login-page .login-box .login-form {
         width: 100%;
-        max-width: 400px;
+        max-width: 550px;
         margin: 30px auto;
-        padding: 20px;
+        padding: 40px;
         border-radius: 5px;
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: white;
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(196 205 224 / 20%);
+        border-radius: 13px;
     }
 
-    .login-page .login-form h2 {
-        margin: 0 0 20px 0;
-        color: #fff;
+    .login-page .login-form p {
         text-align: center;
+        margin-bottom: 30px;
+    }
+        .login-page .login-form h2 {
+        color: #263871;
+        font-size: 30px;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 20px;
     }
 
     .login-page .login-form .form-group {
@@ -142,7 +150,7 @@ label {
 
     .login-page .login-form .form-check label {
         font-size: 14px;
-        color: #fff;
+        color: #333;
     }
 
     .login-page .login-form .forgot-pass {
@@ -161,18 +169,20 @@ label {
         height: 40px;
         width: 100px;
         padding: 6px 15px;
-        background-color: #5b9bd5;
-        border: 2px solid #5b9bd5;
+        background-color: #0057af;
+        border: #0057af;
         box-shadow: none;
         font-size: 16px;
         font-weight: 600;
         color: #fff;
         transition: all 0.3s;
+        border-radius: 5px;
     }
 
         .login-page .login-form .btn:hover {
             background-color: transparent;
-            color: #5b9bd5;
+            color: #0057af;
+            border: 2px solid #0057af;
         }
     /**/
     .login-page footer {
@@ -182,8 +192,7 @@ label {
         .login-page footer p {
             margin: 0;
             text-align: center;
-            color: #fff;
-            text-shadow: 0px 0px 4px rgba(0, 0, 0, 1);
+            color: #263871;
         }
 
 /** Landing Page *********************/
@@ -702,3 +711,10 @@ label {
     font-size: 18px;
     top: 10px;
 }
+.login-navbar {
+    justify-content:center;
+    margin-top:50px;
+}
+    .login-navbar .navbar-brand {
+        padding: 0;
+    }
