@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Models;
+@inject SignInManager<ToranceUser> SignInManager
+@inject UserManager<ToranceUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,9 +43,12 @@
             </div>
 
         </header>
+        @if (SignInManager.IsSignedIn(User))
+{
         <div class="menu-tab-container">
             <partial name="_MenuTab.cshtml" />
         </div>
+}
     </div>
 
     <div class="content-body-container container-fluid">
