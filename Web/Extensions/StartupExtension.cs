@@ -29,6 +29,7 @@ using Repositories.Services.WeldRodRecordServices.LocationService;
 using Repositories.Services.WeldRodRecordServices.RodTypeService;
 using Repositories.Services.WeldRodRecordServices.WeldMethodService;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using Repositories.Shared.AttachmentService;
 using Repositories.Shared.AuthenticationService;
 using Repositories.Shared.UserInfoServices;
 
@@ -113,6 +114,7 @@ namespace Web.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
         }
     }
 }

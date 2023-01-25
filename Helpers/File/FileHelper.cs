@@ -67,7 +67,7 @@ namespace Helpers.File
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UserManagementAPI.SaveImage");
+                _logger.LogError(ex, "FileHelper.SaveImage");
             }
             return imageUrl;
         }

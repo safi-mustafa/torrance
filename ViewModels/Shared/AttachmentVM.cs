@@ -13,17 +13,13 @@ namespace ViewModels.Shared
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]
         public IFormFile File { get; set; }
         public string Url { get; set; }
-        public string Type { get; set; }
+        public string ExtensionType { get; set; }
         public string Name { get; set; }
-        //public string? FormattedName { get; set; }
-        //public string? FormattedType { get; set; }
-        public long EntityId { get; set; }
-        public AttachmentEntityType EntityType { get; set; }
-        //public DateTime UploadDate { get; set; }
-        //public bool IsDeleted { get; set; }
+        public AttachmentEntityType FileType { get; set; }
+        public DateTime UploadDate { get; set; }
         public string GetBaseFolder()
         {
-            var ext = Type;
+            var ext = ExtensionType;
             if (ext == ".jpg" || ext == ".jpeg" || ext == ".png")
             {
                 return "Images";

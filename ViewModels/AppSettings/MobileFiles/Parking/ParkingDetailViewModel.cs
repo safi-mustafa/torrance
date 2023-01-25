@@ -10,7 +10,7 @@ namespace ViewModels.AppSettings.MobileFiles.Parking
 
     public class ParkingSearchViewModel : BaseFileSearchViewModel
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.Parking;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Parking;
 
     }
 }

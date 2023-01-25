@@ -10,7 +10,7 @@ namespace ViewModels.AppSettings.MobileFiles.Passport
 
     public class PassportSearchViewModel : BaseFileSearchViewModel
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.Passport;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Passport;
 
     }
 }

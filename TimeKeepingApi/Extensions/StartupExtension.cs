@@ -34,6 +34,9 @@ using Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Repositories.Shared.UserInfoServices;
+using Repositories.Services.AppSettingServices.MobileFileServices;
+using Helpers.File;
+using Repositories.Shared.AttachmentService;
 
 namespace Web.Extensions
 {
@@ -182,7 +185,10 @@ namespace Web.Extensions
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
         }

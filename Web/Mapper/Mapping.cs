@@ -7,6 +7,7 @@ using Models.WeldingRodRecord;
 using ViewModels;
 using ViewModels.AppSettings.Map;
 using ViewModels.AppSettings.MobileFiles.BadgeRoom;
+using ViewModels.AppSettings.MobileFiles.Delivery;
 using ViewModels.AppSettings.MobileFiles.Parking;
 using ViewModels.AppSettings.MobileFiles.Passport;
 using ViewModels.AppSettings.MobileFiles.VehiclePass;
@@ -233,10 +234,10 @@ namespace Models.Mapper
             CreateMap<MobileFile, BadgeRoomDetailViewModel>().ReverseMap();
             CreateMap<BadgeRoomModifyViewModel, BadgeRoomDetailViewModel>().ReverseMap();
 
-            //Passport
-            CreateMap<PassportModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, PassportDetailViewModel>().ReverseMap();
-            CreateMap<PassportModifyViewModel, PassportDetailViewModel>().ReverseMap();
+            //Delivery
+            CreateMap<DeliveryModifyViewModel, MobileFile>().ReverseMap();
+            CreateMap<MobileFile, DeliveryDetailViewModel>().ReverseMap();
+            CreateMap<DeliveryModifyViewModel, DeliveryDetailViewModel>().ReverseMap();
 
 
             //Passport
@@ -255,6 +256,9 @@ namespace Models.Mapper
             CreateMap<VehiclePassModifyViewModel, MobileFile>().ReverseMap();
             CreateMap<MobileFile, VehiclePassDetailViewModel>().ReverseMap();
             CreateMap<VehiclePassModifyViewModel, VehiclePassDetailViewModel>().ReverseMap();
+
+            //Attachment
+            CreateMap<AttachmentVM, MobileFile>().ReverseMap();
 
         }
     }

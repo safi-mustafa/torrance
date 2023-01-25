@@ -15,10 +15,10 @@ namespace ViewModels.Shared
     public class BaseFileUpdateViewModel : BaseUpdateVM,IFileModel, IIdentitifier
     {
         public string? Url { get; set; }
-        public virtual AttachmentEntityType Type { get; set; }
+        public virtual AttachmentEntityType FileType { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(25 * 1024 * 1024)]
-        [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
+        [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]
         public IFormFile? File { get; set; }
         public string GetBaseFolder()
         {

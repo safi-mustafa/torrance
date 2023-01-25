@@ -6,6 +6,6 @@ namespace ViewModels.AppSettings.MobileFiles.BadgeRoom
 {
     public class BadgeRoomModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.BadgeRoom;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.BadgeRoom;
     }
 }

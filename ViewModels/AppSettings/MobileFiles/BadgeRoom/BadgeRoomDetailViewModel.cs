@@ -10,7 +10,7 @@ namespace ViewModels.AppSettings.MobileFiles.BadgeRoom
 
     public class BadgeRoomSearchViewModel : BaseFileSearchViewModel
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.BadgeRoom;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.BadgeRoom;
 
     }
 }

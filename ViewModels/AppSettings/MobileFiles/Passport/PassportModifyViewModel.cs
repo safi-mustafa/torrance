@@ -6,6 +6,6 @@ namespace ViewModels.AppSettings.MobileFiles.Passport
 {
     public class PassportModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.Passport;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Passport;
     }
 }

@@ -4,7 +4,6 @@ using ViewModels.TomeOnTools.TOTLog;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using AutoMapper;
 using Pagination;
-using ViewModels.WeldingRodRecord.WRRLog;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers

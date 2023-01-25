@@ -6,6 +6,6 @@ namespace ViewModels.AppSettings.MobileFiles.VehiclePass
 {
     public class VehiclePassModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.VehiclePass;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.VehiclePass;
     }
 }

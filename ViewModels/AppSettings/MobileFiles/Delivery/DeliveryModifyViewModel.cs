@@ -6,6 +6,6 @@ namespace ViewModels.AppSettings.MobileFiles.Delivery
 {
     public class DeliveryModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType Type { get; set; } = AttachmentEntityType.Delivery;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Delivery;
     }
 }

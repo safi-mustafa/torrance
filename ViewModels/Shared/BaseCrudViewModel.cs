@@ -27,11 +27,11 @@ namespace ViewModels.Shared
     {
         public long Id { get; set; }
         public string? Url { get; set; }
-        public virtual AttachmentEntityType Type { get; set; }
+        public virtual AttachmentEntityType FileType { get; set; }
     }
 
     public class BaseFileSearchViewModel : BaseSearchModel
     {
-        public virtual AttachmentEntityType Type { get; set; }
+        public virtual AttachmentEntityType FileType { get; set; }
     }
 }
