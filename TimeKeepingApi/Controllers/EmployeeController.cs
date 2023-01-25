@@ -5,11 +5,13 @@ using ViewModels.WeldingRodRecord.Employee;
 using Pagination;
 using ViewModels.WeldingRodRecord.WRRLog;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeController : CrudBaseBriefController<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel, EmployeeDetailViewModel, EmployeeAPISearchViewModel>
     {
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;

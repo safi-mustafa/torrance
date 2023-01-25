@@ -5,11 +5,13 @@ using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using ViewModels.TomeOnTools.TOTLog;
 using AutoMapper;
 using Pagination;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WRRLogController : CrudBaseController<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogAPISearchViewModel>
     {
         private readonly IWRRLogService<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _wRRLogService;
