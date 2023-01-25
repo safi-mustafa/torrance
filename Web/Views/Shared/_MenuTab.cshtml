@@ -24,9 +24,24 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item px-3" asp-controller="BadgeRoom" asp-action="Index">Mobile Files</a>
+                        
                         <a class="dropdown-item px-3" asp-controller="Map" asp-action="Index">Map</a>
                         
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Mobile Files
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item px-3" asp-controller="BadgeRoom" asp-action="Index">Badge Room</a>
+                        <a class="dropdown-item px-3" asp-controller="Delivery" asp-action="Index">Delivery</a>
+                        <a class="dropdown-item px-3" asp-controller="Passport" asp-action="Index">Passport</a>
+                        <a class="dropdown-item px-3" asp-controller="VehiclePass" asp-action="Index">Vehicle Pass</a>
+                        <a class="dropdown-item px-3" asp-controller="Parking" asp-action="Index">Parking</a>
+
 
                     </div>
                 </li>

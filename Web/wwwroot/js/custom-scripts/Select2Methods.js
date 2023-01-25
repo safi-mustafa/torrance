@@ -1,7 +1,10 @@
 ﻿function Select2AutoCompleteAjax(id, url, dataArray, pageSize, placeholder = "---Select---") {
     try {
+        var parent = $(id).parent();
         $(id).select2(
             {
+                dropdownParent: $(parent),
+                
                 ajax: {
                     delay: 150,
                     url: url,
