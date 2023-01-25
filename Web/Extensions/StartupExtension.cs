@@ -1,6 +1,7 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Helpers.File;
+using IdentityProvider.Data.IdentityStore;
 using IdentityProvider.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
 using Repositories.Services.FolderService;
+using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
 using Repositories.Services.TimeOnToolServices.ReworkService;
 using Repositories.Services.TimeOnToolServices.ShiftDelayService;
@@ -28,6 +30,7 @@ using Repositories.Services.WeldRodRecordServices.RodTypeService;
 using Repositories.Services.WeldRodRecordServices.WeldMethodService;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Shared.AuthenticationService;
+using Repositories.Shared.UserInfoServices;
 
 namespace Web.Extensions
 {
@@ -49,7 +52,7 @@ namespace Web.Extensions
                 .AddRoleManager<RoleManager<ToranceRole>>()
                 .AddEntityFrameworkStores<ToranceContext>()
                 .AddSignInManager<SignInManager<ToranceUser>>()
-                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ToranceUser>>()
+                .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>()
                 .AddDefaultTokenProviders()
                  .AddDefaultUI();
 
@@ -92,6 +95,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));
+            services.AddScoped(typeof(IPermittingIssueService<,,>), typeof(PermittingIssueService<,,>));
             services.AddScoped(typeof(IReworkDelayService<,,>), typeof(ReworkDelayService<,,>));
             services.AddScoped(typeof(IShiftDelayService<,,>), typeof(ShiftDelayService<,,>));
             services.AddScoped(typeof(IShiftService<,,>), typeof(ShiftService<,,>));
@@ -108,6 +112,7 @@ namespace Web.Extensions
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IUserInfoService, UserInfoService>();
         }
     }
 }

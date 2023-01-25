@@ -12,6 +12,7 @@ using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
 using Enums;
 using ViewModels.AppSettings.Map;
+using ViewModels.TomeOnTools.PermittingIssue;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -26,6 +27,11 @@ namespace ViewModels.TomeOnTools.TOTLog
         public long ManHours { get; set; }
         [Display(Name = "Start Of Work")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
+        [Display(Name = "Time Requested")]
+        public TimeSpan TimeRequested { get; set; } = TimeSpan.Zero;
+        [Display(Name = "Time Signed")]
+        public TimeSpan TimeSigned { get; set; } = TimeSpan.Zero;
+        public string? Comment { get; set; }
 
         [Display(Name = "Delay Reason", Prompt = "Add Delay Reason")]
         public string DelayReason { get; set; }
@@ -33,14 +39,14 @@ namespace ViewModels.TomeOnTools.TOTLog
         public string JobDescription { get; set; }
         [Display(Name = "Man Power", Prompt = "Add Man Power")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
-        public long ManPower { get; set; }
+        public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No", Prompt = "Add Equipment No")]
         [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
         public long EquipmentNo { get; set; }
         [Display(Name = "Hours Delayed", Prompt = "Add Hours Delayed")]
         [Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double HoursDelayed { get; set; }
-        public ApproveStatus Status { get; set; }
+        public Status Status { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
@@ -55,10 +61,11 @@ namespace ViewModels.TomeOnTools.TOTLog
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
+        public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel(true,"The Approver field is required.");
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel(true, "The Foreman field is required.");
+        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
 
     }
 }

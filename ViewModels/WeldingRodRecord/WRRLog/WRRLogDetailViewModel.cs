@@ -1,4 +1,5 @@
-﻿using Select2.Model;
+﻿using Enums;
+using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Common.Contractor;
@@ -35,7 +36,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         }
         [Required]
         [DisplayName("Fume Control Used")]
-        public string FumeControlUsed { get; set; }
+        public FumeControlUsedCatalog FumeControlUsed { get; set; }
         [DisplayName("Twr")]
         public string Twr { get; set; }
         [DisplayName("Email")]

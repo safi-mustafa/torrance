@@ -9,6 +9,7 @@ using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
@@ -77,6 +78,14 @@ namespace TorranceApi.Mapper
             CreateMap<PermitTypeModifyViewModel, PermitTypeDetailViewModel>().ReverseMap();
             CreateMap<PermitType, PermitTypeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, PermitTypeBriefViewModel>().ReverseMap();
+
+
+            //PermittingIssue
+            CreateMap<PermittingIssueModifyViewModel, PermittingIssue>().ReverseMap();
+            CreateMap<PermittingIssue, PermittingIssueDetailViewModel>().ReverseMap();
+            CreateMap<PermittingIssueModifyViewModel, PermittingIssueDetailViewModel>().ReverseMap();
+            CreateMap<PermittingIssue, PermittingIssueBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, PermittingIssueBriefViewModel>().ReverseMap();
 
             //ReworkDelay
             CreateMap<ReworkDelayModifyViewModel, ReworkDelay>().ReverseMap();
@@ -172,9 +181,13 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
                 .ForMember(x => x.PermitType, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
-                .ForMember(x => x.Approver, opt => opt.Ignore())
-                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
-                .ForMember(x => x.Foreman, opt => opt.Ignore())
+               .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+               .ForMember(x => x.Approver, opt => opt.Ignore())
+               .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+                .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
+               .ForMember(x => x.Foreman, opt => opt.Ignore())
+                .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
+                .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<TOTLogCreateViewModel, TOTLog>()
                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
@@ -192,9 +205,13 @@ namespace TorranceApi.Mapper
                .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
                .ForMember(x => x.PermitType, opt => opt.Ignore())
                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+                .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
                .ForMember(x => x.Foreman, opt => opt.Ignore())
+                .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
+                .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ReverseMap();

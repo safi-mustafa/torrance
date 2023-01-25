@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Enums;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -16,17 +17,17 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DateTime DateRodReturned { get; set; } = DateTime.Now;
         public DateTime CalibrationDate { get; set; } = DateTime.Now;
         [Required]
-        public string FumeControlUsed { get; set; }
+        public FumeControlUsedCatalog FumeControlUsed { get; set; }
         public string Twr { get; set; }
         [EmailAddress]
         [Display(Prompt = "Add Email")]
         [Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public DateTime RodCheckedOut { get; set; } = DateTime.Now;
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]
         public double RodCheckedOutLbs { get; set; }
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
-        public double RodReturnedWasteLbs { get; set; }
+        public double? RodReturnedWasteLbs { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 

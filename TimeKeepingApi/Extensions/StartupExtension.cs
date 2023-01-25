@@ -32,6 +32,8 @@ using Repositories.Shared.AuthenticationService;
 using TorranceApi.Mapper;
 using Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Repositories.Services.TimeOnToolServices.PermittingIssueService;
+using Repositories.Shared.UserInfoServices;
 
 namespace Web.Extensions
 {
@@ -169,6 +171,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));
+            services.AddScoped(typeof(IPermittingIssueService<,,>), typeof(PermittingIssueService<,,>));
             services.AddScoped(typeof(IReworkDelayService<,,>), typeof(ReworkDelayService<,,>));
             services.AddScoped(typeof(IShiftDelayService<,,>), typeof(ShiftDelayService<,,>));
             services.AddScoped(typeof(IShiftService<,,>), typeof(ShiftService<,,>));
@@ -180,6 +183,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
         }
     }

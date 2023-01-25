@@ -33,7 +33,7 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         public long ContractorId { get; set; }
 
-        public long ApproverId { get; set; } 
+        public long ApproverId { get; set; }
 
         public long ForemanId { get; set; }
     }

@@ -8,6 +8,7 @@ using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
+using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.TOTLog;
@@ -23,19 +24,22 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
+            _userInfoService = userInfoService;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as TOTLogSearchViewModel;
-
+            var loggedInUserId = _userInfoService.LoggedInUserId();
+            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
@@ -47,9 +51,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
-                            (searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
+                            (loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
                             &&
-                            (searchFilters.Foreman.Id == 0 || x.Foreman.Id == searchFilters.Foreman.Id)
+                            (searchFilters.Approver.Id == 0 || x.ApproverId == searchFilters.Approver.Id)
+                            &&
+                            (searchFilters.Foreman.Id == 0 || x.ForemanId == searchFilters.Foreman.Id)
             ;
         }
 
@@ -61,12 +67,12 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
-                    .Include(x => x.Approver)
-                    .Include(x => x.Foreman)
                     .Include(x => x.ReworkDelay)
                     .Include(x => x.ShiftDelay)
                     .Include(x => x.Shift)
                     .Include(x => x.PermitType)
+                    .Include(x => x.Approver)
+                    .Include(x => x.Foreman)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

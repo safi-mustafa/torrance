@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IMobileFileService<VehiclePassModifyViewModel, VehiclePassModifyViewModel, VehiclePassDetailViewModel> _vehiclePassService;
         private readonly ILogger<VehiclePassController> _logger;
 
-        public VehiclePassController(IMobileFileService<VehiclePassModifyViewModel, VehiclePassModifyViewModel, VehiclePassDetailViewModel> vehiclePassService, ILogger<VehiclePassController> logger, IMapper mapper) : base(vehiclePassService, logger, mapper, "VehiclePass", "VehiclePass")
+        public VehiclePassController(IMobileFileService<VehiclePassModifyViewModel, VehiclePassModifyViewModel, VehiclePassDetailViewModel> vehiclePassService, ILogger<VehiclePassController> logger, IMapper mapper) : base(vehiclePassService, logger, mapper, "VehiclePass", "Vehicle Pass")
         {
             _vehiclePassService = vehiclePassService;
             _logger = logger;

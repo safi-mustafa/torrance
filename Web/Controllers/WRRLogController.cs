@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
         private readonly ILogger<WRRLogController> _logger;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "WRRLogs")
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs")
         {
             _WRRLogService = WRRLogService;
             _logger = logger;

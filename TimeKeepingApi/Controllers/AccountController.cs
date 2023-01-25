@@ -2,9 +2,11 @@
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models;
 using Pagination;
 using Repositories.Shared.AuthenticationService;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,15 +27,17 @@ namespace TorranceApi.Controllers
         private readonly IRepositoryResponse _response;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
+        private readonly UserManager<ToranceUser> _userManager;
 
         public AccountController
             (
-                IConfiguration configuration, 
-                ToranceContext db, 
-                ILogger<AccountController> logger, 
+                IConfiguration configuration,
+                ToranceContext db,
+                ILogger<AccountController> logger,
                 IRepositoryResponse response,
                 IMapper mapper,
-                IIdentityService identity
+                IIdentityService identity,
+                UserManager<ToranceUser> userManager
             )
         {
             _configuration = configuration;
@@ -42,6 +46,7 @@ namespace TorranceApi.Controllers
             _response = response;
             _mapper = mapper;
             _identity = identity;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -69,16 +74,20 @@ namespace TorranceApi.Controllers
 
                     if (user != null)
                     {
+                        var aspNetUser = await _db.Users.Where(x => x.Id == user.UserId).FirstOrDefaultAsync();
                         var name = User?.Identity?.Name;
                         _logger.LogInformation("User logged in.", "login method 4");
 
                         var fullName = $"{user?.FirstName} {user?.LastName}";
+                        var userRoles = await _userManager.GetRolesAsync(aspNetUser);
+                        var role = userRoles.First();
 
                         var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Name, user.FirstName),
                             new Claim("FullName", fullName),
+                            new Claim(ClaimTypes.Role, role),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                         };
 

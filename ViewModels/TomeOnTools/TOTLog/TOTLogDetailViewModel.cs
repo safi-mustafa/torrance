@@ -12,6 +12,7 @@ using ViewModels.Authentication;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
+using ViewModels.TomeOnTools.PermittingIssue;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -39,17 +40,38 @@ namespace ViewModels.TomeOnTools.TOTLog
                 return StartOfWork.Date.ToString("MM/dd/yyyy");
             }
         }
+        [Display(Name = "Time Requested")]
+        public TimeSpan TimeRequested { get; set; }
+
+        public string FormattedTimeRequested
+        {
+            get
+            {
+                return TimeRequested.ToString();
+            }
+        }
+
+        [Display(Name = "Time Signed")]
+        public TimeSpan TimeSigned { get; set; }
+        public string FormattedTimeSigned
+        {
+            get
+            {
+                return TimeSigned.ToString();
+            }
+        }
+        public string? Comment { get; set; }
         [Display(Name = "Delay Reason")]
         public string DelayReason { get; set; }
         [Display(Name = "Job Description")]
         public string JobDescription { get; set; }
         [Display(Name = "Man Power")]
-        public long ManPower { get; set; }
+        public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No")]
         public long EquipmentNo { get; set; }
         [Display(Name = "Hours Delayed")]
         public double HoursDelayed { get; set; }
-        public ApproveStatus Status { get; set; }
+        public Status Status { get; set; }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -67,5 +89,6 @@ namespace ViewModels.TomeOnTools.TOTLog
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
     }
 }

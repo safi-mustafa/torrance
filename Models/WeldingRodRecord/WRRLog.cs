@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Enums;
 
 namespace Models.WeldingRodRecord
 {
@@ -13,20 +14,20 @@ namespace Models.WeldingRodRecord
     {
         public DateTime DateRodReturned { get; set; }
         public DateTime CalibrationDate { get; set; }
-        public string FumeControlUsed { get; set; }
+        public FumeControlUsedCatalog FumeControlUsed { get; set; }
         public string Twr { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public DateTime RodCheckedOut { get; set; }
         public double RodCheckedOutLbs { get; set; }
-        public double RodReturnedWasteLbs { get; set; }
+        public double? RodReturnedWasteLbs { get; set; }
 
         [ForeignKey("Department")]
         public long DepartmentId { get; set; }
         public Department Department { get; set; }
 
         [ForeignKey("Employee")]
-        public long EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        public long? EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }

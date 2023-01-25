@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "TOTLogs")
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs")
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
@@ -27,7 +27,6 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Man Hours",data = "ManHours"},
                 new DataTableViewModel{title = "Start Of Work",data = "FormattedStartOfWork"},
-                new DataTableViewModel{title = "Man Power",data = "ManPower"},
                 new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
                 new DataTableViewModel{title = "Hours Delayed",data = "HoursDelayed"},
                 new DataTableViewModel{title = "Status",data = "Status"},

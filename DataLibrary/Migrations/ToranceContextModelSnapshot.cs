@@ -446,6 +446,41 @@ namespace DataLibrary.Migrations
                     b.ToTable("PermitTypes");
                 });
 
+            modelBuilder.Entity("Models.TimeOnTools.PermittingIssue", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("ActiveStatus")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PermittingIssues");
+                });
+
             modelBuilder.Entity("Models.TimeOnTools.ReworkDelay", b =>
                 {
                     b.Property<long>("Id")
@@ -597,8 +632,11 @@ namespace DataLibrary.Migrations
                     b.Property<int>("ActiveStatus")
                         .HasColumnType("int");
 
-                    b.Property<long>("ApproverId")
+                    b.Property<long?>("ApproverId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ContractorId")
                         .HasColumnType("bigint");
@@ -613,7 +651,6 @@ namespace DataLibrary.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DelayReason")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("DepartmentId")
@@ -622,7 +659,7 @@ namespace DataLibrary.Migrations
                     b.Property<long>("EquipmentNo")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ForemanId")
+                    b.Property<long?>("ForemanId")
                         .HasColumnType("bigint");
 
                     b.Property<double>("HoursDelayed")
@@ -635,13 +672,16 @@ namespace DataLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ManHours")
+                    b.Property<long?>("ManHours")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ManPower")
+                    b.Property<long>("ManPowerAffected")
                         .HasColumnType("bigint");
 
                     b.Property<long>("PermitTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PermittingIssueId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ReworkDelayId")
@@ -658,6 +698,12 @@ namespace DataLibrary.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan>("TimeRequested")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("TimeSigned")
+                        .HasColumnType("time");
 
                     b.Property<string>("Twr")
                         .IsRequired()
@@ -683,6 +729,8 @@ namespace DataLibrary.Migrations
                     b.HasIndex("ForemanId");
 
                     b.HasIndex("PermitTypeId");
+
+                    b.HasIndex("PermittingIssueId");
 
                     b.HasIndex("ReworkDelayId");
 
@@ -1014,15 +1062,13 @@ namespace DataLibrary.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("EmployeeId")
+                    b.Property<long?>("EmployeeId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("FumeControlUsed")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FumeControlUsed")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1036,7 +1082,7 @@ namespace DataLibrary.Migrations
                     b.Property<double>("RodCheckedOutLbs")
                         .HasColumnType("float");
 
-                    b.Property<double>("RodReturnedWasteLbs")
+                    b.Property<double?>("RodReturnedWasteLbs")
                         .HasColumnType("float");
 
                     b.Property<long>("RodTypeId")
@@ -1167,9 +1213,7 @@ namespace DataLibrary.Migrations
                 {
                     b.HasOne("Models.ToranceUser", "Approver")
                         .WithMany()
-                        .HasForeignKey("ApproverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApproverId");
 
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
@@ -1185,13 +1229,17 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.ToranceUser", "Foreman")
                         .WithMany()
-                        .HasForeignKey("ForemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ForemanId");
 
                     b.HasOne("Models.TimeOnTools.PermitType", "PermitType")
                         .WithMany()
                         .HasForeignKey("PermitTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.TimeOnTools.PermittingIssue", "PermittingIssue")
+                        .WithMany()
+                        .HasForeignKey("PermittingIssueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1229,6 +1277,8 @@ namespace DataLibrary.Migrations
 
                     b.Navigation("PermitType");
 
+                    b.Navigation("PermittingIssue");
+
                     b.Navigation("ReworkDelay");
 
                     b.Navigation("Shift");
@@ -1265,9 +1315,7 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("Models.WeldingRodRecord.Location", "Location")
                         .WithMany()
