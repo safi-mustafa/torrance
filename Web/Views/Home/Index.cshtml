@@ -20,8 +20,107 @@
 <div class="container-fluid">
     <main>
         <div id="progress-charts-container" class="row mt-5">
-           
         </div>
+        <div class="row dashboard-stats-row">
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                       <div class="content">
+                            <h5 class="card-title"> Total TOTs</h5>                        
+                        <p class="card-text">12</p>
+                       </div>
+                        
+                       <div class="icon">
+                           <i class="bi bi-people-fill"></i>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+               <div class="card w-100">
+                    <div class="card-body">
+                       <div class="content">
+                            <h5 class="card-title"> Total WWRs</h5>                        
+                        <p class="card-text">0</p>
+                       </div>
+                        
+                       <div class="icon">
+                           <i class="bi bi-people-fill"></i>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                       <div class="content">
+                            <h5 class="card-title">Total Overrides</h5>                        
+                        <p class="card-text">0</p>
+                       </div>
+                        
+                       <div class="icon">
+                           <i class="bi bi-people-fill"></i>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript">
+    //$(function () {
+    //    $.ajax({
+    //        url: "/Home/ContractProgress",
+    //        type: 'GET',
+    //        success: function (res) {
+    //            $("#progress-charts-container").html(res);
+    //            $('[class*="progress-done"]').each(function (i, element) {
+    //                setTimeout(() => {
+    //                    element.style.opacity = 1;
+    //                    element.style.width = element.getAttribute('data-done') + '%';
+    //                }, 500)
+    //            });
+    //        }
+    //    });
+    //})
+                //const progress = document.querySelector('.progress-done');
+
+                //setTimeout(() => {
+                //    progress1.style.opacity = 1;
+                //    progress1.style.width = progress1.getAttribute('data-done') + '%';
+                //}, 500)
+
+
+</script>
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    *[class^='progress-done-'] {
+        height: 100%;
+        width: 0;
+        opacity: 0;
+        background: linear-gradient(to left, #f2709c,#ff9472);
+        color: #fff;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fac090;
+        box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+        transition: 1s ease;
+    }
+</style>
+<div class="container-fluid">
+    <main>
+        <div id="progress-charts-container" class="row mt-5">
+        </div>
+
+        
     </main>
 </div>
 

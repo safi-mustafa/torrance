@@ -1208,3 +1208,7 @@ header {
         color: #0057af;
         border: 2px solid #0057af;
     }
+.dashboard-stats-row .card-body{
+    display: flex;
+    align-items: center;
+}
