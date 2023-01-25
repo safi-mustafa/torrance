@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "TOTLogs")
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "TOT Logs")
         {
             _TOTLogService = TOTLogService;
             _logger = logger;

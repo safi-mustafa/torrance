@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> _LocationService;
         private readonly ILogger<LocationController> _logger;
 
-        public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> LocationService, ILogger<LocationController> logger, IMapper mapper) : base(LocationService, logger, mapper, "Location", "Locations")
+        public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> LocationService, ILogger<LocationController> logger, IMapper mapper) : base(LocationService, logger, mapper, "Location", "WRR Locations")
         {
             _LocationService = LocationService;
             _logger = logger;

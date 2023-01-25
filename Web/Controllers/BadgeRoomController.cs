@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IMobileFileService<BadgeRoomModifyViewModel, BadgeRoomModifyViewModel, BadgeRoomDetailViewModel> _badgeRoomService;
         private readonly ILogger<BadgeRoomController> _logger;
 
-        public BadgeRoomController(IMobileFileService<BadgeRoomModifyViewModel, BadgeRoomModifyViewModel, BadgeRoomDetailViewModel> badgeRoomService, ILogger<BadgeRoomController> logger, IMapper mapper) : base(badgeRoomService, logger, mapper, "BadgeRoom", "BadgeRooms")
+        public BadgeRoomController(IMobileFileService<BadgeRoomModifyViewModel, BadgeRoomModifyViewModel, BadgeRoomDetailViewModel> badgeRoomService, ILogger<BadgeRoomController> logger, IMapper mapper) : base(badgeRoomService, logger, mapper, "BadgeRoom", "Badge Rooms")
         {
             _badgeRoomService = badgeRoomService;
             _logger = logger;

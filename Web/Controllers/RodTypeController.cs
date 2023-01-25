@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> _RodTypeService;
         private readonly ILogger<RodTypeController> _logger;
 
-        public RodTypeController(IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> RodTypeService, ILogger<RodTypeController> logger, IMapper mapper) : base(RodTypeService, logger, mapper, "RodType", "RodTypes")
+        public RodTypeController(IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> RodTypeService, ILogger<RodTypeController> logger, IMapper mapper) : base(RodTypeService, logger, mapper, "RodType", "Rod Types")
         {
             _RodTypeService = RodTypeService;
             _logger = logger;
