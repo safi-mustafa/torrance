@@ -9,6 +9,8 @@ using Models;
 using Models.Mapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Repositories.Services.AppSettingServices.MappService;
+using Repositories.Services.AppSettingServices.MobileFileServices;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
@@ -100,6 +102,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
+            services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IFolderService, FolderService>();
             services.AddScoped<IUserService, UserService>();

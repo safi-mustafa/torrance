@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.ShiftService;
+using ViewModels.AppSettings.Map;
 using ViewModels.DataTable;
 using ViewModels.TomeOnTools.Shift;
 

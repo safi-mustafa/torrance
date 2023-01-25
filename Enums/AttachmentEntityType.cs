@@ -2,7 +2,10 @@
 {
     public enum AttachmentEntityType
     {
-        Folder,
-        Employee
+        BadgeRoom,
+        Delivery,
+        Passport,
+        VehiclePass,
+        Parking
     }
 }

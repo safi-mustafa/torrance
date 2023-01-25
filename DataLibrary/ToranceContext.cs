@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Models.TimeOnTools;
 using Models.Common;
 using Models.WeldingRodRecord;
+using Models.AppSettings;
 
 namespace DataLibrary;
 
@@ -39,6 +40,8 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<WeldMethod> WeldMethods { get; set; }
     public DbSet<WRRLog> WRRLogs { get; set; }
     public DbSet<TOTLog> TOTLogs { get; set; }
+    public DbSet<Map> Maps { get; set; }
+    public DbSet<MobileFile> MobileFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

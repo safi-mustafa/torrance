@@ -11,6 +11,7 @@ using ViewModels.TomeOnTools.Shift;
 using ViewModels.Authentication;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using ViewModels.AppSettings.Map;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
