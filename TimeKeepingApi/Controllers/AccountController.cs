@@ -122,6 +122,7 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse(result);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("/api/Account/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchViewModel model)

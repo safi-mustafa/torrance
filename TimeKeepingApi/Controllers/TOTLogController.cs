@@ -5,11 +5,13 @@ using Repositories.Services.TimeOnToolServices.TOTLogService;
 using AutoMapper;
 using Pagination;
 using ViewModels.WeldingRodRecord.WRRLog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TOTLogController : CrudBaseController<TOTLogCreateViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogAPISearchViewModel>
     {
         private readonly ITOTLogService<TOTLogCreateViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _tOTLogService;
