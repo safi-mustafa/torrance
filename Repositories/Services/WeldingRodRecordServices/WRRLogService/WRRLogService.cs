@@ -8,6 +8,7 @@ using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
+using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -23,19 +24,22 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         private readonly ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
 
-        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
+            _userInfoService = userInfoService;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
-
+            var loggedInUserId = _userInfoService.LoggedInUserId();
+            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
@@ -46,6 +50,8 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
                             (searchFilters.Unit.Id ==0 || x.Unit.Id == searchFilters.Unit.Id)
+                            &&
+                            (loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
                             &&
                             (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
             ;

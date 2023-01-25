@@ -10,6 +10,7 @@ using Models;
 using Pagination;
 using Repositories.Shared.AuthenticationService;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
@@ -50,9 +51,9 @@ namespace TorranceApi.Controllers
         }
 
         [HttpPost]
-        [Route("/api/Account/Login")]
+        [Route("/api/Account/LoginUsingPincode")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string pincode)
+        public async Task<IActionResult> LoginUsingPincode(string pincode)
         {
             IRepositoryResponse result;
             try
@@ -101,7 +102,7 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
+                        var userDetail = _mapper.Map<UserDetailVM>(aspNetUser);
 
                         var responseModel = new RepositoryResponseWithModel<TokenVM>();
                         responseModel.ReturnModel = new TokenVM
@@ -130,6 +131,104 @@ namespace TorranceApi.Controllers
             result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
             return ReturnProcessedResponse(result);
         }
+
+
+        [HttpPost]
+        [Route("/api/Account/Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginVM model)
+        {
+            IRepositoryResponse result;
+            try
+            {
+                _logger.LogInformation("Entered Login Endpoint", "login method 1");
+                if (ModelState.IsValid)
+                {
+                    _logger.LogInformation("Model State is valid", "login method 2");
+
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    //if (user?.IsApproved == false)
+                    //{
+                    //    ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
+                    //    _logger.LogError("Approval for this account is still pending.");
+
+                    //    result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                    //    var check = ReturnProcessedResponse(result);
+                    //    return check;
+                    //}
+                    var response = await _userManager.CheckPasswordAsync(user, model.Password);
+                    if (user != null && response)
+                    {
+                        var name = User?.Identity?.Name;
+                        _logger.LogInformation("User logged in.", "login method 4");
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        var role = userRoles.First();
+                        var authClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.Name, user.UserName),
+                            new Claim("Role", role),
+                            new Claim(ClaimTypes.Email, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
+                        if (userRoles.Contains("Admin"))
+                        {
+                            authClaims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                        }
+                        else
+                        {
+                            foreach (var userRole in userRoles)
+                            {
+                                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                            }
+                        }
+
+
+                        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+
+                        var token = new JwtSecurityToken
+                            (
+                                issuer: _configuration["JWT:ValidIssuer"],
+                                audience: _configuration["JWT:ValidAudience"],
+                                expires: DateTime.Now.AddHours(12),
+                                claims: authClaims,
+                                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                           );
+
+                        var userDetail = _mapper.Map<UserDetailVM>(user);
+                        userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
+                        userDetail.Role = role;
+                        //  userDetail.Roles = string.Join(',', userRoles);
+
+                        var responseModel = new RepositoryResponseWithModel<TokenVM>();
+                        responseModel.ReturnModel = new TokenVM
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            Expiry = token.ValidTo,
+                            UserDetail = userDetail
+                        };
+                        return ReturnProcessedResponse<TokenVM>(responseModel);
+                    }
+
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        _logger.LogError("Invalid login attempt");
+                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                        return ReturnProcessedResponse(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                _logger.LogError(ex.Message, "Login Endpoint Exception msg");
+            }
+            result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
+            return ReturnProcessedResponse(result);
+        }
+
 
         [Authorize]
         [HttpGet]

@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
@@ -56,6 +57,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Approver.Id == 0 || x.ApproverId == searchFilters.Approver.Id)
                             &&
                             (searchFilters.Foreman.Id == 0 || x.ForemanId == searchFilters.Foreman.Id)
+                            &&
+                            (searchFilters.Status == Status.Pending || searchFilters.Status == x.Status)
             ;
         }
 

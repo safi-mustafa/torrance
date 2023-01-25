@@ -1,18 +1,16 @@
-﻿using Pagination;
+﻿using Enums;
+using Pagination;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
     public class TOTLogSearchViewModel : BaseSearchModel
     {
         public long EquipmentNo { get; set; }
+        public Status Status { get; set; }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
