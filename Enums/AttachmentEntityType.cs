@@ -6,6 +6,7 @@
         Delivery,
         Passport,
         VehiclePass,
-        Parking
+        Parking,
+        DropBoxLink
     }
 }

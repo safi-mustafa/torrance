@@ -6,8 +6,7 @@ using ViewModels.TomeOnTools.ReworkDelay;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class ReworkDelayController : CrudBaseController<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel, ReworkDelayDetailViewModel, ReworkDelaySearchViewModel>
     {
         private readonly IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> _ReworkDelayService;

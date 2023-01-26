@@ -6,8 +6,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class DepartmentController : CrudBaseController<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel, DepartmentDetailViewModel, DepartmentSearchViewModel>
     {
         private readonly IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> _DepartmentService;

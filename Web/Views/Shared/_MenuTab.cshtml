@@ -53,12 +53,16 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         <a class="dropdown-item px-3" asp-controller="WRRLog" asp-action="Index"> Log</a>
-                        <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
-                        <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                        <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                        <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
-                        <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
-                        <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
+                            <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
+                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
+                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
+                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
+                        }
+                        
 
                     </div>
                 </li>
@@ -70,38 +74,20 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         <a class="dropdown-item px-3" asp-controller="TOTLog" asp-action="Index"> Log</a>
-                        <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index">Contractors</a>
-                        <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                        <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                        <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
-                        <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
-                        <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                        <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
-                         <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
-                          <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index">Contractors</a>
+                            <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
+                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
+                            <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
+                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
+                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
+                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                        }
                     </div>
                 </li>
-
-     
-                @* <li class="nav-item"><a class="nav-link px-3" asp-controller="Contractor" asp-action="Index">Contractors</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="Unit" asp-action="Index">Units</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="Department" asp-action="Index">Departments</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="Location" asp-action="Index">Locations</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="WeldMethod" asp-action="Index">WeldMethods</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="RodType" asp-action="Index">RodTypes</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="SOW" asp-action="Index">SOWs</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="Shift" asp-action="Index">Shifts</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="ShiftDelay" asp-action="Index">ShiftDelays</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="ReworkDelay" asp-action="Index">ReworkDelays</a></li>
-                <li class="nav-item"><a class="nav-link px-3" asp-controller="PermitType" asp-action="Index">PermitTypes</a></li>*@
-                @*<li class="nav-item dropdown">
-                <a class="nav-link px-3 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">Customers</a></li>
-                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Change Password</a></li>
-                </ul>
-                </li>*@
             </ul>
         </div>
 

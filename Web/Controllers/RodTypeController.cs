@@ -6,8 +6,7 @@ using ViewModels.WeldingRodRecord.RodType;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class RodTypeController : CrudBaseController<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel, RodTypeDetailViewModel, RodTypeSearchViewModel>
     {
         private readonly IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> _RodTypeService;

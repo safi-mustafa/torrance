@@ -1,4 +1,5 @@
 ﻿@model TOTLogSearchViewModel
+@using Enums;
 @using ViewModels.TomeOnTools.TOTLog;
 
 <div class="row">
@@ -25,6 +26,12 @@
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="form-group profile-input">
+            <label asp-for="Status" class="control-label form-label fw-600"></label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control"></select>
         </div>
     </div>
 </div>

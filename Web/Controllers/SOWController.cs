@@ -6,8 +6,7 @@ using ViewModels.TomeOnTools.SOW;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class SOWController : CrudBaseController<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel, SOWDetailViewModel, SOWSearchViewModel>
     {
         private readonly ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> _SOWService;

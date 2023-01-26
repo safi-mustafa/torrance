@@ -6,8 +6,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class WeldMethodController : CrudBaseController<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel, WeldMethodDetailViewModel, WeldMethodSearchViewModel>
     {
         private readonly IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> _WeldMethodService;

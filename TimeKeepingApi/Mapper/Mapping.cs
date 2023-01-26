@@ -267,8 +267,8 @@ namespace TorranceApi.Mapper
             CreateMap<TOTLogSearchViewModel, TOTLogAPISearchViewModel>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
-                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
-                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
+                //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                //.ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ReverseMap();
 
