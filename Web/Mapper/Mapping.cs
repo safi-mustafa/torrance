@@ -188,6 +188,7 @@ namespace Models.Mapper
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
+                .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
             CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>()
                 .ReverseMap();
