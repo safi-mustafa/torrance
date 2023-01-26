@@ -110,7 +110,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
             services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
-            services.AddScoped<IFolderService, FolderService>();
+            services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
