@@ -111,10 +111,11 @@ namespace Web.Extensions
             services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
+            services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
-            services.AddScoped<IAttachmentService, AttachmentService>();
+          //  services.AddScoped<IAttachmentService, AttachmentService>();
         }
     }
 }

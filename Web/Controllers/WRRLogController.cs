@@ -24,9 +24,14 @@ namespace Web.Controllers
 
         public override List<DataTableViewModel> GetColumns()
         {
-            return new List<DataTableViewModel>()
+            var dataColumns = new List<DataTableViewModel>();
+            if (!User.IsInRole("Employee"))
             {
-                 new DataTableViewModel{title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox",className="exclude-form-export" },
+                dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
+            }
+            dataColumns.AddRange( new List<DataTableViewModel>()
+            {
+
                 new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
@@ -34,7 +39,9 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Email",data = "Email"},
                 new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
-            };
+            });
+            return dataColumns;
+            
         }
         public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
         {

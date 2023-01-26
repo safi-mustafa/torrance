@@ -12,6 +12,6 @@ namespace Repositories.Shared.AttachmentService
         where CreateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, IIdentitifier, new()
     {
-        Task<IRepositoryResponse> DeleteByEntity(long entityId, AttachmentEntityType entityType);
+       // Task<IRepositoryResponse> DeleteByEntity(long entityId, AttachmentEntityType entityType);
     }
 }
