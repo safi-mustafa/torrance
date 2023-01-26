@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Shared.Interfaces;
+using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.TomeOnTools.TOTLog;
 
@@ -46,14 +47,14 @@ namespace Web.Controllers
             }
             return base.Create(model);
         }
+
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return View("~/Views/TOTLog/_Index.cshtml", vm);
-          //  return base.DataTableIndexView(vm);
         }
 
 
-      
+
 
     }
      
