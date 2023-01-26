@@ -68,8 +68,9 @@ function setCheckboxes() {
             if (response != null && response != undefined && response.length > 0) {
                 $('.checkbox-items').each(function (i) {
                     var checkboxId = $(this).val();
+                    console.log(response,'check')
                     var index = (response).findIndex(x => x === parseInt(checkboxId));
-                    if (index == -1) {
+                    if (index !== -1) {
                         $(this).prop('checked', true);
                     }
                 });
