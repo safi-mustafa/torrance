@@ -39,6 +39,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
+            searchFilters.OrderByColumn = "Status";
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);

@@ -41,6 +41,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as TOTLogSearchViewModel;
+            searchFilters.OrderByColumn = "Status";
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
@@ -140,6 +141,32 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 _logger.LogError(ex, $"GetById() for TOTLog threw the following exception");
                 return Response.BadRequestResponse(_response);
             }
+        }
+
+        public override Task<IRepositoryResponse> Create(CreateViewModel model)
+        {
+            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var parsedLoggedInId = long.Parse(loggedInUserId);
+            var viewModel = model as TOTLogModifyViewModel;
+            if(loggedInUserRole == "Employee")
+            {
+                viewModel.Employee.Id = parsedLoggedInId;
+            }
+            return base.Create(model);
+        }
+
+        public override Task<IRepositoryResponse> Update(UpdateViewModel model)
+        {
+            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var parsedLoggedInId = long.Parse(loggedInUserId);
+            var viewModel = model as TOTLogModifyViewModel;
+            if (loggedInUserRole == "Employee")
+            {
+                viewModel.Employee.Id = parsedLoggedInId;
+            }
+            return base.Update(model);
         }
 
     }

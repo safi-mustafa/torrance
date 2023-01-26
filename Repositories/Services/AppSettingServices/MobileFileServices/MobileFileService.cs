@@ -31,15 +31,23 @@ namespace Repositories.Services.AppSettingServices.MobileFileServices
         private readonly IMapper _mapper;
         private readonly IFileHelper _fileHelper;
         private readonly IRepositoryResponse _response;
-        private readonly IAttachmentService _attachment;
+      //  private readonly IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> _attachment;
 
-        public MobileFileService(ToranceContext db, ILogger<MobileFileService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IFileHelper fileHelper, IRepositoryResponse response, IAttachmentService attachment) : base(db, logger, mapper, response)
+        public MobileFileService
+            (
+            ToranceContext db, 
+            ILogger<MobileFileService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, 
+            IMapper mapper, 
+            IFileHelper fileHelper, 
+            IRepositoryResponse response
+           // IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> attachment
+            ) : base(db, logger, mapper, response)
         {
             _db = db;
             _mapper = mapper;
             _fileHelper = fileHelper;
             _response = response;
-            _attachment = attachment;
+         //   _attachment = attachment;
         }
 
         public override Expression<Func<MobileFile, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -53,54 +61,54 @@ namespace Repositories.Services.AppSettingServices.MobileFileServices
             ;
         }
 
-        [HttpPost]
-        public override async Task<IRepositoryResponse> Create(CreateViewModel model)
-        {
+        //[HttpPost]
+        //public override async Task<IRepositoryResponse> Create(CreateViewModel model)
+        //{
             
-            var viewModel = model as BaseFileUpdateViewModel;
+        //    var viewModel = model as BaseFileUpdateViewModel;
 
-            if(viewModel.FileType == AttachmentEntityType.Dropbox)
-            {
-                return await base.Create(model);
-            }
+        //    if(viewModel.FileType == AttachmentEntityType.Dropbox)
+        //    {
+        //        return await base.Create(model);
+        //    }
 
-            var attachment = new AttachmentVM
-            {
-                Name = viewModel.File.FileName,
-                ExtensionType = Path.GetExtension(viewModel.File.FileName),
-                File = viewModel.File,
-                UploadDate = DateTime.Now,
-                FileType = viewModel.FileType,
-            };
-            var result = await _attachment.CreateSingle(attachment);
-            var check = result as RepositoryResponseWithModel<long>;
-            var response = new RepositoryResponseWithModel<long> { ReturnModel = check.ReturnModel };
-            return response;
+        //    var attachment = new AttachmentVM
+        //    {
+        //        Name = viewModel.File.FileName,
+        //        ExtensionType = Path.GetExtension(viewModel.File.FileName),
+        //        File = viewModel.File,
+        //        UploadDate = DateTime.Now,
+        //        FileType = viewModel.FileType,
+        //    };
+        //    var result = await _attachment.CreateSingle(attachment);
+        //    var check = result as RepositoryResponseWithModel<long>;
+        //    var response = new RepositoryResponseWithModel<long> { ReturnModel = check.ReturnModel };
+        //    return response;
 
            
-        }
+        //}
 
-        public override async Task<IRepositoryResponse> Update(UpdateViewModel model)
-        {
-            var viewModel = model as BaseFileUpdateViewModel;
-            if (viewModel.FileType == AttachmentEntityType.Dropbox)
-            {
-                return await base.Update(model);
-            }
-            var attachment = new AttachmentVM
-            {
-                Id = viewModel.Id,
-                Name = viewModel.File.FileName,
-                ExtensionType = Path.GetExtension(viewModel.File.FileName),
-                File = viewModel.File,
-                UploadDate = DateTime.Now,
-                FileType = viewModel.FileType,
-            };
-            var result = await _attachment.UpdateSingle(attachment);
+        //public override async Task<IRepositoryResponse> Update(UpdateViewModel model)
+        //{
+        //    var viewModel = model as BaseFileUpdateViewModel;
+        //    if (viewModel.FileType == AttachmentEntityType.Dropbox)
+        //    {
+        //        return await base.Update(model);
+        //    }
+        //    var attachment = new AttachmentVM
+        //    {
+        //        Id = viewModel.Id,
+        //        Name = viewModel.File.FileName,
+        //        ExtensionType = Path.GetExtension(viewModel.File.FileName),
+        //        File = viewModel.File,
+        //        UploadDate = DateTime.Now,
+        //        FileType = viewModel.FileType,
+        //    };
+        //    var result = await _attachment.UpdateSingle(attachment);
 
-            var response = new RepositoryResponseWithModel<long> { ReturnModel = viewModel.Id };
-            return response;
-        }
+        //    var response = new RepositoryResponseWithModel<long> { ReturnModel = viewModel.Id };
+        //    return response;
+        //}
 
     }
 }

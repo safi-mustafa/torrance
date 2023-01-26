@@ -1,5 +1,4 @@
-﻿using System;
-using ViewModels.Shared;
+﻿using ViewModels.Shared;
 
 namespace ViewModels.Attachment
 {

@@ -24,9 +24,13 @@ namespace Web.Controllers
 
         public override List<DataTableViewModel> GetColumns()
         {
-            return new List<DataTableViewModel>()
+            var dataColumns = new List<DataTableViewModel>();
+            if (!User.IsInRole("Employee"))
             {
-                new DataTableViewModel{title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox",className="exclude-form-export" },
+                dataColumns.Add( new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
+            }
+            dataColumns.AddRange(new List<DataTableViewModel>()
+            {
                 new DataTableViewModel{title = "Date",data = "FormattedDate"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Man Hours",data = "ManHours"},
@@ -35,7 +39,8 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Hours Delayed",data = "HoursDelayed"},
                 new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
-            };
+            });
+            return dataColumns;
         }
 
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
@@ -46,6 +51,16 @@ namespace Web.Controllers
                 ModelState.Remove("Employee.Name");
             }
             return base.Create(model);
+        }
+
+        public override Task<ActionResult> Update(int id)
+        {
+            if (User.IsInRole("Employee"))
+            {
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
+            }
+            return base.Update(id);
         }
 
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
