@@ -12,6 +12,7 @@ namespace ViewModels.Shared
         [DisplayName("Name")]
         public string Name { get; set; }
         public string? IconUrl { get; set; }
+        public List<AttachmentResponseVM> Attachments { get; set; }
     }
 
     public class FolderSearchViewModel : BaseSearchModel
