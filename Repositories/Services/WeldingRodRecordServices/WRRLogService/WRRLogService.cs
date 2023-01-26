@@ -9,6 +9,7 @@ using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Shared;
 using Repositories.Shared.UserInfoServices;
+using System.Data.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -77,8 +78,10 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                     .Include(x => x.Employee)
                     .Include(x => x.RodType)
                     .Include(x => x.WeldMethod)
+                    .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
+
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
