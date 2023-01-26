@@ -7,6 +7,6 @@
         Passport,
         VehiclePass,
         Parking,
-        DropBoxLink
+        Dropbox
     }
 }

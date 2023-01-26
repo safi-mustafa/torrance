@@ -2,15 +2,18 @@
 using Pagination;
 using ViewModels.Shared;
 
-namespace ViewModels.AppSettings.MobileFiles.Delivery
+namespace ViewModels.AppSettings.MobileFiles.Dropbox
 {
-    public class DeliveryDetailViewModel : BaseFileDetailViewModel
+    public class DropboxDetailViewModel : BaseFileDetailViewModel
     {
+
     }
 
-    public class DeliverySearchViewModel : BaseFileSearchViewModel
+    public class DropboxSearchViewModel : BaseFileSearchViewModel
     {
-        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Delivery;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Dropbox;
+
+        public override ActiveStatus ActiveStatus { get; set; } = ActiveStatus.Active;
 
     }
 }

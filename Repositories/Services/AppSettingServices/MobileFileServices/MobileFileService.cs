@@ -45,13 +45,25 @@ namespace Repositories.Services.AppSettingServices.MobileFileServices
         public override Expression<Func<MobileFile, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as BaseFileSearchViewModel;
-            return x => x.FileType == searchFilters.FileType;
+            return x => (
+                            (x.FileType == searchFilters.FileType)
+                            &&
+                            (x.ActiveStatus == null || x.ActiveStatus == searchFilters.ActiveStatus)
+                        )
+            ;
         }
 
         [HttpPost]
         public override async Task<IRepositoryResponse> Create(CreateViewModel model)
         {
+            
             var viewModel = model as BaseFileUpdateViewModel;
+
+            if(viewModel.FileType == AttachmentEntityType.Dropbox)
+            {
+                return await base.Create(model);
+            }
+
             var attachment = new AttachmentVM
             {
                 Name = viewModel.File.FileName,
@@ -65,14 +77,16 @@ namespace Repositories.Services.AppSettingServices.MobileFileServices
             var response = new RepositoryResponseWithModel<long> { ReturnModel = check.ReturnModel };
             return response;
 
-            //viewModel.Url = viewModel.File != null ? _fileHelper.Save(viewModel) : null;
-            //return await base.Create(model);
+           
         }
 
         public override async Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
             var viewModel = model as BaseFileUpdateViewModel;
-
+            if (viewModel.FileType == AttachmentEntityType.Dropbox)
+            {
+                return await base.Update(model);
+            }
             var attachment = new AttachmentVM
             {
                 Id = viewModel.Id,
@@ -86,9 +100,6 @@ namespace Repositories.Services.AppSettingServices.MobileFileServices
 
             var response = new RepositoryResponseWithModel<long> { ReturnModel = viewModel.Id };
             return response;
-
-            //viewModel.Url = viewModel.File != null ? _fileHelper.Save(viewModel) : null;
-           // return await base.Update(model);
         }
 
     }
