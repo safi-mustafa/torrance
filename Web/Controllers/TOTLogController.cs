@@ -30,16 +30,16 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
                 new DataTableViewModel{title = "Hours Delayed",data = "HoursDelayed"},
                 new DataTableViewModel{title = "Status",data = "Status"},
-                //new DataTableViewModel{title = "Department",data = "Department.Name"},
-                //new DataTableViewModel{title = "Unit",data = "Unit.Name"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             };
         }
 
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
         {
-            if (!User.IsInRole("SuperAdmin")) {
+            if (User.IsInRole("Employee"))
+            {
                 ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
             }
             return base.Create(model);
         }

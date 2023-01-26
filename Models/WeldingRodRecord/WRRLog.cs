@@ -20,6 +20,7 @@ namespace Models.WeldingRodRecord
         public DateTime RodCheckedOut { get; set; }
         public double RodCheckedOutLbs { get; set; }
         public double? RodReturnedWasteLbs { get; set; }
+        public Status Status { get; set; }
 
         [ForeignKey("Department")]
         public long DepartmentId { get; set; }

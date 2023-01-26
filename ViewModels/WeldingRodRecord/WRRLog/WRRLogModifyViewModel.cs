@@ -14,7 +14,7 @@ using Enums;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
     {
         [Display(Name = "Date Rod Returned")]
         public DateTime DateRodReturned { get; set; } = DateTime.Now;
@@ -37,6 +37,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Display(Name = "Rod Returned Waste lbs", Prompt = "Add Rod Returned Waste lbs")]
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
         public double? RodReturnedWasteLbs { get; set; }
+        public Status Status { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 

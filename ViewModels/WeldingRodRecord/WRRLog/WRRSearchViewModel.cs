@@ -1,4 +1,5 @@
-﻿using Pagination;
+﻿using Enums;
+using Pagination;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.WeldingRodRecord.Employee;
@@ -22,12 +23,15 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     public class WRRLogAPISearchViewModel : BaseSearchModel
     {
         public string Email { get; set; }
-        public long DepartmentId { get; set; } 
+        public long DepartmentId { get; set; }
 
-        public long EmployeeId { get; set; } 
+        public long EmployeeId { get; set; }
 
         public long UnitId { get; set; }
 
-        public long LocationId { get; set; } 
+        public long LocationId { get; set; }
+
+        public Status Status { get; set; }
+
     }
 }

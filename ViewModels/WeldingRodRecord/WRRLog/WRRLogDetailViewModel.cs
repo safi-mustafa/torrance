@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Models.Common.Interfaces;
 using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogDetailViewModel : BaseCrudViewModel
+    public class WRRLogDetailViewModel : BaseCrudViewModel, IApprove
     {
         public long Id { get; set; }
         [DisplayName("Date Rod Returned")]
@@ -54,6 +55,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public double RodCheckedOutLbs { get; set; }
         [DisplayName("Rod Returned Waste lbs")]
         public double RodReturnedWasteLbs { get; set; }
+
+        public Status Status { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
