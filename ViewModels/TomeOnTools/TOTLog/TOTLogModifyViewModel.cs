@@ -64,10 +64,14 @@ namespace ViewModels.TomeOnTools.TOTLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
+        private UserBriefViewModel? _approver;
+        public UserBriefViewModel Approver { get => _approver == null ? new UserBriefViewModel() : _approver; set => _approver = value; }
 
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        private UserBriefViewModel? _foreman;
+        public UserBriefViewModel Foreman { get => _foreman == null ? new UserBriefViewModel() : _foreman; set => _foreman = value; }
+
+        private EmployeeBriefViewModel? _employee;
+        public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
 
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Shared.Interfaces;
+using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.WRRLog;
 
@@ -25,6 +26,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
+                 new DataTableViewModel{title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox",className="exclude-form-export" },
                 new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
@@ -47,7 +49,11 @@ namespace Web.Controllers
             }
             return base.Create(model);
         }
+        public override ActionResult DataTableIndexView(CrudListViewModel vm)
+        {
+            return View("~/Views/WRRLog/_Index.cshtml", vm);
+        }
 
-        
+
     }
 }
