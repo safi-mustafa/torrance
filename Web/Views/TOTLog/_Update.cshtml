@@ -3,7 +3,7 @@
 @model TOTLogModifyViewModel
 @{
     Layout = null;
-    var isAdmin = User.IsInRole("SuperAdmin");
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Admin");
 }
 <div class="row">
     <div class="col-lg-12">
