@@ -147,8 +147,12 @@ namespace Models.Mapper
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
+                .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
             CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
@@ -173,8 +177,8 @@ namespace Models.Mapper
                 .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
                 .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
-                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
                 .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
                 .ForMember(x => x.Foreman, opt => opt.Ignore())
