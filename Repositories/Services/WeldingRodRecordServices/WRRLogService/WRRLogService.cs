@@ -38,8 +38,9 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
-            var loggedInUserId = _userInfoService.LoggedInUserId();
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var parsedLoggedInId = long.Parse(loggedInUserId);
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
@@ -50,8 +51,14 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
-                            //&&
-                            //(loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
+                            &&
+                            (
+                                (loggedInUserRole == "SuperAdmin")
+                                ||
+                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                ||
+                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                            )
                             &&
                             (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
             ;

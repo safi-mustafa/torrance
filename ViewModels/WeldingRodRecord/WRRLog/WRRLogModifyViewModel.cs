@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.Common.Contractor;
 using Enums;
+using ViewModels.Authentication;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
@@ -51,6 +52,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
     }
 }

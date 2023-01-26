@@ -30,9 +30,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Rod Checked Out",data = "FormattedRodCheckedOut"},
-                new DataTableViewModel{title = "Rod Checked Out lbs",data = "RodCheckedOutLbs"},
-                new DataTableViewModel{title = "Rod Returned Waste lbs",data = "RodReturnedWasteLbs"},
+                new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             };
         }
