@@ -5,8 +5,11 @@
     data: queryString,
     success: function (response) {
       if (response) {
+        console.log("TOT Chart Data:", response);
+        console.log("DelayTypeHours data:", response.DelayTypeHours);
+
         // Total Count by Delay Type
-        GenerateBarChart("tot-delay-type", response.DelayTypeHours);
+        GenerateBarChart("tot-start-of-delay-type", response.StartOfDelayCount);
         // Total Count by Unit
         GenerateBarChart("tot-unit-count", response.UnitCount);
         // Total Hours by Unit

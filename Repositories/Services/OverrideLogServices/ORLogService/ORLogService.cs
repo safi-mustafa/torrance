@@ -15,6 +15,8 @@ using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Pagination;
+using PuppeteerSharp;
+using Response = Centangle.Common.ResponseHelpers.Response;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
@@ -570,107 +572,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        public async Task<XLWorkbook> DownloadExcel1(ORLogSearchViewModel searchModel)
-        {
-            try
-            {
-                searchModel.IsExcelDownload = true;
-                var response = await GetAll<ORLogDetailViewModel>(searchModel);
-
-                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
-                var httpContext = _httpContextAccessor.HttpContext;
-                var baseUri = httpContext?.Request;
-                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
-                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
-                // Create a new workbook
-                var workbook = new XLWorkbook();
-                var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
-                // Add a new worksheet to the workbook and set its name
-                var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
-                //var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
-
-                SetExcelHeaders(overrideLogSheet, 1);
-
-                var rowNumber = 2;
-                var overrideCostIndex = 1;
-                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
-                {
-                    rowNumber = rowNumber + 1;
-                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
-                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
-                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
-                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
-                    overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
-                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
-                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
-                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
-                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
-                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
-                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
-                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
-                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
-                    //overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
-
-                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
-
-                    // Create a cell with the URL as a hyperlink
-                    var cell = overrideLogSheet.Cell(rowNumber, 13);
-                    if (!string.IsNullOrEmpty(url))
-                    {
-                        cell.Value = "link";
-                        cell.SetHyperlink(new XLHyperlink(new Uri(url)));
-                    }
-                    else
-                        cell.Value = "";
-
-                    int currentColumn = 13;
-                    //for (int i = 0; i < maxCostRows; i++)
-                    //{
-                    //    if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
-                    //    {
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //    }
-                    //    else
-                    //    {
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
-                    //    }
-                    //}
-
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
-
-                    //for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
-                    //{
-                    //    overrideCostIndex = overrideCostIndex + 1;
-                    //    overrideLogCostSheet.Cell($"A{overrideCostIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
-                    //    overrideLogCostSheet.Cell($"B{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
-                    //    overrideLogCostSheet.Cell($"C{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
-                    //    overrideLogCostSheet.Cell($"D{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
-                    //    overrideLogCostSheet.Cell($"E{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
-                    //    overrideLogCostSheet.Cell($"f{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].FormattedCost;
-                    //}
-                }
-                return workbook;
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return null;
-        }
-
         public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
         {
             try
@@ -697,24 +598,22 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var overrideCostIndex = 1;
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
-                    rowNumber = rowNumber + 1;
-                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
-                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
-                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
-                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
-                    overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
-                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
-                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
-                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
-                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
-                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
-                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
-                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
-                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
+                    var log = logs.ReturnModel.Items[l];
+                    rowNumber++;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = log.Company?.Name ?? "";
+                    overrideLogSheet.Cell(rowNumber, 2).Value = log.Department?.Name ?? "";
+                    overrideLogSheet.Cell(rowNumber, 3).Value = log.Employee?.Name ?? "";
+                    overrideLogSheet.Cell(rowNumber, 4).Value = log.FormattedCreatedDate;
+                    overrideLogSheet.Cell(rowNumber, 5).Value = log.FormattedCreatedTime;
+                    overrideLogSheet.Cell(rowNumber, 6).Value = log.FormattedDateOfWorkCompleted ?? "";
+                    overrideLogSheet.Cell(rowNumber, 7).Value = log.WorkScope ?? "";
+                    overrideLogSheet.Cell(rowNumber, 8).Value = log.PoNumber.ToString() ?? "";
+                    overrideLogSheet.Cell(rowNumber, 9).Value = log.Unit?.Name ?? "";
+                    overrideLogSheet.Cell(rowNumber, 10).Value = log.Shift?.Name ?? "";
+                    overrideLogSheet.Cell(rowNumber, 11).Value = log.Reason ?? "";
+                    overrideLogSheet.Cell(rowNumber, 12).Value = log.EmployeeNames ?? "";
 
-                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
-
-                    // Create a cell with the URL as a hyperlink
+                    var url = log.FormattedClippedEmployeeUrl;
                     var cell = overrideLogSheet.Cell(rowNumber, 13);
                     if (!string.IsNullOrEmpty(url))
                     {
@@ -725,25 +624,197 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         cell.Value = "";
 
                     int currentColumn = 13;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalSTHours;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalOTHours;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalDTHours;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalSTHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalOTHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalDTHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalHeadCount;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalCost.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.FormattedStatus ?? "";
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.Approver?.Name ?? "";
                 }
+
                 return workbook;
             }
             catch (Exception ex)
             {
-
+                // handle exception
+                return null;
             }
-            return null;
         }
 
+        public async Task<byte[]> DownloadPDF(ORLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.DisablePagination = true;
+                var response = await GetAll<ORLogDetailViewModel>(searchModel);
 
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUri = httpContext?.Request;
+                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
+                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
+
+                // Generate HTML content for PDF
+                var htmlContent = GeneratePDFHtmlContent(logs.ReturnModel.Items);
+
+                // Convert HTML to PDF using PuppeteerSharp
+                var pdfBytes = await ConvertHtmlToPdf(htmlContent);
+
+                return pdfBytes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating PDF in DownloadPDF method");
+                return null;
+            }
+        }
+
+        private string GeneratePDFHtmlContent(List<ORLogDetailViewModel> items)
+        {
+            var html = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Override Logs Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 10px; margin: 0; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; font-size: 9px; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .header { position: relative; text-align: center; margin-bottom: 20px; }
+        .logo { position: absolute; top: 0; left: 0; width: 100px; height: auto; }
+        .page-break { page-break-after: always; }
+        @media print {
+            body { margin: 0; padding: 10px; }
+            .header { margin-bottom: 10px; }
+            th, td { padding: 3px; font-size: 8px; }
+            .logo { width: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class='header'>
+        <img src='https://torrance.eztrak.net/img/trc-logo.png' alt='TRC Logo' class='logo'>
+        <h2>Override Logs Report</h2>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Requestor</th>
+                <th>Approver</th>
+                <th>Department</th>
+                <th>Unit</th>
+                <th>Shift</th>
+                <th>Work Date</th>
+                <th>Workscope</th>
+                <th>Override Reason</th>
+                <th>Company</th>
+                <th>PO Number</th>
+                <th>ST Hours</th>
+                <th>OT Hours</th>
+                <th>DT Hours</th>
+                <th>Total Hours</th>
+                <th>Head Count</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>";
+
+            foreach (var item in items)
+            {
+                html += $@"
+            <tr>
+                <td>{item.FormattedStatus ?? ""}</td>
+                <td>{item.FormattedCreatedOn ?? ""}</td>
+                <td>{item.Employee?.Name ?? ""}</td>
+                <td>{item.Approver?.Name ?? ""}</td>
+                <td>{item.Department?.Name ?? ""}</td>
+                <td>{item.Unit?.Name ?? ""}</td>
+                <td>{item.Shift?.Name ?? ""}</td>
+                <td>{item.FormattedDateOfWorkCompleted ?? ""}</td>
+                <td>{(item.WorkScope ?? "").Replace("<", "&lt;").Replace(">", "&gt;")}</td>
+                <td>{(item.Reason ?? "").Replace("<", "&lt;").Replace(">", "&gt;")}</td>
+                <td>{item.Company?.Name ?? ""}</td>
+                <td>{item.PoNumber.ToString() ?? ""}</td>
+                <td>{item.TotalSTHours}</td>
+                <td>{item.TotalOTHours}</td>
+                <td>{item.TotalDTHours}</td>
+                <td>{item.TotalHours}</td>
+                <td>{item.TotalHeadCount.ToString()}</td>
+                <td>{item.TotalCost:C}</td>
+            </tr>";
+            }
+
+            html += @"
+        </tbody>
+    </table>
+    <script>
+        // Auto-print when loaded (optional)
+        // window.onload = function() { window.print(); }
+    </script>
+</body>
+</html>";
+
+            return html;
+        }
+
+        private async Task<byte[]> ConvertHtmlToPdf(string htmlContent)
+        {
+            try
+            {
+                // Configure browser fetcher to use temp directory
+                var browserFetcher = new BrowserFetcher(new BrowserFetcherOptions
+                {
+                    Path = Path.GetTempPath()
+                });
+
+                // Download the Chromium revision if it doesn't exist
+                await browserFetcher.DownloadAsync();
+
+                // Launch the browser
+                using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                {
+                    Headless = true,
+                    ExecutablePath = browserFetcher.GetInstalledBrowsers().FirstOrDefault()?.GetExecutablePath(),
+                    Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
+                });
+
+                // Create a new page
+                using var page = await browser.NewPageAsync();
+
+                // Set the HTML content
+                await page.SetContentAsync(htmlContent, new NavigationOptions
+                {
+                    WaitUntil = new[] { WaitUntilNavigation.Networkidle0 }
+                });
+
+                // Generate PDF
+                var pdfBytes = await page.PdfDataAsync(new PdfOptions
+                {
+                    Format = PuppeteerSharp.Media.PaperFormat.A4,
+                    PrintBackground = true,
+                    MarginOptions = new PuppeteerSharp.Media.MarginOptions
+                    {
+                        Top = "20px",
+                        Right = "20px",
+                        Bottom = "20px",
+                        Left = "20px"
+                    }
+                });
+
+                return pdfBytes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error converting HTML to PDF using PuppeteerSharp");
+                throw;
+            }
+        }
 
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, int rowNumber)
         {

@@ -53,15 +53,6 @@ namespace Repositories.Services.DashboardService
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
-            // Get Total Count by Delay Type
-            model.DelayTypeHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-              .Include(x => x.DelayType)
-              .GroupBy(x => x.DelayTypeId).Select(x => new ChartViewModel
-              {
-                  Category = x.Max(y => y.DelayType.Name),
-                  Value = x.Count()  // Count of records instead of sum of hours
-              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
-
             model.Shift = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
               .GroupBy(x => x.ShiftId).Select(x => new ChartViewModel
@@ -91,7 +82,17 @@ namespace Repositories.Services.DashboardService
 
             await GetTOTDelayTypeDetailedCharts(search, model, totHours);
 
-            model.DelayTypeHours = await GetTOTDelayTypeHours(search);
+            model.StartOfDelayCount = await GetFilteredTOTLogs(search)
+                                .Include(x => x.StartOfWorkDelay)
+                                .GroupBy(x => x.StartOfWorkDelayId)
+                                .Select(x => new ChartViewModel
+                                {
+                                    Category = !string.IsNullOrEmpty(x.Max(c => c.StartOfWorkDelay.Name)) ? x.Max(c => c.StartOfWorkDelay.Name) : "No Status",
+                                    Value = x.Count()
+                                })
+                                .IgnoreAutoIncludes()
+                                .ToListAsync();
+
             model.DelayTypeCosts = await GetTOTDelayTypeCosts(search, totHours);
 
             var departments = await _db.Departments.AsNoTracking().ToListAsync();

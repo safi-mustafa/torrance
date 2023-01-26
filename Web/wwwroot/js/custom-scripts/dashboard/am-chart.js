@@ -78,6 +78,33 @@ function GeneratePieChart(id, seriesData) {
   }); // end am5.ready()
 }
 function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
+  console.log(
+    "GenerateBarChart called with id:",
+    id,
+    "seriesData:",
+    seriesData
+  );
+
+  // Validate input data
+  if (!seriesData || !Array.isArray(seriesData) || seriesData.length === 0) {
+    console.log("No data available for chart:", id);
+    return;
+  }
+
+  // Filter out any items with null or undefined values
+  var validData = seriesData.filter(function (item) {
+    return (
+      item && item.Category && item.Value !== undefined && item.Value !== null
+    );
+  });
+
+  if (validData.length === 0) {
+    console.log("No valid data after filtering for chart:", id);
+    return;
+  }
+
+  console.log("Valid data for chart:", id, validData);
+
   am5.ready(function () {
     DisposeRoot(id);
     var root = am5.Root.new(id);
@@ -175,19 +202,19 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
       setCustomBarChartSeriesColor(series);
     } else {
       // If series is longer than colorArray, add missing colors
-      for (let i = colorArray.length; i < seriesData.length; i++) {
+      for (let i = colorArray.length; i < validData.length; i++) {
         colorArray.push(getRandomColor());
       }
       setBarChartSeriesColors(series);
     }
 
-    xAxis.data.setAll(seriesData);
+    xAxis.data.setAll(validData);
     xAxis.get("renderer").labels.template.setAll({
       oversizedBehavior: "truncate",
       textAlign: "center",
       maxHeight: 100,
     });
-    series.data.setAll(seriesData);
+    series.data.setAll(validData);
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
