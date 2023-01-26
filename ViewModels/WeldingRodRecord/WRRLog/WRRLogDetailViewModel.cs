@@ -55,6 +55,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [DisplayName("Rod Returned Waste lbs")]
         public double RodReturnedWasteLbs { get; set; }
 
+        public Status Status { get; set; }
+
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
