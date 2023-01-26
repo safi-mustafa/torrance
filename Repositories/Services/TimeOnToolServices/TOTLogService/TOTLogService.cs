@@ -57,7 +57,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (loggedInUserRole == "SuperAdmin" || loggedInUserRole == "Admin")
                                 ||
                                 (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
                                 ||

@@ -4,8 +4,9 @@ $(document).on('change', '#master-checkbox', function () {
     $(this).is(':checked');
 
 });
+var controller = "";
 $(function () {
-
+    controller = $("#controller-name").val();
     dataTable.off('xhr.dt', function () { });
     dataTable.on('xhr.dt', function (e, settings, json, xhr) {
         setTimeout(function () {
@@ -16,7 +17,7 @@ $(function () {
     $(document).off('click', '#approve-all');
     $(document).on('click', '#approve-all', function (e) {
         e.preventDefault();
-        var href = '/TOTLog/ApproveRecords';
+        var href = '/' + controller + '/ApproveRecords';
         ApproveAll(href);
     });
 
@@ -38,7 +39,7 @@ $(function () {
 
 function SendAjax(Ids, status) {
     $.ajax({
-        url: "/TOTLog/ApproveRecords",
+        url: "/" + controller + "/ApproveRecords",
         type: "post",
         data: { 'Ids': Ids, Status: status },
         dataType: "html",
@@ -61,7 +62,7 @@ function UnCheckBoxes(id) {
 
 function setCheckboxes() {
     $.ajax({
-        url: "/TOTLog/GetApprovedRecordIds",
+        url: "/" + controller + "/GetApprovedRecordIds",
         type: "post",
         success: function (response) {
             if (response != null && response != undefined && response.length > 0) {

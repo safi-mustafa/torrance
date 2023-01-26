@@ -12,6 +12,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     public class WRRLogSearchViewModel : BaseSearchModel
     {
         public string Email { get; set; }
+
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
@@ -19,10 +20,14 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
+
+        public Status? Status { get; set; } = null;
     }
+
     public class WRRLogAPISearchViewModel : BaseSearchModel
     {
         public string Email { get; set; }
+
         public long DepartmentId { get; set; }
 
         public long EmployeeId { get; set; }

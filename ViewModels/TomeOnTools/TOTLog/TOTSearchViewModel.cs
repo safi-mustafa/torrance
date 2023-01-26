@@ -10,7 +10,7 @@ namespace ViewModels.TomeOnTools.TOTLog
     public class TOTLogSearchViewModel : BaseSearchModel
     {
         public long EquipmentNo { get; set; }
-        public Status? Status { get; set; } = Enums.Status.Pending;
+        public Status? Status { get; set; } = null;
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -25,9 +25,9 @@ namespace ViewModels.TomeOnTools.TOTLog
     public class TOTLogAPISearchViewModel : BaseSearchModel
     {
         public long EquipmentNo { get; set; }
-        public long DepartmentId { get; set; } 
+        public long DepartmentId { get; set; }
 
-        public long UnitId { get; set; } 
+        public long UnitId { get; set; }
 
         public long ContractorId { get; set; }
 
