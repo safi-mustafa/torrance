@@ -1,13 +1,14 @@
 ﻿using Enums;
 using Helpers.Models.Shared;
 using Models.Common;
+using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Timers;
 
 namespace Models.TimeOnTools
 {
-    public class TOTLog : BaseDBModel
+    public class TOTLog : BaseDBModel, IApprove
     {
         public DateTime Date { get; set; }
         public string Twr { get; set; }
