@@ -125,6 +125,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
                     .Include(x => x.Foreman)
+                    .Include(x => x.Employee)
                     .Include(x => x.PermittingIssue)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)

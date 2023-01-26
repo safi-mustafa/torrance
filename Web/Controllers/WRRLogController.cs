@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Shared.Interfaces;
 using ViewModels.CRUD;
@@ -61,6 +62,23 @@ namespace Web.Controllers
             return View("~/Views/WRRLog/_Index.cshtml", vm);
         }
 
+        protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
+        {
+            result.ActionsList = new List<DataTableActionViewModel>()
+            {
+                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/WRRLog/Detail/Id"},
 
+            };
+
+            if (!User.IsInRole("Employee"))
+            {
+                result.ActionsList.AddRange(new List<DataTableActionViewModel>()
+                    {
+                        new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id" },
+                        new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" }
+                    }
+                );
+            }
+        }
     }
 }

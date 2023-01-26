@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Shared.Interfaces;
 using ViewModels.CRUD;
@@ -27,7 +28,7 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             if (!User.IsInRole("Employee"))
             {
-                dataColumns.Add( new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
+                dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
             }
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
@@ -68,9 +69,26 @@ namespace Web.Controllers
             return View("~/Views/TOTLog/_Index.cshtml", vm);
         }
 
+        protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
+        {
+            result.ActionsList = new List<DataTableActionViewModel>()
+            {
+                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
 
+            };
+
+            if (!User.IsInRole("Employee"))
+            {
+                result.ActionsList.AddRange(new List<DataTableActionViewModel>() 
+                    {  
+                        new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id" },
+                        new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" }
+                    }
+                );
+            }
+        }
 
 
     }
-     
+
 }
