@@ -24,6 +24,8 @@ namespace ViewModels.Dashboard
         public List<ChartViewModel> RequestReason { get; set; }
         public List<ChartViewModel> DelayTypeHours { get; set; }
         public List<ChartViewModel> DelayTypeCosts { get; set; }
+        public List<ChartViewModel> TurnAroundDelayType { get; set; }
+        public List<ChartViewModel> CapitalDelayType { get; set; }
     }
 
 
@@ -33,6 +35,8 @@ namespace ViewModels.Dashboard
         public List<ChartViewModel> Unit { get; set; }
         public List<ChartViewModel> Department { get; set; }
         public List<ChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> TurnAroundDelayType { get; set; }
+        public List<ChartViewModel> CapitalDelayType { get; set; }
     }
 
     public class WrrPieChartViewModel

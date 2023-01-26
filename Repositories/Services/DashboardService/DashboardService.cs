@@ -9,6 +9,7 @@ using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.Common.Department;
 using ViewModels.Dashboard;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -73,6 +74,29 @@ namespace Repositories.Services.DashboardService
             model.DelayTypeHours = await GetTOTDelayTypeHours(search);
             model.DelayTypeCosts = await GetTOTDelayTypeCosts(search, totHours);
 
+            var departments = await _db.Departments.AsNoTracking().ToListAsync();
+            var turnaroundId = departments.Where(x => x.Name == "1. Turnaround").Select(x => x.Id).FirstOrDefault();
+            var capitalId = departments.Where(x => x.Name == "2. Capital ").Select(x => x.Id).FirstOrDefault();
+            search.Department = new DepartmentBriefViewModel { Id = turnaroundId };
+
+            model.TurnAroundDelayType = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                .Include(x => x.DelayType)
+                .GroupBy(x => x.DelayTypeId).Select(static x => new ChartViewModel
+                {
+                    Category = x.Max(y => y.DelayType.Name),
+                    Value = x.Count()
+                    //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+                }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
+            search.Department = new DepartmentBriefViewModel { Id = capitalId };
+            model.CapitalDelayType = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                .Include(x => x.DelayType)
+                .GroupBy(x => x.DelayTypeId).Select(x => new ChartViewModel
+                {
+                    Category = x.Max(y => y.DelayType.Name),
+                    Value = x.Count()
+                    //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+                }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
             return model;
 
         }
@@ -196,7 +220,6 @@ namespace Repositories.Services.DashboardService
               }).ToListAsync();
             SetDisplayNameForStatus(model.ChartData);
             return model;
-
         }
 
         public async Task<StatusChartViewModel> GetOverrideStatusChartData(TOTLogSearchViewModel search)
@@ -243,6 +266,8 @@ namespace Repositories.Services.DashboardService
                     (search.DelayType.Id == null || search.DelayType.Id == x.DelayTypeId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == x.UnitId)
+                    &&
+                    (search.Department.Id == null || search.Department.Id == x.DepartmentId)
             );
         }
 
@@ -254,6 +279,8 @@ namespace Repositories.Services.DashboardService
                     x.IsArchived == false
                     &&
                     search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
+                    &&
+                    search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId
                 );
         }
 
