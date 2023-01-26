@@ -2,9 +2,9 @@
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 
-namespace ViewModels.AppSettings.MobileFiles.Delivery
+namespace ViewModels.AppSettings.MobileFiles.Dropbox
 {
-    public class DeliveryModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
+    public class DropboxModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
         public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Delivery;
     }
