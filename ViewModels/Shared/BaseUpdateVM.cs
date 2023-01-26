@@ -14,6 +14,8 @@ namespace ViewModels.Shared
 
     public class BaseFileUpdateViewModel : BaseUpdateVM,IFileModel, IIdentitifier
     {
+        public string? Name { get; set; }
+        public DateTime UploadDate { get; set; } = DateTime.Now;
         public string? Url { get; set; }
         public virtual AttachmentEntityType FileType { get; set; }
         [DataType(DataType.Upload)]

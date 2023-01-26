@@ -6,6 +6,6 @@ namespace ViewModels.AppSettings.MobileFiles.Dropbox
 {
     public class DropboxModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Delivery;
+        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Dropbox;
     }
 }

@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -90,5 +91,6 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
 }

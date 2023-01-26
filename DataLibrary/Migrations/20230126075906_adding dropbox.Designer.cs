@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230126075906_adding dropbox")]
+    partial class addingdropbox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -666,9 +669,6 @@ namespace DataLibrary.Migrations
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("EmployeeId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("EquipmentNo")
                         .HasColumnType("bigint");
 
@@ -738,8 +738,6 @@ namespace DataLibrary.Migrations
                     b.HasIndex("ContractorId");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ForemanId");
 
@@ -1242,10 +1240,6 @@ namespace DataLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("Models.ToranceUser", "Foreman")
                         .WithMany()
                         .HasForeignKey("ForemanId");
@@ -1291,8 +1285,6 @@ namespace DataLibrary.Migrations
                     b.Navigation("Contractor");
 
                     b.Navigation("Department");
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Foreman");
 

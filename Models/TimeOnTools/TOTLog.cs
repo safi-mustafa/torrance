@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Helpers.Models.Shared;
 using Models.Common;
+using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Timers;
 
@@ -61,5 +62,9 @@ namespace Models.TimeOnTools
         [ForeignKey("Foreman")]
         public long? ForemanId { get; set; }
         public ToranceUser? Foreman { get; set; }
+
+        [ForeignKey("Employee")]
+        public long? EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
     }
 }

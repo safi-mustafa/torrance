@@ -18,6 +18,7 @@ using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -60,5 +61,6 @@ namespace ViewModels.TomeOnTools.TOTLog
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
 }
