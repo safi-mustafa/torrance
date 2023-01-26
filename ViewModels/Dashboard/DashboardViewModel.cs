@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Common.Department;
 
 namespace ViewModels.Dashboard
 {
@@ -11,6 +12,7 @@ namespace ViewModels.Dashboard
         public long TotalTotLogs { get; set; } = 0;
         public long TotalWRRLogs { get; set; } = 0;
         public long TotalORLogs { get; set; } = 0;
+        public List<DepartmentBriefViewModel> Departments { get; set; } = new List<DepartmentBriefViewModel>();
     }
     public class StatusChartViewModel
     {
@@ -26,17 +28,16 @@ namespace ViewModels.Dashboard
         public List<ChartViewModel> DelayTypeCosts { get; set; }
         public List<ChartViewModel> TurnAroundDelayType { get; set; }
         public List<ChartViewModel> CapitalDelayType { get; set; }
+        public List<ChartViewModel> UnitCount { get; set; }
     }
 
 
     public class OverridePieChartViewModel
     {
-        public List<ChartViewModel> Shift { get; set; }
         public List<ChartViewModel> Unit { get; set; }
-        public List<ChartViewModel> Department { get; set; }
-        public List<ChartViewModel> RequestReason { get; set; }
-        public List<ChartViewModel> TurnAroundDelayType { get; set; }
-        public List<ChartViewModel> CapitalDelayType { get; set; }
+        public List<ChartViewModel> UnitCount { get; set; }
+        public List<ChartViewModel> UnitHours { get; set; }
+        public List<ChartViewModel> UnitCost { get; set; }
     }
 
     public class WrrPieChartViewModel

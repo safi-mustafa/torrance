@@ -1,66 +1,22 @@
-﻿function GetTOTChartData(isAdmin, isApprover, formData = "") {
+﻿function GetTOTChartData(isAdmin, isApprover, queryString = "") {
   $.ajax({
-    type: "GET",
     url: "/Home/GetTotChartsData",
-    data: formData,
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    success: function (data) {
-      TOTDepartmentChart(data.Department);
-      TOTUnitChart(data.Unit);
-      TOTShiftChart(data.Shift);
-      TOTRequestReasonChart(data.RequestReason);
-      TOTShiftDelayChart(data.ShiftDelay);
-      TOTReworkDelayChart(data.ReworkDelay);
-      TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
-      TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
-      TOTWorkDelayHours(data.DelayTypeHours);
-      TOTWorkDelayCosts(data.DelayTypeCosts);
-      OverrrideTurnaroundDelayTypeChart(data.TurnAroundDelayType);
-      OverrrideCapitalDelayTypeChart(data.CapitalDelayType);
+    type: "GET",
+    data: queryString,
+    success: function (response) {
+      if (response) {
+        // Total Count by Delay Type
+        GenerateBarChart("tot-delay-type", response.DelayTypeHours);
+        // Total Count by Unit
+        GenerateBarChart("tot-unit-count", response.UnitCount);
+        // Total Hours by Unit
+        GenerateBarChart("tot-unit", response.Unit);
+      }
     },
     error: function () {
-      console.log("Error occured!!");
+      console.log("Error occurred while fetching TOT chart data");
     },
   });
 }
 
-function TOTDepartmentChart(seriesData) {
-  GenerateBarChart("tot-department", seriesData);
-}
-function TOTUnitChart(seriesData) {
-  GenerateBarChart("tot-unit", seriesData);
-}
-function TOTShiftChart(seriesData) {
-  GenerateBarChart("tot-shift", seriesData);
-}
-function TOTRequestReasonChart(seriesData) {
-  GenerateBarChart("tot-request-reason", seriesData);
-}
-
-function TOTShiftDelayChart(seriesData) {
-  GenerateBarChart("tot-shift-delay", seriesData);
-}
-function TOTReworkDelayChart(seriesData) {
-  GenerateBarChart("tot-rework-delay", seriesData);
-}
-function TOTStartOfWorkDelayChart(seriesData) {
-  GenerateBarChart("tot-start-of-work-delay", seriesData);
-}
-function TOTOngoingWorkDelayChart(seriesData) {
-  GenerateBarChart("tot-ongoing-work-delay", seriesData);
-}
-
-function TOTWorkDelayHours(seriesData) {
-  GenerateBarChart("tot-work-delay-hours", seriesData);
-}
-
-function TOTWorkDelayCosts(seriesData) {
-  GenerateBarChart("tot-work-delay-costs", seriesData);
-}
-function OverrrideTurnaroundDelayTypeChart(seriesData) {
-  GenerateBarChart("tot-turnaround-delay-type", seriesData);
-}
-function OverrrideCapitalDelayTypeChart(seriesData) {
-  GenerateBarChart("tot-capital-delay-type", seriesData);
-}
+// Remove all other chart functions since we're not using them anymore

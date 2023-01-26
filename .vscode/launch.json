@@ -5,10 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "C#: Web Project (Hot Reload)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Web/Web.csproj",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "preLaunchTask": "build"
+    },
+    {
       "name": "C#: Torrance Debug",
       "type": "dotnet",
       "request": "launch",
-      "projectPath": "${workspaceFolder}/<relative-path-to-project-folder>Torrance.csproj"
+      "projectPath": "${workspaceFolder}/Torrance/Torrance.csproj",
+      "preLaunchTask": "build"
     }
   ]
 }

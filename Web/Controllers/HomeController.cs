@@ -110,6 +110,17 @@ namespace Web.Controllers
             return Json(data);
         }
 
+        public async Task<ActionResult> GetDashboardStats(TOTLogSearchViewModel search)
+        {
+            var data = await _dashboardService.GetDashboardData(search);
+            return Json(new
+            {
+                totalTotLogs = data.TotalTotLogs,
+                totalWRRLogs = data.TotalWRRLogs,
+                totalORLogs = data.TotalORLogs
+            });
+        }
+
         [AllowAnonymous]
         public ActionResult ShowMessage(string message)
         {

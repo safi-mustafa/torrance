@@ -23,6 +23,58 @@
         box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
         transition: 1s ease;
     }
+
+    .department-filter .item_wrap ul li input.active {
+        background: #f44b00;
+        color: #FFFFFF;
+    }
+
+    .department-filter .item_wrap ul li input {
+        height: 30px;
+        padding: 0px 13px;
+        background: #F8F8F8;
+        border-radius: 999px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .department-filter .item_wrap ul li input:hover {
+        background: #f44b00;
+        color: #FFFFFF;
+    }
+
+    .department-filter .item_wrap ul li:last-child {
+        border-top-right-radius: 999px;
+        border-bottom-right-radius: 999px;
+    }
+
+    .department-filter .item_wrap ul li:first-child {
+        border-top-left-radius: 999px;
+        border-bottom-left-radius: 999px;
+    }
+
+    .item_wrap {
+        display: flex;
+    }
+
+    .department-filter .item_wrap ul li {
+        background: #F8F8F8;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .department-filter .item_wrap ul {
+        border: 1px solid #E5E5E5;
+        display: flex;
+        align-items: center;
+        padding: 7px 9px;
+        border-radius: 999px;
+        background-color: #FFFFFF;
+        margin: 0px;
+    }
 </style>
 <div class="container-fluid">
     <main>
@@ -31,6 +83,21 @@
             <h3 class="default-heading">
                 Torrance Admin Dashboard
             </h3>
+            <div class="department-filter">
+                <div class="item_wrap col-md-3">
+                    <ul class="choise_button">
+                        <li>
+                            <input type="button" name="Department" class="search-filters department-filter active"
+                                value="All" attr-val="">
+                            @foreach (var dept in Model.Departments)
+                            {
+                                <input type="button" name="Department" class="search-filters department-filter"
+                                    value="@dept.Name" attr-val="@dept.Id">
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
         }
         @if (isApprover)
         {
@@ -43,12 +110,12 @@
         @if (isAdmin || isApprover)
         {
             <div class="row dashboard-stats-row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card w-100">
                         <div class="card-body">
                             <div class="content">
                                 <h5 class="card-title"> Total TOT's</h5>
-                                <p class="card-text">@Model.TotalTotLogs</p>
+                                <p class="card-text" id="total-tot-count">@Model.TotalTotLogs</p>
                             </div>
 
                             <div class="icon">
@@ -58,12 +125,12 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                @*<div class="col-md-4">
                     <div class="card w-100">
                         <div class="card-body">
                             <div class="content">
                                 <h5 class="card-title">Total WRR's</h5>
-                                <p class="card-text">@Model.TotalWRRLogs</p>
+                                <p class="card-text" id="total-wrr-count">@Model.TotalWRRLogs</p>
                             </div>
 
                             <div class="icon">
@@ -71,13 +138,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
+                </div>*@
+                <div class="col-md-6">
                     <div class="card w-100">
                         <div class="card-body">
                             <div class="content">
                                 <h5 class="card-title">Total Overrides</h5>
-                                <p class="card-text">@Model.TotalORLogs</p>
+                                <p class="card-text" id="total-or-count">@Model.TotalORLogs</p>
                             </div>
 
                             <div class="icon">
@@ -88,24 +155,47 @@
                 </div>
             </div>
         }
-        <div class="row dashboard-filters-row">
-            @if (isAdmin || isApprover)
-            {
-                <partial name="_TOTStatusChart" />
-                <partial name="_WRRStatusChart" />
-                <partial name="_OverrideStatusChart" />
-                <div class="row col-12">
-                    <partial name="_OverridePieCharts" />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">Time on Tools (TOT)</h4>
+                    </div>
                 </div>
-            }
-            @if (isAdmin || isApprover)
-            {
-                <div class="row col-12">
-                    <partial name="_TOTPieCharts" />
+                <div class="row">
+                    <div class="col-12">
+                        @await Html.PartialAsync("_TOTStatusChart", Model, new ViewDataDictionary(ViewData) { {
+                        "ColumnClass", "col-md-12" } })
+                        @* @await Html.PartialAsync("_WRRStatusChart", Model, new ViewDataDictionary(ViewData) { {
+                                                "ColumnClass", "col-md-6" } }) *@
+                    </div>
                 </div>
-            }
-
-
+                <div class="row">
+                    <div class="col-12">
+                        @await Html.PartialAsync("_TOTPieCharts", Model, new ViewDataDictionary(ViewData) { {
+                                                "ColumnClass", "col-12" } })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">Override</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @await Html.PartialAsync("_OverrideStatusChart", Model, new ViewDataDictionary(ViewData) { {
+                                                "ColumnClass", "col-md-12" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @await Html.PartialAsync("_OverridePieCharts", Model, new ViewDataDictionary(ViewData) { {
+                                                "ColumnClass", "col-md-12" } })
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>
@@ -133,18 +223,45 @@
 <script>
     $(function () {
         GetStatusChartData("TOT", "tot-status");
-        GetStatusChartData("WRR", "wrr-status");
+        //GetStatusChartData("WRR", "wrr-status");
         GetStatusChartData("Override", "override-status");
         GetTOTChartData("@isAdmin", "@isApprover");
         GetOverrideChartData();
 
-        //$(document).on("change", "#department-id, #unit-id", function () {
-        //    var departmentId = $("#department-id").val();
-        //    var unitId = $("#unit-id").val();
+        function updateDashboardStats(queryString) {
+            $.ajax({
+                url: '@Url.Action("GetDashboardStats", "Home")',
+                type: 'GET',
+                data: queryString,
+                success: function (response) {
+                    $('#total-tot-count').text(response.totalTotLogs);
+                    //$('#total-wrr-count').text(response.totalWRRLogs);
+                    $('#total-or-count').text(response.totalORLogs);
+                }
+            });
+        }
 
-        //    var formData = { "Department.Id": departmentId, "Unit.Id": unitId };
+        $(document).on("click", ".search-filters.department-filter", function () {
+            // Remove active class from all buttons
+            $(".department-filter").removeClass("active");
+            // Add active class to clicked button
+            $(this).addClass("active");
 
-        //    GetTOTChartData(formData);
-        //    GetWrrChartData(formData);
-        //});
+            var departmentId = $(this).attr("attr-val");
+            var search = {
+                "Department.Id": departmentId ? parseInt(departmentId) : null
+            };
+
+            // Convert search object to query string format
+            var queryString = $.param(search);
+
+            // Update dashboard stats
+            updateDashboardStats(queryString);
+
+            GetStatusChartData("TOT", "tot-status", queryString);
+            //GetStatusChartData("WRR", "wrr-status", queryString);
+            GetStatusChartData("Override", "override-status", queryString);
+            GetTOTChartData("@isAdmin", "@isApprover", queryString);
+            GetOverrideChartData(queryString);
+        });
     })</script>

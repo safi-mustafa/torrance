@@ -33,6 +33,35 @@ namespace Repositories.Services.DashboardService
         {
             var model = new TOTPieChartViewModel();
             var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+
+            // Get Total Count by Unit
+            model.UnitCount = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
+              {
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = x.Count()  // Count of records instead of sum of hours
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
+            // Get Total Hours by Unit
+            model.Unit = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
+              {
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
+            // Get Total Count by Delay Type
+            model.DelayTypeHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+              .Include(x => x.DelayType)
+              .GroupBy(x => x.DelayTypeId).Select(x => new ChartViewModel
+              {
+                  Category = x.Max(y => y.DelayType.Name),
+                  Value = x.Count()  // Count of records instead of sum of hours
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
             model.Shift = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
               .GroupBy(x => x.ShiftId).Select(x => new ChartViewModel
@@ -47,15 +76,6 @@ namespace Repositories.Services.DashboardService
               .GroupBy(x => x.DepartmentId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Department.Name),
-                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
-                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
-
-            model.Unit = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-              .Include(x => x.Unit)
-              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
-              {
-                  Category = x.Max(y => y.Unit.Name),
                   Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
@@ -98,7 +118,6 @@ namespace Repositories.Services.DashboardService
                     //Value = x.Sum(y => y.TotalCost) * 100 / totCost
                 }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
             return model;
-
         }
 
         private async Task GetTOTDelayTypeDetailedCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeDetailChartViewModel model, double? totHours)
@@ -144,44 +163,35 @@ namespace Repositories.Services.DashboardService
         {
             var model = new OverridePieChartViewModel();
             var totCost = await GetFilteredORLogs(search).IgnoreQueryFilters().SumAsync(x => x.TotalCost);
-            model.Shift = await GetFilteredORLogs(search).IgnoreQueryFilters()
-              .Include(x => x.Shift)
-              .GroupBy(x => x.ShiftId).Select(x => new ChartViewModel
-              {
-                  Category = x.Max(y => y.Shift.Name),
-                  Value = (double)(x.Sum(y => y.TotalCost))
-                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
-            model.Department = await GetFilteredORLogs(search).IgnoreQueryFilters()
-              .Include(x => x.Department)
-              .GroupBy(x => x.DepartmentId).Select(x => new ChartViewModel
-              {
-                  Category = x.Max(y => y.Department.Name),
-                  Value = (double)(x.Sum(y => y.TotalCost))
-                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
-
-            model.Unit = await GetFilteredORLogs(search).IgnoreQueryFilters()
+            // Get Total Count by Unit
+            model.UnitCount = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
               .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Unit.Name),
-                  Value = (double)(x.Sum(y => y.TotalCost))
-                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+                  Value = x.Count()  // Count of records
               }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
-            model.RequestReason = await GetFilteredORLogs(search).IgnoreQueryFilters()
-              .Include(x => x.ReasonForRequest)
-              .GroupBy(x => x.ReasonForRequestId).Select(x => new ChartViewModel
+            // Get Total Hours by Unit (using TotalCost since ManHours is not available)
+            model.UnitHours = await GetFilteredORLogs(search).IgnoreQueryFilters()
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
               {
-                  Category = x.Max(y => y.ReasonForRequest.Name),
-                  Value = (double)(x.Sum(y => y.TotalCost))
-                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = (double)x.Sum(y => y.TotalCost)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
+            // Get Total Cost by Unit
+            model.UnitCost = await GetFilteredORLogs(search).IgnoreQueryFilters()
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
+              {
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = (double)x.Sum(y => y.TotalCost)
               }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             return model;
-
         }
 
         public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
@@ -234,18 +244,28 @@ namespace Repositories.Services.DashboardService
             SetDisplayNameForStatus(model.ChartData);
 
             return model;
-
         }
 
-        public async Task<DashboardViewModel> GetDashboardData()
+        public async Task<DashboardViewModel> GetDashboardData(TOTLogSearchViewModel search = null)
         {
             try
             {
+                var departments = await _db.Departments
+                    .Where(x => !x.IsDeleted)
+                    .Select(x => new DepartmentBriefViewModel { Id = x.Id, Name = x.Name })
+                    .ToListAsync();
+
+
+                var totalORLogs = await GetFilteredORLogs(search ?? new TOTLogSearchViewModel()).CountAsync();
+                // var totalWRRLogs = await GetFilteredWrrLogs(new WRRLogSearchViewModel { Department = new DepartmentBriefViewModel { Id = search?.Department.Id } }).CountAsync();
+                var totalTotLogs = await GetFilteredTOTLogs(search ?? new TOTLogSearchViewModel()).CountAsync();
+
                 var dashboardData = new DashboardViewModel
                 {
-                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
-                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
-                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync()
+                    TotalORLogs = totalORLogs,
+                    // TotalWRRLogs = totalWRRLogs,
+                    TotalTotLogs = totalTotLogs,
+                    Departments = departments
                 };
                 return dashboardData;
             }
@@ -278,9 +298,9 @@ namespace Repositories.Services.DashboardService
                     &&
                     x.IsArchived == false
                     &&
-                    search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
+                    (search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
                     &&
-                    search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId
+                    (search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
                 );
         }
 

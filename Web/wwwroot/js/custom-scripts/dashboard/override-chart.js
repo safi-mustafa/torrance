@@ -1,18 +1,20 @@
-﻿function GetOverrideChartData(formData = "") {
+﻿function GetOverrideChartData(queryString = "") {
   $.ajax({
-    type: "GET",
     url: "/Home/GetOverrideChartsData",
-    data: formData,
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    success: function (data) {
-      OverrideDepartmentChart(data.Department);
-      OverrideUnitChart(data.Unit);
-      OverrideShiftChart(data.Shift);
-      OverrrideRequestReasonChart(data.RequestReason);
+    type: "GET",
+    data: queryString,
+    success: function (response) {
+      if (response) {
+        // Total Count by Unit
+        GenerateBarChart("override-unit-count", response.UnitCount);
+        // Total Hours by Unit
+        GenerateBarChart("override-unit-hours", response.UnitHours);
+        // Total Cost by Unit
+        GenerateBarChart("override-unit-cost", response.UnitCost);
+      }
     },
     error: function () {
-      console.log("Error occured!!");
+      console.log("Error occurred while fetching Override chart data");
     },
   });
 }
