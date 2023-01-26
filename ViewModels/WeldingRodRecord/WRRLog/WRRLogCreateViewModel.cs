@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -42,5 +43,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
     }
 }
