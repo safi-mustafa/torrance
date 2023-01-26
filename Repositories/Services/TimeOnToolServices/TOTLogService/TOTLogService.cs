@@ -10,6 +10,7 @@ using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
+using Repositories.Shared;
 using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using ViewModels.Shared;
@@ -17,7 +18,7 @@ using ViewModels.TomeOnTools.TOTLog;
 
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
-    public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

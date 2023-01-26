@@ -2,16 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
+using Repositories.Shared.Interfaces;
 using ViewModels.DataTable;
 using ViewModels.TomeOnTools.TOTLog;
 
 namespace Web.Controllers
 {
     [Authorize]
-    public class TOTLogController : CrudBaseController<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogSearchViewModel>
+    public class TOTLogController : ApproveBaseController<ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel>, TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogSearchViewModel>
     {
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
+        private readonly IBaseApprove _baseApprove;
 
         public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs")
         {
@@ -43,6 +45,9 @@ namespace Web.Controllers
             }
             return base.Create(model);
         }
+
+
+      
 
     }
      

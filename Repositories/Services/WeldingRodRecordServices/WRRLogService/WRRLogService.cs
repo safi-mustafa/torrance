@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
-using Repositories.Common;
 using Repositories.Shared;
 using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
