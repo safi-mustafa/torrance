@@ -31,15 +31,6 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Rod Checked Out",data = "FormattedRodCheckedOut"},
                 new DataTableViewModel{title = "Rod Checked Out lbs",data = "RodCheckedOutLbs"},
                 new DataTableViewModel{title = "Rod Returned Waste lbs",data = "RodReturnedWasteLbs"},
-                //new DataTableViewModel{title = "Department",data = "Department.Name"},
-                //new DataTableViewModel{title = "Employee",data = "Employee.Name"},
-                //new DataTableViewModel{title = "Unit",data = "Unit.Name"},
-                //new DataTableViewModel{title = "RodType",data = "RodType.Name"},
-                //new DataTableViewModel{title = "WeldMethod",data = "WeldMethod.Name"},
-                //new DataTableViewModel{title = "Location",data = "Location.Name"},
-                //new DataTableViewModel{title = "Name",data = "Name"},
-
-
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             };
         }
@@ -50,9 +41,9 @@ namespace Web.Controllers
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
-            if (!User.IsInRole("Admin")) {
+            if (User.IsInRole("Employee")) {
                 ModelState.Remove("Employee.Id");
-            
+                ModelState.Remove("Employee.Name");
             }
             return base.Create(model);
         }

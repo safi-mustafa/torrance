@@ -56,8 +56,12 @@ namespace TorranceApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> Post([FromBody] CreateViewModel model)
         {
-            var data = await _service.Create(model);
-            return ReturnProcessedResponse(data);
+            if (ModelState.IsValid)
+            {
+                var data = await _service.Create(model);
+                return ReturnProcessedResponse(data);
+            }
+            return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest});
         }
 
         [HttpPut]
