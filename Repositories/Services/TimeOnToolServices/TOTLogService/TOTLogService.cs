@@ -63,10 +63,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                                 ||
                                 (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )
-                            //&&
-                            //(searchFilters.Approver.Id == 0 || x.ApproverId == searchFilters.Approver.Id)
-                            //&&
-                            //(searchFilters.Foreman.Id == 0 || x.ForemanId == searchFilters.Foreman.Id)
                             &&
                             (searchFilters.Status == null || searchFilters.Status == x.Status)
             ;

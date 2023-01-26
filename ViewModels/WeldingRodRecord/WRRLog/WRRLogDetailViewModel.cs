@@ -3,6 +3,7 @@ using Models.Common.Interfaces;
 using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -67,7 +68,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
 
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
-
+        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
     }
 }
