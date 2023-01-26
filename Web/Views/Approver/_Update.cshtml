@@ -24,7 +24,8 @@
             </div>
             <div class="col-lg-6">
                 <label asp-for="ActiveStatus" class="form-label fw-600">Active Status</label>
-                <select asp-for="ActiveStatus" class="form-control" asp-items="@Html.GetEnumSelectList<ActiveStatus>()"></select>
+                <select asp-for="ActiveStatus" class="form-control"
+                    asp-items="@Html.GetEnumSelectList<ActiveStatus>()"></select>
                 <span asp-validation-for="ActiveStatus" class="validation-invalid-label"></span>
             </div>
             @if (Model.Id < 1)
@@ -39,7 +40,8 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label asp-for="ConfirmPassword" class="form-label fw-600"></label>
-                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
+                        <input asp-for="ConfirmPassword" type="password" class="form-control"
+                            placeholder="Confirm Password" />
                         <span asp-validation-for="ConfirmPassword" class="validation-invalid-label"></span>
                     </div>
                 </div>
@@ -66,17 +68,20 @@
             </div>
             <div class="col-md-12 mt-3">
                 <div class="form-group container row">
-                    <h4 class="col-md-12">Department & Unit</h4>
-                    <span class="col-md-3">
-                        @await Html.PartialAsync("~/Views/Shared/Select2/_Department.cshtml", (new ViewModels.Common.Department.DepartmentBriefViewModel()), "Department")
+                    <h4 class="col-md-12">Department & Units</h4>
+                    <span class="col-md-4">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_Department.cshtml", (new
+                        ViewModels.Common.Department.DepartmentBriefViewModel()), "Department")
                     </span>
-                    <span class="col-md-3">
-                        @await Html.PartialAsync("~/Views/Shared/Select2/_Unit.cshtml", (new ViewModels.Common.Unit.UnitBriefViewModel(false)), "Unit")
+                    <span class="col-md-4">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_UnitMultiSelect.cshtml", Model, new
+                                                ViewDataDictionary(ViewData) { { "MultiSelect", true}, { "Id", "unit-multiselect-id" } })
                     </span>
 
-                    <span class="text-center col-md-3">
+                    <span class="text-center col-md-4">
                         <label class="form-label fw-600 w-100">Add</label>
-                        <button type="button" class="add-association btn-circle btn-sm" style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
+                        <button type="button" class="add-multiple-associations btn-circle btn-sm"
+                            style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
                     </span>
                 </div>
             </div>
@@ -92,8 +97,9 @@
                     <tbody class="association-tbody">
                         @for (var i = 0; i < Model.Associations.Count(); i++)
                         {
-                            @await Html.PartialAsync("~/Views/Approver/_ApproverAssociationRow.cshtml", Model.Associations[i], new ViewDataDictionary(ViewData) { { "RowNumber", i } })
-                        }
+                            @await Html.PartialAsync("~/Views/Approver/_ApproverAssociationRow.cshtml",
+                            Model.Associations[i], new ViewDataDictionary(ViewData) { { "RowNumber", i } })
+                                                }
                     </tbody>
                 </table>
             </div>
@@ -106,9 +112,9 @@
 
 <script>
     $(function () {
-        $(document).off("click", ".add-association");
-        $(document).on("click", ".add-association", function () {
-            AddAssociation(this);
+        $(document).off("click", ".add-multiple-associations");
+        $(document).on("click", ".add-multiple-associations", function () {
+            AddMultipleAssociations(this);
         });
         $(document).off("click", ".remove-association");
         $(document).on("click", ".remove-association", function () {
@@ -116,35 +122,57 @@
             RefreshInputIndexes();
         });
     });
-    function AddAssociation(element) {
+    function AddMultipleAssociations(element) {
         var thisElement = $(element);
-        var departmentId = $("#department-id").select2('data')[0].id;
-        var departmentName = $("#department-id").select2('data')[0].text;
-        //departmentName = departmentName.replace(/(\r\n|\n|\r)/gm, "");
+        var departmentData = $("#department-id").select2('data');
+        var unitData = $('#unit-multiselect-id').select2('data');
 
-        var unitId = $('#unit-id').select2('data')[0].id;
-        var unitName = $('#unit-id').select2('data')[0].text;
+        if (departmentData.length > 0 && unitData.length > 0) {
+            var departmentId = departmentData[0].id;
+            var departmentName = departmentData[0].text;
+            var addedCount = 0;
+            var duplicateCount = 0;
 
-        if (departmentId != null && departmentId != "" && unitId != null && unitId != "") {
-            var rowNumber = $(".association-row").length;
-            var obj = {
-                'Department': {
-                    'Id': departmentId,
-                    'Name': departmentName
-                },
-                'Unit': {
-                    'Id': unitId,
-                    'Name': unitName
+            // Loop through all selected units
+            unitData.forEach(function (unit) {
+                if (unit.id && unit.id !== "") {
+                    var rowNumber = $(".association-row").length + addedCount;
+                    var obj = {
+                        'Department': {
+                            'Id': departmentId,
+                            'Name': departmentName
+                        },
+                        'Unit': {
+                            'Id': unit.id,
+                            'Name': unit.text
+                        }
+                    }
+
+                    if (!isAlreadyAdded(obj)) {
+                        AddAssociationRow(obj, rowNumber);
+                        addedCount++;
+                    } else {
+                        duplicateCount++;
+                    }
                 }
-            }
-            if (!isAlreadyAdded(obj)) {
-                AddAssociationRow(obj, rowNumber);
+            });
+
+            if (addedCount > 0) {
                 ResetAssociationInputs();
-            }
-            else {
+                if (duplicateCount > 0) {
+                    swal.fire({
+                        title: 'Partial Success',
+                        text: `${addedCount} association(s) added successfully. ${duplicateCount} duplicate(s) were skipped.`,
+                        type: 'warning',
+                        confirmButtonText: "Okay",
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+                    });
+                }
+            } else if (duplicateCount > 0) {
                 swal.fire({
                     title: 'Validation Error',
-                    text: "This department and unit has already been added",
+                    text: "All selected department and unit combinations have already been added",
                     type: 'error',
                     showCancelButton: true,
                     confirmButtonText: "Okay",
@@ -154,13 +182,10 @@
                     buttonsStyling: false
                 });
             }
-            
-        }
-           
-        else {
+        } else {
             swal.fire({
                 title: 'Validation Error',
-                text: "Department & Unit are required fields.",
+                text: "Department & at least one Unit are required fields.",
                 type: 'error',
                 showCancelButton: true,
                 confirmButtonText: "Okay",
@@ -172,8 +197,8 @@
         }
     }
     function ResetAssociationInputs() {
-        $("#unit-id").val('').trigger('change');
-        $("#unit-id").empty().trigger('change');
+        $("#unit-multiselect-id").val('').trigger('change');
+        $("#unit-multiselect-id").empty().trigger('change');
         $("#department-id").val('').trigger('change');
         $("#department-id").empty().trigger('change');
     }

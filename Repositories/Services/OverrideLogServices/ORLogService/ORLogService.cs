@@ -23,6 +23,7 @@ using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
@@ -697,7 +698,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 </head>
 <body>
     <div class='header'>
-        <img src='https://torrance.eztrak.net/img/trc-logo.png' alt='TRC Logo' class='logo'>
+        <img src='https://torrance.eztrak.net/img/pbf-logo.png' alt='TRC Logo' class='logo'>
         <h2>Override Logs Report</h2>
     </div>
     <table>
@@ -763,26 +764,102 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return html;
         }
 
+        private string GetSystemChromePath()
+        {
+            string[] chromePaths;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Windows Chrome paths
+                chromePaths = new[]
+                {
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Google", "Chrome", "Application", "chrome.exe"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Google", "Chrome", "Application", "chrome.exe"),
+                    @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                    @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+                };
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                // macOS Chrome paths
+                chromePaths = new[]
+                {
+                    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+                    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+                    "/usr/bin/google-chrome",
+                    "/usr/bin/chromium-browser"
+                };
+            }
+            else
+            {
+                // Linux Chrome paths
+                chromePaths = new[]
+                {
+                    "/usr/bin/google-chrome",
+                    "/usr/bin/google-chrome-stable",
+                    "/usr/bin/chromium-browser",
+                    "/usr/bin/chromium",
+                    "/snap/bin/chromium",
+                    "/usr/local/bin/chrome"
+                };
+            }
+
+            return chromePaths.FirstOrDefault(File.Exists);
+        }
+
         private async Task<byte[]> ConvertHtmlToPdf(string htmlContent)
         {
             try
             {
-                // Configure browser fetcher to use temp directory
+                // Configure browser fetcher with better path handling
+                var puppeteerPath = Path.Combine(Path.GetTempPath(), "puppeteer");
+                Directory.CreateDirectory(puppeteerPath);
+
                 var browserFetcher = new BrowserFetcher(new BrowserFetcherOptions
                 {
-                    Path = Path.GetTempPath()
+                    Path = puppeteerPath
                 });
 
                 // Download the Chromium revision if it doesn't exist
                 await browserFetcher.DownloadAsync();
 
-                // Launch the browser
-                using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                // Get the executable path with better error handling
+                string executablePath = null;
+                var installedBrowsers = browserFetcher.GetInstalledBrowsers();
+
+                if (installedBrowsers.Any())
+                {
+                    executablePath = installedBrowsers.FirstOrDefault()?.GetExecutablePath();
+                }
+
+                // Fallback to system Chrome if PuppeteerSharp download fails
+                if (string.IsNullOrEmpty(executablePath) || !File.Exists(executablePath))
+                {
+                    executablePath = GetSystemChromePath();
+                }
+
+                if (string.IsNullOrEmpty(executablePath))
+                {
+                    throw new InvalidOperationException("Chrome/Chromium executable not found. Please install Google Chrome or Chromium.");
+                }
+
+                // Launch the browser with macOS-specific arguments
+                var launchOptions = new LaunchOptions
                 {
                     Headless = true,
-                    ExecutablePath = browserFetcher.GetInstalledBrowsers().FirstOrDefault()?.GetExecutablePath(),
-                    Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
-                });
+                    ExecutablePath = executablePath,
+                    Args = new[]
+                    {
+                        "--no-sandbox",
+                        "--disable-setuid-sandbox",
+                        "--disable-dev-shm-usage",
+                        "--disable-web-security",
+                        "--disable-features=VizDisplayCompositor"
+                    }
+                };
+
+                using var browser = await Puppeteer.LaunchAsync(launchOptions);
 
                 // Create a new page
                 using var page = await browser.NewPageAsync();
