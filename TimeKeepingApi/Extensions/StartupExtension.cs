@@ -127,7 +127,7 @@ namespace Web.Extensions
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SIFAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Torrance API", Version = "v1" });
                 c.OperationFilter<SwaggerFileOperationFilter>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
