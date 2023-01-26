@@ -1,0 +1,55 @@
+﻿@using Newtonsoft.Json
+@model ViewModels.CRUD.CrudListViewModel
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/bundles/datatable.css" rel="stylesheet" />
+<link href="~/css/bundles/datatable-buttons.css" rel="stylesheet" />
+<h1 class="model-title-heading">@Model.Title</h1>
+<div class="card datatable">
+    <div class="card-body">
+        <div class="list-container">
+            <div class="d-flex flex-wrap align-items-center justify-content-end mb-4">
+                <a id="approve" class="btn blue-btn mx-2 my-2 ms-4">Approve</a>
+                <a id="approve-all" class="btn blue-btn mx-2 my-2 ms-4">Approve All</a>
+            </div>
+            @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Header.cshtml", Model)
+            <div class="dataTables_wrapper no-footer" style="min-height:300px;">
+                <div class="datatable-scroll">
+                    <table class="table datatable-basic dataTable" id="crud-list-table" role="grid" aria-describedby="DataTables_Table_0_info">
+                    </table>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.ControllerName, new { id = "controller-name" })
+        @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Search.cshtml", Model)
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script src="~/js/bundles/datatable.js"></script>
+    <script src="~/js/bundles/datatable-buttons.js"></script>
+    <script src="~/js/bundles/custom-datatable.js"></script>
+    <script src="~/js/crud/ajaxCrud.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+        $(function () {
+            ReInitializeDataTables();
+        });
+        function ReInitializeDataTables() {
+            let dataTableId = $("#crud-list-table").attr('id');
+            if ($.fn.DataTable.fnIsDataTable($("#" + dataTableId))) {
+                $("#" + dataTableId).dataTable().fnDestroy();
+                $("#crud-list-table").addClass("dataTable");
+            }
+            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl');
+        }
+    </script>
+    <script src="~/js/custom-scripts/approval-script.js"></script>
+}
