@@ -188,8 +188,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
+            services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();

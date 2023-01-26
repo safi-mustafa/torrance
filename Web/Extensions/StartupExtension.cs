@@ -115,7 +115,6 @@ namespace Web.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
-          //  services.AddScoped<IAttachmentService, AttachmentService>();
         }
     }
 }

@@ -161,6 +161,9 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
+                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+               .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<WRRLogCreateViewModel, WRRLog>()
                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
@@ -177,6 +180,9 @@ namespace TorranceApi.Mapper
                .ForMember(x => x.Unit, opt => opt.Ignore())
                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
+                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+               .ForMember(x => x.Approver, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ReverseMap();
@@ -200,6 +206,8 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
                 .ForMember(x => x.PermitType, opt => opt.Ignore())
+                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+               .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
@@ -224,6 +232,8 @@ namespace TorranceApi.Mapper
                .ForMember(x => x.Unit, opt => opt.Ignore())
                .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
                .ForMember(x => x.PermitType, opt => opt.Ignore())
+               .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+               .ForMember(x => x.Employee, opt => opt.Ignore())
                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())

@@ -88,6 +88,7 @@ namespace TorranceApi.Controllers
                             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Name, user.FirstName),
                             new Claim("FullName", fullName),
+                            new Claim("EmployeeId", user.Id.ToString()),
                             new Claim(ClaimTypes.Role, role),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                         };

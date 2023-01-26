@@ -48,8 +48,6 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                             &&
-                            (searchFilters.Employee.Id == 0 || x.Employee.Id == searchFilters.Employee.Id)
-                            &&
                             (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)

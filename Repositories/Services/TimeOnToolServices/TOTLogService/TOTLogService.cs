@@ -143,31 +143,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-        public override Task<IRepositoryResponse> Create(CreateViewModel model)
-        {
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
-            var viewModel = model as TOTLogModifyViewModel;
-            if(loggedInUserRole == "Employee")
-            {
-                viewModel.Employee.Id = parsedLoggedInId;
-            }
-            return base.Create(model);
-        }
-
-        public override Task<IRepositoryResponse> Update(UpdateViewModel model)
-        {
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
-            var viewModel = model as TOTLogModifyViewModel;
-            if (loggedInUserRole == "Employee")
-            {
-                viewModel.Employee.Id = parsedLoggedInId;
-            }
-            return base.Update(model);
-        }
+      
 
     }
 }
