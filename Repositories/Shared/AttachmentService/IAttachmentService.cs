@@ -1,17 +1,17 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
 using Enums;
+using Helpers.File;
+using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Shared;
 
 namespace Repositories.Shared.AttachmentService
 {
-    public interface IAttachmentService : IBaseSearch
+    public interface IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, IIdentitifier, new()
     {
-        Task<IRepositoryResponse> CreateMultiple(List<AttachmentVM> model);
-        Task<IRepositoryResponse> CreateSingle(AttachmentVM attachment);
-        Task<IRepositoryResponse> UpdateSingle(AttachmentVM attachment);
-        Task<IRepositoryResponse> Update(List<AttachmentVM> model, long id);
-        Task<IRepositoryResponse> Delete(List<long> attachmentIds);
         Task<IRepositoryResponse> DeleteByEntity(long entityId, AttachmentEntityType entityType);
     }
 }
