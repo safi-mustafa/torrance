@@ -8,7 +8,7 @@ using ViewModels.Shared;
 
 namespace ViewModels.Shared
 {
-    public class FolderCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IFileModel, IFolderAttachment
+    public class FolderCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IFileModel, IFolderIcon
     {
         [Required]
         [MaxLength(200)]

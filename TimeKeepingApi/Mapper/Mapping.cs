@@ -28,6 +28,7 @@ using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using ViewModels.WeldingRodRecord.WRRLog;
+using Helpers.Models.Shared;
 
 namespace TorranceApi.Mapper
 {
@@ -121,6 +122,13 @@ namespace TorranceApi.Mapper
             CreateMap<SOWModifyViewModel, SOWDetailViewModel>().ReverseMap();
             CreateMap<StatementOfWork, SOWBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, SOWBriefViewModel>().ReverseMap();
+
+            //Folder
+            CreateMap<FolderModifyViewModel, Folder>().ReverseMap();
+            CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
+            CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
+            CreateMap<Folder, FolderBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FolderBriefViewModel>().ReverseMap();
 
             //Employee
             CreateMap<EmployeeModifyViewModel, Employee>().ReverseMap();

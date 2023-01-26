@@ -37,6 +37,7 @@ using Repositories.Shared.UserInfoServices;
 using Repositories.Services.AppSettingServices.MobileFileServices;
 using Helpers.File;
 using Repositories.Shared.AttachmentService;
+using Repositories.Services.FolderService;
 
 namespace Web.Extensions
 {
@@ -186,6 +187,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
+            services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IFileHelper, FileHelper>();

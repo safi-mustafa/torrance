@@ -4,10 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models.Common.Interfaces
 {
-    public interface IFolderAttachment
+    public interface IFolderIcon
     {
         string? IconUrl { get; set; }
-        IFormFile? File { get; set; }
     }
 }
 

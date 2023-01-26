@@ -15,9 +15,8 @@ namespace Repositories.Services.FolderService
 {
     public class FolderService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Folder, CreateViewModel, UpdateViewModel, DetailViewModel>, IFolderService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
-    {
+        where CreateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IFolderIcon, IFileModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly IMapper _mapper;
