@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Shared\Interfaces\" />
+    <Folder Include="Attachment\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,4 +23,7 @@
     <ProjectReference Include="..\Pagination\Pagination.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Attachment\" />
+  </ItemGroup>
 </Project>

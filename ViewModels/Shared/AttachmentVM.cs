@@ -1,11 +1,12 @@
 ﻿using Enums;
 using Helpers.File;
 using Microsoft.AspNetCore.Http;
+using Models.Common;
 using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels.Shared
 {
-    public class AttachmentVM : IFileModel
+    public class AttachmentVM : IFileModel, IAttachmentUrl
     {
         public long? Id { get; set; }
         [DataType(DataType.Upload)]
@@ -40,6 +41,8 @@ namespace ViewModels.Shared
 
     public class AttachmentResponseVM
     {
+        public string Name { get; set; }
         public string Url { get; set; }
+        public string Type { get; set; }
     }
 }
