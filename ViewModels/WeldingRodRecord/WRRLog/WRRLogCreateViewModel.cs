@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Microsoft.AspNetCore.Mvc;
+using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -12,7 +13,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
+    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove
     {
         public DateTime DateRodReturned { get; set; } = DateTime.Now;
         public DateTime CalibrationDate { get; set; } = DateTime.Now;

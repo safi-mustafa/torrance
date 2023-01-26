@@ -14,7 +14,7 @@ using Enums;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
     {
         [Display(Name = "Date Rod Returned")]
         public DateTime DateRodReturned { get; set; } = DateTime.Now;
