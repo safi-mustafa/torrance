@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Enums;
 
 namespace Helpers.Models.Shared
 {
@@ -9,6 +10,9 @@ namespace Helpers.Models.Shared
         public string Type { get; set; }
         public long EntityId { get; set; }
         public AttachmentEntityType EntityType { get; set; }
-        
+
+        [ForeignKey("Folder")]
+        public long? FolderId { get; set; }
+        public Folder? Folder { get; set; }
     }
 }
