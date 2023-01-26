@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Enums;
+using Models.Common.Interfaces;
 
 namespace Models.WeldingRodRecord
 {
-    public class WRRLog : BaseDBModel
+    public class WRRLog : BaseDBModel, IApprove
     {
         public DateTime DateRodReturned { get; set; }
         public DateTime CalibrationDate { get; set; }

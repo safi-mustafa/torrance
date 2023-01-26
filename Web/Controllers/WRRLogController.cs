@@ -2,16 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using Repositories.Shared.Interfaces;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers
 {
     [Authorize]
-    public class WRRLogController : CrudBaseController<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
+    public class WRRLogController : ApproveBaseController<IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel>, WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
     {
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
         private readonly ILogger<WRRLogController> _logger;
+        private readonly IBaseApprove _approveService;
 
         public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs")
         {
@@ -47,5 +49,7 @@ namespace Web.Controllers
             }
             return base.Create(model);
         }
+
+        
     }
 }
