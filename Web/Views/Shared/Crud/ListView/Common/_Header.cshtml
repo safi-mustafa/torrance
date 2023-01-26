@@ -3,6 +3,7 @@
 @model CrudListViewModel
 @{
     var createUrl = HttpUtility.UrlDecode(Url.Action("Create", Model.ControllerName));
+    var isAdmin = User.IsInRole("SuperAdmin");
 }
 <script>
     $(document).ready(function () {

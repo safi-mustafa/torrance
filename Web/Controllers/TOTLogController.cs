@@ -38,8 +38,8 @@ namespace Web.Controllers
 
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
         {
-            if (!User.IsInRole("Admin")) {
-                //ModelState.Remove();
+            if (!User.IsInRole("SuperAdmin")) {
+                ModelState.Remove("Employee.Id");
             }
             return base.Create(model);
         }

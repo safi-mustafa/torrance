@@ -50,7 +50,7 @@ namespace Web.Controllers
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
-            if (!User.IsInRole("Admin")) {
+            if (!User.IsInRole("SuperAdmin")) {
                 ModelState.Remove("Employee.Id");
             
             }
