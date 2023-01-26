@@ -29,6 +29,15 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<TOTLogDetailViewModel>>(result);
         }
 
+        public override Task<IActionResult> Post([FromBody] TOTLogCreateViewModel model)
+        {
+
+            if (User.IsInRole("Employee"))
+            {
+
+            }
+            return base.Post(model);
+        }
     }
 }
 
