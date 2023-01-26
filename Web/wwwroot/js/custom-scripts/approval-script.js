@@ -70,7 +70,7 @@ function setCheckboxes() {
                     var checkboxId = $(this).val();
                     console.log(response,'check')
                     var index = (response).findIndex(x => x === parseInt(checkboxId));
-                    if (index !== -1) {
+                    if (index !==-1) {
                         $(this).prop('checked', true);
                     }
                 });
