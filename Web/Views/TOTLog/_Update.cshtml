@@ -3,6 +3,7 @@
 @model TOTLogModifyViewModel
 @{
     Layout = null;
+    var isAdmin = User.IsInRole("Admin");
 }
 <div class="row">
     <div class="col-lg-12">
@@ -141,16 +142,30 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+            @if (isAdmin)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                    </div>
                 </div>
-            </div>
+            }
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
                 </div>
             </div>
+            <div class="col-lg-6">
+                <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeSigned" type="time" class="form-control" />
+                <span asp-validation-for="TimeSigned" class="text-danger"></span>
+            </div>
+            <div class="col-lg-6">
+                <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeRequested" type="time" class="form-control" />
+                <span asp-validation-for="TimeRequested" class="text-danger"></span>
+            </div>
+
         </div>
     </div>
 </div>

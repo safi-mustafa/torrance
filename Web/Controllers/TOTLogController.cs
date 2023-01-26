@@ -35,5 +35,15 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             };
         }
+
+        public override Task<ActionResult> Create(TOTLogModifyViewModel model)
+        {
+            if (!User.IsInRole("Admin")) {
+                //ModelState.Remove();
+            }
+            return base.Create(model);
+        }
+
     }
+     
 }

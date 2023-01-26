@@ -47,5 +47,14 @@ namespace Web.Controllers
         {
             return Json(await _WRRLogService.IsWRRLogEmailUnique(id, email));
         }
+        [HttpPost]
+        public override Task<ActionResult> Create(WRRLogModifyViewModel model)
+        {
+            if (!User.IsInRole("Admin")) {
+                ModelState.Remove("Employee.Id");
+            
+            }
+            return base.Create(model);
+        }
     }
 }
