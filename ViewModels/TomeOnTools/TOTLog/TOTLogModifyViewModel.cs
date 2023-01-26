@@ -65,7 +65,7 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel(false);
 
     }
 }

@@ -6,8 +6,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class ContractorController : CrudBaseController<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel, ContractorDetailViewModel, ContractorSearchViewModel>
     {
         private readonly IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> _ContractorService;

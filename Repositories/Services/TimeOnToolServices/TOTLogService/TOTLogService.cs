@@ -3,6 +3,7 @@ using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
+using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
@@ -39,8 +40,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as TOTLogSearchViewModel;
-            var loggedInUserId = _userInfoService.LoggedInUserId();
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            //var loggedInUserId = _userInfoService.LoggedInUserId();
+            //var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
@@ -51,15 +53,63 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
+                            //&&
+                            //(
+                            //    (loggedInUserRole == "Employee" && x.CreatedBy == loggedInUserId)
+                            //    ||
+                            //    (loggedInUserRole == "Approver" && x.ApproverId == loggedInUserId)
+                            //    ||
+                            //    (loggedInUserRole == "SuperAdmin")
+                            //)
+                            //&&
+                            //(searchFilters.Approver.Id == 0 || x.ApproverId == searchFilters.Approver.Id)
+                            //&&
+                            //(searchFilters.Foreman.Id == 0 || x.ForemanId == searchFilters.Foreman.Id)
                             &&
-                            (loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
-                            &&
-                            (searchFilters.Approver.Id == 0 || x.ApproverId == searchFilters.Approver.Id)
-                            &&
-                            (searchFilters.Foreman.Id == 0 || x.ForemanId == searchFilters.Foreman.Id)
-                            &&
-                            (searchFilters.Status == Status.Pending || searchFilters.Status == x.Status)
+                            (searchFilters.Status == null || searchFilters.Status == x.Status)
             ;
+        }
+
+        public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
+        {
+            var searchFilters = search as TOTLogSearchViewModel;
+            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var parsedLoggedInId = long.Parse(loggedInUserId);
+
+            try
+            {
+                var filters = SetQueryFilter(search);
+                var result =  _db.TOTLogs.Where(filters).AsQueryable();
+
+                if(loggedInUserRole == "Employee")
+                {
+                    result = result.Where(x => x.CreatedBy == parsedLoggedInId).AsQueryable();
+                }
+                if(loggedInUserRole == "Approver")
+                {
+                    result = result.Where(x => x.ApproverId == parsedLoggedInId).AsQueryable();
+                }
+                var paginatedResult = await result.Paginate(search);
+                if (paginatedResult != null)
+                {
+                    var paginatedResponse = new PaginatedResultModel<M>();
+                    paginatedResponse.Items = _mapper.Map<List<M>>(paginatedResult.Items.ToList());
+                    paginatedResponse._meta = paginatedResult._meta;
+                    paginatedResponse._links = paginatedResult._links;
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResponse };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for TOTLog in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for TOTLogs threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
+
+           // return base.GetAll<M>(search);
         }
 
         public override async Task<IRepositoryResponse> GetById(long id)
@@ -76,6 +126,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
                     .Include(x => x.Foreman)
+                    .Include(x => x.PermittingIssue)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

@@ -6,7 +6,7 @@ using ViewModels.TomeOnTools.PermittingIssue;
 
 namespace Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class PermittingIssueController : CrudBaseController<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel, PermittingIssueDetailViewModel, PermittingIssueSearchViewModel>
     {
         private readonly IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> _permittingIssueService;

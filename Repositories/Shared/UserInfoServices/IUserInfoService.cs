@@ -2,8 +2,9 @@
 {
     public interface IUserInfoService
     {
-        long LoggedInUserId();
+        string LoggedInUserId();
         string LoggedInUserRole();
+        string LoggedInEmployeeId();
         string LoggedInWebUserRole();
         string LoggedInUserDesignation();
         List<string> LoggedInUserRoles();

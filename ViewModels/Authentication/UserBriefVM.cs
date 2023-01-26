@@ -20,4 +20,5 @@ namespace ViewModels.Authentication
         //public new string Name { get { return string.IsNullOrEmpty(_name) ? $"{FirstName} {LastName}" : _name; } set { _name = value; } }
         //public string Role { get; set; }
     }
+
 }

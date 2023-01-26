@@ -11,12 +11,16 @@ namespace Repositories.Shared.UserInfoServices
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public long LoggedInUserId()
+        public string LoggedInUserId()
         {
             var userId = _httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return !string.IsNullOrEmpty(userId) ? long.Parse(userId) : 0;
+            return userId;
         }
-
+        public string LoggedInEmployeeId()
+        {
+            var empId = _httpContextAccessor?.HttpContext.User.FindFirstValue("EmployeeId");
+            return empId;
+        }
         public string LoggedInUserImageUrl()
         {
             var imageUrl = _httpContextAccessor?.HttpContext.User.FindFirstValue("ImageUrl");
@@ -33,6 +37,9 @@ namespace Repositories.Shared.UserInfoServices
             var role = _httpContextAccessor?.HttpContext.User.FindFirstValue("Role");
             return role;
         }
+
+     
+
 
         public string LoggedInUserDesignation()
         {

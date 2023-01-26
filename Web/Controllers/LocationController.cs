@@ -6,7 +6,7 @@ using ViewModels.WeldingRodRecord.Location;
 
 namespace Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class LocationController : CrudBaseController<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel, LocationDetailViewModel, LocationSearchViewModel>
     {
         private readonly ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> _LocationService;

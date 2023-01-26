@@ -11,8 +11,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class UnitController : CrudBaseController<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel, UnitDetailViewModel, UnitSearchViewModel>
     {
         private readonly IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> _UnitService;

@@ -66,19 +66,19 @@
         </div>
 
         <div class="row">
-             <div class="col-lg-6">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="DelayReason" class="form-label fw-600"></label>
                     <input asp-for="DelayReason" type="text" class="form-control" />
                     <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
                 </div>
- </div>
+            </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
                 </div>
             </div>
-           
+
         </div>
         <div class="row">
             <div class="col-lg-6">
@@ -124,14 +124,14 @@
                     <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
                 </div>
             </div>
-           
+
         </div>
 
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group profile-input">
                     <label asp-for="Status" class="control-label form-label fw-600"></label>
-                    <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(ApproveStatus))" class="form-control"></select>
+                    <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control"></select>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -144,6 +144,11 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
                 </div>
             </div>
         </div>

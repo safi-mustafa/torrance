@@ -7,8 +7,7 @@ using ViewModels.TomeOnTools.Shift;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin")]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class ShiftController : CrudBaseController<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel, ShiftDetailViewModel, ShiftSearchViewModel>
     {
         private readonly IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> _ShiftService;

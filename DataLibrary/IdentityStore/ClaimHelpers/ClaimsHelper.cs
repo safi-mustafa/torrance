@@ -16,6 +16,7 @@ namespace IdentityProvider.Data.IdentityStore.ClaimHelpers
             var fullName = string.IsNullOrEmpty(user.NormalizedUserName) ? "" : user.NormalizedUserName;
             var claims = new List<Claim>();
             claims.Add(new Claim("Role", roleName));
+            claims.Add(new Claim("EmployeeId", empId.ToString()));
             claims.Add(new Claim("Email", email.ToString()));
             claims.Add(new Claim("Id", empId.ToString()));
             claims.Add(new Claim("FullName", fullName.ToString()));

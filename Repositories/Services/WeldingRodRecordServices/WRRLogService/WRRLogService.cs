@@ -50,8 +50,8 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
                             (searchFilters.Unit.Id ==0 || x.Unit.Id == searchFilters.Unit.Id)
-                            &&
-                            (loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
+                            //&&
+                            //(loggedInUserRole == "SuperAdmin" || x.CreatedBy == loggedInUserId)
                             &&
                             (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
             ;
