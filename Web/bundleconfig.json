@@ -43,7 +43,9 @@
     "outputFileName": "wwwroot/js/bundles/custom-datatable.js",
     "inputFiles": [
       "wwwroot/js/sweetalert.min.js",
-      "wwwroot/js/custom-scripts/auto-datatable.js"
+      "wwwroot/js/custom-scripts/auto-datatable.js",
+      "wwwroot/js/bundels/approvel-script.js"
+
     ],
     // Optionally specify minification options
     "minify": {
