@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Repositories.Common;
+using Repositories.Shared.Interfaces;
 using ViewModels.Shared;
 
 namespace Repositories.Shared
 {
-    public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>
+        
+    public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>,IBaseApprove
         where TEntity : BaseDBModel, IApprove
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()

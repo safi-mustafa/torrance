@@ -15,7 +15,8 @@ namespace ViewModels.Shared
         public string Url { get; set; }
         public string ExtensionType { get; set; }
         public string Name { get; set; }
-        public AttachmentEntityType FileType { get; set; }
+        public FolderDetailViewModel F { get; set; }
+       public AttachmentEntityType FileType { get; set; }
         public DateTime UploadDate { get; set; }
         public string GetBaseFolder()
         {

@@ -3,11 +3,11 @@
 @model TOTLogModifyViewModel
 @{
     Layout = null;
-    var isAdmin = User.IsInRole("Admin");
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Admin");
 }
 <div class="row">
     <div class="col-lg-12">
-        <div class="row">
+       <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
@@ -18,9 +18,15 @@
                     <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
                 </div>
             </div>
-
-        </div>
-        <div class="row">
+            @if (isAdmin)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+                    </div>
+                </div>
+            }
+  
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Date" class="form-label fw-600"></label>
@@ -35,8 +41,7 @@
                     <span asp-validation-for="Twr" class="validation-invalid-label"></span>
                 </div>
             </div>
-        </div>
-        <div class="row">
+       
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ManHours" class="form-label fw-600"></label>
@@ -52,8 +57,6 @@
                 </div>
             </div>
 
-        </div>
-        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
@@ -64,9 +67,7 @@
                     <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
                 </div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="DelayReason" class="form-label fw-600"></label>
@@ -80,8 +81,6 @@
                 </div>
             </div>
 
-        </div>
-        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="JobDescription" class="form-label fw-600"></label>
@@ -94,9 +93,6 @@
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-        </div>
-
-        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ManPowerAffected" class="form-label fw-600"></label>
@@ -104,6 +100,7 @@
                     <span asp-validation-for="ManPowerAffected" class="validation-invalid-label"></span>
                 </div>
             </div>
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="EquipmentNo" class="form-label fw-600"></label>
@@ -111,8 +108,7 @@
                     <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
                 </div>
             </div>
-        </div>
-        <div class="row">
+   
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_User.cshtml" for="Foreman" view-data='new ViewDataDictionary(ViewData) { { "Id", "forman-id"}, { "UserTitle", "Foreman"}, {"Type", "Foreman"} }' />
@@ -126,9 +122,6 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="row">
             <div class="col-lg-6">
                 <div class="form-group profile-input">
                     <label asp-for="Status" class="control-label form-label fw-600"></label>
@@ -140,16 +133,14 @@
                     <partial name="~/Views/Shared/Select2/_User.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
                 </div>
             </div>
-        </div>
-        <div class="row">
-            @if (isAdmin)
-            {
+
+
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                     </div>
                 </div>
-            }
+          
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />

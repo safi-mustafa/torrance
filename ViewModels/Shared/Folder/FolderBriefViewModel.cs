@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.SOW
+namespace ViewModels.Shared
 {
     public class FolderBriefViewModel : BaseBriefVM, ISelect2Data
     {
@@ -10,7 +10,6 @@ namespace ViewModels.TomeOnTools.SOW
 
         }
         [DisplayName("Folder")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿using Models.Common.Interfaces;
+using Repositories.Shared.Interfaces;
 using ViewModels.Shared;
 
 namespace Repositories.Interfaces
