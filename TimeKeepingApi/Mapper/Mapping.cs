@@ -28,6 +28,7 @@ using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using ViewModels.WeldingRodRecord.WRRLog;
+using Helpers.Models.Shared;
 
 namespace TorranceApi.Mapper
 {
@@ -121,6 +122,18 @@ namespace TorranceApi.Mapper
             CreateMap<SOWModifyViewModel, SOWDetailViewModel>().ReverseMap();
             CreateMap<StatementOfWork, SOWBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, SOWBriefViewModel>().ReverseMap();
+
+            //Folder
+            CreateMap<FolderModifyViewModel, Folder>()
+                .ForMember(x => x.Attachments, d => d.Ignore())
+                .ReverseMap();
+            CreateMap<FolderCreateViewModel, Folder>()
+                .ForMember(x => x.Attachments, d => d.Ignore())
+                .ReverseMap();
+            CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
+            CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
+            CreateMap<Folder, FolderBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FolderBriefViewModel>().ReverseMap();
 
             //Employee
             CreateMap<EmployeeModifyViewModel, Employee>().ReverseMap();
@@ -308,6 +321,11 @@ namespace TorranceApi.Mapper
 
             //Attachment
             CreateMap<AttachmentVM, MobileFile>().ReverseMap();
+            CreateMap<AttachmentVM, Attachment>()
+               .ForMember(d => d.FolderId, s => s.MapFrom(x => x.Folder.Id))
+               .ForMember(d => d.Folder, s => s.Ignore())
+               .ReverseMap();
+            CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
 
         }
     }

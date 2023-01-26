@@ -6,5 +6,7 @@ namespace Helpers.Models.Shared
     {
         public string Name { get; set; }
         public string? IconUrl { get; set; }
+
+        public List<Attachment> Attachments { get; set; }
     }
 }

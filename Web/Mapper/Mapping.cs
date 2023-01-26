@@ -222,11 +222,14 @@ namespace Models.Mapper
 
 
             //Folder
+            CreateMap<Folder, BaseBriefVM>().ReverseMap();
             CreateMap<FolderModifyViewModel, Folder>()
-              .ReverseMap();
+                .ForMember(x => x.Attachments, d => d.Ignore())
+                .ReverseMap();
             CreateMap<Folder, FolderDetailViewModel>().ReverseMap();
             CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
-            CreateMap<Folder, BaseBriefVM>().ReverseMap();
+            CreateMap<Folder, FolderBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FolderBriefViewModel>().ReverseMap();
 
 
             //Map
@@ -267,6 +270,11 @@ namespace Models.Mapper
 
             //Attachment
             CreateMap<AttachmentVM, MobileFile>().ReverseMap();
+            CreateMap<AttachmentVM, Attachment>()
+                .ForMember(d => d.FolderId, s => s.MapFrom(x => x.Folder.Id))
+                .ForMember(d => d.Folder, s => s.Ignore())
+                .ReverseMap();
+            CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
 
         }
     }

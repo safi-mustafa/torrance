@@ -8,13 +8,13 @@ using Repositories.Services.AppSettingServices.MobileFileServices;
 namespace Web.Controllers
 {
     [Authorize]
-    
+
     public class FolderController : CrudBaseController<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel, FolderDetailViewModel, FolderSearchViewModel>
     {
-        private readonly IFolderService _folderService;
+        private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
 
-        public FolderController(IFolderService folderService, ILogger<FolderController> logger, IMapper mapper) : base(folderService, logger, mapper, "Folder", "Folders")
+        public FolderController(IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, ILogger<FolderController> logger, IMapper mapper) : base(folderService, logger, mapper, "Folder", "Folders")
         {
             _folderService = folderService;
             _logger = logger;

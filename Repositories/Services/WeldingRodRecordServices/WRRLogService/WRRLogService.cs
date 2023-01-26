@@ -62,6 +62,8 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             )
                             &&
                             (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
+                            &&
+                            (searchFilters.Status == null || searchFilters.Status == x.Status)
             ;
         }
 
