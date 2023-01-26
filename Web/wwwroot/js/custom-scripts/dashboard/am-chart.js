@@ -301,7 +301,7 @@ function setBarChartToolTip(series, root, barChart) {
 function getBarChartToolTipContent(barChart, text) {
   barChart.series.each(function (series) {
     //text += '\n[' + series.get("stroke").toString() + ']●[/] [bold width:100px]' + series.get("name") + ':[/] {' + series.get("valueYField") + '}'
-    text += ": {" + series.get("valueYField") + "}";
+    text += ": [bold]{" + series.get("valueYField") + "}[/]";
   });
   return text;
 }
@@ -320,4 +320,197 @@ function DisposeRoot(root) {
     //            v.root.dispose();
     //    })
   }
+}
+
+function GenerateBarChartWithCurrency(
+  id,
+  seriesData,
+  setCustomBarChartSeriesColor = null
+) {
+  console.log(
+    "GenerateBarChartWithCurrency called with id:",
+    id,
+    "seriesData:",
+    seriesData
+  );
+
+  // Validate input data
+  if (!seriesData || !Array.isArray(seriesData) || seriesData.length === 0) {
+    console.log("No data available for chart:", id);
+    return;
+  }
+
+  // Filter out any items with null or undefined values
+  var validData = seriesData.filter(function (item) {
+    return (
+      item && item.Category && item.Value !== undefined && item.Value !== null
+    );
+  });
+
+  if (validData.length === 0) {
+    console.log("No valid data after filtering for chart:", id);
+    return;
+  }
+
+  console.log("Valid data for chart:", id, validData);
+
+  am5.ready(function () {
+    DisposeRoot(id);
+    var root = am5.Root.new(id);
+    if (roots.find((x) => x.type == id) === undefined) {
+      roots.push({ type: id, root: root });
+    }
+    // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([am5themes_Animated.new(root)]);
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/
+    var chart = root.container.children.push(
+      am5xy.XYChart.new(root, {
+        panX: true,
+        panY: true,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        pinchZoomX: true,
+      })
+    );
+
+    // Add cursor
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+    cursor.lineY.set("visible", false);
+
+    // Create axes
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+    var xRenderer = am5xy.AxisRendererX.new(root, { minGridDistance: 30 });
+    xRenderer.labels.template.setAll({
+      rotation: -90,
+      centerY: am5.p50,
+      centerX: am5.p100,
+      paddingRight: 15,
+    });
+
+    xRenderer.grid.template.setAll({
+      location: 1,
+    });
+
+    var xAxis = chart.xAxes.push(
+      am5xy.CategoryAxis.new(root, {
+        maxDeviation: 0.3,
+        categoryField: categoryFieldName,
+        renderer: xRenderer,
+        tooltip: am5.Tooltip.new(root, {}),
+      })
+    );
+
+    var yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 0.3,
+        renderer: am5xy.AxisRendererY.new(root, {
+          strokeOpacity: 0.1,
+        }),
+      })
+    );
+
+    // Format Y-axis with currency
+    yAxis.get("renderer").set("numberFormat", "$#,###.##");
+
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+    var series = chart.series.push(
+      am5xy.ColumnSeries.new(root, {
+        name: "Series 1",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: valueFieldName,
+        sequencedInterpolation: true,
+        categoryXField: categoryFieldName,
+        tooltip: am5.Tooltip.new(root, {
+          labelText: "$[bold]{valueY.formatNumber('#,###.##')}[/]",
+        }),
+        maskBullets: false,
+      })
+    );
+
+    series.columns.template.setAll({
+      cornerRadiusTL: 5,
+      cornerRadiusTR: 5,
+      strokeOpacity: 0,
+    });
+    setBarChartToolTipWithCurrency(series, root, chart);
+    //setBarChartSeriesBullets(series, root);
+    series.columns.template.label = am5.Label.new(root, {
+      text: "$[font-size: 12px]{valueY.formatNumber('#,###')}[/]",
+      centerX: am5.p50,
+      centerY: am5.p50,
+      fontSize: 12,
+      fill: "white",
+    });
+    if (
+      setCustomBarChartSeriesColor &&
+      typeof setCustomBarChartSeriesColor === "function"
+    ) {
+      setCustomBarChartSeriesColor(series);
+    } else {
+      // If series is longer than colorArray, add missing colors
+      for (let i = colorArray.length; i < validData.length; i++) {
+        colorArray.push(getRandomColor());
+      }
+      setBarChartSeriesColors(series);
+    }
+
+    xAxis.data.setAll(validData);
+    xAxis.get("renderer").labels.template.setAll({
+      oversizedBehavior: "truncate",
+      textAlign: "center",
+      maxHeight: 100,
+    });
+    series.data.setAll(validData);
+
+    // Make stuff animate on load
+    // https://www.amcharts.com/docs/v5/concepts/animations/
+    series.appear(1000);
+    chart.appear(1000, 100);
+  });
+}
+
+function setBarChartToolTipWithCurrency(series, root, barChart) {
+  var tooltip = series.set(
+    "tooltip",
+    am5.Tooltip.new(root, {
+      getFillFromSprite: false,
+      getStrokeFromSprite: true,
+      autoTextColor: false,
+      pointerOrientation: "horizontal",
+    })
+  );
+
+  tooltip.get("background").setAll({
+    fill: am5.color(0xffffff),
+    fillOpacity: 0.8,
+  });
+
+  tooltip.get("background").setAll({
+    fill: am5.color(0xffffff),
+  });
+
+  tooltip.label.setAll({
+    text: "{Category}[/]",
+    fill: am5.color(0x000000),
+  });
+
+  tooltip.label.adapters.add("text", function (text, target) {
+    return getBarChartToolTipContentWithCurrency(barChart, text);
+  });
+}
+
+function getBarChartToolTipContentWithCurrency(barChart, text) {
+  barChart.series.each(function (series) {
+    text +=
+      ": [bold]{" +
+      series.get("valueYField") +
+      ".formatNumber('$#,###.##')}[/]";
+  });
+  return text;
 }

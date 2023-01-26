@@ -10,7 +10,7 @@
         // Total Hours by Unit
         GenerateBarChart("override-unit-hours", response.UnitHours);
         // Total Cost by Unit
-        GenerateBarChart("override-unit-cost", response.UnitCost);
+        GenerateBarChartWithCurrency("override-unit-cost", response.UnitCost);
       }
     },
     error: function () {
