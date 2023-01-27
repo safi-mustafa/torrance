@@ -50,6 +50,18 @@ namespace Web.Controllers
             }
         }
 
+        [Route("Attachment/Create/{id:long}")]
+        [HttpGet]
+        public async Task<IActionResult> Create(long id)
+        {
+            return UpdateView(GetUpdateViewModel("Create", new AttachmentVM { Folder = new FolderBriefViewModel { Id = id } }));
+        }
+
+        [NonAction]
+        public override ActionResult Create()
+        {
+            return base.Create();
+        }
         [NonAction]
         public override ActionResult Index()
         {

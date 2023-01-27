@@ -14,17 +14,19 @@ namespace ViewModels.Shared
         [MaxFileSize(25 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]
         public IFormFile File { get; set; }
-        public string Url { get; set; }
-        public string ExtensionType { get; set; }
+        public string? Url { get; set; }
+        private string? _type;
+        public string Type { get => string.IsNullOrEmpty(_type) ? Path.GetExtension(File.FileName) : _type; set => _type = value; }
         public string Name { get; set; }
         public AttachmentEntityType FileType { get; set; }
         public DateTime UploadDate { get; set; }
-        public FolderBriefViewModel Folder { get; set; } = new();
+        public FolderBriefViewModel? Folder { get; set; } = new();
         public ActiveStatus ActiveStatus { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public string GetBaseFolder()
         {
-            var ext = ExtensionType;
+            var ext = Type;
             if (ext == ".jpg" || ext == ".jpeg" || ext == ".png")
             {
                 return "Images";
@@ -47,5 +49,7 @@ namespace ViewModels.Shared
         public string Name { get; set; }
         public string Url { get; set; }
         public string Type { get; set; }
+        public DateTime CreatedOn { get; set; }
+
     }
 }

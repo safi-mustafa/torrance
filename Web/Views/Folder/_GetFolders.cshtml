@@ -18,8 +18,8 @@
                     <i class="fa-solid fa-trash delete-folder delete ml-2 mt-2" href='@("/Folder/Delete/"+item.Id)' attr-id="@item.Id"></i>
                 </div>
                 <a class="doc-setting" href="#"><img src="~/img/dots.png" alt="dots" /></a>
-                <a href="#" class="doc-body folder">
-                    <img src="~/img/folder.png" class="doc-icon" alt="folder" attr-id="@item.Id" />
+                <a href="#" class="doc-body folder" attr-id="@item.Id">
+                    <img src="~/img/folder.png" class="doc-icon" alt="folder" />
                     <h4 class="doc-title">@item.Name</h4>
                     <p class="doc-item-count">@item.AttachmentCount items</p>
                 </a>

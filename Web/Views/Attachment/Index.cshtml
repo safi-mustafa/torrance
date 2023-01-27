@@ -23,7 +23,7 @@
     <div class="col-md-6">
         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
         {
-            <input type="button" id="create-attachment" class="btn btn-dark float-right" value="Create Attachment" onclick="loadCreateModalPanel('/Attachment/Create')" />
+            <input type="button" id="create-attachment" class="btn btn-dark float-right" value="Create Attachment" onclick="loadCreateModalPanel('/Attachment/Create/'+@Model.Id)" />
             <input type="hidden" asp-for="Id" id="folder-id" />
         }
         <input type="button" id="back-to-folders" class="btn btn-light float-right mr-2" value="Back to Folders" />
