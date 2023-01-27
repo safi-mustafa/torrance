@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels.Shared
 {
-    public class AttachmentVM : IFileModel, IAttachmentUrl
+    public class AttachmentVM : IFileModel, IAttachmentUrl, IBaseCrudViewModel
     {
         public long? Id { get; set; }
         [DataType(DataType.Upload)]
@@ -20,6 +20,8 @@ namespace ViewModels.Shared
         public AttachmentEntityType FileType { get; set; }
         public DateTime UploadDate { get; set; }
         public FolderBriefViewModel Folder { get; set; }
+        public ActiveStatus ActiveStatus { get; set; }
+
         public string GetBaseFolder()
         {
             var ext = ExtensionType;
