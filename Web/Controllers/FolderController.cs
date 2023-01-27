@@ -64,7 +64,6 @@ namespace Web.Controllers
             return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         public async Task<ActionResult> GetAttachments(long id)
         {
             try
