@@ -2,13 +2,14 @@
 using Helpers.File;
 using Microsoft.AspNetCore.Http;
 using Models.Common;
+using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels.Shared
 {
-    public class AttachmentVM : IFileModel, IAttachmentUrl, IBaseCrudViewModel
+    public class AttachmentVM : IFileModel, IAttachmentUrl, IBaseCrudViewModel, IIdentitifier
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(25 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]

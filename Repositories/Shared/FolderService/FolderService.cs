@@ -28,16 +28,16 @@ namespace Repositories.Services.FolderService
         private readonly IMapper _mapper;
         private readonly IFileHelper _fileHelper;
         private readonly IRepositoryResponse _response;
-        private readonly IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> _attachmentService;
+        private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
 
         public FolderService
             (
-                ToranceContext db, 
-                ILogger<FolderService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, 
-                IMapper mapper, 
-                IFileHelper fileHelper, 
+                ToranceContext db,
+                ILogger<FolderService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger,
+                IMapper mapper,
+                IFileHelper fileHelper,
                 IRepositoryResponse response,
-                IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> attachmentService
+                IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
             ) : base(db, logger, mapper, response)
         {
             _db = db;

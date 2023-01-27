@@ -22,8 +22,8 @@ namespace Repositories.Shared.AttachmentService
 {
     public class AttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Attachment, CreateViewModel, UpdateViewModel, DetailViewModel>, IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFolderIcon, IFileModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFolderIcon, IFileModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFileModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFileModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<AttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;

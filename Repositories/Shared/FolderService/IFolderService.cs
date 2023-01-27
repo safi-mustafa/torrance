@@ -10,8 +10,6 @@ namespace Repositories.Services.FolderService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
-        Task<FolderDetailViewModel> GetFolderAttachments(long id);
-        Task<FolderDetailViewModel> GetFolders(long id);
-        
+
     }
 }
