@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.CommonServices;
 using ViewModels.Shared;
 using ViewModels.DataTable;
-using Repositories.Services.AppSettingServices.MobileFileServices;
+using Repositories.Services.AppSettingServices;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Shared;
 using Repositories.Shared.AttachmentService;
