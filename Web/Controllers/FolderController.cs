@@ -43,7 +43,6 @@ namespace Web.Controllers
             };
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         public override ActionResult Index()
         {
             try
@@ -65,7 +64,6 @@ namespace Web.Controllers
             return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         public async Task<ActionResult> _GetAttachmentView(long id)
         {
             try
@@ -80,7 +78,6 @@ namespace Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateAttachment(AttachmentVM model)
         {
             try
