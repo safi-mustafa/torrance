@@ -4,6 +4,8 @@ using Repositories.Services.FolderService;
 using ViewModels.Shared;
 using ViewModels.DataTable;
 using Repositories.Services.AppSettingServices.MobileFileServices;
+using Microsoft.AspNetCore.Mvc;
+using ViewModels.CRUD;
 
 namespace Web.Controllers
 {
@@ -29,6 +31,11 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
+        }
+        public override ActionResult DataTableIndexView(CrudListViewModel vm)
+        {
+            return base.DataTableIndexView(vm);
+            return View("~/Views/TOTLog/_Index.cshtml", vm);
         }
     }
 }
