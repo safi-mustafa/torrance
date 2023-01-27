@@ -6,6 +6,7 @@ using ViewModels.DataTable;
 using Repositories.Services.AppSettingServices.MobileFileServices;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Shared.Folder;
+using Repositories.Shared.AttachmentService;
 
 namespace Web.Controllers
 {
@@ -15,11 +16,19 @@ namespace Web.Controllers
     {
         private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
+        private readonly IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _attachmentService;
 
-        public FolderController(IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, ILogger<FolderController> logger, IMapper mapper) : base(folderService, logger, mapper, "Folder", "Folders")
+        public FolderController
+            (
+                IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, 
+                ILogger<FolderController> logger, 
+                IMapper mapper,
+                IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> attachmentService
+            ) : base(folderService, logger, mapper, "Folder", "Folders")
         {
             _folderService = folderService;
             _logger = logger;
+            _attachmentService = attachmentService;
         }
 
         public override List<DataTableViewModel> GetColumns()
@@ -50,11 +59,12 @@ namespace Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Employee")]
-        public async Task<ActionResult> _GetFolderView(long employeeId)
+        public async Task<ActionResult> _GetFolderView(FolderSearchViewModel search)
         {
             try
             {
-                var model = await _folderService.GetFolders(employeeId);
+                search.DisablePagination = true;
+                var model = await _folderService.GetAll<FolderDetailViewModel>(search);
                 return View(model);
             }
             catch (Exception ex)
@@ -68,7 +78,7 @@ namespace Web.Controllers
         {
             try
             {
-                var folderId = await _folderService.CreateAttachments(model);
+                var folderId = await _attachmentService.Create(model);
                 return RedirectToAction("_GetAttachmentView", new { id = model.Id });
             }
             catch (Exception ex)
