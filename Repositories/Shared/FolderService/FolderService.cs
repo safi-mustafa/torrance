@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Helpers.File;
 using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,10 @@ using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
+using Repositories.Shared.AttachmentService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
+using ViewModels.Shared.Folder;
 
 namespace Repositories.Services.FolderService
 {
@@ -25,14 +28,24 @@ namespace Repositories.Services.FolderService
         private readonly IMapper _mapper;
         private readonly IFileHelper _fileHelper;
         private readonly IRepositoryResponse _response;
+        private readonly IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> _attachmentService;
 
-        public FolderService(ToranceContext db, ILogger<FolderService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IFileHelper fileHelper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public FolderService
+            (
+                ToranceContext db, 
+                ILogger<FolderService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, 
+                IMapper mapper, 
+                IFileHelper fileHelper, 
+                IRepositoryResponse response,
+                IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> attachmentService
+            ) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _fileHelper = fileHelper;
             _response = response;
+            _attachmentService = attachmentService;
         }
 
         public override Expression<Func<Folder, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -80,6 +93,85 @@ namespace Repositories.Services.FolderService
                 _logger.LogError(ex, $"GetById() for Folder threw the following exception");
                 return Response.BadRequestResponse(_response);
             }
+        }
+
+        //public async Task<List<FolderDetailViewModel>> GetFolders(long id)
+        //{
+        //    try
+        //    {
+        //        var folders = await _db.Folders.Where(x => (x.Id == id) && (x.ActiveStatus == ActiveStatus.Active)).ToListAsync();
+        //        if (folders.Count > 0)
+        //        {
+        //            var mappedFolders = _mapper.Map<List<FolderDetailViewModel>>(folders);
+        //            foreach (var folder in mappedFolders)
+        //            {
+        //                var attachments = await _db.Attachments.Where(x => x.EntityId == folder.Id && x.EntityType == Enums.AttachmentEntityType.Folder && x.UserId == id).ToListAsync();
+        //                var mappedAttachments = _mapper.Map<List<AttachmentVM>>(attachments);
+        //                folder.Attachments.AddRange(mappedAttachments);
+        //            }
+
+        //            return mappedFolders.OrderBy(x => x.Name).ToList();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    return null;
+        //}
+
+        public async Task<long> CreateAttachments(CreateViewModel model)
+        {
+            try
+            {
+                //model.Attachments.ForEach(x =>
+                //{
+                //    x.Folder = new FolderBriefViewModel { Id = model.Id};
+                //});
+                var folderId = await _attachmentService.Create(model);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return -1;
+        }
+
+        public async Task<FolderViewModel> GetFolderAttachments(long id)
+        {
+            try
+            {
+                var attachments = await _db.Attachments.Where(x => x.EntityId == id).ToListAsync();
+                var mappedAttachments = _mapper.Map<List<AttachmentVM>>(attachments);
+                FolderViewModel viewModel = new()
+                {
+                    Id = id,
+                    Attachments = mappedAttachments,
+                };
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        public async Task<FolderDetailViewModel> GetFolders(long id)
+        {
+            try
+            {
+                var folders = await GetById(id);
+                return new FolderDetailViewModel();
+             //   return folders;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Shared;
+using ViewModels.Shared.Folder;
 
 namespace Repositories.Services.FolderService
 {
@@ -9,5 +10,8 @@ namespace Repositories.Services.FolderService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
+        Task<FolderViewModel> GetFolderAttachments(long id);
+        Task<FolderDetailViewModel> GetFolders(long id);
+        Task<long> CreateAttachments(CreateViewModel model);
     }
 }
