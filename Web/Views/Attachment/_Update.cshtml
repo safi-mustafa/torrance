@@ -1,0 +1,21 @@
+﻿@using ViewModels.Shared;
+@model AttachmentVM
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <input type="text" id="file-name" class="form-control" name="Name" placeholder="Add attachment name" />
+    </div>
+    <div class="col-lg-6">
+        <input type="file" id="file" name="File" class="form-control" />
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-6">
+        <input type="button" id="add-attachment" class="btn btn-dark" value="Add" />
+    </div>
+</div>
+<input type="hidden" asp-for="Id" id="attachment-id" />

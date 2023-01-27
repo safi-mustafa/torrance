@@ -14,6 +14,7 @@
     <None Remove="Areas\Pages\**" />
     <Content Remove="wwwroot\js\views\" />
     <Content Remove="wwwroot\js\views\Folder\" />
+    <None Remove="Views\Attachment\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -109,6 +110,7 @@
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="wwwroot\js\views\" />
     <Folder Include="wwwroot\js\views\Folder\" />
+    <Folder Include="Views\Attachment\" />
   </ItemGroup>
 
 </Project>

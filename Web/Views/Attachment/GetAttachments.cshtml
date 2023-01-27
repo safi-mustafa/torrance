@@ -1,0 +1,98 @@
+﻿@model ViewModels.Shared.FolderDetailViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
+        @if (User.IsInRole("Admin"))
+        {
+            <input type="button" id="create-attachment" class="btn btn-dark float-right" value="Create Attachment" />
+        }
+        <input type="button" id="back-to-folders" class="btn btn-light float-right mr-2" value="Back to Folders" />
+    </div>
+</div>
+
+
+<br />
+
+@if (Model.Attachments.Count > 0)
+{
+    <div class="row">
+        @foreach (var item in Model.Attachments)
+        {
+           @* <div class="col-lg-3 doc-col col-6 mb-3">
+                <div class="doc-inner">
+                    <a href="@item.Url" class="doc-body">
+                        <img src="~/img/file.png" class="doc-icon" attr-id="@item.Id" alt />
+                        <h4 class="doc-title">@item.Name</h4>
+                    </a>
+                </div>
+            </div>*@
+
+            <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
+                <div class="doc-inner">
+                    <div class="row">
+                        <i class="fa-solid fa-pen attachment-edit" attr-id="4"></i>
+                        <i class="fa-solid fa-trash attachment-delete" attr-id="4"></i>
+                    </div>
+                    <a class="doc-setting" href="@item.Url"><img src="~/img/dots.png" alt="dots" /></a>
+                    <a href="#" class="doc-body">
+                        <img src="~/img/folder.png" class="doc-icon attachment-create" alt="folder" attr-id="@item.Id" />
+                        <h4 class="doc-title">@item.Name</h4>
+                    </a>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+else
+{
+
+    <div class="row">
+        <h3>No Attachments found.</h3>
+    </div>
+}
+
+
+<div class="line-modal modal fade" id="attachment-modal" tabindex="-1" aria-labelledby="lineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn-circle" data-bs-dismiss="modal" aria-label="Close" data-toggle="tooltip" title="Close"><i class="icon-cross icon-1x"></i></button>
+                </div>
+
+                <div id="attachment-modal-div">
+                    <form action="CreateAttachment" id="attachment-form">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" id="file-name" class="form-control" name="Attachments[0].Name" placeholder="Add Attachment name" />
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="file" id="file" name="Attachments[0].File" class="form-control" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="button" id="add-attachment" class="btn btn-dark" value="Add" />
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="Id" id="folder-id" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>$(function () {
+        $(document).on('click', '#create-attachment', function () {
+            $("#attachment-modal").modal('show');
+        });
+    });</script>
