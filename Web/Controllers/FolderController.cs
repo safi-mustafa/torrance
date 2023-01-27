@@ -53,22 +53,8 @@ namespace Web.Controllers
 
         public async Task<IActionResult> _GetFolders(FolderSearchViewModel search)
         {
-<<<<<<< HEAD
             var response = await SearchFolders(search);
             return View(response);
-=======
-            try
-            {
-                var response = await _folderService.GetById(id);
-                var parsedResponse = response as RepositoryResponseWithModel<FolderDetailViewModel>;
-                return View(parsedResponse?.ReturnModel??new FolderDetailViewModel());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Folder _GetAttachmentView method threw an exception, Message: {ex.Message}");
-            }
-            return null;
->>>>>>> 36b82b45a544d30badb26530a48f486d10092d00
         }
 
         public override List<DataTableViewModel> GetColumns()
