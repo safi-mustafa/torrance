@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels.Shared.Folder;
 using Repositories.Shared.AttachmentService;
 using ViewModels.CRUD;
+using Centangle.Common.ResponseHelpers.Models;
+using Pagination;
 
 namespace Web.Controllers
 {
@@ -21,8 +23,8 @@ namespace Web.Controllers
 
         public FolderController
             (
-                IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, 
-                ILogger<FolderController> logger, 
+                IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService,
+                ILogger<FolderController> logger,
                 IMapper mapper,
                 IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
             ) : base(folderService, logger, mapper, "Folder", "Folders")
@@ -32,29 +34,21 @@ namespace Web.Controllers
             _attachmentService = attachmentService;
         }
 
+
         public override List<DataTableViewModel> GetColumns()
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Name",data = "Name"},
-                new DataTableViewModel{title = "Status",data = "FormattedStatus"},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
         }
-        public override ActionResult DataTableIndexView(CrudListViewModel vm)
-        {
-            return base.DataTableIndexView(vm);
-            return View("~/Views/Folder/_Index.cshtml", vm);
-        }
 
         [Authorize(Roles = "Admin, Employee")]
-        public async Task<ActionResult> _GetFolderView(FolderSearchViewModel search)
+        public override ActionResult Index()
         {
             try
             {
-                search.DisablePagination = true;
-                var model = await _folderService.GetAll<FolderDetailViewModel>(search);
+                var model = SearchFolders(new FolderSearchViewModel { DisablePagination = true });
                 return View(model);
             }
             catch (Exception ex)
@@ -63,6 +57,29 @@ namespace Web.Controllers
             }
             return null;
         }
+
+        public async Task<List<FolderDetailViewModel>> SearchFolders(FolderSearchViewModel search)
+        {
+            var response = await _folderService.GetAll<FolderDetailViewModel>(search);
+            var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<FolderDetailViewModel>>;
+            return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
+        }
+
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<ActionResult> _GetAttachmentView(long id)
+        {
+            try
+            {
+                var model = await _folderService.GetById(id);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Folder _GetAttachmentView method threw an exception, Message: {ex.Message}");
+            }
+            return null;
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateAttachment(AttachmentVM model)
         {
@@ -77,6 +94,7 @@ namespace Web.Controllers
             }
             return null;
         }
+
 
     }
 }

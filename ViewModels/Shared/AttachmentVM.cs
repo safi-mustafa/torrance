@@ -44,6 +44,7 @@ namespace ViewModels.Shared
 
     public class AttachmentResponseVM
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
         public string Type { get; set; }
