@@ -47,7 +47,7 @@ namespace Web.Controllers
         {
             try
             {
-                var model = SearchFolders(new FolderSearchViewModel { DisablePagination = true });
+                var model = (SearchFolders(new FolderSearchViewModel { DisablePagination = true })).Result;
                 return View(model);
             }
             catch (Exception ex)
