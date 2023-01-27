@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.FolderService;
 using TorranceApi.Controllers;
 using ViewModels.Shared;
+using ViewModels.Shared.Folder;
 
 namespace API.Controllers
 {

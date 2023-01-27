@@ -20,7 +20,7 @@ using ViewModels.Shared;
 
 namespace Repositories.Shared.AttachmentService
 {
-    public class AttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Folder, CreateViewModel, UpdateViewModel, DetailViewModel>, IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class AttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Attachment, CreateViewModel, UpdateViewModel, DetailViewModel>, IAttachmentService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFolderIcon, IFileModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IAttachmentUrl, IFolderIcon, IFileModel, IIdentitifier, new()

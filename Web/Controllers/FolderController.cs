@@ -6,8 +6,7 @@ using ViewModels.DataTable;
 using Repositories.Services.AppSettingServices.MobileFileServices;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Shared.Folder;
-using Microsoft.AspNetCore.Mvc;
-using ViewModels.CRUD;
+using Repositories.Shared.AttachmentService;
 
 namespace Web.Controllers
 {
@@ -17,11 +16,19 @@ namespace Web.Controllers
     {
         private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
+        private readonly IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _attachmentService;
 
-        public FolderController(IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, ILogger<FolderController> logger, IMapper mapper) : base(folderService, logger, mapper, "Folder", "Folders")
+        public FolderController
+            (
+                IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, 
+                ILogger<FolderController> logger, 
+                IMapper mapper,
+                IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> attachmentService
+            ) : base(folderService, logger, mapper, "Folder", "Folders")
         {
             _folderService = folderService;
             _logger = logger;
+            _attachmentService = attachmentService;
         }
 
         public override List<DataTableViewModel> GetColumns()
@@ -39,5 +46,36 @@ namespace Web.Controllers
             return base.DataTableIndexView(vm);
             return View("~/Views/Folder/_Index.cshtml", vm);
         }
+
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<ActionResult> _GetFolderView(FolderSearchViewModel search)
+        {
+            try
+            {
+                search.DisablePagination = true;
+                var model = await _folderService.GetAll<FolderDetailViewModel>(search);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Folder _GetFolderView method threw an exception, Message: {ex.Message}");
+            }
+            return null;
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CreateAttachment(FolderModifyViewModel model)
+        {
+            try
+            {
+                var folderId = await _attachmentService.Create(model);
+                return RedirectToAction("_GetAttachmentView", new { id = model.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Folder CreateAttachment method threw an exception, Message: {ex.Message}");
+            }
+            return null;
+        }
+
     }
 }
