@@ -4,7 +4,7 @@ namespace ViewModels.Authentication
 {
     public class UserBriefViewModel : BaseBriefVM
     {
-        public UserBriefViewModel()
+        public UserBriefViewModel() : base(false,"")
         {
         }
         public UserBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled)

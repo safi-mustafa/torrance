@@ -6,11 +6,7 @@ using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
 using ViewModels.AppSettings.Map;
-using ViewModels.AppSettings.MobileFiles.BadgeRoom;
-using ViewModels.AppSettings.MobileFiles.Delivery;
-using ViewModels.AppSettings.MobileFiles.Parking;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
-using ViewModels.AppSettings.MobileFiles.VehiclePass;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -296,38 +292,10 @@ namespace TorranceApi.Mapper
                 .ReverseMap();
 
 
-            //BadgeRoom
-            CreateMap<BadgeRoomModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, BadgeRoomDetailViewModel>().ReverseMap();
-            CreateMap<BadgeRoomModifyViewModel, BadgeRoomDetailViewModel>().ReverseMap();
-
-            //Delivery
-            CreateMap<DeliveryModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, DeliveryDetailViewModel>().ReverseMap();
-            CreateMap<DeliveryModifyViewModel, DeliveryDetailViewModel>().ReverseMap();
-
-
             //Dropbox
             CreateMap<DropboxModifyViewModel, MobileFile>().ReverseMap();
             CreateMap<MobileFile, DropboxDetailViewModel>().ReverseMap();
             CreateMap<DropboxModifyViewModel, DropboxDetailViewModel>().ReverseMap();
-
-            //Dropbox
-            CreateMap<DropboxModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, DropboxDetailViewModel>().ReverseMap();
-            CreateMap<DropboxModifyViewModel, DropboxDetailViewModel>().ReverseMap();
-
-
-            //Parking
-            CreateMap<ParkingModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, ParkingDetailViewModel>().ReverseMap();
-            CreateMap<ParkingModifyViewModel, ParkingDetailViewModel>().ReverseMap();
-
-
-            //VehiclePass
-            CreateMap<VehiclePassModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, VehiclePassDetailViewModel>().ReverseMap();
-            CreateMap<VehiclePassModifyViewModel, VehiclePassDetailViewModel>().ReverseMap();
 
             //Attachment
             CreateMap<AttachmentVM, MobileFile>().ReverseMap();

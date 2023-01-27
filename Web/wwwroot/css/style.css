@@ -1283,3 +1283,14 @@ header {
     color: #263871;
     font-weight: 500;
 }
+
+.edit-icon {
+    margin-top: 8px;
+    margin-left: 18px;
+}
+
+.delete-icon {
+    margin-left: 6px;
+    margin-top: 8px;
+}
+
