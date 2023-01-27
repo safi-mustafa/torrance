@@ -44,6 +44,8 @@ namespace Repositories.Shared.AttachmentService
 
         public override async Task<IRepositoryResponse> Create(CreateViewModel attachment)
         {
+            var viewModel = attachment as AttachmentVM;
+            viewModel.Id = 0;
             attachment.Url = _fileHelper.Save(attachment);
             return await base.Create(attachment);
         }
