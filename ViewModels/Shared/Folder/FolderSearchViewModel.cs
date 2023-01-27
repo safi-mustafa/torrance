@@ -2,7 +2,7 @@
 using Enums;
 using Pagination;
 
-namespace ViewModels.Shared.Folder
+namespace ViewModels.Shared
 {
     public class FolderSearchViewModel : BaseSearchModel
     {

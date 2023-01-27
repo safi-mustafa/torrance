@@ -1,9 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.FolderService;
 using TorranceApi.Controllers;
-using ViewModels.Common;
 using ViewModels.Shared;
 using ViewModels.Shared.Folder;
 
