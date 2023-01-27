@@ -1,19 +1,20 @@
 ﻿using Helpers.File;
-using Helpers.ValidationAttributes;
 using Microsoft.AspNetCore.Http;
+using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Shared;
 
-namespace ViewModels.Authentication
+namespace ViewModels.Authentication.Approver
 {
-    public class CommonSignUpVM 
+    public class UserUpdateViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [Required]
-        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
+        public string UserName { get; set; }
+        [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
         public string Password { get; set; }
         [Required]
         [DataType(DataType.Password)]
@@ -22,11 +23,8 @@ namespace ViewModels.Authentication
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public string UserName { get; set; }
-        [Required]
         [DataType(DataType.PhoneNumber)]
-        [CustomMobileNumberValidator(ErrorMessage = "Phone no. must be a valid number")]
-
+        [RegularExpression(@"^[0-9]{7,15}$", ErrorMessage = "Phone no. must be a valid number")]
         public string PhoneNumber { get; set; }
     }
 }

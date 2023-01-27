@@ -1,4 +1,5 @@
-﻿using ViewModels.WeldingRodRecord.Employee;
+﻿using ViewModels.Authentication.Approver;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.Authentication
 {
@@ -7,6 +8,6 @@ namespace ViewModels.Authentication
         public string Email { get; set; }
         public string Token { get; set; }
         public DateTime Expiry { get; set; }
-        public UserDetailVM UserDetail { get; set; }
+        public UserDetailViewModel UserDetail { get; set; }
     }
 }

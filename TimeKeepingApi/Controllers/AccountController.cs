@@ -14,6 +14,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace TorranceApi.Controllers

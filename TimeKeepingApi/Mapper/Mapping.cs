@@ -25,6 +25,7 @@ using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using ViewModels.WeldingRodRecord.WRRLog;
 using Helpers.Models.Shared;
+using ViewModels.Authentication.Approver;
 
 namespace TorranceApi.Mapper
 {

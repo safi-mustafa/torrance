@@ -8,6 +8,7 @@ using ViewModels;
 using ViewModels.AppSettings.Map;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -251,6 +252,14 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
             CreateMap<AttachmentResponseVM, AttachmentVM>().ReverseMap();
+
+
+            //Approver
+            CreateMap<UserUpdateViewModel, ToranceUser>()
+              .ReverseMap();
+            CreateMap<ToranceUser, UserDetailViewModel>().ReverseMap();
+            CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
+            CreateMap<UserUpdateViewModel, SignUpModel>().ReverseMap();
 
         }
     }

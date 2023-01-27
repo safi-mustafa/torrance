@@ -7,6 +7,7 @@ using Repositories.Common;
 using Repositories.Services.TimeOnToolServices.ShiftService;
 using System.Linq.Expressions;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 using ViewModels.TomeOnTools.SOW;
 
 namespace Repositories.Services.TimeOnToolServices.UserService

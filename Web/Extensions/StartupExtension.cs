@@ -24,6 +24,7 @@ using Repositories.Services.TimeOnToolServices.ShiftService;
 using Repositories.Services.TimeOnToolServices.SOWService;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Services.TimeOnToolServices.UserService;
+using Repositories.Services.WeldRodRecordServices.ApproverService;
 using Repositories.Services.WeldRodRecordServices.EmployeeService;
 using Repositories.Services.WeldRodRecordServices.LocationService;
 using Repositories.Services.WeldRodRecordServices.RodTypeService;
@@ -112,6 +113,7 @@ namespace Web.Extensions
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
+            services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();

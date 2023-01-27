@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Models;
 using Pagination;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 
 namespace Repositories.Shared.AuthenticationService
 {
@@ -20,6 +22,7 @@ namespace Repositories.Shared.AuthenticationService
         private readonly ILogger<IdentityService> _logger;
         private readonly IMapper _mapper;
         private readonly ToranceContext _db;
+        private readonly IUserInfoService _userInfoService;
 
         public IdentityService(
             UserManager<ToranceUser> userManager,
@@ -27,7 +30,8 @@ namespace Repositories.Shared.AuthenticationService
             SignInManager<ToranceUser> signInManager,
             ILogger<IdentityService> logger,
             IMapper mapper,
-            ToranceContext db
+            ToranceContext db,
+            IUserInfoService userInfoService
             )
         {
             _userManager = userManager;
@@ -36,6 +40,7 @@ namespace Repositories.Shared.AuthenticationService
             _logger = logger;
             _mapper = mapper;
             _db = db;
+            _userInfoService = userInfoService;
         }
 
         public async Task<long> CreateUser(SignUpModel model, IDbContextTransaction transaction, string optionalUsernamePrefix = "")
@@ -45,8 +50,9 @@ namespace Repositories.Shared.AuthenticationService
                 var user = _mapper.Map<ToranceUser>(model);
                 try
                 {
-                    var result = await _userManager.CreateAsync(user, model.EmployeeId);
-                    var role = model.Role != null ? model.Role : "Admin";
+                    var password = model.Role == "Employee" ? model.EmployeeId : model.Password;
+                    var result = await _userManager.CreateAsync(user, password);
+                    var role = model.Role != null ? model.Role : "SuperAdmin";
                     if (result.Succeeded)
                     {
                         if ((await _userManager.AddToRoleAsync(user, role)).Succeeded)
@@ -79,7 +85,8 @@ namespace Repositories.Shared.AuthenticationService
             string errorMsg = "There was some problem in updating data. Please try again later.";
             try
             {
-                var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+                var id = model.Role == "Approver" ? model.Id.ToString() : model.UserId.ToString();
+                var user = await _userManager.FindByIdAsync(id);
                 if (user != null)
                 {
                     user.UserName = model.UserName;
@@ -89,17 +96,21 @@ namespace Repositories.Shared.AuthenticationService
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        await _userManager.RemovePasswordAsync(user);
-                        var response = await _userManager.AddPasswordAsync(user, model.EmployeeId);
-                        if (response.Succeeded)
+                        if(model.Password != null)
                         {
-                            return result.Succeeded;
+                            await _userManager.RemovePasswordAsync(user);
+                            var response = await _userManager.AddPasswordAsync(user, model.EmployeeId);
+                            if (response.Succeeded)
+                            {
+                                return result.Succeeded;
+                            }
+                            else
+                            {
+                                _logger.LogWarning("Error! Password not updating.");
+                                await transaction.RollbackAsync();
+                            }
                         }
-                        else
-                        {
-                            _logger.LogWarning("Error! Password not updating.");
-                            await transaction.RollbackAsync();
-                        }
+                        return result.Succeeded;
                     }
                     else
                     {
@@ -148,9 +159,9 @@ namespace Repositories.Shared.AuthenticationService
                                             string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
                                          )
                                     )
-                                     select new UserDetailVM { Id = user.Id }
+                                     select new UserDetailViewModel { Id = user.Id }
                             ).GroupBy(x => x.Id)
-                            .Select(x => new UserDetailVM { Id = x.Max(m => m.Id) })
+                            .Select(x => new UserDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
 
                 var queryString = userQueryable.ToQueryString();
@@ -162,7 +173,7 @@ namespace Repositories.Shared.AuthenticationService
 
                 var userList = await _db.Users
                     .Where(x => filteredUserIds.Contains(x.Id))
-                    .Select(x => new UserDetailVM
+                    .Select(x => new UserDetailViewModel
                     {
                         Id = x.Id,
                         Email = x.Email,

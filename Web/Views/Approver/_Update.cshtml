@@ -1,0 +1,57 @@
+﻿@using ViewModels.Authentication.Approver;
+@model UserUpdateViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-600"></label>
+                    <input asp-for="Email" type="text" class="form-control" placeholder="Email" />
+                    <span asp-validation-for="Email" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label fw-600"></label>
+                    <input asp-for="UserName" type="text" class="form-control" placeholder="Username" />
+                    <span asp-validation-for="UserName" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+        @if(Model.Id < 1)
+        {
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-600"></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Password" class="validation-invalid-label"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label fw-600"></label>
+                        <input asp-for="ConfirmPassword" type="text" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="ConfirmPassword" class="validation-invalid-label"></span>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label fw-600"></label>
+                    <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="Phone Number" />
+                    <span asp-validation-for="PhoneNumber" class="validation-invalid-label"></span>
+                </div>
+            </div>
+        </div>
+      
+
+    </div>
+</div>
+
+<input type="hidden" asp-for="Id" />
