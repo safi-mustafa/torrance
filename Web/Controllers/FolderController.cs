@@ -16,14 +16,14 @@ namespace Web.Controllers
     {
         private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
-        private readonly IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _attachmentService;
+        private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
 
         public FolderController
             (
                 IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, 
                 ILogger<FolderController> logger, 
                 IMapper mapper,
-                IAttachmentService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> attachmentService
+                IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
             ) : base(folderService, logger, mapper, "Folder", "Folders")
         {
             _folderService = folderService;
@@ -74,7 +74,7 @@ namespace Web.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateAttachment(FolderModifyViewModel model)
+        public async Task<ActionResult> CreateAttachment(AttachmentVM model)
         {
             try
             {
