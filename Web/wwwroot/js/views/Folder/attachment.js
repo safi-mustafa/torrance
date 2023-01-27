@@ -39,4 +39,69 @@ $(function () {
         window.location.href = "/Folder/Index";
     });
 
-}));
+});
+
+function DeleteDataItem(deleteUrl) {
+    var confirmBtnText = "Yes, delete it!";
+    var cancelBtnText = "No, cancel!";
+    swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'error',
+        //icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmBtnText,
+        cancelButtonText: cancelBtnText,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false
+    }).then(function (result) {
+        if (result.value) {
+            DeleteItem(deleteUrl).then(function (ajaxResult) {
+                if (ajaxResult.Success) {
+                    ReInitializeDataTables();
+                }
+                else {
+                    Swal.fire("Couldn't delete. Try again later.")
+                }
+            });
+
+        }
+        else if (result.dismiss === swal.DismissReason.cancel) {
+        }
+    });
+}
+
+function DeleteItem(url) {
+    return $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (res) {
+        }
+    });
+}
+
+function loadUpdateAndDetailModalPanel(contentUrl) {
+    loadModalPanel(contentUrl, "crudModalPanel", "crudModalPanelBody")
+}
+
+function ReInitializeDataTables() {
+    var searchValue = $("#search-value").val();
+    $.ajax({
+        url: "/Attachment/_GetAttachments",
+        type: "post",
+        data: { 'Search.value': searchValue },
+        dataType: "html",
+        success: function (response) {
+            $('#attachment-list').html(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
+
+function loadCreateModalPanel(contentUrl, action = "Create Attachment") {
+    $("#modal-title").val(action);
+    loadModalPanel(contentUrl, "crudModalPanel", "crudModalPanelBody")
+}

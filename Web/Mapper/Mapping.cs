@@ -250,6 +250,7 @@ namespace Models.Mapper
                 .ForMember(d => d.Folder, s => s.Ignore())
                 .ReverseMap();
             CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
+            CreateMap<AttachmentResponseVM, AttachmentVM>().ReverseMap();
 
         }
     }

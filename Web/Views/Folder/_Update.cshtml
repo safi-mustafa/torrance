@@ -7,10 +7,10 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <input type="text" id="file-name" class="form-control" name="Name" placeholder="Add folder name" />
+        <input type="text" id="file-name" class="form-control" asp-for="Name" placeholder="Add folder name" />
     </div>
     <div class="col-lg-6">
-        <input type="file" id="file" name="File" class="form-control" />
+        <input type="file" id="file" asp-for="File" class="form-control" />
     </div>
 </div>
 <input type="hidden" asp-for="Id" id="folder-id" />

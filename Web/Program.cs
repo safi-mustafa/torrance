@@ -35,8 +35,7 @@ app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-                    System.IO.Path.Combine(Directory.GetParent(builder.Environment.ContentRootPath).FullName, "Storage")
-                    ),
+                    Path.Combine(builder.Environment.ContentRootPath, "Storage")),
     RequestPath = "/Storage"
 });
 

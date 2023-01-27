@@ -1,13 +1,27 @@
 ﻿@model ViewModels.Shared.FolderDetailViewModel
 @{
-    Layout = null;
 }
 
+<!-- The Modal -->
+<div class="modal fade" id="crudModalPanel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Folder</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div id="crudModalPanelBody" class="modal-body">
+                Modal body..
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-6"></div>
     <div class="col-md-6">
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
         {
             <input type="button" id="create-attachment" class="btn btn-dark float-right" value="Create Attachment" onclick="loadCreateModalPanel('/Attachment/Create')" />
             <input type="hidden" asp-for="Id" id="folder-id" />
@@ -15,40 +29,12 @@
         <input type="button" id="back-to-folders" class="btn btn-light float-right mr-2" value="Back to Folders" />
     </div>
 </div>
-
-
 <br />
-
-@if (Model.Attachments.Count > 0)
-{
-    <div class="row">
-        @foreach (var item in Model.Attachments)
-        {
-            <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
-                <div class="doc-inner">
-                    <div class="row">
-                        <i class="fa-solid fa-pen attachment-edit" attr-id="4"></i>
-                        <i class="fa-solid fa-trash attachment-delete" attr-id="4"></i>
-                    </div>
-                    <a class="doc-setting" href="@item.Url"><img src="~/img/dots.png" alt="dots" /></a>
-                    <a href="#" class="doc-body">
-                        <img src="~/img/folder.png" class="doc-icon attachment-create" alt="folder" attr-id="@item.Id" />
-                        <h4 class="doc-title">@item.Name</h4>
-                    </a>
-                </div>
-            </div>
-        }
-
-    </div>
-}
-else
-{
-    <div class="row">
-        <h3>No Attachments found.</h3>
-    </div>
-}
+<partial name="_GetAttachments" model="Model.Attachments" />
 
 @section Scripts{
+    <script src="~/js/sweetalert.min.js"></script>
+    <script src="~/js/views/Folder/attachment.js"></script>
     <script src="~/js/crud/ajaxCrud.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

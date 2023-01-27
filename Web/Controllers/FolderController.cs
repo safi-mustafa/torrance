@@ -30,6 +30,7 @@ namespace Web.Controllers
             _logger = logger;
             _attachmentService = attachmentService;
         }
+
         public override ActionResult Index()
         {
             try

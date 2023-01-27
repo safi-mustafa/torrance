@@ -19,6 +19,7 @@ namespace Web.Controllers
     public class AttachmentController : CrudBaseController<AttachmentVM, AttachmentVM, AttachmentVM, AttachmentVM, AttachmentSearchViewModel>
     {
         private readonly ILogger<AttachmentController> _logger;
+        private readonly IMapper _mapper;
         private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
 
         public AttachmentController
@@ -29,6 +30,7 @@ namespace Web.Controllers
             ) : base(attachmentService, logger, mapper, "Attachment", "Attachments")
         {
             _logger = logger;
+            _mapper = mapper;
             _attachmentService = attachmentService;
         }
 
@@ -37,8 +39,9 @@ namespace Web.Controllers
         {
             try
             {
-                var model = await SearchAttachments(new AttachmentSearchViewModel { DisablePagination = true, Folder = new FolderBriefViewModel { Id = id } });
-                return View(model);
+                var attachments = await SearchAttachments(new AttachmentSearchViewModel { DisablePagination = true, Folder = new FolderBriefViewModel { Id = id } });
+                var folder = new FolderDetailViewModel { Id = id, Attachments = attachments };
+                return View(folder);
             }
             catch (Exception ex)
             {
@@ -47,25 +50,31 @@ namespace Web.Controllers
             }
         }
 
-        public override List<DataTableViewModel> GetColumns()
-        {
-            return new List<DataTableViewModel>()
-            {
-
-            };
-        }
-
         [NonAction]
         public override ActionResult Index()
         {
             return View();
         }
 
-        public async Task<List<AttachmentVM>> SearchAttachments(AttachmentSearchViewModel search)
+        public async Task<List<AttachmentResponseVM>> SearchAttachments(AttachmentSearchViewModel search)
         {
             var response = await _attachmentService.GetAll<AttachmentVM>(search);
             var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<AttachmentVM>>;
-            return parsedResponse?.ReturnModel.Items ?? new List<AttachmentVM>();
+            return _mapper.Map<List<AttachmentResponseVM>>(parsedResponse?.ReturnModel.Items) ?? new List<AttachmentResponseVM>();
+        }
+
+        public async Task<IActionResult> _GetFolders(AttachmentSearchViewModel search)
+        {
+            var response = await SearchAttachments(search);
+            return View(response);
+        }
+
+        public override List<DataTableViewModel> GetColumns()
+        {
+            return new List<DataTableViewModel>()
+            {
+
+            };
         }
     }
 }
