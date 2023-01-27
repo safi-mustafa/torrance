@@ -66,7 +66,7 @@ namespace Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Employee")]
-        public async Task<ActionResult> _GetAttachmentView(long id)
+        public async Task<ActionResult> GetAttachments(long id)
         {
             try
             {
@@ -94,7 +94,5 @@ namespace Web.Controllers
             }
             return null;
         }
-
-
     }
 }
