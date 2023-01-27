@@ -328,6 +328,7 @@ namespace Web.Controllers
             if (!string.IsNullOrEmpty(formAction))
             {
                 vm.FormAction = formAction;
+                vm.FormController = _controllerName;
             }
             if (!string.IsNullOrEmpty(updateViewPath))
             {

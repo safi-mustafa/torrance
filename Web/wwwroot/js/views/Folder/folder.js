@@ -64,11 +64,9 @@ function loadUpdateAndDetailModalPanel(contentUrl) {
 }
 
 function ReInitializeDataTables() {
-    var searchValue = $("#search-value").val();
     $.ajax({
         url: "/Folder/_GetFolders",
         type: "post",
-        data: { 'Search.value': searchValue },
         dataType: "html",
         success: function (response) {
             $('#folder-list').html(response);

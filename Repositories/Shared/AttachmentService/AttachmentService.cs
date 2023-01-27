@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
@@ -16,6 +17,7 @@ using Pagination;
 using Repositories.Common;
 using Repositories.Services.FolderService;
 using Repositories.Shared.AuthenticationService;
+using ViewModels.Attachment;
 using ViewModels.Shared;
 
 namespace Repositories.Shared.AttachmentService
@@ -44,8 +46,6 @@ namespace Repositories.Shared.AttachmentService
 
         public override async Task<IRepositoryResponse> Create(CreateViewModel attachment)
         {
-            var viewModel = attachment as AttachmentVM;
-            viewModel.Id = 0;
             attachment.Url = _fileHelper.Save(attachment);
             return await base.Create(attachment);
         }
@@ -56,17 +56,32 @@ namespace Repositories.Shared.AttachmentService
                 attachment.Url = _fileHelper.Save(attachment);
             return await base.Update(attachment);
         }
-    }
 
-    public class IdComparer<T> : IEqualityComparer<T> where T : BaseDBModel
-    {
-        public bool Equals(T x, T y)
+        public override async Task<IRepositoryResponse> GetById(long id)
         {
-            return x.Id == y.Id;
+            try
+            {
+                var dbModel = await _db.Set<Attachment>().Include(x => x.Folder).Where(x => x.Id == id).FirstOrDefaultAsync();
+                if (dbModel != null)
+                {
+                    var result = _mapper.Map<DetailViewModel>(dbModel);
+                    var response = new RepositoryResponseWithModel<DetailViewModel> { ReturnModel = result };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for id:{id} for {typeof(Attachment).FullName} in GetById()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetById() for {typeof(Attachment).FullName} threw the following exception");
+                return Response.BadRequestResponse(_response);
+            }
         }
-        public int GetHashCode(T obj)
+
+        public override Expression<Func<Attachment, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
-            return obj.Id.GetHashCode();
+            var search = filters as AttachmentSearchViewModel;
+            return x => (search.Folder.Id == 0 || search.Folder.Id == x.FolderId);
         }
     }
 }

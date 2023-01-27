@@ -10,27 +10,23 @@
 
 @if (Model.Count > 0)
 {
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
-                <div class="doc-inner">
-                    <div class="row">
-                        <i class="fa-solid fa-pen ml-3 mt-2 attachment-edit" onclick="loadUpdateAndDetailModalPanel('/Attachment/Update/@item.Id')" attr-id="4"></i>
-                        <i class="fa-solid fa-trash ml-2 mt-2 attachment-delete" href='@("/Attachment/Delete/"+item.Id)' attr-id="4"></i>
-                    </div>
-                    <a href="#" class="doc-body">
-                        <img src="~/img/file.png" class="doc-icon attachment-create" alt="file" attr-id="@item.Id" />
-                        <h4 class="doc-title">@item.Name</h4>
-                    </a>
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
+            <div class="doc-inner">
+                <div class="row">
+                    <i class="fa-solid fa-pen ml-3 mt-2 attachment-edit" onclick="loadUpdateAndDetailModalPanel('/Attachment/Update/@item.Id')" attr-id="@item.Id"></i>
+                    <i class="fa-solid fa-trash ml-2 mt-2 attachment-delete delete" href='@("/Attachment/Delete/"+item.Id)' attr-id="@item.Id"></i>
                 </div>
+                <a href="@item.Url" class="doc-body" target="_blank">
+                    <img src="~/img/file.png" class="doc-icon attachment-create" alt="file" attr-id="@item.Id" />
+                    <h4 class="doc-title">@item.Name</h4>
+                </a>
             </div>
-        }
-    </div>
+        </div>
+    }
 }
 else
 {
-    <div class="row">
-        <h3>No Attachments found.</h3>
-    </div>
+    <h3>No Attachments found.</h3>
 }

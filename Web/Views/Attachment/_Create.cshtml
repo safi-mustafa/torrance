@@ -1,5 +1,5 @@
 ﻿@using ViewModels.Shared;
-@model AttachmentModifyViewModel
+@model AttachmentVM
 @{
     Layout = null;
 }
@@ -14,4 +14,3 @@
 </div>
 <br />
 @Html.HiddenFor(x => x.Folder.Id)
-<input name="Id" value="@Model.Id" type="hidden" />

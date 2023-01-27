@@ -30,7 +30,9 @@
     </div>
 </div>
 <br />
-<partial name="_GetAttachments" model="Model.Attachments" />
+<div class="row" id="attachment-list">
+    <partial name="_GetAttachments" model="Model.Attachments" />
+</div>
 
 @section Scripts{
     <script src="~/js/sweetalert.min.js"></script>

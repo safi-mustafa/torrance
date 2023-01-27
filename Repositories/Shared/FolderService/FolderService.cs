@@ -28,7 +28,6 @@ namespace Repositories.Services.FolderService
         private readonly IMapper _mapper;
         private readonly IFileHelper _fileHelper;
         private readonly IRepositoryResponse _response;
-        private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
 
         public FolderService
             (
@@ -36,8 +35,7 @@ namespace Repositories.Services.FolderService
                 ILogger<FolderService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger,
                 IMapper mapper,
                 IFileHelper fileHelper,
-                IRepositoryResponse response,
-                IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
+                IRepositoryResponse response
             ) : base(db, logger, mapper, response)
         {
             _db = db;
@@ -45,7 +43,6 @@ namespace Repositories.Services.FolderService
             _mapper = mapper;
             _fileHelper = fileHelper;
             _response = response;
-            _attachmentService = attachmentService;
         }
 
         public override Expression<Func<Folder, bool>> SetQueryFilter(IBaseSearchModel filters)

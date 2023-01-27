@@ -12,7 +12,7 @@ namespace Helpers.File
 {
     public interface IFileHelper
     {
-        string Save(IFileModel model, string existingUrl="");
+        string Save(IFileModel model, string existingUrl = "");
         bool Delete(string url);
 
         void GetFilePath(string extension, string _baseFolder, out string subPath, out string uniqueFileName, out string filePath, out string basePath);
@@ -29,7 +29,7 @@ namespace Helpers.File
             _logger = logger;
             _env = env;
         }
-        public string Save(IFileModel model, string existingUrl="")
+        public string Save(IFileModel model, string existingUrl = "")
         {
             string imageUrl = "";
             try
@@ -47,7 +47,7 @@ namespace Helpers.File
                     }
                     _logger.LogDebug("File Save method, created filepath", filePath);
 
-                    var absolutePath = Directory.GetParent(_env.ContentRootPath).FullName;
+                    var absolutePath = _env.ContentRootPath;
                     var savedDirectory = Path.Combine(absolutePath, filePath);
                     FileInfo file = new FileInfo(savedDirectory);
                     file.Directory.Create(); // If the directory already exists, this method does nothing.
@@ -74,7 +74,7 @@ namespace Helpers.File
 
         public void GetFilePath(string extension, string _baseFolder, out string subPath, out string uniqueFileName, out string filePath, out string basePath)
         {
-            string basePathStorage = _configuration.GetValue<string>("UploadBaseStoragePath");
+            string basePathStorage = $"wwwroot/{_configuration.GetValue<string>("UploadBaseStoragePath")}";
             basePath = _configuration.GetValue<string>("UploadBasePath");
             subPath = _configuration.GetValue<string>("UploadSubPath");
             string uploadsFolder = Path.Combine(basePathStorage, subPath, _baseFolder);

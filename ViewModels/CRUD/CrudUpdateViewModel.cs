@@ -17,6 +17,7 @@ namespace ViewModels.CRUD
         public string Name { get; set; }
         public string FormId { get; set; }
         public string FormType { get; set; }
+        public string FormController { get; set; }
         public string FormAction { get; set; }
         public string UpdateViewPath { get; set; }
         public IBaseCrudViewModel UpdateModel { get; set; }

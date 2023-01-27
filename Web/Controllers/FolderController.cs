@@ -16,19 +16,16 @@ namespace Web.Controllers
     {
         private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
-        private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
 
         public FolderController
             (
                 IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService,
                 ILogger<FolderController> logger,
-                IMapper mapper,
-                IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
+                IMapper mapper
             ) : base(folderService, logger, mapper, "Folder", "Folders")
         {
             _folderService = folderService;
             _logger = logger;
-            _attachmentService = attachmentService;
         }
 
         public override ActionResult Index()

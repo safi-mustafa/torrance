@@ -39,6 +39,11 @@ $(function () {
         window.location.href = "/Folder/Index";
     });
 
+    $(document).off('click', '.delete');
+    $(document).on('click', '.delete', function (e) {
+        e.preventDefault();
+        DeleteDataItem($(this).attr("href"));
+    });
 });
 
 function DeleteDataItem(deleteUrl) {

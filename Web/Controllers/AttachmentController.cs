@@ -16,18 +16,18 @@ namespace Web.Controllers
 {
     [Authorize]
 
-    public class AttachmentController : CrudBaseController<AttachmentVM, AttachmentVM, AttachmentVM, AttachmentVM, AttachmentSearchViewModel>
+    public class AttachmentController : CrudBaseController<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentSearchViewModel>
     {
         private readonly ILogger<AttachmentController> _logger;
         private readonly IMapper _mapper;
-        private readonly IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> _attachmentService;
+        private readonly IAttachmentService<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel> _attachmentService;
 
         public AttachmentController
             (
                 ILogger<AttachmentController> logger,
                 IMapper mapper,
-                IAttachmentService<AttachmentVM, AttachmentVM, AttachmentVM> attachmentService
-            ) : base(attachmentService, logger, mapper, "Attachment", "Attachments")
+                IAttachmentService<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
+            ) : base(attachmentService, logger, mapper, "Attachment", "Attachments", false, false)
         {
             _logger = logger;
             _mapper = mapper;
@@ -70,12 +70,13 @@ namespace Web.Controllers
 
         public async Task<List<AttachmentResponseVM>> SearchAttachments(AttachmentSearchViewModel search)
         {
-            var response = await _attachmentService.GetAll<AttachmentVM>(search);
-            var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<AttachmentVM>>;
+            var response = await _attachmentService.GetAll<AttachmentModifyViewModel>(search);
+            var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<AttachmentModifyViewModel>>;
             return _mapper.Map<List<AttachmentResponseVM>>(parsedResponse?.ReturnModel.Items) ?? new List<AttachmentResponseVM>();
         }
 
-        public async Task<IActionResult> _GetFolders(AttachmentSearchViewModel search)
+        [HttpPost]
+        public async Task<IActionResult> _GetAttachments(AttachmentSearchViewModel search)
         {
             var response = await SearchAttachments(search);
             return View(response);
