@@ -41,9 +41,10 @@ namespace Web.Controllers
             }
             return null;
         }
-
+        [HttpPost]
         public async Task<List<FolderDetailViewModel>> SearchFolders(FolderSearchViewModel search)
         {
+            var check = search.Search.value;
             var response = await _folderService.GetAll<FolderDetailViewModel>(search);
             var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<FolderDetailViewModel>>;
             return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();

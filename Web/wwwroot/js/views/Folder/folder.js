@@ -12,6 +12,12 @@ $(function () {
         window.location.href = url;
     });
 
+    $(document).off('keyup', '#search-value');
+    $(document).on('keyup', '#search-value', function (e) {
+        e.preventDefault();
+        ReInitializeDataTables();
+    });
+
     $(document).off('click', '.delete');
     $(document).on('click', '.delete', function (e) {
         e.preventDefault();
@@ -64,8 +70,15 @@ function loadUpdateAndDetailModalPanel(contentUrl) {
 }
 
 function ReInitializeDataTables() {
+    var searchValue = $("#search-value").val();
+    var model = {
+        Name: searchValue,
+        Search: { value: searchValue }
+    };
     $.ajax({
         url: "/Folder/_GetFolders",
+        data: JSON.stringify(model),
+        contentType: "application/json; charset=utf-8",
         type: "post",
         dataType: "html",
         success: function (response) {
