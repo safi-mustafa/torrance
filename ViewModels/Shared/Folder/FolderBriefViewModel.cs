@@ -5,7 +5,7 @@ namespace ViewModels.Shared
 {
     public class FolderBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public FolderBriefViewModel() : base(true, "The Folder field is required.")
+        public FolderBriefViewModel() : base(false, "The Folder field is required.")
         {
 
         }
