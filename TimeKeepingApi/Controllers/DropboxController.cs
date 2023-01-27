@@ -2,27 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
-using Repositories.Services.AppSettingServices.MobileFileServices;
+using Repositories.Services.AppSettingServices.DropboxServices;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class DropboxController : CrudBaseController<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel, DropboxDetailViewModel, DropboxSearchViewModel>
+    public class DropboxController : CrudBaseBriefController<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel, DropboxDetailViewModel, DropboxSearchViewModel>
     {
-        public DropboxController(IMobileFileService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService) : base(dropboxService)
+        public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService) : base(dropboxService)
         {
         }
 
-        public override Task<IActionResult> Post([FromForm] DropboxModifyViewModel model)
+        public override Task<IActionResult> GetAll([FromQuery] DropboxSearchViewModel search)
         {
-            return base.Post(model);
-        }
-
-        public override Task<IActionResult> Put([FromForm] DropboxModifyViewModel model)
-        {
-            return base.Put(model);
+            search.ActiveStatus = Enums.ActiveStatus.Active;
+            return base.GetAll(search);
         }
     }
 }

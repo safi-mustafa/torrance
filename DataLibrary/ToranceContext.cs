@@ -41,7 +41,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<WRRLog> WRRLogs { get; set; }
     public DbSet<TOTLog> TOTLogs { get; set; }
     public DbSet<Map> Maps { get; set; }
-    public DbSet<MobileFile> MobileFiles { get; set; }
+    public DbSet<Dropbox> Dropboxes { get; set; }
     public DbSet<PermittingIssue> PermittingIssues { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

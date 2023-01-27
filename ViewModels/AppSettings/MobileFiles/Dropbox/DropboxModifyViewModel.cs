@@ -4,8 +4,8 @@ using ViewModels.Shared;
 
 namespace ViewModels.AppSettings.MobileFiles.Dropbox
 {
-    public class DropboxModifyViewModel : BaseFileUpdateViewModel, IBaseCrudViewModel, IIdentitifier
+    public class DropboxModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
-        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Dropbox;
+        public string? Url { get; set; }
     }
 }

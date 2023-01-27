@@ -1,0 +1,89 @@
+﻿@using Enums;
+@using ViewModels.AppSettings.MobileFiles.Dropbox;
+@using Web.Extensions;
+@model DropboxModifyViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Url" class="form-label fw-600"></label>
+                    <input asp-for="Url" type="text" class="form-control" placeholder="Link Url" />
+                    <span asp-validation-for="Url" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ActiveStatus" class="control-label form-label fw-600"></label>
+                    <select asp-for="ActiveStatus" asp-items="Html.GetEnumSelectList(typeof(ActiveStatus))" class="form-control" id="status">
+                        <option value="">Select Status</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" asp-for="Id" />
+
+
+<script>
+    $(function () {
+        $(document).off('change', '#status');
+        $(document).on('change', '#status', function (e) {
+            var status = $('#status :selected').text();
+            if(status === "Active"){
+                 e.preventDefault();
+                var href = '/Dropbox/UpdateLinkStatus';
+                ChangeLinkStatus(href);
+            }
+        });
+    });
+
+    function ChangeLinkStatus(url, confirmBtnText = "", cancelBtnText = "") {
+        if (confirmBtnText === "") {
+            confirmBtnText = "Yes, Change all!";
+        }
+        if (cancelBtnText === "") {
+            cancelBtnText = "No, cancel!";
+        }
+        swal.fire({
+            title: 'Are you sure? Statuses of the previous links will be inactive!',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            // icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: confirmBtnText,
+            cancelButtonText: cancelBtnText,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.value) {
+               
+                SendAjax(url).then(function (ajaxResult) {
+                    if (ajaxResult) {
+                       // location.reload();
+                    }
+                    else {
+                        Swal.fire("Couldn't complete request. Try again later.")
+                    }
+                });
+
+            }
+            else if (result.dismiss === swal.DismissReason.cancel) {
+            }
+        });
+    }
+    function SendAjax(url) {
+        return $.ajax({
+            url: url,
+            type: 'POST',
+            success: function (res) {
+            }
+        });
+    }
+</script>

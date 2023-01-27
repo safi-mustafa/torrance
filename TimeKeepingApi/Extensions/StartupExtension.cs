@@ -34,10 +34,10 @@ using Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Repositories.Shared.UserInfoServices;
-using Repositories.Services.AppSettingServices.MobileFileServices;
 using Helpers.File;
 using Repositories.Shared.AttachmentService;
 using Repositories.Services.FolderService;
+using Repositories.Services.AppSettingServices.DropboxServices;
 
 namespace Web.Extensions
 {
@@ -186,7 +186,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
-            services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
+            services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped<IUserService, UserService>();
