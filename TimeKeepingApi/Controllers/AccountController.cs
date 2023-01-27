@@ -104,7 +104,7 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        var userDetail = _mapper.Map<UserDetailVM>(aspNetUser);
+                        var userDetail = _mapper.Map<UserDetailViewModel>(aspNetUser);
 
                         var responseModel = new RepositoryResponseWithModel<TokenVM>();
                         responseModel.ReturnModel = new TokenVM
@@ -198,7 +198,7 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        var userDetail = _mapper.Map<UserDetailVM>(user);
+                        var userDetail = _mapper.Map<UserDetailViewModel>(user);
                         userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
                         userDetail.Role = role;
                         //  userDetail.Roles = string.Join(',', userRoles);
@@ -237,10 +237,10 @@ namespace TorranceApi.Controllers
         [Route("/api/Account/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchViewModel model)
         {
-            var result = await _identity.GetAll<UserDetailVM>(model);
-            var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<UserDetailVM>>();
+            var result = await _identity.GetAll<UserDetailViewModel>(model);
+            var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<UserDetailViewModel>>();
             responseModel.ReturnModel = result;
-            return ReturnProcessedResponse<PaginatedResultModel<UserDetailVM>>(responseModel);
+            return ReturnProcessedResponse<PaginatedResultModel<UserDetailViewModel>>(responseModel);
         }
     }
 }

@@ -252,7 +252,7 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>().ReverseMap();
-            CreateMap<UserDetailVM, ToranceUser>().ReverseMap();
+            CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();
 
             //Employee
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
