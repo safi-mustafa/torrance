@@ -1,4 +1,7 @@
-﻿$(function () {
+﻿$.getScript("/js/crud/serialize-file.js", function () {
+});
+
+$(function () {
 
     $(document).off('click', '#add-attachment');
     $(document).on('click', '#add-attachment', function (e) {
@@ -36,21 +39,4 @@
         window.location.href = "/Folder/Index";
     });
 
-
-    $.fn.serializeFiles = function () {
-        var formData = new FormData();
-        var obj = $(this);
-        /* ADD FILE TO PARAM AJAX */
-        //var formData = new FormData();
-        $.each($(obj).find("input[type='file']"), function (i, tag) {
-            $.each($(tag)[0].files, function (i, file) {
-                formData.append(tag.name, file);
-            });
-        });
-        var params = $(obj).serializeArray();
-        $.each(params, function (i, val) {
-            formData.append(val.name, val.value);
-        });
-        return formData;
-    };
 }));

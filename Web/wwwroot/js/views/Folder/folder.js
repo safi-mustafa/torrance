@@ -1,4 +1,7 @@
-﻿$(function () {
+﻿$.getScript("/js/crud/serialize-file.js", function () {
+});
+
+$(function () {
     $(document).off('click', '#add-folder');
     $(document).on('click', '#add-folder', function (e) {
         var name = $("#folder-name").val();
@@ -11,22 +14,20 @@
         }
     });
 
-    $.fn.serializeFiles = function () {
-        var formData = new FormData();
-        var obj = $(this);
-        /* ADD FILE TO PARAM AJAX */
-        //var formData = new FormData();
-        $.each($(obj).find("input[type='file']"), function (i, tag) {
-            $.each($(tag)[0].files, function (i, file) {
-                formData.append(tag.name, file);
-            });
+
+    $(document).off('click', '#edit-folder');
+    $(document).on('click', '#edit-folder', function (e) {
+        var id = $(this).attr("attr-id");
+        var contentUrl = "/Folder/Update/" + id;
+        $.ajax({
+            type: "GET",
+            url: contentUrl,
+            success: function (htmlContent) {
+                $("#folder-modal-div").html(htmlContent);
+                $("#folder-modal").modal("toggle");
+            }
         });
-        var params = $(obj).serializeArray();
-        $.each(params, function (i, val) {
-            formData.append(val.name, val.value);
-        });
-        return formData;
-    };
+    });
 
     $(document).off('click', '.folder');
     $(document).on("click", ".folder", function (e) {
