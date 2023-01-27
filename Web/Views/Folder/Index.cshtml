@@ -1,23 +1,6 @@
 ﻿@using ViewModels.Shared
 @model List<FolderDetailViewModel>
 
-@{
-            //   Layout = null;
-}
-
-<style>
-    .folder-edit{
-        margin-top: 8px;
-        margin-left: 18px;
-    }
-
-    .folder-delete{
-        margin-left: 6px;
-        margin-top: 8px;
-    }
-</style>
-
-
 <div class="card">
     <div class="card-body">
         <div class="row">
@@ -46,8 +29,8 @@
                             <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
                                 <div class="doc-inner">
                                     <div class="row">
-                                        <i class="fa-solid fa-pen folder-edit" attr-id="4"></i>
-                                            <i class="fa-solid fa-trash folder-delete" attr-id="4"></i>
+                                        <i class="fa-solid fa-pen edit-icon folder-edit" attr-id="4"></i>
+                                        <i class="fa-solid fa-trash delete-icon folder-delete" attr-id="4"></i>
                                     </div>
                                     <a class="doc-setting" href="#"><img src="~/img/dots.png" alt="dots" /></a>
                                     <a href="#" class="doc-body">

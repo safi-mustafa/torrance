@@ -68,8 +68,9 @@ namespace Web.Controllers
         {
             try
             {
-                var model = await _folderService.GetById(id);
-                return View(model);
+                var response = await _folderService.GetById(id);
+                var parsedResponse = response as RepositoryResponseWithModel<FolderDetailViewModel>;
+                return View(parsedResponse?.ReturnModel??new FolderDetailViewModel());
             }
             catch (Exception ex)
             {
