@@ -15,9 +15,5 @@ namespace ViewModels.Shared
         public List<AttachmentResponseVM> Attachments { get; set; }
     }
 
-    public class FolderSearchViewModel : BaseSearchModel
-    {
-        public string? Name { get; set; }
-        public ActiveStatus? Status { get; set; }
-    }
+   
 }
