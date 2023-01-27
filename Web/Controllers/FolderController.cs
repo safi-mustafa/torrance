@@ -37,7 +37,7 @@ namespace Web.Controllers
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return base.DataTableIndexView(vm);
-            return View("~/Views/TOTLog/_Index.cshtml", vm);
+            return View("~/Views/Folder/_Index.cshtml", vm);
         }
     }
 }
