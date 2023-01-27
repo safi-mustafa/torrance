@@ -3,52 +3,35 @@
 @{
     Layout = null;
 }
-<div class="row">
-    <div class="col-lg-12">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="mb-3">
-                    <label asp-for="Name" class="form-label fw-600"></label>
-                    <input asp-for="Name" type="text" class="form-control" placeholder="Name" />
-                    <span asp-validation-for="Name" class="validation-invalid-label"></span>
+
+<div class="line-modal modal fade" id="folder-modal" tabindex="-1" aria-labelledby="lineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn-circle" data-bs-dismiss="modal" aria-label="Close" data-toggle="tooltip" title="Close"><i class="icon-cross icon-1x"></i></button>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="File" class="form-label fw-600">Upload Icon</label>
-                    <div class="col-sm-12">
-                        <img class="img-responsive" src="@Model.IconUrl" id="image-thumbnail" alt="" style="max-width:120px;">
-                        <input type="hidden" asp-for="IconUrl" value="@Model.IconUrl" id="hidden-image-url" />
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                            <input type="file" asp-for="File" name="File" class="form-control" placeholder="Upload Image" id="Image" onchange="ShowImage(this)" />
-                            <span> <a href="javascript:void(0)" class="input-group-addon btn btn-default fileinput-exists" onclick='RemoveImage()' data-dismiss="fileinput">Remove</a></span>
+
+                <div id="folder-modal-div">
+                    <form action="CreateAttachment" id="folder-form">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" id="file-name" class="form-control" name="Name" placeholder="Add FolderName name" />
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="file" id="file" name="File" class="form-control" />
+                            </div>
                         </div>
-                    </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="button" id="add-folder" class="btn btn-dark" value="Add" />
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="Id" id="folder-id" />
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<input type="hidden" asp-for="Id" />
-<script>
-    function ShowImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#image-thumbnail').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function RemoveImage() {
-        document.getElementById("Image").value = "";
-        $("#image-thumbnail").removeAttr('src');
-        $("#hidden-image-url").val("/Storage/Default/default.png");
-    }
-</script>
