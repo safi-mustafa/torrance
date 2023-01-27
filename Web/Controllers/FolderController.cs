@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.FolderService;
 using ViewModels.Shared;
 using ViewModels.DataTable;
-using Repositories.Services.AppSettingServices.MobileFileServices;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.Shared.Folder;
 using Repositories.Shared.AttachmentService;
-using ViewModels.CRUD;
 using Centangle.Common.ResponseHelpers.Models;
 using Pagination;
 

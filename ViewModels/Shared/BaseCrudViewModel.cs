@@ -13,7 +13,7 @@ namespace ViewModels.Shared
     public class BaseCrudViewModel : IBaseCrudViewModel
     {
         [DisplayName("Status")]
-        public ActiveStatus ActiveStatus { get; set; } = ActiveStatus.Active;
+        public ActiveStatus ActiveStatus { get; set; } 
         public string FormattedStatus
         {
             get
@@ -23,18 +23,7 @@ namespace ViewModels.Shared
         }
     }
 
-    public class BaseFileDetailViewModel : BaseCrudViewModel
-    {
-        public long Id { get; set; }
-        public string? Url { get; set; }
-        public string ExtensionType { get; set; }
-        public string Name { get; set; }
-        public virtual AttachmentEntityType FileType { get; set; }
-    }
 
-    public class BaseFileSearchViewModel : BaseSearchModel
-    {
-        public virtual AttachmentEntityType FileType { get; set; }
-        public virtual ActiveStatus ActiveStatus { get; set; }
-    }
+
+    
 }

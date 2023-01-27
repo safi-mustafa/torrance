@@ -6,6 +6,7 @@ using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
 using ViewModels.AppSettings.Map;
+using ViewModels.AppSettings.MobileFiles.Dropbox;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -235,14 +236,15 @@ namespace Models.Mapper
             CreateMap<MapModifyViewModel, MapDetailViewModel>().ReverseMap();
             CreateMap<Map, BaseBriefVM>().ReverseMap();
 
+            //Dropbox
+            CreateMap<DropboxModifyViewModel, Dropbox>()
+              .ReverseMap();
+            CreateMap<Dropbox, DropboxDetailViewModel>().ReverseMap();
+            CreateMap<DropboxModifyViewModel, DropboxDetailViewModel>().ReverseMap();
+            CreateMap<Dropbox, BaseBriefVM>().ReverseMap();
 
-     
-
-
-       
 
             //Attachment
-            CreateMap<AttachmentVM, MobileFile>().ReverseMap();
             CreateMap<AttachmentVM, Attachment>()
                 .ForMember(d => d.FolderId, s => s.MapFrom(x => x.Folder.Id))
                 .ForMember(d => d.Folder, s => s.Ignore())

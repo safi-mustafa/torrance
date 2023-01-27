@@ -293,12 +293,11 @@ namespace TorranceApi.Mapper
 
 
             //Dropbox
-            CreateMap<DropboxModifyViewModel, MobileFile>().ReverseMap();
-            CreateMap<MobileFile, DropboxDetailViewModel>().ReverseMap();
+            CreateMap<DropboxModifyViewModel, Dropbox>().ReverseMap();
+            CreateMap<Dropbox, DropboxDetailViewModel>().ReverseMap();
             CreateMap<DropboxModifyViewModel, DropboxDetailViewModel>().ReverseMap();
 
             //Attachment
-            CreateMap<AttachmentVM, MobileFile>().ReverseMap();
             CreateMap<AttachmentVM, Attachment>()
                .ForMember(d => d.FolderId, s => s.MapFrom(x => x.Folder.Id))
                .ForMember(d => d.Folder, s => s.Ignore())

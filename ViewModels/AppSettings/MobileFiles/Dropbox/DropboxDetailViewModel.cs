@@ -4,16 +4,14 @@ using ViewModels.Shared;
 
 namespace ViewModels.AppSettings.MobileFiles.Dropbox
 {
-    public class DropboxDetailViewModel : BaseFileDetailViewModel
+    public class DropboxDetailViewModel : BaseCrudViewModel
     {
-
+        public long Id { get; set; }
+        public string? Url { get; set; }
     }
 
-    public class DropboxSearchViewModel : BaseFileSearchViewModel
+    public class DropboxSearchViewModel : BaseSearchModel
     {
-        public override AttachmentEntityType FileType { get; set; } = AttachmentEntityType.Dropbox;
-
-        public override ActiveStatus ActiveStatus { get; set; } = ActiveStatus.Active;
-
+        public ActiveStatus? ActiveStatus { get; set; } = null;
     }
 }

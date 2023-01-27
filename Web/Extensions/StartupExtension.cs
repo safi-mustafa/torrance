@@ -10,8 +10,8 @@ using Models;
 using Models.Mapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Repositories.Services.AppSettingServices.DropboxServices;
 using Repositories.Services.AppSettingServices.MappService;
-using Repositories.Services.AppSettingServices.MobileFileServices;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
@@ -108,7 +108,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
-            services.AddScoped(typeof(IMobileFileService<,,>), typeof(MobileFileService<,,>));
+            services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
