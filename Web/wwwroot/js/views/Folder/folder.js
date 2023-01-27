@@ -6,10 +6,8 @@ $(function () {
     $(document).on('click', '#add-folder', function (e) {
         var name = $("#folder-name").val();
         if (name != null && name != undefined && name != "") {
-            var model = {
-                'Name': name
-            };
-            AddFolder(model);
+           
+            AddFolder();
         }
         else {
             Swal.fire("Folder name is empty.")
@@ -57,17 +55,37 @@ function Getfolders() {
     });
 }
 
-function AddFolder(model) {
+function AddFolder() {
+
+    var form = $("#folder-form");
+    var updateUrl = "/Folder/Create";
+    var formData = $(form).serializeFiles();
     $.ajax({
-        url: "/Folder/Create",
-        type: "post",
-        data: { 'model': model },
-        dataType: "html",
-        success: function (response) {
-            Getfolders();
+        type: "POST",
+        url: updateUrl,
+        data: formData,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (result) {
+            $("#attachment-modal").modal('hide');
+            $('#attachment-list').html(result);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
         }
     });
+    //$.ajax({
+    //    url: "/Folder/Create",
+    //    type: "post",
+    //    data: { 'model': model },
+    //    dataType: "html",
+    //    success: function (response) {
+    //        Getfolders();
+    //    },
+    //    error: function (jqXHR, textStatus, errorThrown) {
+    //        console.log(textStatus, errorThrown);
+    //    }
+    //});
 }

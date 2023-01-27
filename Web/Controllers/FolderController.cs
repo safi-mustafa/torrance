@@ -47,7 +47,7 @@ namespace Web.Controllers
         {
             try
             {
-                var model = SearchFolders(new FolderSearchViewModel { DisablePagination = true });
+                var model = (SearchFolders(new FolderSearchViewModel { DisablePagination = true })).Result;
                 return View(model);
             }
             catch (Exception ex)
@@ -64,7 +64,6 @@ namespace Web.Controllers
             return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         public async Task<ActionResult> GetAttachments(long id)
         {
             try

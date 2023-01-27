@@ -2,62 +2,75 @@
 @model List<FolderDetailViewModel>
 
 @{
-    Layout = null;
+            //   Layout = null;
 }
 
-<div class="row">
-    <div class="col-lg-12">
-        <input type="search" id="search-value" class="form-control" placeholder="Search Folders" />
-    </div>
-</div>
+<style>
+    .folder-edit{
+        margin-top: 8px;
+        margin-left: 18px;
+    }
 
-@if (User.IsInRole("Admin"))
-{
-    <div class="row">
-        <div class="col-lg-6">
-            <input type="text" id="folder-name" class="form-control" placeholder="Add folder name" />
-        </div>
-        <div class="col-lg-6">
-            <input type="button" id="add-folder" class="btn btn-dark" value="Create new Folder" />
-        </div>
-    </div>
-}
+    .folder-delete{
+        margin-left: 6px;
+        margin-top: 8px;
+    }
+</style>
 
-<br />
-<div class="row" id="folder-list">
-    @if (Model != null)
-    {
-        @foreach (var item in Model)
-        {
-            <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
-                <div class="doc-inner">
-                    <img src="~/img/lock.png" class="doc-lock-icon" alt="lock" />
-                    <a class="doc-setting" href="#"><img src="~/img/dots.png" alt="dots" /></a>
-                    <a href="#" class="doc-body">
-                        <img src="~/img/folder.png" class="doc-icon folder" alt="folder" />
-                        <h4 class="doc-title">@item.Name</h4>
-                        <p class="doc-item-count">@item.AttachmentCount items</p>
-                    </a>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="search" id="search-value" class="form-control" placeholder="Search Folders" />
+                        </div>
+                       @* <div class="col-lg-4">
+                            <input type="text" id="folder-name" class="form-control" placeholder="Add folder name" />
+                        </div>*@
+                        <div class="col-lg-6">
+                            <input type="button" id="add-folder-modal" class="btn btn-dark" value="Create new Folder" />
+                        </div>
+                    </div>
+                }
+
+                <br />
+                <div class="row" id="folder-list">
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-lg-3 doc-col col-6 mb-3" attr-id="@item.Id">
+                                <div class="doc-inner">
+                                    <div class="row">
+                                        <i class="fa-solid fa-pen folder-edit" attr-id="4"></i>
+                                            <i class="fa-solid fa-trash folder-delete" attr-id="4"></i>
+                                    </div>
+                                    <a class="doc-setting" href="#"><img src="~/img/dots.png" alt="dots" /></a>
+                                    <a href="#" class="doc-body">
+                                        <img src="~/img/folder.png" class="doc-icon folder" alt="folder" attr-id="@item.Id" />
+                                        <h4 class="doc-title">@item.Name</h4>
+                                        <p class="doc-item-count">@item.AttachmentCount items</p>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <h3>No Folders found.</h3>
+                        </div>
+                    }
                 </div>
             </div>
-        }
-    }
-    else
-    {
-        <div class="row">
-            <h3>No Folders found.</h3>
         </div>
-    }
-
-    @*<input type="hidden" asp-for="EmployeeId" id="emp-id" />*@
-
+    </div>
 </div>
 
-@section Scripts{
-    <script>$(function () {
-
-        }))
-        function</script>
 
 
-}
+
