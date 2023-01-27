@@ -6,14 +6,13 @@ $(function () {
     $(document).on('click', '#add-folder', function (e) {
         var name = $("#folder-name").val();
         if (name != null && name != undefined && name != "") {
-           
+
             AddFolder();
         }
         else {
             Swal.fire("Folder name is empty.")
         }
     });
-
 
     $(document).off('click', '#edit-folder');
     $(document).on('click', '#edit-folder', function (e) {
@@ -39,12 +38,12 @@ $(function () {
     });
 });
 
-function Getfolders() {
+function ReInitializeDataTables() {
     var searchValue = $("#search-value").val();
     $.ajax({
-        url: "/Folder/_GetFolderView",
+        url: "/Folder/_GetFolders",
         type: "post",
-        data: { 'Search.value': regexValue },
+        data: { 'Search.value': searchValue },
         dataType: "html",
         success: function (response) {
             $('#folder-list').html(response);
@@ -55,37 +54,7 @@ function Getfolders() {
     });
 }
 
-function AddFolder() {
-
-    var form = $("#folder-form");
-    var updateUrl = "/Folder/Create";
-    var formData = $(form).serializeFiles();
-    $.ajax({
-        type: "POST",
-        url: updateUrl,
-        data: formData,
-        enctype: 'multipart/form-data',
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function (result) {
-            $("#attachment-modal").modal('hide');
-            $('#attachment-list').html(result);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-        }
-    });
-    //$.ajax({
-    //    url: "/Folder/Create",
-    //    type: "post",
-    //    data: { 'model': model },
-    //    dataType: "html",
-    //    success: function (response) {
-    //        Getfolders();
-    //    },
-    //    error: function (jqXHR, textStatus, errorThrown) {
-    //        console.log(textStatus, errorThrown);
-    //    }
-    //});
+function loadCreateModalPanel(contentUrl, action = "Create Folder") {
+    $("#modal-title").val(action);
+    loadModalPanel(contentUrl, "crudModalPanel", "crudModalPanelBody")
 }

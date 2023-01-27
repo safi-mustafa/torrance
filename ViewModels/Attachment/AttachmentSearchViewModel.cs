@@ -1,5 +1,6 @@
 ﻿using System;
 using Pagination;
+using ViewModels.Shared;
 
 namespace ViewModels.Attachment
 {
@@ -8,6 +9,7 @@ namespace ViewModels.Attachment
         public AttachmentSearchViewModel()
         {
         }
+        public FolderBriefViewModel Folder { get; set; } = new();
     }
 }
 

@@ -4,34 +4,13 @@
     Layout = null;
 }
 
-<div class="line-modal modal fade" id="folder-modal" tabindex="-1" aria-labelledby="lineModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex justify-content-end mb-2">
-                    <button type="button" class="btn-circle" data-bs-dismiss="modal" aria-label="Close" data-toggle="tooltip" title="Close"><i class="icon-cross icon-1x"></i></button>
-                </div>
 
-                <div id="folder-modal-div">
-                    <form action="CreateAttachment" id="folder-form">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <input type="text" id="file-name" class="form-control" name="Name" placeholder="Add FolderName name" />
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="file" id="file" name="File" class="form-control" />
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <input type="button" id="add-folder" class="btn btn-dark" value="Add" />
-                            </div>
-                        </div>
-                        <input type="hidden" asp-for="Id" id="folder-id" />
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-lg-6">
+        <input type="text" id="file-name" class="form-control" name="Name" placeholder="Add folder name" />
+    </div>
+    <div class="col-lg-6">
+        <input type="file" id="file" name="File" class="form-control" />
     </div>
 </div>
+<input type="hidden" asp-for="Id" id="folder-id" />

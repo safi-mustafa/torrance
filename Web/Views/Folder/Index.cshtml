@@ -1,27 +1,65 @@
 ﻿@using ViewModels.Shared
 @model List<FolderDetailViewModel>
 
+<<<<<<< HEAD
+@{
+    //   Layout = null;
+}
+
+<style>
+    .folder-edit {
+        margin-top: 8px;
+        margin-left: 18px;
+    }
+
+    .folder-delete {
+        margin-left: 6px;
+        margin-top: 8px;
+    }
+</style>
+
+<!-- The Modal -->
+<div class="modal fade" id="crudModalPanel">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Folder</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div id="crudModalPanelBody" class="modal-body">
+                Modal body..
+            </div>
+        </div>
+    </div>
+</div>
+
+=======
+>>>>>>> 36b82b45a544d30badb26530a48f486d10092d00
 <div class="card">
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                @if (User.IsInRole("SuperAdmin"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                 {
                     <div class="row">
                         <div class="col-lg-6">
                             <input type="search" id="search-value" class="form-control" placeholder="Search Folders" />
                         </div>
-                       @* <div class="col-lg-4">
-                            <input type="text" id="folder-name" class="form-control" placeholder="Add folder name" />
-                        </div>*@
+                        @* <div class="col-lg-4">
+                                <input type="text" id="folder-name" class="form-control" placeholder="Add folder name" />
+                            </div>*@
                         <div class="col-lg-6">
-                            <input type="button" id="add-folder-modal" class="btn btn-dark" value="Create new Folder" />
+                            <input type="button" id="add-folder" class="btn btn-dark" value="Create new Folder" onclick="loadCreateModalPanel('/Folder/Create')" />
                         </div>
                     </div>
                 }
 
                 <br />
                 <div class="row" id="folder-list">
+<<<<<<< HEAD
+                    <partial name="_GetFolders" model="Model" />
+=======
                     @if (Model != null)
                     {
                         @foreach (var item in Model)
@@ -48,12 +86,17 @@
                             <h3>No Folders found.</h3>
                         </div>
                     }
+>>>>>>> 36b82b45a544d30badb26530a48f486d10092d00
                 </div>
             </div>
         </div>
     </div>
 </div>
+<input type="hidden" value="" id="modal-title" />
 
-
-
+@section Scripts{
+    <script src="~/js/views/Folder/folder.js"></script>
+    <script src="~/js/crud/ajaxCrud.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}
 

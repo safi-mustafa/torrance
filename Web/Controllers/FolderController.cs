@@ -30,16 +30,6 @@ namespace Web.Controllers
             _logger = logger;
             _attachmentService = attachmentService;
         }
-
-
-        public override List<DataTableViewModel> GetColumns()
-        {
-            return new List<DataTableViewModel>()
-            {
-
-            };
-        }
-
         public override ActionResult Index()
         {
             try
@@ -61,8 +51,12 @@ namespace Web.Controllers
             return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
         }
 
-        public async Task<ActionResult> GetAttachments(long id)
+        public async Task<IActionResult> _GetFolders(FolderSearchViewModel search)
         {
+<<<<<<< HEAD
+            var response = await SearchFolders(search);
+            return View(response);
+=======
             try
             {
                 var response = await _folderService.GetById(id);
@@ -74,20 +68,12 @@ namespace Web.Controllers
                 _logger.LogError($"Folder _GetAttachmentView method threw an exception, Message: {ex.Message}");
             }
             return null;
+>>>>>>> 36b82b45a544d30badb26530a48f486d10092d00
         }
 
-        public async Task<ActionResult> CreateAttachment(AttachmentVM model)
+        public override List<DataTableViewModel> GetColumns()
         {
-            try
-            {
-                var folderId = await _attachmentService.Create(model);
-                return RedirectToAction("_GetAttachmentView", new { id = model.Id });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Folder CreateAttachment method threw an exception, Message: {ex.Message}");
-            }
-            return null;
+            throw new NotImplementedException();
         }
     }
 }
