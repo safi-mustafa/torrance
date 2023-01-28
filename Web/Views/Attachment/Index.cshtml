@@ -19,6 +19,9 @@
 </div>
 
 <div class="row">
+    <div class="col-lg-12">
+        <h4>@Model.Name</h4>
+    </div>
     @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
     {
         <div class="col-lg-6">

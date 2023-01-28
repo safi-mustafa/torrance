@@ -34,13 +34,14 @@ namespace Web.Controllers
             _attachmentService = attachmentService;
         }
 
-        [Route("Attachment/Index/{id:long}")]
-        public async Task<IActionResult> Index(long id)
+        //[Route("Attachment/Index/{id:long}/{name:string}")]
+        [HttpGet]
+        public async Task<IActionResult> Index(long id, string name)
         {
             try
             {
                 var attachments = await SearchAttachments(new AttachmentSearchViewModel { DisablePagination = true, Folder = new FolderBriefViewModel { Id = id } });
-                var folder = new FolderDetailViewModel { Id = id, Attachments = attachments };
+                var folder = new FolderDetailViewModel { Id = id, Name = name, Attachments = attachments };
                 return View(folder);
             }
             catch (Exception ex)

@@ -8,8 +8,10 @@ $(function () {
         e.preventDefault();
         var Id = $(this).attr("attr-id");
         var id = parseInt(Id);
-        var url = "/Attachment/Index/" + id;
+        var name = $(this).find(".folder-name").html();
+        var url = "/Attachment/Index?id=" + id + "&name=" + name;
         window.location.href = url;
+        //$.get(url, { id: id, name: name });
     });
 
     $(document).off('keyup', '#search-value');
