@@ -71,15 +71,11 @@ function loadUpdateAndDetailModalPanel(contentUrl) {
 
 function ReInitializeDataTables() {
     var searchValue = $("#search-value").val();
-    var model = {
-        Name: searchValue,
-        Search: { value: searchValue }
-    };
+
     $.ajax({
+        method: "POST",
         url: "/Folder/_GetFolders",
-        data: JSON.stringify(model),
-        contentType: "application/json; charset=utf-8",
-        type: "post",
+        data: { Name: searchValue },
         dataType: "html",
         success: function (response) {
             $('#folder-list').html(response);
@@ -87,6 +83,7 @@ function ReInitializeDataTables() {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
         }
+
     });
 }
 
