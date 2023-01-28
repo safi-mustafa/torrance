@@ -104,16 +104,16 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        var userDetail = _mapper.Map<UserDetailViewModel>(aspNetUser);
+                        var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
 
-                        var responseModel = new RepositoryResponseWithModel<TokenVM>();
-                        responseModel.ReturnModel = new TokenVM
+                        var responseModel = new RepositoryResponseWithModel<EmployeeTokenVM>();
+                        responseModel.ReturnModel = new EmployeeTokenVM
                         {
                             Token = new JwtSecurityTokenHandler().WriteToken(token),
                             Expiry = token.ValidTo,
                             UserDetail = userDetail
                         };
-                        return ReturnProcessedResponse<TokenVM>(responseModel);
+                        return ReturnProcessedResponse<EmployeeTokenVM>(responseModel);
                     }
 
                     else
@@ -203,14 +203,14 @@ namespace TorranceApi.Controllers
                         userDetail.Role = role;
                         //  userDetail.Roles = string.Join(',', userRoles);
 
-                        var responseModel = new RepositoryResponseWithModel<TokenVM>();
-                        responseModel.ReturnModel = new TokenVM
+                        var responseModel = new RepositoryResponseWithModel<UserTokenVM>();
+                        responseModel.ReturnModel = new UserTokenVM
                         {
                             Token = new JwtSecurityTokenHandler().WriteToken(token),
                             Expiry = token.ValidTo,
                             UserDetail = userDetail
                         };
-                        return ReturnProcessedResponse<TokenVM>(responseModel);
+                        return ReturnProcessedResponse<UserTokenVM>(responseModel);
                     }
 
                     else

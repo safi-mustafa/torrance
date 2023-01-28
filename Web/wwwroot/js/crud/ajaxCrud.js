@@ -1,5 +1,7 @@
 ﻿$.getScript("/js/crud/serialize-file.js", function () {
 });
+$.getScript("/js/crud/validation-summary.js", function () {
+});
 
 function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
     $.ajax({
@@ -49,19 +51,6 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
     }
     addCurrencyMasking();
 
-}
-function createValidationSummary(form, errors) {
-    var validationSummaryContainer = $(form).find(".validation-summary-errors");
-    var html = "<ul>";
-    for (var i = 0; i < errors.length; i++) {
-        html += `<li>${errors[i]}</li>`;
-    }
-    html += "</ul>";
-    $(validationSummaryContainer).html(html);
-}
-function clearValidationSummary(form) {
-    var validationSummaryContainer = $(form).find(".validation-summary-errors");
-    $(validationSummaryContainer).empty();
 }
 function disableControls(form) {
     let submitBtn = $(form).find("#submit-btn");

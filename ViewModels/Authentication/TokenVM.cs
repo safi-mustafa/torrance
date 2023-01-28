@@ -8,6 +8,15 @@ namespace ViewModels.Authentication
         public string Email { get; set; }
         public string Token { get; set; }
         public DateTime Expiry { get; set; }
+    }
+
+    public class EmployeeTokenVM : TokenVM
+    {
+        public EmployeeDetailViewModel UserDetail { get; set; }
+    }
+
+    public class UserTokenVM : TokenVM
+    {
         public UserDetailViewModel UserDetail { get; set; }
     }
 }
