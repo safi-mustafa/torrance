@@ -39,9 +39,11 @@ namespace Models.WeldingRodRecord
         public DateTime DateOfHire { get; set; }
         public DateTime TerminationDate { get; set; }
 
-        [ForeignKey("Approver")]
-        public long ApproverId { get; set; }
-        public ToranceUser Approver { get; set; }
+        //private long? _approverId;
+        //[ForeignKey("Approver")]
+        ////public long? ApproverId { get => _approverId == 0 ? null : _approverId; set => _approverId = value; }
+        //public long? ApproverId { get; set; }
+        //public ToranceUser? Approver { get; set; }
 
     }
 }

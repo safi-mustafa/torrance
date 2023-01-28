@@ -9,6 +9,7 @@ namespace ViewModels.Attachment
         public AttachmentSearchViewModel()
         {
         }
+        public string Name { get; set; }
         public FolderBriefViewModel Folder { get; set; } = new();
     }
 }

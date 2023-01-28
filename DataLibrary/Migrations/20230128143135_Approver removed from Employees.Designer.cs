@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230128143135_Approver removed from Employees")]
+    partial class ApproverremovedfromEmployees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -880,6 +883,9 @@ namespace DataLibrary.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("ApproverId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("BankAccount")
                         .HasColumnType("bigint");
 
@@ -954,6 +960,8 @@ namespace DataLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApproverId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -1311,6 +1319,15 @@ namespace DataLibrary.Migrations
                     b.Navigation("ShiftDelay");
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Models.WeldingRodRecord.Employee", b =>
+                {
+                    b.HasOne("Models.ToranceUser", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverId");
+
+                    b.Navigation("Approver");
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.WRRLog", b =>

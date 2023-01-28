@@ -19,15 +19,18 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6"></div>
-    <div class="col-md-6">
-        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-        {
-            <input type="button" id="create-attachment" class="btn btn-dark float-right" value="Create Attachment" onclick="loadCreateModalPanel('/Attachment/Create/'+@Model.Id)" />
-            <input type="hidden" asp-for="Id" id="folder-id" />
-        }
-        <input type="button" id="back-to-folders" class="btn btn-light float-right mr-2" value="Back to Folders" />
-    </div>
+    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+    {
+        <div class="col-lg-6">
+            <input type="search" id="search-value" class="form-control" placeholder="Search Attachments" />
+        </div>
+        <div class="col-lg-6">
+            <input type="button" id="create-attachment" class="btn btn-dark float-left" value="Create Attachment" onclick="loadCreateModalPanel('/Attachment/Create/'+@Model.Id)" />
+
+            <input type="button" id="back-to-folders" class="btn btn-light float-right mr-2" value="Back to Folders" />
+        </div>
+        <input type="hidden" asp-for="Id" id="folder-id" />
+    }
 </div>
 <br />
 <div class="row" id="attachment-list">

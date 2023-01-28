@@ -119,14 +119,16 @@ namespace Models.Mapper
             CreateMap<BaseBriefVM, SOWBriefViewModel>().ReverseMap();
 
             //Employee
-            CreateMap<EmployeeModifyViewModel, Employee>().ReverseMap();
+            CreateMap<EmployeeModifyViewModel, Employee>()
+                //.ForMember(x => x.Approver, opt => opt.Ignore())
+                //.ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+                .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<Employee, EmployeeBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
                 .ReverseMap();
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
-
 
             //WRRLog
             CreateMap<WRRLogModifyViewModel, WRRLog>()
@@ -208,8 +210,8 @@ namespace Models.Mapper
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
                 .ReverseMap();
             CreateMap<EmployeeModifyViewModel, Employee>()
-                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
-                .ForMember(x => x.Approver, opt => opt.Ignore())
+               //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               //.ForMember(x => x.Approver, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>()
                .ReverseMap();

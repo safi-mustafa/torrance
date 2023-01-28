@@ -39,6 +39,12 @@ $(function () {
         window.location.href = "/Folder/Index";
     });
 
+    $(document).off('keyup', '#search-value');
+    $(document).on('keyup', '#search-value', function (e) {
+        e.preventDefault();
+        ReInitializeDataTables();
+    });
+
     $(document).off('click', '.delete');
     $(document).on('click', '.delete', function (e) {
         e.preventDefault();
@@ -91,11 +97,13 @@ function loadUpdateAndDetailModalPanel(contentUrl) {
 }
 
 function ReInitializeDataTables() {
+    var folderId = $("#folder-id").val();
     var searchValue = $("#search-value").val();
+
     $.ajax({
         url: "/Attachment/_GetAttachments",
         type: "post",
-        data: { 'Search.value': searchValue },
+        data: { 'Folder.Id': folderId, "Name": searchValue },
         dataType: "html",
         success: function (response) {
             $('#attachment-list').html(response);

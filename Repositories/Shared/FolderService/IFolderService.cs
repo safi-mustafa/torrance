@@ -10,6 +10,6 @@ namespace Repositories.Services.FolderService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
-
+        Task AddCount(List<FolderDetailViewModel> folders);
     }
 }

@@ -46,7 +46,9 @@ namespace Web.Controllers
         {
             var response = await _folderService.GetAll<FolderDetailViewModel>(model);
             var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<FolderDetailViewModel>>;
-            return parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
+            var listItems = parsedResponse?.ReturnModel.Items ?? new List<FolderDetailViewModel>();
+            await _folderService.AddCount(listItems);
+            return listItems;
         }
 
         public async Task<IActionResult> _GetFolders(FolderSearchViewModel search)

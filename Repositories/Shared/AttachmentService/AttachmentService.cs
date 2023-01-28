@@ -81,7 +81,11 @@ namespace Repositories.Shared.AttachmentService
         public override Expression<Func<Attachment, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var search = filters as AttachmentSearchViewModel;
-            return x => (search.Folder.Id == 0 || search.Folder.Id == x.FolderId);
+            return x =>
+                    (search.Folder.Id == 0 || search.Folder.Id == x.FolderId)
+                    &&
+                    (string.IsNullOrEmpty(search.Name) || x.Name.ToLower().Contains(search.Name.ToLower()))
+            ;
         }
     }
 }

@@ -83,7 +83,6 @@ function ReInitializeDataTables() {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
         }
-
     });
 }
 

@@ -264,8 +264,8 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
                 .ReverseMap();
             CreateMap<EmployeeModifyViewModel, Employee>()
-                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
-                .ForMember(x => x.Approver, opt => opt.Ignore())
+               //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+               //.ForMember(x => x.Approver, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>()
                .ReverseMap();

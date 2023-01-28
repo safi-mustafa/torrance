@@ -46,8 +46,8 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                             (string.IsNullOrEmpty(searchFilters.FirstName) || x.FirstName.ToLower().Contains(searchFilters.FirstName.ToLower()))
                             &&
                             (searchFilters.Status == null || x.ActiveStatus == searchFilters.Status)
-                            &&
-                            (searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
+                            //&&
+                            //(searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                         ;
@@ -125,7 +125,9 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
         {
             try
             {
-                var dbModel = await _db.Employees.Include(x => x.Approver).Where(x => x.Id == id).FirstOrDefaultAsync();
+                var dbModel = await _db.Employees
+                    //.Include(x => x.Approver)
+                    .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<EmployeeDetailViewModel>(dbModel);

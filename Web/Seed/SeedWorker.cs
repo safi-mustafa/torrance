@@ -10,7 +10,7 @@ namespace IdentityProvider.Seed
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public SeedWorker(IServiceProvider serviceProvider )
+        public SeedWorker(IServiceProvider serviceProvider)
             => _serviceProvider = serviceProvider;
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -110,7 +110,7 @@ namespace IdentityProvider.Seed
                                     State = "CA - California",
                                     ZipCode = "92337",
                                     Telephone = 3102561519,
-                                    ApproverId = long.Parse(userId),
+                                    //ApproverId = long.Parse(userId),
                                     DateOfHire = DateTime.Now,
                                     Email = "nunez_adrian@yahoo.com",
                                     EmployeeId = "5555",
@@ -130,12 +130,12 @@ namespace IdentityProvider.Seed
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
 
-           
+
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

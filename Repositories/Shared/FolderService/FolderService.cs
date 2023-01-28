@@ -112,5 +112,19 @@ namespace Repositories.Services.FolderService
             return null;
         }
 
+        public async Task AddCount(List<FolderDetailViewModel> folders)
+        {
+            try
+            {
+                foreach (var item in folders)
+                {
+                    item.AttachmentCount = await _db.Attachments.Where(x => x.FolderId == item.Id).CountAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace ViewModels.Shared
         public string Name { get; set; }
         public string? IconUrl { get; set; }
         public List<AttachmentResponseVM> Attachments { get; set; }
-        public long AttachmentCount { get => Attachments.Count; }
+        public long AttachmentCount { get; set; }
     }
 
 
