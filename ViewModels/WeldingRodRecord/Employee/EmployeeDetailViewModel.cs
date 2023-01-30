@@ -5,6 +5,7 @@ using Enums;
 using System.ComponentModel;
 using ViewModels.CRUD;
 using ViewModels.Authentication;
+using ViewModels.Common.Contractor;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -24,7 +25,7 @@ namespace ViewModels.WeldingRodRecord.Employee
             }
             set { }
         }
-        [DisplayName("Employee ID")]
+        [DisplayName("Access Code")]
         public string EmployeeId { get; set; }
 
         public long? Telephone { get; set; }
@@ -66,10 +67,9 @@ namespace ViewModels.WeldingRodRecord.Employee
                 return DateOfHire.Date.ToString("MM/dd/yyyy");
             }
         }
+        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
 
-
-        [DisplayName("Approver Name")]
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
+        public ApproverStatus IsApprover { get; set; }
     }
     
 }

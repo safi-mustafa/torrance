@@ -9,9 +9,10 @@ namespace ViewModels.Authentication.Approver
     public class UserUpdateViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]
@@ -24,6 +25,7 @@ namespace ViewModels.Authentication.Approver
 
         [Required]
         [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone Number")]
         [RegularExpression(@"^[0-9]{7,15}$", ErrorMessage = "Phone no. must be a valid number")]
         public string PhoneNumber { get; set; }
     }

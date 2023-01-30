@@ -45,10 +45,6 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                             &&
                             (string.IsNullOrEmpty(searchFilters.FirstName) || x.FirstName.ToLower().Contains(searchFilters.FirstName.ToLower()))
                             &&
-                            (searchFilters.Status == null || x.ActiveStatus == searchFilters.Status)
-                            //&&
-                            //(searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
-                            &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                         ;
         }
@@ -64,6 +60,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                 {
                     var mappedModel = _mapper.Map<Employee>(model);
                     mappedModel.UserId = userId;
+                    mappedModel.Contractor = null;
                     await _db.AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
                     if (mappedModel.Id > 0)
@@ -126,7 +123,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             try
             {
                 var dbModel = await _db.Employees
-                    //.Include(x => x.Approver)
+                    .Include(x => x.Contractor)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
