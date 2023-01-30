@@ -75,7 +75,6 @@ namespace Web.Controllers
             result.ActionsList = new List<DataTableActionViewModel>()
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
-
             };
 
             if (User.IsInRole("Approver"))

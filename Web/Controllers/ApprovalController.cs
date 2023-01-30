@@ -22,7 +22,7 @@ using Web.Helpers;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Approver")]
     public class ApprovalController : DatatableBaseController<ApprovalDetailViewModel, ApprovalSearchViewModel>
     {
         private readonly IApprovalService _approvalService;
