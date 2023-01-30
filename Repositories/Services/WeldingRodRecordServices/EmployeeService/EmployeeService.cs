@@ -133,7 +133,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<EmployeeDetailViewModel>(dbModel);
-                    result.State = dbModel.State;
+                    //result.State = dbModel.State;
                     var response = new RepositoryResponseWithModel<EmployeeDetailViewModel> { ReturnModel = result };
                     return response;
                     //return await base.GetById(id);
