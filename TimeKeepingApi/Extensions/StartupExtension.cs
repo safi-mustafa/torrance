@@ -171,7 +171,7 @@ namespace Web.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
-            services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
+            services.AddScoped(typeof(IContractorService<,,>), typeof(ApprovalService<,,>));
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));

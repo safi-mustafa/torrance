@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Repositories.Services.AppSettingServices.DropboxServices;
 using Repositories.Services.AppSettingServices.MappService;
+using Repositories.Services.CommonServices.ApprovalService;
+using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
@@ -114,6 +116,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
+            services.AddScoped(typeof(IApprovalService), typeof(ApprovalService));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();

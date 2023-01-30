@@ -14,7 +14,7 @@ using Repositories.Shared.Interfaces;
 
 namespace Web.Controllers
 {
-  
+
     public abstract class ApproveBaseController<Service, CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where PaginatedResultViewModel : class, new()
@@ -31,11 +31,7 @@ namespace Web.Controllers
         private readonly bool _hideCreateButton;
         private readonly bool _useSameUpdateViews;
         private readonly IMapper _mapper;
-        public ApproveBaseController()
-        {
-
-        }
-        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title, bool hideCreateButton = false, bool useSameUpdateViews = true):base(service, logger, mapper, controllerName, title)
+        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title, bool hideCreateButton = false, bool useSameUpdateViews = true) : base(service, logger, mapper, controllerName, title)
         {
             _service = service;
             _logger = logger;

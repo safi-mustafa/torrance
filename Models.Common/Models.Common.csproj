@@ -15,9 +15,11 @@
 	<ItemGroup>
 	  <None Remove="Interfaces\Folder\" />
 	  <None Remove="Interfaces\Attachment\" />
+	  <None Remove="Interfaces\Approval\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Interfaces\Folder\" />
 	  <Folder Include="Interfaces\Attachment\" />
+	  <Folder Include="Interfaces\Approval\" />
 	</ItemGroup>
 </Project>
