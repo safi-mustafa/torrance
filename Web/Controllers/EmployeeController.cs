@@ -25,16 +25,21 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            if (User.IsInRole("Approver"))
+            if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
             {
                 result.ActionsList = new List<DataTableActionViewModel>()
                 {
                     new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/Employee/ResetPassword/Id"},
                 };
             }
-            else
+            if (User.IsInRole("SuperAdmin"))
             {
-                base.SetDatatableActions(result);
+                result.ActionsList.AddRange(new List<DataTableActionViewModel>()
+                {
+                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Employee/Detail/Id"},
+                    new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Employee/Update/Id"},
+                    //new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Employee/Delete/Id"},
+                });
             }
             
         }
