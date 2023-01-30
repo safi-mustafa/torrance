@@ -23,7 +23,7 @@
                 {
                     <button type="button" id="search-filters" class="btn-circle mb-2 float-right" data-toggle="tooltip" title="Search"><i class="icon-filter3 icon-1x"></i></button>
                 }
-                @if (Model.HideCreateButton == false && Model.ControllerName != "Approval")
+                @if (Model.HideCreateButton == false && Model.ControllerName != "TOTLog" && Model.ControllerName != "WRRLog")
                 {
                     <button class="btn-circle mb-1 float-right" onclick="loadCreateModalPanel('@createUrl')"><i class="icon-plus-circle2 icon-1x" data-toggle="tooltip" title="Create"></i></button>
                 }

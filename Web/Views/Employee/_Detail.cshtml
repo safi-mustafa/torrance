@@ -18,12 +18,12 @@
             <div>@Model.LastName</div>
         </div>
     </div>
-    <div class="col-lg-4">
+   @* <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Telephone" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Telephone?.ToString()) ? "-" : Model.Telephone?.ToString())</div>
         </div>
-    </div>
+    </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Email" class="form-label fw-600"></label>
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+   @* <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Address" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</div>
@@ -102,27 +102,33 @@
             <label asp-for="DateOfHire" class="form-label fw-600"></label>
             <div>@Model.FormattedDateOfHire</div>
         </div>
-    </div>
+    </div>*@
   
-    <div class="col-lg-4">
+   @* <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="EmployeeId" class="form-label fw-600"></label>
             <div>@Model.EmployeeId</div>
         </div>
+    </div>*@
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label asp-for="IsApprover" class="form-label fw-600">Is Approver ?</label>
+            <div>@Model.IsApprover</div>
+        </div>
     </div>
-    <div class="col-lg-4">
+  @*  <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Approver" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Approver.Name) ? "-" : Model.Approver.Name)</div>
         </div>
-    </div>
-    <div class="col-md-4">
+    </div>*@
+   @* <div class="col-md-4">
         <div class="mb-3">
             <label asp-for="ActiveStatus" class="form-label fw-600"></label>
             <div>@Model.FormattedStatus</div>
         </div>
-    </div>
-    @if (Model.ActiveStatus == Enums.ActiveStatus.Inactive)
+    </div>*@
+  @*  @if (Model.ActiveStatus == Enums.ActiveStatus.Inactive)
     {
         <div class="col-md-4">
             <div class="mb-3">
@@ -130,7 +136,7 @@
                 <div>@Model.FormattedTerminationDate</div>
             </div>
         </div>
-    }
+    }*@
 </div>
 
 

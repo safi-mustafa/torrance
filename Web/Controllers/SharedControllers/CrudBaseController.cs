@@ -311,7 +311,7 @@ namespace Web.Controllers
                     updateViewPath = "_Update";
                 }
             }
-            return SetUpdateViewModel($"{action} {_controllerName}", model, action, null, updateViewPath);
+            return SetUpdateViewModel($"{action} {_title}", model, action, null, updateViewPath);
         }
 
         protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model)

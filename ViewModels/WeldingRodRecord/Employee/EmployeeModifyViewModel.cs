@@ -5,6 +5,8 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 using Helpers.ValidationAttributes;
 using ViewModels.Authentication;
+using ViewModels.Common.Contractor;
+using Enums;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -16,28 +18,26 @@ namespace ViewModels.WeldingRodRecord.Employee
         [MaxLength(200)]
         [DisplayName("Last Name")]
         public string LastName { get; set; }
-        //[MaxLength(10)]
-        [DisplayName("Employee ID")]
-        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Employee Id must be of 4-digits.")]
-        [Remote(action: "ValidateEmployeeId", controller: "Employee", AdditionalFields = "Id,EmployeeId", ErrorMessage = "Employee Id already in use.")]
+        [DisplayName("Access Code")]
+        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Access Code must be of 4-digits.")]
+        [Remote(action: "ValidateEmployeeId", controller: "Employee", AdditionalFields = "Id,EmployeeId", ErrorMessage = "Access Code already in use.")]
         public string EmployeeId { get; set; }
-        [Required]
         [DataType(DataType.PhoneNumber)]
-        [CustomMobileNumberValidator(ErrorMessage = "Telephone No. must be a valid number")]
+        //[CustomMobileNumberValidator(ErrorMessage = "Telephone No. must be a valid number")]
         public long? Telephone { get; set; }
         [EmailAddress]
         [Remote(action: "ValidateEmployeeEmail", controller: "Employee", AdditionalFields = "Id,Email", ErrorMessage = "Employee Email already in use.")]
         public string Email { get; set; }
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public string? Action { get; set; }
         public string? Role { get; set; }
         public long UserId { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
       //  public StateBriefViewModel State { get; set; } = new StateBriefViewModel();
         [DisplayName("Zip Code")]
         [StringLength(5, ErrorMessage = "Zip must be a 5 digit code", MinimumLength = 5)]
-        public string ZipCode { get; set; }
+        public string? ZipCode { get; set; }
         [DisplayName("Social Security")]
         public string? SocialSecurity { get; set; }
         [DisplayName("Driver's License")]
@@ -66,7 +66,9 @@ namespace ViewModels.WeldingRodRecord.Employee
             }
         }
 
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
+        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+
+        public ApproverStatus IsApprover { get; set; }
 
     }
 }

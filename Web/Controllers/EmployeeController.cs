@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, ILogger<EmployeeController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Employee", "Employees")
+        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, ILogger<EmployeeController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Employee", "Accounts")
         {
             _employeeService = employeeService;
             _logger = logger;
@@ -25,8 +25,8 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "First Name",data = "FirstName"},
                 new DataTableViewModel{title = "Last Name",data = "LastName"},
-                new DataTableViewModel{title = "Employee Id",data = "EmployeeId"},
-                new DataTableViewModel{title = "Status",data = "FormattedStatus"},
+                new DataTableViewModel{title = "Email",data = "Email"},
+                new DataTableViewModel{title = "Is Approver?",data = "IsApprover"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

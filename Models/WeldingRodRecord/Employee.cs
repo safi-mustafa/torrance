@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models.Common;
+using Enums;
 
 namespace Models.WeldingRodRecord
 {
@@ -36,14 +38,11 @@ namespace Models.WeldingRodRecord
         public long? RoutingNumber { get; set; }
         public string? EmergencyContactName { get; set; }
         public long? EmergencyContactNumber { get; set; }
-        public DateTime DateOfHire { get; set; }
-        public DateTime TerminationDate { get; set; }
-
-        //private long? _approverId;
-        //[ForeignKey("Approver")]
-        ////public long? ApproverId { get => _approverId == 0 ? null : _approverId; set => _approverId = value; }
-        //public long? ApproverId { get; set; }
-        //public ToranceUser? Approver { get; set; }
-
+        public DateTime? DateOfHire { get; set; }
+        public DateTime? TerminationDate { get; set; }
+        public ApproverStatus? IsApprover { get; set; }
+        [ForeignKey("Contractor")]
+        public long ContractorId { get; set; }
+        public Contractor Contractor { get; set; }
     }
 }

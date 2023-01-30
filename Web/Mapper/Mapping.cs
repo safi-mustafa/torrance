@@ -120,8 +120,8 @@ namespace Models.Mapper
 
             //Employee
             CreateMap<EmployeeModifyViewModel, Employee>()
-                //.ForMember(x => x.Approver, opt => opt.Ignore())
-                //.ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
