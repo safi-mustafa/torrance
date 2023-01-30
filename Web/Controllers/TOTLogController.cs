@@ -27,7 +27,7 @@ namespace Web.Controllers
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
-            if (!User.IsInRole("Employee"))
+            if (User.IsInRole("Approver"))
             {
                 dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
             }
@@ -75,10 +75,9 @@ namespace Web.Controllers
             result.ActionsList = new List<DataTableActionViewModel>()
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
-
             };
 
-            if (!User.IsInRole("Employee"))
+            if (User.IsInRole("Approver"))
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                     {

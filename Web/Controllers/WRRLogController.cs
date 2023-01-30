@@ -10,7 +10,7 @@ using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,Approver")]
     public class WRRLogController : ApproveBaseController<IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel>, WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
     {
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
@@ -26,7 +26,7 @@ namespace Web.Controllers
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
-            if (!User.IsInRole("Employee"))
+            if (User.IsInRole("Approver"))
             {
                 dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
             }
@@ -70,7 +70,7 @@ namespace Web.Controllers
 
             };
 
-            if (!User.IsInRole("Employee"))
+            if (User.IsInRole("Approver"))
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                     {

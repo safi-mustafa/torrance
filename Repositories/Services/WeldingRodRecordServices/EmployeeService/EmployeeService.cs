@@ -13,6 +13,9 @@ using Centangle.Common.ResponseHelpers.Models;
 using Centangle.Common.ResponseHelpers;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
+using Microsoft.AspNetCore.Identity;
+using Models;
+
 
 namespace Repositories.Services.WeldRodRecordServices.EmployeeService
 {
@@ -22,14 +25,16 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
+        private readonly UserManager<ToranceUser> _userManager;
         private readonly ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public EmployeeService(ToranceContext db, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
+            _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _identity = identity;
@@ -128,7 +133,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<EmployeeDetailViewModel>(dbModel);
-                    result.State = dbModel.State;
+                    //result.State = dbModel.State;
                     var response = new RepositoryResponseWithModel<EmployeeDetailViewModel> { ReturnModel = result };
                     return response;
                     //return await base.GetById(id);
@@ -151,6 +156,37 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
         public async Task<bool> IsEmployeeEmailUnique(long id, string email)
         {
             return (await _db.Employees.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
+        }
+
+        public async Task<bool> ResetAccessCode(ChangeAccessCodeVM model)
+        {
+            var transaction = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentAccessCode, model.EmployeeId);
+                if (result.Succeeded)
+                {
+                    var record = await _db.Employees.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                    if (record != null)
+                    {
+                        record.EmployeeId = model.EmployeeId;
+                        await _db.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                        return true;
+                    }
+
+                }
+                await transaction.RollbackAsync();
+                return false;
+            }
+            catch(Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return false;
+            }
+
         }
     }
 }
