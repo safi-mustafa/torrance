@@ -6,14 +6,22 @@
 }
 <link href="~/css/bundles/datatable.css" rel="stylesheet" />
 <link href="~/css/bundles/datatable-buttons.css" rel="stylesheet" />
-<h1 class="model-title-heading">@Model.Title</h1>
+<div class="row">
+    <div class="col-md-6"><h1 class="model-title-heading">@Model.Title</h1></div>
+    <div class="col-md-6">
+        <div class="d-flex flex-wrap align-items-center justify-content-end mb-4">
+            <a id="approve" class="btn blue-btn mx-2 my-2 ms-4">Approve</a>
+            <a id="approve-all" class="btn blue-btn mx-2 my-2 ms-4">Approve All</a>
+        </div>
+    </div>
+</div>
+
+
 <div class="card datatable">
+
     <div class="card-body">
         <div class="list-container">
-            <div class="d-flex flex-wrap align-items-center justify-content-end mb-4">
-                <a id="approve" class="btn blue-btn mx-2 my-2 ms-4">Approve</a>
-                <a id="approve-all" class="btn blue-btn mx-2 my-2 ms-4">Approve All</a>
-            </div>
+
             @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Header.cshtml", Model)
             <div class="dataTables_wrapper no-footer" style="min-height:300px;">
                 <div class="datatable-scroll">
@@ -38,7 +46,7 @@
     <partial name="_ValidationScriptsPartial" />
 
 
-   <script>
+    <script>
         $(function () {
             ReInitializeDataTables();
         });
