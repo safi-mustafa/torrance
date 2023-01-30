@@ -1,4 +1,6 @@
-﻿@{
+﻿@using ViewModels.Dashboard;
+@model DashboardViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -19,7 +21,7 @@
 </style>
 <div class="container-fluid">
     <main>
-        <div id="progress-charts-container" class="row mt-5">
+        <div id="progress-charts-container" class="row">
         </div>
         <h3 class="default-heading">
             Torrance Admin Dashboard
@@ -31,7 +33,7 @@
                     <div class="card-body">
                         <div class="content">
                             <h5 class="card-title"> Total TOTs</h5>
-                            <p class="card-text">12</p>
+                            <p class="card-text">0</p>
                         </div>
 
                         <div class="icon">
@@ -182,7 +184,7 @@
 </style>
 <div class="container-fluid">
     <main>
-        <div id="progress-charts-container" class="row mt-5">
+        <div id="progress-charts-container" class="row">
         </div>
 
 

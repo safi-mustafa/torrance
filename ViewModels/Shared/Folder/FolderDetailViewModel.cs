@@ -14,6 +14,7 @@ namespace ViewModels.Shared
         public string? IconUrl { get; set; }
         public List<AttachmentResponseVM> Attachments { get; set; }
         public long AttachmentCount { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 
 

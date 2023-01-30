@@ -1188,7 +1188,7 @@ header {
 .default-heading {
     color: #263871;
     font-weight: 700;
-
+    font-size:1.25rem;
 }
 
 .default-form-btn {

@@ -15,7 +15,7 @@ namespace Web.Controllers
         {
             _logger = logger;
         }
-
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Index()
         {
             return View();

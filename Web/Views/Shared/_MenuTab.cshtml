@@ -13,47 +13,54 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
                 <li class="nav-item"><a class="nav-link px-3" href="#">Approvals</a></li>
-                <li class="nav-item"><a class="nav-link px-3" href="/TOTLog/Index">Time on Tools</a></li>
-                <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User Setup
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item px-3" asp-controller="Employee" asp-action="Index">Accounts</a>
-                        <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Settings
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <b>All</b>
+                @if (!User.IsInRole("Approver"))
+                {
+                    <li class="nav-item"><a class="nav-link px-3" href="/TOTLog/Index">Time on Tools</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            User Setup
                         </a>
-                        <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
-                        <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                        <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                        <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <b>TOT</b>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item px-3" asp-controller="Employee" asp-action="Index">Accounts</a>
+                            <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Settings
                         </a>
-                        <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                        <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
-                        <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
-                        <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                        <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
-                        <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
-                        <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <b>WRR</b>
-                        </a>
-                        <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
-                        <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
-                        <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
-                    </div>
-                </li>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <b>All</b>
+                            </a>
+                            <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
+                            <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
+                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <b>TOT</b>
+                            </a>
+                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
+                            <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
+                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
+                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
+                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <b>WRR</b>
+                            </a>
+                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
+                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
+                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
+                        </div>
+                    </li>
+                }
+               
                 <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files</a></li>
-                @*<li class="nav-item"><a class="nav-link px-3" href="/Approver/Index">Approvers</a></li>*@
+                @if (User.IsInRole("Approver"))
+                {
+                    <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>
+                }
               
              
 
