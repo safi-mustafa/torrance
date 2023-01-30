@@ -1,6 +1,8 @@
 ﻿using System;
 using Enums;
+using Helpers.Extensions;
 using Models.Common.Interfaces;
+using Models.WeldingRodRecord;
 using ViewModels.Shared;
 
 namespace ViewModels.Common
@@ -11,10 +13,14 @@ namespace ViewModels.Common
         {
         }
         public long Id { get; set; }
-        public string Status { get; set; }
-        public string Date { get; set; }
-        public string Type { get; set; }
-        public string Requester { get; set; }
+        public Status Status { get; set; }
+        public string FormattedStatus { get => Status.GetDisplayName(); }
+        public DateTime Date { get; set; }
+        public string FormattedDate { get => Date.ToString("U"); }
+        public LogType Type { get; set; }
+        public string FormattedLogType { get => Type.GetDisplayName(); }
+        public Employee? Employee { get; set; }
+        public string Requester { get => Employee != null ? $"{Employee.FirstName} {Employee.LastName}" : ""; }
         public string Department { get; set; }
         public string Contractor { get; set; }
         public string Unit { get; set; }

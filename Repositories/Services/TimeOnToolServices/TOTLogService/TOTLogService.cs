@@ -130,8 +130,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
-                    var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                    var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
+                    var mappedModel = _mapper.Map<DetailViewModel>(dbModel);
+                    var response = new RepositoryResponseWithModel<DetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
                 _logger.LogWarning($"No record found for id:{id} for TOTLog");
@@ -144,7 +144,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-      
+
 
     }
 }

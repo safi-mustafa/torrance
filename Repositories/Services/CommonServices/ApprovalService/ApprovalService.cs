@@ -41,7 +41,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var search = model as ApprovalSearchViewModel;
             try
             {
-                var logsQueryable = _db.TOTLogs
+                var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
@@ -59,15 +59,15 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Id = x.Id,
                             Contractor = x.Contractor != null ? x.Contractor.Name : "",
                             Department = x.Department != null ? x.Department.Name : "",
-                            Date = x.CreatedOn.ToString("U"),
-                            Status = x.Status.GetDisplayName(),
+                            Date = x.CreatedOn,
+                            Status = x.Status,
                             TWR = x.Twr,
                             Unit = x.Unit != null ? x.Unit.Name : "",
-                            Type = LogType.TimeOnTools.GetDisplayName(),
-                            Requester = x.Employee != null ? $"{x.Employee.FirstName} {x.Employee.LastName}" : ""
-                        }).AsNoTracking();
+                            Type = LogType.TimeOnTools,
+                            Employee = x.Employee
+                        }).AsQueryable();
 
-                logsQueryable.Concat(_db.WRRLogs
+                var wrrLogsQueryable = _db.WRRLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
@@ -85,14 +85,15 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Id = x.Id,
                             Contractor = x.Contractor != null ? x.Contractor.Name : "",
                             Department = x.Department != null ? x.Department.Name : "",
-                            Date = x.CreatedOn.ToString("U"),
-                            Status = x.Status.GetDisplayName(),
+                            Date = x.CreatedOn,
+                            Status = x.Status,
                             TWR = x.Twr,
                             Unit = x.Unit != null ? x.Unit.Name : "",
-                            Type = LogType.TimeOnTools.GetDisplayName(),
-                            Requester = x.Employee != null ? $"{x.Employee.FirstName} {x.Employee.LastName}" : ""
-                        }).AsNoTracking());
-                var check = logsQueryable.ToQueryString();
+                            Type = LogType.WeldingRodRecord,
+                            Employee = x.Employee
+                        }).AsQueryable();
+                var logsQueryable = (totLogsQueryable.Concat(wrrLogsQueryable)).AsQueryable();
+
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
                 {

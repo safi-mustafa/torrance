@@ -304,7 +304,7 @@ function GetHref(actionItem, cellData) {
                 var queryParams = linkAndQueryParams[1].split('&');
                 link = actionItem.Href.split('?')[0] + "?";
                 $.each(queryParams, function (index, value) {
-                    link = link + $.trim(value.split('=')[0]) + "=" + GetCellObjectValue(cellData, $.trim(value.split('=')[1])) + "&";
+                    link = link + $.trim(value.split('=')[0]) + "=" + GetCellObjectValue(cellData, $.trim(value.split('=')[0])) + "&";
 
                 });
                 if (queryParams.length > 1) {

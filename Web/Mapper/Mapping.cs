@@ -150,10 +150,10 @@ namespace Models.Mapper
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ReverseMap();
-            CreateMap<WRRLog, WRRLogDetailViewModel>()
+            CreateMap<WRRLog, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
-            CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
+            CreateMap<WRRLogModifyViewModel, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
 
@@ -184,12 +184,12 @@ namespace Models.Mapper
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<TOTLog, TOTLogDetailViewModel>()
+            CreateMap<TOTLog, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>()
+            CreateMap<TOTLogModifyViewModel, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
