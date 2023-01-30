@@ -246,10 +246,6 @@ namespace Web.Controllers
         #endregion
 
         #region[Helper Models]
-        public ActionResult DataTableIndexViewForApproval(CrudListViewModel vm)
-        {
-            return View("~/Views/Shared/Crud/ListView/DataTable/Approval/_Index.cshtml", vm);
-        }
 
         protected ActionResult UpdateView(CrudUpdateViewModel vm)
         {

@@ -93,6 +93,10 @@ namespace Web.Controllers.SharedControllers
                 };
         }
 
+        public ActionResult DataTableIndexViewForApproval(CrudListViewModel vm)
+        {
+            return View("~/Views/Shared/Crud/ListView/DataTable/Approval/_Index.cshtml", vm);
+        }
         #region[Abstract Methods]
         public abstract List<DataTableViewModel> GetColumns();
         #endregion

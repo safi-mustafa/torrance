@@ -97,7 +97,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Employee = x.Employee
                     }).AsQueryable();
                 var logsQueryable = (totLogsQueryable.Concat(wrrLogsQueryable)).AsQueryable();
-                var check = logsQueryable.ToQueryString();
+                //var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
                 {
