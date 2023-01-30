@@ -130,7 +130,7 @@ namespace TorranceApi.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
                 _logger.LogError(ex.Message, "Login Endpoint Exception msg");
             }
-            result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
+            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
             return ReturnProcessedResponse(result);
         }
 
@@ -227,7 +227,7 @@ namespace TorranceApi.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
                 _logger.LogError(ex.Message, "Login Endpoint Exception msg");
             }
-            result = Centangle.Common.ResponseHelpers.Response.UnAuthorizedResponse(_response);
+            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
             return ReturnProcessedResponse(result);
         }
 
