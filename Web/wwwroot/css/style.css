@@ -1133,6 +1133,36 @@ header {
     border-bottom: 0;
 }
 
+.badge.Approved {
+    color: #25b372;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #25b372;
+    vertical-align: middle;
+}
+
+.badge.Submitted {
+    color: orange;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: orange;
+    vertical-align: middle;
+}
+
+.badge.Rejected {
+    color: red;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red;
+    vertical-align: middle;
+}
+
 @media (min-width: 768px) and (max-width: 1199px) {
     .days-box-left {
         width: 60%;
@@ -1188,7 +1218,6 @@ header {
 .default-heading {
     color: #263871;
     font-weight: 700;
-
 }
 
 .default-form-btn {
@@ -1209,12 +1238,13 @@ header {
         color: #0057af;
         border: 2px solid #0057af;
     }
-.dashboard-stats-row .card-body{
+
+.dashboard-stats-row .card-body {
     display: flex;
     align-items: center;
 }
 
-.dashboard-stats-row  .card{
+.dashboard-stats-row .card {
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
@@ -1227,16 +1257,19 @@ header {
 }
 
     .dashboard-stats-row .card .content {
-            width:70%;
-        }
+        width: 70%;
+    }
+
     .dashboard-stats-row .card .icon {
         width: auto;
         padding: 15px;
-        text-align:right;
+        text-align: right;
     }
+
     .dashboard-stats-row .card .card-body {
         padding: 5px;
     }
+
     .dashboard-stats-row .card .icon span {
         padding: 10px 17px;
         border-radius: 10px;
@@ -1244,32 +1277,39 @@ header {
         text-align: center;
         justify-content: center;
     }
-    .dashboard-stats-row .card .icon span i{
-        font-size: 22px;
-        color: white;
-    }
-    .dashboard-stats-row .card .icon span.tot {
-        background: #0DCD94;
-    }
+
+        .dashboard-stats-row .card .icon span i {
+            font-size: 22px;
+            color: white;
+        }
+
+        .dashboard-stats-row .card .icon span.tot {
+            background: #0DCD94;
+        }
+
         .dashboard-stats-row .card .icon span.wwr {
             background: #0057AF;
         }
+
         .dashboard-stats-row .card .icon span.tos {
             background: #FE7F00;
         }
+
     .dashboard-stats-row .card .card-title {
         margin-bottom: 5px;
         font-weight: 500;
         font-size: 15px;
     }
+
     .dashboard-stats-row .card .card-text {
         font-size: 18px;
         font-weight: 600;
     }
+
 .filter-select select {
-        width:auto;
-        display:inline;
-    }
+    width: auto;
+    display: inline;
+}
 
 .dashboard-filters-row .card {
     background-color: #fff;
@@ -1278,12 +1318,13 @@ header {
     border: 0;
     box-shadow: 0 0.15rem 1.75rem 0 rgb(196 205 224 / 20%);
     border-radius: 13px;
-    height:450px;
+    height: 450px;
 }
-.dashboard-filters-row .card .card-title{
-    color: #263871;
-    font-weight: 500;
-}
+
+    .dashboard-filters-row .card .card-title {
+        color: #263871;
+        font-weight: 500;
+    }
 
 .edit-icon {
     margin-top: 8px;
@@ -1294,4 +1335,3 @@ header {
     margin-left: 6px;
     margin-top: 8px;
 }
-

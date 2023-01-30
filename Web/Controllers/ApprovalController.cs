@@ -26,17 +26,19 @@ namespace Web.Controllers
     public class ApprovalController : DatatableBaseController<ApprovalDetailViewModel, ApprovalSearchViewModel>
     {
         private readonly IApprovalService _approvalService;
-        private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogModifyViewModel> _totService;
-        private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogModifyViewModel> _wrrService;
+        private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _totService;
+        private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _wrrService;
         private readonly ILogger<ApprovalController> _logger;
         private readonly IMapper _mapper;
         private string _controllerName;
         private string _updateViewPath;
+        private string _detailViewPath;
+        private string _detailTitle;
 
         public ApprovalController(
             IApprovalService approvaleService,
-            ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogModifyViewModel> totService,
-            IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogModifyViewModel> wrrService,
+            ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> totService,
+            IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
             ILogger<ApprovalController> logger,
             IMapper mapper
             ) : base(approvaleService, logger, mapper, "Approval", "Approvals")
@@ -48,6 +50,28 @@ namespace Web.Controllers
             _mapper = mapper;
         }
 
+        public async Task<IActionResult> Detail(long id, LogType type)
+        {
+            try
+            {
+                IRepositoryResponse response = new RepositoryResponse();
+
+                if (type == LogType.TimeOnTools)
+                {
+                    _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
+                    response = await _totService.GetById(id);
+                    return GetDetailView<TOTLogDetailViewModel>(response, id, type);
+                }
+                else if (type == LogType.WeldingRodRecord)
+                {
+                    _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
+                    response = await _wrrService.GetById(id);
+                    return GetDetailView<TOTLogDetailViewModel>(response, id, type);
+                }
+            }
+            catch (Exception ex) { _logger.LogError($"{_controllerName} Detail method threw an exception, Message: {ex.Message}"); }
+            return RedirectToAction("Index");
+        }
 
         public async Task<IActionResult> Delete(long id, LogType type)
         {
@@ -79,55 +103,51 @@ namespace Web.Controllers
         {
             try
             {
+                IRepositoryResponse response;
                 if (type == LogType.TimeOnTools)
                 {
                     _controllerName = "TOTLog";
                     _updateViewPath = "~/Views/TOTLog/_Update.cshtml";
-                    var response = await _totService.GetById(id);
-                    TOTLogModifyViewModel model = null;
-                    if (response.Status == System.Net.HttpStatusCode.OK)
-                    {
-                        var parsedModel = response as RepositoryResponseWithModel<TOTLogModifyViewModel>;
-                        var responseModel = parsedModel?.ReturnModel;
-                        model = _mapper.Map<TOTLogModifyViewModel>(responseModel);
-                    }
-                    if (model != null)
-                    {
-                        return UpdateView(GetUpdateViewModel("Update", model));
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"Approval for LogType: {type.GetDisplayName()} with id " + id + "not found");
-                        return RedirectToAction("Index");
-                    }
+                    response = await _totService.GetById(id);
+
+                    return GetUpdateView<TOTLogModifyViewModel, TOTLogDetailViewModel>(response, id, type);
                 }
                 else if (type == LogType.WeldingRodRecord)
                 {
                     _controllerName = "WRRLog";
                     _updateViewPath = "~/Views/WRRLog/_Update.cshtml";
-                    var response = await _wrrService.GetById(id);
-                    WRRLogModifyViewModel model = null;
-                    if (response.Status == System.Net.HttpStatusCode.OK)
-                    {
-                        var parsedModel = response as RepositoryResponseWithModel<WRRLogModifyViewModel>;
-                        var responseModel = parsedModel?.ReturnModel;
-                        model = _mapper.Map<WRRLogModifyViewModel>(responseModel);
-                    }
-                    if (model != null)
-                    {
-                        return UpdateView(GetUpdateViewModel("Update", model));
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"Approval for LogType: {type.GetDisplayName()} with id " + id + "not found");
-                        return RedirectToAction("Index");
-                    }
+                    response = await _wrrService.GetById(id);
+
+                    return GetUpdateView<WRRLogModifyViewModel, WRRLogDetailViewModel>(response, id, type);
                 }
             }
             catch (Exception ex) { _logger.LogError($"Approval for LogType: {type.GetDisplayName()} GetById method threw an exception, Message: {ex.Message}"); }
             return RedirectToAction("Index");
         }
 
+        #region Helping Methods
+
+        private ActionResult GetUpdateView<UpdateViewModel, DetailViewModel>(IRepositoryResponse response, long id, LogType type)
+            where UpdateViewModel : BaseCrudViewModel, new()
+            where DetailViewModel : BaseCrudViewModel, new()
+        {
+            var model = new BaseCrudViewModel();
+            if (response.Status == System.Net.HttpStatusCode.OK)
+            {
+                var parsedModel = response as RepositoryResponseWithModel<DetailViewModel>;
+                var responseModel = parsedModel?.ReturnModel;
+                model = _mapper.Map<UpdateViewModel>(responseModel);
+            }
+            if (model != null)
+            {
+                return UpdateView(GetUpdateViewModel("Update", model));
+            }
+            else
+            {
+                _logger.LogInformation($"Approval for LogType: {type.GetDisplayName()} with id " + id + "not found");
+                return RedirectToAction("Index");
+            }
+        }
 
         protected virtual CrudUpdateViewModel GetUpdateViewModel(string action, BaseCrudViewModel model)
         {
@@ -170,6 +190,7 @@ namespace Web.Controllers
             }
             return View("~/Views/Shared/Crud/UpdateView/_UpdateForm.cshtml", vm);
         }
+
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
             result.ActionsList = new List<DataTableActionViewModel>()
@@ -179,11 +200,12 @@ namespace Web.Controllers
                     new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
             };
         }
+
         public override List<DataTableViewModel> GetColumns()
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate"},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType"},
                 new DataTableViewModel{title = "Requester",data = "Requester"},
@@ -195,6 +217,35 @@ namespace Web.Controllers
 
             };
         }
+
+        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model)
+        {
+            CrudDetailViewModel vm = new CrudDetailViewModel()
+            {
+                Title = $"{_detailTitle} Details",
+                DetailViewPath = _detailViewPath,
+                DetailModel = model
+            };
+            return vm;
+        }
+
+        private ActionResult GetDetailView<DetailViewModel>(IRepositoryResponse response, long id, LogType type) where DetailViewModel : BaseCrudViewModel, new()
+        {
+            if (response.Status == System.Net.HttpStatusCode.OK)
+            {
+                var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
+                var model = parsedResponse?.ReturnModel ?? new();
+                var vm = SetDetailViewModel(model);
+                return View("~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", vm);
+            }
+            else
+            {
+                _logger.LogInformation($"Approval for Detail of LogType: {type.GetDisplayName()} with id " + id + "not found");
+                return RedirectToAction("Index");
+            }
+        }
+
+        #endregion
     }
 }
 

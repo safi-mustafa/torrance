@@ -1,17 +1,25 @@
-﻿let dataTable;
-let actionIcons = {};
-let showSelectedFilters = true;
-let isAjaxBasedCrud = true;
-let enableButtons = true;
-actionIcons["Update"] = "fa-regular fa-pen-to-square";
-actionIcons["AddEmployees"] = "fa-solid fa-user-plus";
+﻿var dataTable;
+var actionIcons = {};
+var showSelectedFilters = true;
+var isAjaxBasedCrud = true;
+var enableButtons = true;
+actionIcons["Update"] = "fa-solid fa-pen-to-square";
+actionIcons["Profile"] = "fa-solid fa-user-plus";
+actionIcons["Notes"] = "fa-solid fa-file";
+actionIcons["View"] = "fa-solid fa-eye";
+actionIcons["History"] = "fa-solid fa-history";
 actionIcons["Detail"] = "fas fa-folder-open"
 actionIcons["Approve"] = "icon-file-text"
 actionIcons["Delete"] = "icon-trash";
+actionIcons["POD"] = "fa-solid fa-file";
 actionIcons["Timesheet"] = "fa-solid fa-file-spreadsheet";
 actionIcons["Report"] = "icon-copy";
 actionIcons["ResetPassword"] = "icon-key";
 actionIcons["Approve"] = "icon-checkmark4";
+actionIcons["AddToCart"] = "icon-cart2";
+actionIcons["Comments"] = "fa-solid fa-comments";
+actionIcons["Invoice"] = "fa-solid fa-file-invoice-dollar";
+actionIcons["Print"] = "fa-solid fa-print";
 
 function CallBackFunctionality() {
 }
@@ -348,7 +356,6 @@ function GetCellObjectValue(cellData, Prop) {
     }
 }
 function RenderHtml(data, dtColumns, meta) {
-    var classValue = dtColumns[meta.col].className;
     if (dtColumns[meta.col].formatValue === "checkbox") {
         return '<input type="checkbox" class="checkbox-items ' + classValue + '" value="' + data + '" />';
     }
@@ -361,8 +368,26 @@ function RenderHtml(data, dtColumns, meta) {
     else if (dtColumns[meta.col].formatValue === "badge") {
         return '<span class="badge ' + data + '">' + data + '</span>';
     }
+    else if (dtColumns[meta.col].formatValue === "link") {
+        return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
+    }
+    else if (dtColumns[meta.col].formatValue === "image") {
+        return ' <img src="' + data + '" class="rounded" alt="Image">';
+    }
+    else if (dtColumns[meta.col].formatValue === "status") {
+        return '<span class="badge ' + data + '"></span>';
+    }
+    else if (dtColumns[meta.col].formatValue === "barcode") {
+        return '<span data-barcode="' + data + '"><i class="fa fa-barcode"></i></span>';
+    }
+    else if (dtColumns[meta.col].formatValue === "detail") {
+        return '<span class="details-control" data-url="' + dtColumns[meta.col].detailUrl + '">' + (data === undefined ? "" : data) + '</span>';
+    }
     else if (dtColumns[meta.col].formatValue === "hidden") {
         return '<div>' + data + '</div><input type="hidden" class="hidden ' + classValue + '" value="' + data + '">';
+    }
+    else if (dtColumns[meta.col].formatValue === "hidden-div") {
+        return '<input type="hidden" class="hidden ' + classValue + '" value="' + data + '">';
     }
 }
 function RenderNumericValue(data, dtColumns, meta) {

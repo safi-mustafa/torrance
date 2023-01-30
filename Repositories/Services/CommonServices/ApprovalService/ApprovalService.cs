@@ -51,7 +51,9 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (search.Type == null || search.Type == LogType.TimeOnTools)
                          &&
-                         (search.Status == null || x.Status == x.Status)
+                         (search.Status == null || search.Status == x.Status)
+                         &&
+                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -77,23 +79,25 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (search.Type == null || search.Type == LogType.WeldingRodRecord)
                          &&
-                         (search.Status == null || x.Status == x.Status)
+                         (search.Status == null || search.Status == x.Status)
+                         &&
+                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     )
-                     .Select(x =>
-                        new ApprovalDetailViewModel
-                        {
-                            Id = x.Id,
-                            Contractor = x.Contractor != null ? x.Contractor.Name : "",
-                            Department = x.Department != null ? x.Department.Name : "",
-                            Date = x.CreatedOn,
-                            Status = x.Status,
-                            TWR = x.Twr,
-                            Unit = x.Unit != null ? x.Unit.Name : "",
-                            Type = LogType.WeldingRodRecord,
-                            Employee = x.Employee
-                        }).AsQueryable();
+                    .Select(x =>
+                    new ApprovalDetailViewModel
+                    {
+                        Id = x.Id,
+                        Contractor = x.Contractor != null ? x.Contractor.Name : "",
+                        Department = x.Department != null ? x.Department.Name : "",
+                        Date = x.CreatedOn,
+                        Status = x.Status,
+                        TWR = x.Twr,
+                        Unit = x.Unit != null ? x.Unit.Name : "",
+                        Type = LogType.WeldingRodRecord,
+                        Employee = x.Employee
+                    }).AsQueryable();
                 var logsQueryable = (totLogsQueryable.Concat(wrrLogsQueryable)).AsQueryable();
-
+                var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
                 {
