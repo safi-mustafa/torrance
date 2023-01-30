@@ -6,7 +6,7 @@ namespace ViewModels
 
     public interface IBaseBriefVM
     {
-        long Id { get; set; }
+        long Id { get; set; } 
         string? Name { get; set; }
     }
     public class BaseBriefVM : IBaseBriefVM

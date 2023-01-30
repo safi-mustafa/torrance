@@ -29,16 +29,18 @@ namespace ViewModels.TomeOnTools.TOTLog
         public long? ManHours { get; set; }
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
-        public TimeSpan TimeRequested { get; set; } = TimeSpan.Zero;
+        public TimeSpan TimeRequested { get; set; } = TimeSpan.MaxValue;
         [Display(Name = "Time Signed")]
-        public TimeSpan TimeSigned { get; set; } = TimeSpan.Zero;
+        public TimeSpan TimeSigned { get; set; } = TimeSpan.MinValue;
         public string? Comment { get; set; }
-        public string? DelayReason { get; set; }
+        public string DelayReason { get; set; }
         public string JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         public long ManPowerAffected { get; set; }
-        [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "EquipmentNo must be a natural number")]
+        //[Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
         public long EquipmentNo { get; set; }
+
         [Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }

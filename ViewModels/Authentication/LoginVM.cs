@@ -5,7 +5,7 @@ namespace ViewModels.Authentication
     public class LoginVM
     {
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
