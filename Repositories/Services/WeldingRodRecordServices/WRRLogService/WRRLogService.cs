@@ -83,8 +83,8 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
 
                 if (dbModel != null)
                 {
-                    var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
-                    var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
+                    var mappedModel = _mapper.Map<DetailViewModel>(dbModel);
+                    var response = new RepositoryResponseWithModel<DetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
                 _logger.LogWarning($"No record found for id:{id} for WRRLog");

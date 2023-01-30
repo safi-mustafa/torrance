@@ -181,9 +181,9 @@ namespace TorranceApi.Mapper
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
                .ReverseMap();
-            CreateMap<WRRLog, WRRLogDetailViewModel>()
+            CreateMap<WRRLog, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>()
                 .ReverseMap();
-            CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
+            CreateMap<WRRLogModifyViewModel, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
 

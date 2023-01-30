@@ -7,17 +7,18 @@ using Repositories.Shared.Interfaces;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers
 {
     [Authorize]
-    public class TOTLogController : ApproveBaseController<ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel>, TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogSearchViewModel>
+    public class TOTLogController : ApproveBaseController<ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel>, TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, TOTLogSearchViewModel>
     {
-        private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
+        private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs")
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs")
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
@@ -79,8 +80,8 @@ namespace Web.Controllers
 
             if (!User.IsInRole("Employee"))
             {
-                result.ActionsList.AddRange(new List<DataTableActionViewModel>() 
-                    {  
+                result.ActionsList.AddRange(new List<DataTableActionViewModel>()
+                    {
                         new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id" },
                         new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" }
                     }
