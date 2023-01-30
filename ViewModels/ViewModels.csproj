@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Shared\Interfaces\" />
     <Folder Include="Attachment\" />
+    <Folder Include="Common\Approval\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,5 +26,6 @@
 
   <ItemGroup>
     <None Remove="Attachment\" />
+    <None Remove="Common\Approval\" />
   </ItemGroup>
 </Project>

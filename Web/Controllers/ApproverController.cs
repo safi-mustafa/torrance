@@ -7,7 +7,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class ApproverController : CrudBaseController<UserUpdateViewModel, UserUpdateViewModel, UserDetailViewModel, UserDetailViewModel, UserSearchViewModel>
     {
         private readonly IApproverService<UserUpdateViewModel, UserUpdateViewModel, UserDetailViewModel> _approverService;
