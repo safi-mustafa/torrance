@@ -7,7 +7,7 @@
 }
 <div class="row">
     <div class="col-lg-12">
-       <div class="row">
+        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             }
-  
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Date" class="form-label fw-600"></label>
@@ -41,7 +41,7 @@
                     <span asp-validation-for="Twr" class="validation-invalid-label"></span>
                 </div>
             </div>
-       
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ManHours" class="form-label fw-600"></label>
@@ -108,7 +108,7 @@
                     <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
                 </div>
             </div>
-   
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_User.cshtml" for="Foreman" view-data='new ViewDataDictionary(ViewData) { { "Id", "forman-id"}, { "UserTitle", "Foreman"}, {"Type", "Foreman"} }' />
@@ -122,25 +122,25 @@
                 </div>
             </div>
 
-    
-           @* <div class="col-lg-6">
-                <div class="form-group profile-input">
-                    <label asp-for="Status" class="control-label form-label fw-600"></label>
-                    <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control"></select>
-                </div>
-            </div>*@
+
+            @* <div class="col-lg-6">
+                    <div class="form-group profile-input">
+                        <label asp-for="Status" class="control-label form-label fw-600"></label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control"></select>
+                    </div>
+                </div>*@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_User.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
                 </div>
             </div>
-       
-            
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
-                    </div>
+
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
+            </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
@@ -156,7 +156,7 @@
                 <input asp-for="TimeRequested" type="time" class="form-control" />
                 <span asp-validation-for="TimeRequested" class="text-danger"></span>
             </div>
-
+            <input asp-for="Status" type="hidden" />
         </div>
     </div>
 </div>

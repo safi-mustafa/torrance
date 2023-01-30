@@ -41,7 +41,7 @@ namespace Web.Controllers
             IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
             ILogger<ApprovalController> logger,
             IMapper mapper
-            ) : base(approvaleService, logger, mapper, "Approval", "Approvals")
+            ) : base(approvaleService, logger, mapper, "Approval", "Approvals", true)
         {
             _approvalService = approvaleService;
             _totService = totService;
@@ -177,6 +177,7 @@ namespace Web.Controllers
             {
                 vm.FormId = formId;
             }
+            vm.IsApprovalForm = true;
             vm.UpdateModel = updateModel == null ? new() : updateModel;
             return vm;
 

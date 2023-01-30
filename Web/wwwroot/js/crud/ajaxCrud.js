@@ -15,6 +15,16 @@ function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
         }
     });
 }
+
+function approveRecord(element, modalPanelId = "crudModalPanel") {
+    $("#Status").val(1);
+    updateRecord(element, modalPanelId)
+}
+function rejectRecord(element, modalPanelId = "crudModalPanel") {
+    $("#Status").val(2);
+    updateRecord(element, modalPanelId)
+}
+
 function updateRecord(element, modalPanelId = "crudModalPanel") {
     var form = element.closest("form")
     var updateUrl = form.action;

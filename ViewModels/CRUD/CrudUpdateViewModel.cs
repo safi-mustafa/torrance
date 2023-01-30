@@ -21,7 +21,7 @@ namespace ViewModels.CRUD
         public string FormAction { get; set; }
         public string UpdateViewPath { get; set; }
         public IBaseCrudViewModel UpdateModel { get; set; }
-
+        public bool IsApprovalForm { get; set; }
         public bool IsAjaxBased { get; set; } = true;
     }
 }
