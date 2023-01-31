@@ -5,11 +5,11 @@ using ViewModels.Shared;
 
 namespace ViewModels.OverrideLogs
 {
-    public class CraftRateModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class ReasonForRequestModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [Required]
         [MaxLength(200)]
-        [DisplayName("Rate")]
-        public float Rate { get; set; }
+        [DisplayName("Reason for Request")]
+        public string Name { get; set; }
     }
 }
