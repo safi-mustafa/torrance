@@ -1,13 +1,14 @@
 ﻿@using ViewModels.Shared;
-@model AttachmentModifyViewModel
+@model FolderCreateViewModel
 @{
     Layout = null;
 }
 
+
 <div class="row">
     <div class="col-lg-6">
         <label asp-for="Name" class="form-label fw-600"></label>
-        <input type="text" id="file-name" class="form-control" asp-for="Name" placeholder="Add attachment name" />
+        <input type="text" id="file-name" class="form-control" asp-for="Name" placeholder="Add folder name" />
         <span asp-validation-for="Name" class="validation-invalid-label"></span>
     </div>
     <div class="col-lg-6">
@@ -16,6 +17,3 @@
         <span asp-validation-for="File" class="validation-invalid-label"></span>
     </div>
 </div>
-<br />
-@Html.HiddenFor(x => x.Folder.Id)
-<input name="Id" value="@Model.Id" type="hidden" />

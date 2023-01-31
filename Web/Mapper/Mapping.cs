@@ -223,7 +223,12 @@ namespace Models.Mapper
 
             //Folder
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
+            CreateMap<FolderCreateViewModel, Folder>()
+                .ForMember(x => x.Attachments, d => d.Ignore())
+                .ForMember(d => d.IconUrl, s => s.Condition(src => (!string.IsNullOrEmpty(src.IconUrl))))
+                .ReverseMap();
             CreateMap<FolderModifyViewModel, Folder>()
+                .ForMember(d => d.IconUrl, s => s.Condition(src => (!string.IsNullOrEmpty(src.IconUrl))))
                 .ForMember(x => x.Attachments, d => d.Ignore())
                 .ReverseMap();
             CreateMap<Folder, FolderDetailViewModel>().ReverseMap();

@@ -12,17 +12,17 @@ namespace Web.Controllers
 {
     [Authorize]
 
-    public class FolderController : CrudBaseController<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel, FolderDetailViewModel, FolderSearchViewModel>
+    public class FolderController : CrudBaseController<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel, FolderDetailViewModel, FolderSearchViewModel>
     {
-        private readonly IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
+        private readonly IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
         private readonly ILogger<FolderController> _logger;
 
         public FolderController
             (
-                IFolderService<FolderModifyViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService,
+                IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService,
                 ILogger<FolderController> logger,
                 IMapper mapper
-            ) : base(folderService, logger, mapper, "Folder", "Folders")
+            ) : base(folderService, logger, mapper, "Folder", "Folders", false, false)
         {
             _folderService = folderService;
             _logger = logger;

@@ -11,7 +11,6 @@ function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
             $("#" + modalPanelBody).html(htmlContent);
             $("#" + modalPanelId).find(".modal-title").html($("#modal-title").val());
             $("#" + modalPanelId).modal("toggle");
-
         }
     });
 }

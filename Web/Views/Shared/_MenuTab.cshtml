@@ -17,7 +17,6 @@
                 <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
                 @if (!User.IsInRole("Approver"))
                 {
-                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             User Setup
@@ -56,52 +55,52 @@
                         </div>
                     </li>
                 }
-               
+
                 <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files</a></li>
                 @if (User.IsInRole("Approver"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>
                 }
-              
-             
 
-             
+
+
+
 
                 @*<li class="nav-item dropdown">
 
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Welding Rod Records
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welding Rod Records
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item px-3" asp-controller="WRRLog" asp-action="Index"> Log</a>
-                        @if (User.IsInRole("SuperAdmin"))
-                        {
-                        }
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
+                            <a class="dropdown-item px-3" asp-controller="WRRLog" asp-action="Index"> Log</a>
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                            }
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
 
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Time on Tools
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Time on Tools
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item px-3" asp-controller="TOTLog" asp-action="Index"> Log</a>
-                        @if (User.IsInRole("SuperAdmin"))
-                        {
-                            <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index">Contractors</a>
-                            <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                            <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
-                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
-                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
-                            <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
-                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                        }
-                    </div>
-                </li>*@
+                            <a class="dropdown-item px-3" asp-controller="TOTLog" asp-action="Index"> Log</a>
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                                <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index">Contractors</a>
+                                <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
+                                <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
+                                <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
+                                <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
+                                <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
+                                <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
+                                <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
+                                <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                            }
+                        </div>
+                    </li>*@
             </ul>
         </div>
 

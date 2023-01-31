@@ -17,10 +17,11 @@ namespace ViewModels.Shared
 
         public string? IconUrl { get; set; }
 
+        [Required]
         [DataType(DataType.Upload)]
         [MaxFileSize(25 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
-        public IFormFile? File { get; set; }
+        public IFormFile File { get; set; }
         public string GetBaseFolder()
         {
             var ext = Path.GetExtension(File.FileName);
