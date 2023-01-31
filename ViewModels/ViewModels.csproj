@@ -10,6 +10,13 @@
     <Folder Include="Shared\Interfaces\" />
     <Folder Include="Attachment\" />
     <Folder Include="Common\Approval\" />
+    <Folder Include="OverrideLogs\" />
+    <Folder Include="OverrideLogs\ReasonForRequest\" />
+    <Folder Include="OverrideLogs\CraftSkill\" />
+    <Folder Include="OverrideLogs\CraftRates\" />
+    <Folder Include="OverrideLogs\LeadPlanners\" />
+    <Folder Include="OverrideLogs\OverrideType\" />
+    <Folder Include="OverrideLogs\Log\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,5 +34,12 @@
   <ItemGroup>
     <None Remove="Attachment\" />
     <None Remove="Common\Approval\" />
+    <None Remove="OverrideLogs\" />
+    <None Remove="OverrideLogs\ReasonForRequest\" />
+    <None Remove="OverrideLogs\CraftSkill\" />
+    <None Remove="OverrideLogs\CraftRates\" />
+    <None Remove="OverrideLogs\LeadPlanners\" />
+    <None Remove="OverrideLogs\OverrideType\" />
+    <None Remove="OverrideLogs\Log\" />
   </ItemGroup>
 </Project>
