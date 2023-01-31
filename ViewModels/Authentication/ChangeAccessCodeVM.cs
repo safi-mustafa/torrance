@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using ViewModels.Shared;
+using Enums;
 
 namespace ViewModels.Authentication
 {
-    public class ChangeAccessCodeVM
+    public class ChangeAccessCodeVM 
     {
         [DisplayName("New Access Code")]
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Access Code must be of 4-digits.")]
@@ -19,6 +21,5 @@ namespace ViewModels.Authentication
         [DisplayName("Confirm Access Code")]
         [Compare("EmployeeId", ErrorMessage = "Confirm Access Code Does not Match.")]
         public string ConfirmEmployeeId { get; set; }
-
     }
 }
