@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Shared.Interfaces;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -17,7 +18,7 @@ namespace Web.Controllers
         private readonly ILogger<WRRLogController> _logger;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs")
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin")))
         {
             _WRRLogService = WRRLogService;
             _logger = logger;
@@ -26,10 +27,6 @@ namespace Web.Controllers
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
-            if (User.IsInRole("Approver"))
-            {
-                dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
-            }
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
 

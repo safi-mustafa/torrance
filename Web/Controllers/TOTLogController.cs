@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Shared.Interfaces;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.TomeOnTools.TOTLog;
@@ -18,7 +19,7 @@ namespace Web.Controllers
         private readonly ILogger<TOTLogController> _logger;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs")
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, WRRLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin")))
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
