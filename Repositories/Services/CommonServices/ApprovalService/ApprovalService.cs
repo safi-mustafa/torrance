@@ -5,12 +5,14 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Services.CommonServices.ContractorService;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.Common;
 using ViewModels.Shared;
 
@@ -22,13 +24,15 @@ namespace Repositories.Services.CommonServices.ApprovalService
         private readonly ILogger<ApprovalService> _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfo;
 
-        public ApprovalService(ToranceContext db, ILogger<ApprovalService> logger, IMapper mapper, IRepositoryResponse response)
+        public ApprovalService(ToranceContext db, ILogger<ApprovalService> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfo)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
+            this._userInfo = userInfo;
         }
 
         public Task<IRepositoryResponse> Delete(long id, LogType type)
@@ -39,6 +43,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel model)
         {
             var search = model as ApprovalSearchViewModel;
+            var userRoles = _userInfo.LoggedInUserRoles();
+            var loggedInUserId = long.Parse(_userInfo.LoggedInUserId());
             try
             {
                 var totLogsQueryable = _db.TOTLogs
@@ -48,6 +54,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Unit)
                     .Where(x =>
                          (search.Employee.Id == 0 || search.Employee.Id == x.EmployeeId)
+                         &&
+                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
                          &&
                          (search.Type == null || search.Type == LogType.TimeOnTools)
                          &&
@@ -76,6 +84,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Unit)
                     .Where(x =>
                          (search.Employee.Id == 0 || search.Employee.Id == x.EmployeeId)
+                         &&
+                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
                          &&
                          (search.Type == null || search.Type == LogType.WeldingRodRecord)
                          &&
