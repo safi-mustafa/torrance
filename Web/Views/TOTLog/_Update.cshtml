@@ -156,7 +156,9 @@
                 <input asp-for="TimeRequested" type="time" class="form-control" />
                 <span asp-validation-for="TimeRequested" class="text-danger"></span>
             </div>
-            <input asp-for="Status" type="hidden" />
+            <input asp-for="Status" type="hidden" id="status-id" />
+            <input asp-for="Approver.Id" type="hidden" />
+            <input asp-for="Employee.Id" type="hidden" />
         </div>
     </div>
 </div>

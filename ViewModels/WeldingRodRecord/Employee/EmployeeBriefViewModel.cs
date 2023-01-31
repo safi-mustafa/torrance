@@ -10,7 +10,7 @@ namespace ViewModels.WeldingRodRecord.Employee
 
         }
         [DisplayName("Employee")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

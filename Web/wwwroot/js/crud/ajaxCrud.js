@@ -17,11 +17,11 @@ function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
 }
 
 function approveRecord(element, modalPanelId = "crudModalPanel") {
-    $("#Status").val(1);
+    $("#status-id").val(1);
     updateRecord(element, modalPanelId)
 }
 function rejectRecord(element, modalPanelId = "crudModalPanel") {
-    $("#Status").val(2);
+    $("#status-id").val(2);
     updateRecord(element, modalPanelId)
 }
 

@@ -43,7 +43,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         private EmployeeBriefViewModel? _employee;
-        public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
+        public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
 
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -59,6 +59,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         //public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 
         private UserBriefViewModel? _approver;
-        public UserBriefViewModel Approver { get => _approver == null ? new UserBriefViewModel() : _approver; set => _approver = value; }
+        public UserBriefViewModel? Approver { get => _approver == null ? new UserBriefViewModel() : _approver; set => _approver = value; }
     }
 }
