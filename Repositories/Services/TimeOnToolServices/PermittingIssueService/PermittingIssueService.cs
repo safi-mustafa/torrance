@@ -10,6 +10,7 @@ using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermittingIssue;
+using Models.OverrideLogs;
 
 namespace Repositories.Services.TimeOnToolServices.PermittingIssueService
 {

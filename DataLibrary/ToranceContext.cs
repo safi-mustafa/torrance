@@ -11,6 +11,7 @@ using Models.TimeOnTools;
 using Models.Common;
 using Models.WeldingRodRecord;
 using Models.AppSettings;
+using Models.OverrideLogs;
 
 namespace DataLibrary;
 
