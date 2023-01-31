@@ -1,4 +1,5 @@
-﻿using Models.Common.Interfaces;
+﻿using Centangle.Common.ResponseHelpers.Models;
+using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Authentication;
 using ViewModels.Shared;
@@ -12,6 +13,6 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
     {
         Task<bool> IsEmployeeIdUnique(long id, string employeeId);
         Task<bool> IsEmployeeEmailUnique(long id, string email);
-        Task<bool> ResetAccessCode(ChangeAccessCodeVM model);
+        Task<IRepositoryResponse> ResetAccessCode(ChangeAccessCodeVM model);
     }
 }

@@ -2,6 +2,7 @@
 using Helpers.Models.Shared;
 using Models.AppSettings;
 using Models.Common;
+using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;

@@ -158,7 +158,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             return (await _db.Employees.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
         }
 
-        public async Task<bool> ResetAccessCode(ChangeAccessCodeVM model)
+        public async Task<IRepositoryResponse> ResetAccessCode(ChangeAccessCodeVM model)
         {
             var transaction = await _db.Database.BeginTransactionAsync();
             try
@@ -174,17 +174,18 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                         record.EmployeeId = model.EmployeeId;
                         await _db.SaveChangesAsync();
                         await transaction.CommitAsync();
-                        return true;
+                        var response = new RepositoryResponseWithModel<bool> { ReturnModel = true };
+                        return response;
                     }
 
                 }
                 await transaction.RollbackAsync();
-                return false;
+                return Response.BadRequestResponse(_response);
             }
             catch(Exception ex)
             {
                 await transaction.RollbackAsync();
-                return false;
+                return Response.BadRequestResponse(_response);
             }
 
         }

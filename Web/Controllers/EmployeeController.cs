@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using Helpers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositories.Services.WeldRodRecordServices.EmployeeService;
+using System;
 using ViewModels.Authentication;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.Employee;
+using Web.Helpers;
 
 namespace Web.Controllers
 {
@@ -73,11 +76,24 @@ namespace Web.Controllers
         public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
         {
             var response = await _employeeService.ResetAccessCode(model);
-            if (response)
+
+            if (response.Status == System.Net.HttpStatusCode.OK)
             {
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
+            //if (Request.IsAjaxRequest())
+            //{
+            var errors = ModelState.Keys.SelectMany(k => ModelState[k].Errors)
+                               .Select(m => m.ErrorMessage).ToList();
+
+            return Json(new JsonResultViewModel
+            {
+                Success = false,
+                Errors = errors
+            });
+            //}
+           
         }
         public override List<DataTableViewModel> GetColumns()
         {
