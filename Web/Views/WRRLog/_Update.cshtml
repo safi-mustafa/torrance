@@ -109,17 +109,23 @@
                     <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_User.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
-                </div>
-            </div>
 
-            <input asp-for="Status" type="hidden" id="status-id" />
-            <input asp-for="Approver.Id" type="hidden" />
-            <input asp-for="Employee.Id" type="hidden" />
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_User.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Approver.Id" type="hidden" />
+            }
         </div>
     </div>
 </div>
 
-<input type="hidden" asp-for="Id" />
+<input asp-for="Status" type="hidden" id="status-id" />
+<input asp-for="Employee.Id" type="hidden" />
+<input asp-for="Id" type="hidden" />

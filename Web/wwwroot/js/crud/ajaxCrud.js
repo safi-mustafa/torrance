@@ -63,14 +63,12 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
 
 }
 function disableControls(form) {
-    let submitBtn = $(form).find("#submit-btn");
-    let clearBtn = $(form).find(".cancel-btn");
+    DisableProperty(form, "#approve-btn", true);
+    DisableProperty(form, "#reject-btn", true);
+    DisableProperty(form, "#submit-btn", true, `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...`);
+    DisableProperty(form, ".cancel-btn", true);
     let modalPanel = $(form).closest("#crudModalPanel");
-    $(submitBtn).html(
-        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...`
-    );
-    $(submitBtn).prop('disabled', true);
-    $(clearBtn).prop('disabled', true);
+
     $(modalPanel).off('hide.bs.modal');
     $(modalPanel).on('hide.bs.modal', function () {
         return false;
@@ -92,20 +90,23 @@ function disableControls(form) {
     $(modalPanel).find(".blockOverlay").css({ "background-color": "#fff", "opacity": "0.5" })
 }
 function enableControls(form) {
-    let submitBtn = $(form).find("#submit-btn");
-    if ($(submitBtn).is(":disabled")) {
-        let clearBtn = $(form).find(".cancel-btn");
+    if ($(form).find(".form-btn").is(":disabled")) {
+        DisableProperty(form, ".cancel-btn", false);
+        DisableProperty(form, "#submit-btn", false, "Submit");
         let modalPanel = $(form).closest("#crudModalPanel");
-        $(submitBtn).html(`Submit`);
-        $(submitBtn).prop('disabled', false);
-        $(clearBtn).prop('disabled', false);
         $(modalPanel).off('hide.bs.modal');
         $(modalPanel).on('hide.bs.modal', function () {
             return true;
         });
         $(modalPanel).find("fieldset").unblock();
     }
+}
 
+function DisableProperty(form, target, status, html = "") {
+    let btn = $(form).find(target);
+    if (html != "")
+        $(btn).html(`Submit`);
+    $(btn).prop('disabled', status);
 }
 
 function removeCurrencyMasking() {
