@@ -76,16 +76,6 @@ namespace Web.Controllers
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
             };
-
-            if (User.IsInRole("Approver"))
-            {
-                result.ActionsList.AddRange(new List<DataTableActionViewModel>()
-                    {
-                        new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id" },
-                        new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" }
-                    }
-                );
-            }
         }
 
 

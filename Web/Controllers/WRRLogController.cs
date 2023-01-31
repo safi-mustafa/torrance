@@ -30,7 +30,7 @@ namespace Web.Controllers
             {
                 dataColumns.Add(new DataTableViewModel { title = "<input type='checkbox' id='master-checkbox'>", data = "Id", format = "html", formatValue = "checkbox", className = "exclude-form-export" });
             }
-            dataColumns.AddRange( new List<DataTableViewModel>()
+            dataColumns.AddRange(new List<DataTableViewModel>()
             {
 
                 new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
@@ -42,7 +42,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;
-            
+
         }
         public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
         {
@@ -51,7 +51,8 @@ namespace Web.Controllers
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
-            if (User.IsInRole("Employee")) {
+            if (User.IsInRole("Employee"))
+            {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
@@ -69,16 +70,6 @@ namespace Web.Controllers
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/WRRLog/Detail/Id"},
 
             };
-
-            if (User.IsInRole("Approver"))
-            {
-                result.ActionsList.AddRange(new List<DataTableActionViewModel>()
-                    {
-                        new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id" },
-                        new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" }
-                    }
-                );
-            }
         }
     }
 }
