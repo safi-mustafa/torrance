@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models.OverrideLogs
 {
-    public class OTType : BaseDBModel
+    public class OverrideType : BaseDBModel
     {
         public string Name { get; set; }
     }

@@ -9,7 +9,7 @@ namespace ViewModels.OverrideLogs
     {
         [Required]
         [MaxLength(200)]
-        [DisplayName("Lead Planner")]
-        public string Name { get; set; }
+        [DisplayName("Lead Planner Email")]
+        public string Email { get; set; }
     }
 }

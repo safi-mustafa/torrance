@@ -9,6 +9,6 @@ namespace Models.OverrideLogs
 {
     public class ReasonForRequest : BaseDBModel
     {
-        public string Reason { get; set; }
+        public string Name { get; set; }
     }
 }

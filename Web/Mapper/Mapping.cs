@@ -13,6 +13,7 @@ using ViewModels.Authentication.Approver;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.OverrideLogs;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.TomeOnTools.PermitType;
@@ -276,6 +277,42 @@ namespace Models.Mapper
             CreateMap<ToranceUser, UserDetailViewModel>().ReverseMap();
             CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
             CreateMap<UserUpdateViewModel, SignUpModel>().ReverseMap();
+
+
+            //CraftRate
+            CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
+            CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
+            CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
+            CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
+
+            //CraftSkill
+            CreateMap<CraftSkillModifyViewModel, CraftSkill>().ReverseMap();
+            CreateMap<CraftSkill, CraftSkillDetailViewModel>().ReverseMap();
+            CreateMap<CraftSkillModifyViewModel, CraftSkillDetailViewModel>().ReverseMap();
+            CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
+
+            //LeadPlanner
+            CreateMap<LeadPlannerModifyViewModel, LeadPlanner>().ReverseMap();
+            CreateMap<LeadPlanner, LeadPlannerDetailViewModel>().ReverseMap();
+            CreateMap<LeadPlannerModifyViewModel, LeadPlannerDetailViewModel>().ReverseMap();
+            CreateMap<LeadPlanner, LeadPlannerBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, LeadPlannerBriefViewModel>().ReverseMap();
+
+            //OverrideType
+            CreateMap<OverrideTypeModifyViewModel, OverrideType>().ReverseMap();
+            CreateMap<OverrideType, OverrideTypeDetailViewModel>().ReverseMap();
+            CreateMap<OverrideTypeModifyViewModel, OverrideTypeDetailViewModel>().ReverseMap();
+            CreateMap<OverrideType, OverrideTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OverrideTypeBriefViewModel>().ReverseMap();
+
+            //ReasonForRequest
+            CreateMap<ReasonForRequestModifyViewModel, ReasonForRequest>().ReverseMap();
+            CreateMap<ReasonForRequest, ReasonForRequestDetailViewModel>().ReverseMap();
+            CreateMap<ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel>().ReverseMap();
+            CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
 
         }
     }

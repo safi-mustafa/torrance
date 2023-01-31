@@ -9,8 +9,10 @@ namespace ViewModels.OverrideLogs
         {
 
         }
+
         [DisplayName("Craft Rate")]
-        public override string Name { get; set; }
+        public float Rate { get; set; }
+        public override string Name { get => Rate.ToString(); set { } }
     }
 
 }

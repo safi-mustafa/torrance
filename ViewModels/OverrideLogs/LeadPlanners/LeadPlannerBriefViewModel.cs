@@ -9,8 +9,8 @@ namespace ViewModels.OverrideLogs
         {
 
         }
-        [DisplayName("Lead Planner")]
-        public override string Name { get; set; }
+        public string Email { get; set; }
+        public override string Name { get => Email; set { } }
     }
 
 }

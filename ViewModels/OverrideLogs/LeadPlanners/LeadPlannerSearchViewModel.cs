@@ -4,6 +4,6 @@ namespace ViewModels.OverrideLogs
 {
     public class LeadPlannerSearchViewModel : BaseSearchModel
     {
-        public string Name { get; set; }
+        public string Email { get; set; }
     }
 }
