@@ -6,10 +6,14 @@
 
 <div class="row">
     <div class="col-lg-6">
+        <label asp-for="Name" class="form-label fw-600"></label>
         <input type="text" id="file-name" class="form-control" asp-for="Name" placeholder="Add attachment name" />
+        <span asp-validation-for="Name" class="validation-invalid-label"></span>
     </div>
     <div class="col-lg-6">
+        <label asp-for="File" class="form-label fw-600"></label>
         <input type="file" id="file" asp-for="File" class="form-control" />
+        <span asp-validation-for="File" class="validation-invalid-label"></span>
     </div>
 </div>
 <br />
