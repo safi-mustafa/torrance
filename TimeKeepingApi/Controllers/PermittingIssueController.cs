@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels.TomeOnTools.PermittingIssue;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Microsoft.AspNetCore.Authorization;
+using Repositories.Services.OverrideLogServices.CraftSkillService;
+using Repositories.Services.OverrideLogServices.LeadPlannerService;
+using Repositories.Services.OverrideLogServices.OverrideTypeService;
 
 namespace API.Controllers
 {
