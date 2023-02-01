@@ -27,7 +27,7 @@ namespace ViewModels.TomeOnTools.TOTLog
 
     public class TOTLogAPISearchViewModel : BaseSearchModel
     {
-        public long EquipmentNo { get; set; }
+        public long? EquipmentNo { get; set; }
         public long DepartmentId { get; set; }
 
         public long UnitId { get; set; }
