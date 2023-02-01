@@ -106,7 +106,7 @@
     "outputFileName": "wwwroot/js/bundles/site.js",
     "inputFiles": [
       "wwwroot/js/loaders/blockui.min.js",
-      "wwwroot/js/select2/select2.min.js"
+      "wwwroot/js/select2/select2.min.js",
     ],
     // Optionally specify minification options
     "minify": {
