@@ -1,6 +1,58 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
+
+<style type="text/css">
+    .menu-area{background: #d61a5e}
+.dropdown-menu{padding:0;margin:0;border:0 solid transition!important;border:0 solid rgba(0,0,0,.15);border-radius:0;-webkit-box-shadow:none!important;box-shadow:none!important}
+.mainmenu a, .navbar-default .navbar-nav > li > a, .mainmenu ul li a , .navbar-expand-lg .navbar-nav .nav-link{color:#fff;font-size:16px;text-transform:capitalize;padding:16px 15px;font-family:'Roboto',sans-serif;display: block !important;}
+.mainmenu .active a,.mainmenu .active a:focus,.mainmenu .active a:hover,.mainmenu li a:hover,.mainmenu li a:focus ,.navbar-default .navbar-nav>.show>a, .navbar-default .navbar-nav>.show>a:focus, .navbar-default .navbar-nav>.show>a:hover{color: #fff;background: #4CAF50;outline: 0;}
+/*==========Sub Menu=v==========*/
+.mainmenu .collapse ul > li:hover > a{background: #4CAF50;}
+.mainmenu .collapse ul ul > li:hover > a, .navbar-default .navbar-nav .show .dropdown-menu > li > a:focus, .navbar-default .navbar-nav .show .dropdown-menu > li > a:hover{background: #4CAF50;}
+.mainmenu .collapse ul ul ul > li:hover > a{background: #4CAF50;}
+
+.mainmenu .collapse ul ul, .mainmenu .collapse ul ul.dropdown-menu{background:#1565C0;}
+.mainmenu .collapse ul ul ul, .mainmenu .collapse ul ul ul.dropdown-menu{background:#1E88E5}
+.mainmenu .collapse ul ul ul ul, .mainmenu .collapse ul ul ul ul.dropdown-menu{background:#64B5F6}
+
+/******************************Drop-down menu work on hover**********************************/
+.mainmenu{background: none;border: 0 solid;margin: 0;padding: 0;min-height:20px;width: 100%;}
+.mainmenu .collapse ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul{position:absolute;top:100%;left:0;min-width:250px;display:none}
+/*******/
+.mainmenu .collapse ul ul li{position:relative}
+.mainmenu .collapse ul ul li:hover> ul{display:block}
+.mainmenu .collapse ul ul ul{position:absolute;top:0;left:100%;min-width:250px;display:none}
+/*******/
+.mainmenu .collapse ul ul ul li{position:relative}
+.mainmenu .collapse ul ul ul li:hover ul{display:block}
+.mainmenu .collapse ul ul ul ul{position:absolute;top:0;left:-100%;min-width:250px;display:none;z-index:1}
+
+.navbar-nav .show .dropdown-menu .dropdown-menu > li > a{padding:16px 15px 16px 35px}
+.navbar-nav .show .dropdown-menu .dropdown-menu .dropdown-menu > li > a{padding:16px 15px 16px 45px}
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            var $subMenu = $(this).next(".dropdown-menu");
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
+
+            return false;
+        });
+
+    }); 
+</script>
+
 <nav class="container main-nav navbar navbar-expand-lg navbar-light">
     <div class="container-fluid nav-bar-container w-100">
 
@@ -15,6 +67,7 @@
                 <li class="nav-item"><a class="nav-link px-3" href="/Approval/Index">Approvals</a></li>
                 <li class="nav-item"><a class="nav-link px-3" href="/TOTLog/Index">Time on Tools</a></li>
                 <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
+                <li class="nav-item"><a class="nav-link px-3" href="#">Overrides</a></li>
                 @if (!User.IsInRole("Approver"))
                 {
                     <li class="nav-item dropdown">
@@ -26,33 +79,87 @@
                             <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
                         </div>
                     </li>
+                    @*  <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Settings
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <b>All</b>
+                </a>
+                <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
+                <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
+                <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <b>TOT</b>
+                </a>
+                <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
+                <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
+                <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
+                <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
+                <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
+                <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
+                <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <b>WRR</b>
+                </a>
+                <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
+                <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
+                <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
+                <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <b>Override</b>
+                </a>
+                <a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>
+                <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft Skill</a>
+                <a class="dropdown-item px-3" asp-controller="LeadPlanner" asp-action="Index">Lead Planner</a>
+                <a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>
+                <a class="dropdown-item px-3" asp-controller="ReasonOfRequest" asp-action="Index">Request Reason</a>
+                </div>
+                </li>*@
+
+                  
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Settings
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>All</b>
-                            </a>
-                            <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a>
-                            <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>TOT</b>
-                            </a>
-                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                            <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
-                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
-                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
-                            <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
-                            <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>WRR</b>
-                            </a>
-                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
-                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
-                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a>
-                        </div>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li class="dropdown">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All</a>
+                                <ul class="submenu dropdown-menu">
+                                    <li><a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index"> Contractors</a></li>
+                                    <li><a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a> </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>              </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">TOT</a>
+                                <ul class="submenu dropdown-menu">
+                                    <li><a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a></li>
+                                    <li><a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a></li>
+                                    <li><a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>       </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>                  </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>         </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">WRR</a>
+                                <ul class="submenu dropdown-menu">
+                                    <li><a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a></li>
+                                    <li><a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a></li>
+                                    <li><a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methodes</a></li>
+                                </ul>
+                            </li>
+                             <li class="dropdown">
+                                <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Overrides</a>
+                                <ul class="submenu dropdown-menu">
+                                    <li><a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>          </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft Skill</a>        </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="LeadPlanner" asp-action="Index">Lead Planner</a>      </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>    </li>
+                                    <li><a class="dropdown-item px-3" asp-controller="ReasonOfRequest" asp-action="Index">Request Reason</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                     </li>
                 }
 
@@ -61,47 +168,8 @@
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>
                 }
-
-
-
-
-
-                @*<li class="nav-item dropdown">
-
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Welding Rod Records
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                            <a class="dropdown-item px-3" asp-controller="WRRLog" asp-action="Index"> Log</a>
-                            @if (User.IsInRole("SuperAdmin"))
-                            {
-                            }
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Time on Tools
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                            <a class="dropdown-item px-3" asp-controller="TOTLog" asp-action="Index"> Log</a>
-                            @if (User.IsInRole("SuperAdmin"))
-                            {
-                                <a class="dropdown-item px-3" asp-controller="Contractor" asp-action="Index">Contractors</a>
-                                <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                                <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                                <a class="dropdown-item px-3" asp-controller="PermittingIssue" asp-action="Index">Permitting Issue</a>
-                                <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
-                                <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                                <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
-                                <a class="dropdown-item px-3" asp-controller="SOW" asp-action="Index">SOWs</a>
-                                <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                            }
-                        </div>
-                    </li>*@
             </ul>
+         
         </div>
 
     </div>

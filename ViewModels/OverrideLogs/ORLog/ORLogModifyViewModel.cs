@@ -3,7 +3,7 @@ using Models.Common.Interfaces;
 using ViewModels.Shared;
 using ViewModels.Common.Contractor;
 using ViewModels.TomeOnTools.Shift;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {

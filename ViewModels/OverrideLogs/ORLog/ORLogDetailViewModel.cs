@@ -1,19 +1,8 @@
-﻿using Enums;
-using System.ComponentModel;
-using ViewModels.Common.Department;
-using ViewModels.Common.Unit;
-using ViewModels.Shared;
+﻿using ViewModels.Shared;
 using ViewModels.Common.Contractor;
-using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.Shift;
-using ViewModels.Authentication;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-using ViewModels.AppSettings.Map;
-using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {

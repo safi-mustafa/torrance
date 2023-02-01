@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using ViewModels;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
