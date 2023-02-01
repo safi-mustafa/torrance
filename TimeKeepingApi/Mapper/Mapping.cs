@@ -29,6 +29,7 @@ using ViewModels.Authentication.Approver;
 using Models.OverrideLogs;
 using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs.ORLog;
+using ViewModels.OverrideLogs;
 
 namespace TorranceApi.Mapper
 {
@@ -309,6 +310,38 @@ namespace TorranceApi.Mapper
                .ReverseMap();
             CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
 
+            //CraftRate
+            CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
+
+            //CraftSkill
+            CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
+
+            //LeadPlanner
+            CreateMap<LeadPlanner, LeadPlannerBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, LeadPlannerBriefViewModel>().ReverseMap();
+
+            //OverrideType
+            CreateMap<OverrideType, OverrideTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OverrideTypeBriefViewModel>().ReverseMap();
+
+            //ReasonForRequest
+            CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
+
+            //ORLog
+            CreateMap<OverrideLogEmployee, EmployeeBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => $"{dest.Employee.FirstName} {dest.Employee.LastName}"))
+                .ForMember(dest => dest.Name, act => act.Condition(src => (src.Employee != null)))
+                .ForMember(d => d.Id, s => s.MapFrom(s => s.Employee.Id))
+                .ForMember(dest => dest.Id, act => act.Condition(src => (src.Employee != null)))
+                .ReverseMap();
+            CreateMap<ORLogDetailViewModel, OverrideLog>()
+                //.ForMember(x => x.Employees, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
+                .ReverseMap();
         }
     }
 }

@@ -103,6 +103,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.OverrideType)
                     .Include(x => x.Shift)
+                    .Include(x => x.Employees).ThenInclude(x => x.Employee)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
@@ -219,7 +220,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             var dbModel = _mapper.Map(model, record);
                             await _db.SaveChangesAsync();
 
-                            _db.RemoveRange(await _db.OverrideLogEmployees.Where(x => model.EmployeeMultiselect.EmployeeIds.Contains(x.Id)).ToListAsync());
+                            _db.RemoveRange(await _db.OverrideLogEmployees.Where(x => x.OverrideLogId == record.Id).ToListAsync());
                             await _db.SaveChangesAsync();
 
                             await CreateEmployees(model, dbModel.Id);

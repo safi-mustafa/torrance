@@ -282,44 +282,53 @@ namespace Models.Mapper
 
 
             //CraftRate
+            CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
             CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
             CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
             CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
-            CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
 
             //CraftSkill
+            CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
             CreateMap<CraftSkillModifyViewModel, CraftSkill>().ReverseMap();
             CreateMap<CraftSkill, CraftSkillDetailViewModel>().ReverseMap();
             CreateMap<CraftSkillModifyViewModel, CraftSkillDetailViewModel>().ReverseMap();
-            CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
 
             //LeadPlanner
+            CreateMap<LeadPlanner, LeadPlannerBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, LeadPlannerBriefViewModel>().ReverseMap();
             CreateMap<LeadPlannerModifyViewModel, LeadPlanner>().ReverseMap();
             CreateMap<LeadPlanner, LeadPlannerDetailViewModel>().ReverseMap();
             CreateMap<LeadPlannerModifyViewModel, LeadPlannerDetailViewModel>().ReverseMap();
-            CreateMap<LeadPlanner, LeadPlannerBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, LeadPlannerBriefViewModel>().ReverseMap();
 
             //OverrideType
+            CreateMap<OverrideType, OverrideTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OverrideTypeBriefViewModel>().ReverseMap();
             CreateMap<OverrideTypeModifyViewModel, OverrideType>().ReverseMap();
             CreateMap<OverrideType, OverrideTypeDetailViewModel>().ReverseMap();
             CreateMap<OverrideTypeModifyViewModel, OverrideTypeDetailViewModel>().ReverseMap();
-            CreateMap<OverrideType, OverrideTypeBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, OverrideTypeBriefViewModel>().ReverseMap();
 
             //ReasonForRequest
+            CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
             CreateMap<ReasonForRequestModifyViewModel, ReasonForRequest>().ReverseMap();
             CreateMap<ReasonForRequest, ReasonForRequestDetailViewModel>().ReverseMap();
             CreateMap<ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel>().ReverseMap();
-            CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
 
 
             //ORLog
-            CreateMap<OverrideLogEmployee, EmployeeBriefViewModel>().ReverseMap();
-
+            CreateMap<OverrideLogEmployee, EmployeeBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => $"{dest.Employee.FirstName} {dest.Employee.LastName}"))
+                .ForMember(dest => dest.Name, act => act.Condition(src => (src.Employee != null)))
+                .ForMember(d => d.Id, s => s.MapFrom(s => s.Employee.Id))
+                .ForMember(dest => dest.Id, act => act.Condition(src => (src.Employee != null)))
+                .ReverseMap();
+            CreateMap<ORLogDetailViewModel, OverrideLog>()
+                //.ForMember(x => x.Employees, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
+                .ReverseMap();
             CreateMap<ORLogModifyViewModel, OverrideLog>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
@@ -335,11 +344,7 @@ namespace Models.Mapper
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
                 .ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<ORLogDetailViewModel, OverrideLog>()
-                //.ForMember(x => x.Employees, opt => opt.Ignore())
-                .ReverseMap();
-            CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
-                .ReverseMap();
+
             CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ORLogBriefViewModel>().ReverseMap();
 
