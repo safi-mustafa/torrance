@@ -49,6 +49,8 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<LeadPlanner> LeadPlanners { get; set; }
     public DbSet<OverrideType> OverrideTypes { get; set; }
     public DbSet<ReasonForRequest> ReasonForRequests { get; set; }
+    public DbSet<OverrideLog> OverrideLogs { get; set; }
+    public DbSet<OverrideLogEmployee> OverrideLogEmployees { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
