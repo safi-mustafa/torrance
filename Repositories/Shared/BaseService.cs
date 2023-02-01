@@ -10,6 +10,7 @@ using ViewModels.Shared;
 using Centangle.Common.ResponseHelpers.Models;
 using Centangle.Common.ResponseHelpers;
 using Helpers.Models.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories.Common
 {
@@ -102,7 +103,7 @@ namespace Repositories.Common
             try
             {
                 var filters = SetQueryFilter(search);
-                var result = await _db.Set<TEntity>().Where(filters).Paginate(search);
+                var result = await GetPaginationDbSet().Where(filters).Paginate(search);
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
@@ -122,6 +123,10 @@ namespace Repositories.Common
             }
         }
 
+        public virtual IQueryable<TEntity> GetPaginationDbSet()
+        {
+            return _db.Set<TEntity>().AsQueryable();
+        }
         public virtual async Task<IRepositoryResponse> GetById(long id)
         {
             try

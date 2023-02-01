@@ -77,7 +77,7 @@ namespace Web.Controllers
         {
             var response = await _employeeService.ResetAccessCode(model);
 
-            if (response.Status == System.Net.HttpStatusCode.OK)
+            if (response.Status==System.Net.HttpStatusCode.OK)
             {
                 return RedirectToAction("Index");
             }
