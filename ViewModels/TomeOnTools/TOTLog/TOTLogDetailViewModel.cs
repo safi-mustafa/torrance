@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -85,7 +85,7 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 
-        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(); 
+        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
         public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
 

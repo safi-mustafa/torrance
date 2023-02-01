@@ -50,7 +50,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (searchFilters.EquipmentNo == 0 || x.EquipmentNo == searchFilters.EquipmentNo)
+                            (searchFilters.EquipmentNo == null || x.EquipmentNo == searchFilters.EquipmentNo)
                             &&
                             (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
                             &&
@@ -59,7 +59,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin" || loggedInUserRole == "Admin")
+                                (loggedInUserRole == "SuperAdmin")
                                 ||
                                 (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
                                 ||

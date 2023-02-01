@@ -1,11 +1,13 @@
-﻿using Helpers.Models.Shared;
+﻿using Enums;
+using Helpers.Models.Shared;
 using Models.Common;
+using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.OverrideLogs
 {
-    public class OverrideLog : BaseDBModel
+    public class OverrideLog : BaseDBModel, IApprove
     {
         public string Requester { get; set; }
         public string RequesterEmail { get; set; }
@@ -15,6 +17,7 @@ namespace Models.OverrideLogs
         public string WorkScope { get; set; }
         public int OverrideHours { get; set; }
         public long PONumber { get; set; }
+        public Status Status { get; set; }
 
         [ForeignKey("Shift")]
         public long ShiftId { get; set; }

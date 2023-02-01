@@ -1,4 +1,4 @@
-﻿@using ViewModels.WeldingRodRecord.Employee;
+﻿@using ViewModels.WeldingRodRecord;
 @model EmployeeBriefViewModel
 
 @{
@@ -10,17 +10,18 @@
     <label class="form-label fw-600">Employee</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
-    {
-    Value = (Model!=null&&Model.Id > 0)?Model.Id.ToString():"",
-    Text = (Model!=null&&Model.Id > 0)?Model.Name:"",
-    Selected = (Model!=null&&Model.Id > 0)?true:false,
-    }},
+        {
+            Value = (Model!=null&&Model.Id > 0)?Model.Id.ToString():"",
+            Text = (Model!=null&&Model.Id > 0)?Model.Name:"",
+            Selected = (Model!=null&&Model.Id > 0)?true:false,
+        }
+    },
     new
     {
-    @id = elementId,
-    @class = "form-control disable-field",
-    data_val_required = Model.ErrorMessage,
-    data_val = Model.IsValidationEnabled.ToString().ToLower()
+        @id = elementId,
+        @class = "form-control disable-field",
+        data_val_required = Model.ErrorMessage,
+        data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
     <input type="hidden" name="Employee.Name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>

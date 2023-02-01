@@ -1,7 +1,7 @@
 ﻿using System;
 using Enums;
 using Pagination;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.Common
 {

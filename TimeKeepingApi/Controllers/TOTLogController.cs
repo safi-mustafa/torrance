@@ -53,7 +53,7 @@ namespace API.Controllers
             var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
-                model.Employee = new ViewModels.WeldingRodRecord.Employee.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
+                model.Employee = new ViewModels.WeldingRodRecord.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
             return base.Put(model);
         }

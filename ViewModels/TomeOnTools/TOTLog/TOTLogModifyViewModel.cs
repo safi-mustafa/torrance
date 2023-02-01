@@ -13,7 +13,7 @@ using ViewModels.TomeOnTools.ShiftDelay;
 using Enums;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
