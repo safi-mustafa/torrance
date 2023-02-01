@@ -151,6 +151,8 @@ namespace Repositories.Shared.AuthenticationService
                                             string.IsNullOrEmpty(search.Search.value)|| user.Email.ToLower().Contains(search.Search.value.ToLower())
                                         )
                                          &&
+                                         (string.IsNullOrEmpty(search.Role) || search.Role == r.Name)
+                                          &&
                                          (search.Roles.Count == 0 || rolesName.Contains(r.Name))
                                          &&
                                          (r.Name != "SuperAdmin")
