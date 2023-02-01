@@ -7,6 +7,7 @@ using Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.OverrideLogs.ORLog;
+using ViewModels.WeldingRodRecord;
 
 namespace API.Controllers
 {
@@ -53,7 +54,7 @@ namespace API.Controllers
             var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
-                model.Employee = new ViewModels.WeldingRodRecord.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
+                model.Employee = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
             return base.Put(model);
         }

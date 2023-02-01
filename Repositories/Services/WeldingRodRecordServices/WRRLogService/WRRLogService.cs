@@ -5,6 +5,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
+using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Shared;
@@ -65,7 +66,18 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             (searchFilters.Status == null || searchFilters.Status == x.Status)
             ;
         }
-
+        public override IQueryable<TOTLog> GetPaginationDbSet()
+        {
+            return _db.WRRLogs
+                    .Include(x => x.Unit)
+                    .Include(x => x.Department)
+                    .Include(x => x.Location)
+                    .Include(x => x.Employee)
+                    .Include(x => x.RodType)
+                    .Include(x => x.WeldMethod)
+                    .Include(x => x.Approver)
+                    .Include(x => x.Contractor).AsQueryable();
+        }
         public override async Task<IRepositoryResponse> GetById(long id)
         {
             try
