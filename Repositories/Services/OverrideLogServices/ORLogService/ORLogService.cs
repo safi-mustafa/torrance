@@ -46,6 +46,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             searchFilters.OrderByColumn = "Status";
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var employeeCheck = loggedInUserRole == "Employee";
             var parsedLoggedInId = long.Parse(loggedInUserId);
 
             return x =>
@@ -54,6 +55,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (string.IsNullOrEmpty(searchFilters.RequesterEmail) || x.RequesterEmail == searchFilters.RequesterEmail)
                             &&
                             (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
+                            &&
+                            (!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
         }
 
