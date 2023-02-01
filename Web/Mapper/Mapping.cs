@@ -187,12 +187,12 @@ namespace Models.Mapper
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<TOTLog, ViewModels.OverrideLogs.ORLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel, ViewModels.OverrideLogs.ORLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLogModifyViewModel,TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
@@ -269,7 +269,7 @@ namespace Models.Mapper
                 .ForMember(dest => dest.FolderId, act => act.Condition(src => src.Folder != null))
                 .ForMember(d => d.Folder, s => s.Ignore())
                 .ReverseMap();
-            CreateMap<AttachmentResponseVM, AttachmentModifyViewModel>().ReverseMap();
+            CreateMap<AttachmentResponseVM,AttachmentModifyViewModel>().ReverseMap();
 
 
             //Approver
