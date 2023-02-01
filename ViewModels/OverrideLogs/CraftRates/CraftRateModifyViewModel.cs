@@ -8,7 +8,6 @@ namespace ViewModels.OverrideLogs
     public class CraftRateModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [Required]
-        [MaxLength(200)]
         [DisplayName("Rate")]
         public float Rate { get; set; }
     }
