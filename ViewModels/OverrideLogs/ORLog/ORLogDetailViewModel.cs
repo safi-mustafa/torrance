@@ -73,8 +73,8 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
 
-        public List<EmployeeBriefViewModel> Employees { get; set; } = new();
+        public List<EmployeeBriefViewModel> Employees { get; set; } = new List<EmployeeBriefViewModel>();
 
-        public EmployeeMultiselectBriefViewModel EmployeeMultiselect { get; set; } = new();
+        public EmployeeMultiselectBriefViewModel EmployeeMultiselect { get; set; } = new EmployeeMultiselectBriefViewModel();
     }
 }

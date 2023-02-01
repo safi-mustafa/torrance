@@ -225,6 +225,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Date",data = "FormattedDate"},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType"},
                 new DataTableViewModel{title = "Requester",data = "Requester"},
+                new DataTableViewModel{title = "Approver",data = "Approver"},
                 new DataTableViewModel{title = "Department",data = "Department"},
                 new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit"},

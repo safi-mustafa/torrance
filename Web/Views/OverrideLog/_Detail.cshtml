@@ -29,7 +29,7 @@
     <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="Employees" class="form-label fw-600"></label>
-            <div>@(Model.Employees != null && Model.EmployeeMultiselect.Employees.Count > 0 ? "-" : string.Join(", ", Model.EmployeeMultiselect.Employees.Select(x => x.Name)))</div>
+            <div>@(Model.Employees != null && Model.EmployeeMultiselect.Employees.Count > 0 ? string.Join(", ", Model.EmployeeMultiselect.Employees.Select(x => x.Name)) : "-")</div>
         </div>
     </div>
 

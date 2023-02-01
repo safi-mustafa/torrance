@@ -67,12 +67,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
                     .Include(x => x.Contractor)
-                    .Include(x => x.Employees)
                     .Include(x => x.OverrideType)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
                     .Include(x => x.CraftSkill)
                     .Include(x => x.CraftRate)
+                    .Include(x => x.Employees).ThenInclude(x => x.Employee)
                     .Where(filters);
                 var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);

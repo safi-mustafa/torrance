@@ -49,6 +49,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
             {
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
+                    .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -69,6 +70,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Id = x.Id,
                             Contractor = x.Contractor != null ? x.Contractor.Name : "",
                             Department = x.Department != null ? x.Department.Name : "",
+                            Approver = x.Approver != null ? x.Approver.UserName : "",
                             Date = x.CreatedOn,
                             Status = x.Status,
                             TWR = x.Twr,
@@ -79,6 +81,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var wrrLogsQueryable = _db.WRRLogs
                     .Include(x => x.Employee)
+                    .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -97,6 +100,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
+                        Approver = x.Approver != null ? x.Approver.UserName : "",
                         Contractor = x.Contractor != null ? x.Contractor.Name : "",
                         Department = x.Department != null ? x.Department.Name : "",
                         Date = x.CreatedOn,

@@ -36,14 +36,13 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Email",data = "Email"},
                 //new DataTableViewModel{title = "Status",data = "Status"},
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;
