@@ -18,7 +18,7 @@ using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {

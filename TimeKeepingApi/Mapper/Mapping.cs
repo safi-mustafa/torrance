@@ -27,6 +27,7 @@ using ViewModels.WeldingRodRecord.WRRLog;
 using Helpers.Models.Shared;
 using ViewModels.Authentication.Approver;
 using Models.OverrideLogs;
+using ViewModels.WeldingRodRecord;
 
 namespace TorranceApi.Mapper
 {
@@ -284,7 +285,7 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ReverseMap();
             CreateMap<EmployeeSearchViewModel, EmployeeAPISearchViewModel>()
-                 //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ReverseMap();
             CreateMap<TOTLogSearchViewModel, TOTLogAPISearchViewModel>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))

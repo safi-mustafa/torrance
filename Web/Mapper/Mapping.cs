@@ -22,6 +22,7 @@ using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
 using ViewModels.TomeOnTools.SOW;
 using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;

@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.WeldingRodRecord.Employee
+namespace ViewModels.WeldingRodRecord
 {
     public class EmployeeBriefViewModel : BaseBriefVM, ISelect2Data
     {
