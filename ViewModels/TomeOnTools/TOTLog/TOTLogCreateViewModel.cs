@@ -29,9 +29,9 @@ namespace ViewModels.TomeOnTools.TOTLog
         public long? ManHours { get; set; }
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
-        public TimeSpan TimeRequested { get; set; } = TimeSpan.MaxValue;
+        public TimeSpan TimeRequested { get; set; } = TimeSpan.Zero;
         [Display(Name = "Time Signed")]
-        public TimeSpan TimeSigned { get; set; } = TimeSpan.MinValue;
+        public TimeSpan TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
         public string DelayReason { get; set; }
         public string JobDescription { get; set; }
