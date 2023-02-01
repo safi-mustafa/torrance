@@ -13,7 +13,9 @@ namespace ViewModels.TomeOnTools.TOTLog
     {
         [Display(Name = "Equipment No")]
         public long? EquipmentNo { get; set; }
-        public Status? Status { get; set; } = null;
+        public StatusSearchEnum? Status { get; set; } = null;
+        [Display(Name = "Status Is Not")]
+        public Status? StatusNot { get; set; } = null;
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();

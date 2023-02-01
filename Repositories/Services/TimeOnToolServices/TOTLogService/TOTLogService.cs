@@ -43,6 +43,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         {
             var searchFilters = filters as TOTLogSearchViewModel;
             searchFilters.OrderByColumn = "Status";
+            var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
@@ -66,25 +67,27 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                                 (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
-                            (searchFilters.Status == null || searchFilters.Status == x.Status)
+                            (status == null || status == x.Status)
+                            &&
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
             ;
         }
 
-        public override IQueryable<TOTLog> GetPaginationDbSet()
-        {
-            return _db.TOTLogs
-                    .Include(x => x.Unit)
-                    .Include(x => x.Department)
-                    .Include(x => x.Contractor)
-                    .Include(x => x.ReworkDelay)
-                    .Include(x => x.ShiftDelay)
-                    .Include(x => x.Shift)
-                    .Include(x => x.PermitType)
-                    .Include(x => x.Approver)
-                    .Include(x => x.Foreman)
-                    .Include(x => x.Employee)
-                    .Include(x => x.PermittingIssue).AsQueryable();
-        }
+        //public override IQueryable<TOTLog> GetPaginationDbSet()
+        //{
+        //    return _db.TOTLogs
+        //            .Include(x => x.Unit)
+        //            .Include(x => x.Department)
+        //            .Include(x => x.Contractor)
+        //            .Include(x => x.ReworkDelay)
+        //            .Include(x => x.ShiftDelay)
+        //            .Include(x => x.Shift)
+        //            .Include(x => x.PermitType)
+        //            .Include(x => x.Approver)
+        //            .Include(x => x.Foreman)
+        //            .Include(x => x.Employee)
+        //            .Include(x => x.PermittingIssue).AsQueryable();
+        //}
 
         //public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         //{

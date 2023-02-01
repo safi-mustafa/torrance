@@ -9,4 +9,10 @@ namespace Enums
         Approved,
         Rejected
     }
+
+    public enum StatusSearchEnum
+    {
+        Approved=1,
+        Rejected=2
+    }
 }

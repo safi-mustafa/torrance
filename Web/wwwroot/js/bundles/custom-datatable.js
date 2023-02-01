@@ -273,7 +273,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
 }
 function GetActionLinks(actionsList, cellData) {
     var actionHtml = "";
-    if (actionsList.length > 3) {
+    if (actionsList.length > 4) {
 
         actionHtml = "<div class='list-icons'>";
         actionHtml += "<div class='dropdown show'>";

@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
@@ -42,6 +43,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
             var searchFilters = filters as WRRLogSearchViewModel;
             searchFilters.OrderByColumn = "Status";
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
             return x =>
@@ -63,21 +65,23 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             &&
                             (searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
                             &&
-                            (searchFilters.Status == null || searchFilters.Status == x.Status)
+                            (status == null || status == x.Status)
+                            &&
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
             ;
         }
-        public override IQueryable<TOTLog> GetPaginationDbSet()
-        {
-            return _db.WRRLogs
-                    .Include(x => x.Unit)
-                    .Include(x => x.Department)
-                    .Include(x => x.Location)
-                    .Include(x => x.Employee)
-                    .Include(x => x.RodType)
-                    .Include(x => x.WeldMethod)
-                    .Include(x => x.Approver)
-                    .Include(x => x.Contractor).AsQueryable();
-        }
+        //public override IQueryable<WRRLog> GetPaginationDbSet()
+        //{
+        //    return _db.WRRLogs
+        //            .Include(x => x.Unit)
+        //            .Include(x => x.Department)
+        //            .Include(x => x.Location)
+        //            .Include(x => x.Employee)
+        //            .Include(x => x.RodType)
+        //            .Include(x => x.WeldMethod)
+        //            .Include(x => x.Approver)
+        //            .Include(x => x.Contractor).AsQueryable();
+        //}
         public override async Task<IRepositoryResponse> GetById(long id)
         {
             try

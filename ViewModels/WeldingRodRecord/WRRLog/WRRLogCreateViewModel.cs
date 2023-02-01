@@ -23,7 +23,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public string Twr { get; set; }
         [EmailAddress]
         [Display(Prompt = "Add Email")]
-        [Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
+        //[Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
         public string? Email { get; set; }
         public DateTime RodCheckedOut { get; set; } = DateTime.Now;
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]

@@ -1,5 +1,7 @@
 ﻿using Enums;
 using Pagination;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.WeldingRodRecord.Employee;
@@ -21,7 +23,10 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
-        public Status? Status { get; set; } = null;
+        public StatusSearchEnum? Status { get; set; } = null;
+
+        [Display(Name = "Status Is Not")]
+        public Status? StatusNot { get; set; } = null;
     }
 
     public class WRRLogAPISearchViewModel : BaseSearchModel

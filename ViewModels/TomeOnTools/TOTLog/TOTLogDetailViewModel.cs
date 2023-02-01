@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
+using Helpers.Extensions;
 
 namespace ViewModels.TomeOnTools.TOTLog
 {
@@ -73,6 +74,8 @@ namespace ViewModels.TomeOnTools.TOTLog
         [Display(Name = "Hours Delayed")]
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }
+
+        public string FormattedStatus { get => Status.GetDisplayName(); }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();

@@ -7,6 +7,7 @@ using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
+using ViewModels.TomeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers
@@ -23,6 +24,12 @@ namespace Web.Controllers
             _WRRLogService = WRRLogService;
             _logger = logger;
         }
+        protected override WRRLogSearchViewModel SetDefaultFilters()
+        {
+            var filters = base.SetDefaultFilters();
+            filters.StatusNot = Enums.Status.Pending;
+            return filters;
+        }
 
         public override List<DataTableViewModel> GetColumns()
         {
@@ -35,7 +42,8 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Status",data = "Status"},
+                //new DataTableViewModel{title = "Status",data = "Status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;

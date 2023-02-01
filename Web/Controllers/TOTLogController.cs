@@ -26,6 +26,12 @@ namespace Web.Controllers
             _logger = logger;
         }
 
+        protected override TOTLogSearchViewModel SetDefaultFilters()
+        {
+            var filters= base.SetDefaultFilters();
+            filters.StatusNot = Enums.Status.Pending;
+            return filters;
+        }
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
@@ -37,7 +43,8 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Start Of Work",data = "FormattedStartOfWork"},
                 new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
                 new DataTableViewModel{title = "Hours Delayed",data = "HoursDelayed"},
-                new DataTableViewModel{title = "Status",data = "Status"},
+                //new DataTableViewModel{title = "Status",data = "Status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;

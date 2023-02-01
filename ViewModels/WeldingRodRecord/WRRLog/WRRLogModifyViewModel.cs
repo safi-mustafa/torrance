@@ -28,7 +28,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public string Twr { get; set; }
         [EmailAddress]
         [Display(Prompt = "Add Email")]
-        [Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
+        //[Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
         public string? Email { get; set; }
         [Display(Name = "Rod Checked Out")]
         public DateTime RodCheckedOut { get; set; } = DateTime.Now;

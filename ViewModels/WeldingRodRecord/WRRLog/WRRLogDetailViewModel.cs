@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Helpers.Extensions;
 using Models.Common.Interfaces;
 using Select2.Model;
 using System.ComponentModel;
@@ -58,6 +59,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public double RodReturnedWasteLbs { get; set; }
 
         public Status Status { get; set; }
+        public string FormattedStatus { get => Status.GetDisplayName(); }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 

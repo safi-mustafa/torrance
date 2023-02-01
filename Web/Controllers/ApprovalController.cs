@@ -50,7 +50,12 @@ namespace Web.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-
+        protected override ApprovalSearchViewModel SetDefaultFilters()
+        {
+            var filters = base.SetDefaultFilters();
+            filters.Status = Status.Pending;
+            return filters;
+        }
         public async Task<IActionResult> Detail(long id, LogType type)
         {
             try
@@ -102,6 +107,15 @@ namespace Web.Controllers
 
         public async Task<IActionResult> Update(long id, LogType type)
         {
+            return await SetUpdateView(id, type, "Update");
+        }
+        public async Task<IActionResult> Approve(long id, LogType type)
+        {
+            return await SetUpdateView(id, type, "Approve");
+        }
+
+        private async Task<IActionResult> SetUpdateView(long id, LogType type, string view)
+        {
             try
             {
                 IRepositoryResponse response;
@@ -111,7 +125,7 @@ namespace Web.Controllers
                     _updateViewPath = "~/Views/TOTLog/_Update.cshtml";
                     response = await _totService.GetById(id);
 
-                    return GetUpdateView<TOTLogModifyViewModel, TOTLogDetailViewModel>(response, id, type);
+                    return GetUpdateView<TOTLogModifyViewModel, TOTLogDetailViewModel>(response, id, type, view);
                 }
                 else if (type == LogType.WeldingRodRecord)
                 {
@@ -119,16 +133,15 @@ namespace Web.Controllers
                     _updateViewPath = "~/Views/WRRLog/_Update.cshtml";
                     response = await _wrrService.GetById(id);
 
-                    return GetUpdateView<WRRLogModifyViewModel, WRRLogDetailViewModel>(response, id, type);
+                    return GetUpdateView<WRRLogModifyViewModel, WRRLogDetailViewModel>(response, id, type, view);
                 }
             }
             catch (Exception ex) { _logger.LogError($"Approval for LogType: {type.GetDisplayName()} GetById method threw an exception, Message: {ex.Message}"); }
             return RedirectToAction("Index");
         }
-
         #region Helping Methods
 
-        private ActionResult GetUpdateView<UpdateViewModel, DetailViewModel>(IRepositoryResponse response, long id, LogType type)
+        private ActionResult GetUpdateView<UpdateViewModel, DetailViewModel>(IRepositoryResponse response, long id, LogType type, string view)
             where UpdateViewModel : BaseCrudViewModel, new()
             where DetailViewModel : BaseCrudViewModel, new()
         {
@@ -141,7 +154,7 @@ namespace Web.Controllers
             }
             if (model != null)
             {
-                return UpdateView(GetUpdateViewModel("Update", model));
+                return UpdateView(GetUpdateViewModel("Update", model, view));
             }
             else
             {
@@ -150,12 +163,12 @@ namespace Web.Controllers
             }
         }
 
-        protected virtual CrudUpdateViewModel GetUpdateViewModel(string action, BaseCrudViewModel model)
+        protected virtual CrudUpdateViewModel GetUpdateViewModel(string action, BaseCrudViewModel model, string view)
         {
-            return SetUpdateViewModel($"{action} {_controllerName}", model, action, null, _updateViewPath);
+            return SetUpdateViewModel($"{action} {_controllerName}", model, action, null, _updateViewPath, "", view);
         }
 
-        protected virtual CrudUpdateViewModel SetUpdateViewModel(string title, BaseCrudViewModel updateModel, string formAction = null, string formType = null, string updateViewPath = "", string formId = "")
+        protected virtual CrudUpdateViewModel SetUpdateViewModel(string title, BaseCrudViewModel updateModel, string formAction = null, string formType = null, string updateViewPath = "", string formId = "", string view = "")
         {
             CrudUpdateViewModel vm = new()
             {
@@ -178,7 +191,7 @@ namespace Web.Controllers
             {
                 vm.FormId = formId;
             }
-            vm.IsApprovalForm = true;
+            vm.IsApprovalForm = view == "Approve" ? true : false;
             vm.UpdateModel = updateModel == null ? new() : updateModel;
             return vm;
 
@@ -200,6 +213,7 @@ namespace Web.Controllers
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Approval/Detail?Id&Type"},
                     new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Approval/Update?Id&Type"},
                     new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
+                    new DataTableActionViewModel() {Action="Approve",Title="Approve",Href=$"/Approval/Approve?Id&Type"},
             };
         }
 

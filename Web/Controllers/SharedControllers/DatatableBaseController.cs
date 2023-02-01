@@ -39,7 +39,7 @@ namespace Web.Controllers.SharedControllers
         {
             var vm = new CrudListViewModel();
             vm.Title = _title;
-            vm.Filters = new SearchViewModel();
+            vm.Filters = SetDefaultFilters();
             vm.DatatableColumns = GetColumns();
             vm.DisableSearch = false;
             vm.HideCreateButton = _hideCreateButton;
@@ -47,6 +47,11 @@ namespace Web.Controllers.SharedControllers
             vm.DataUrl = $"/{_controllerName}/Search";
             vm.SearchViewPath = $"~/Views/{_controllerName}/_Search.cshtml";
             return DataTableIndexView(vm);
+        }
+
+        protected virtual SearchViewModel SetDefaultFilters()
+        {
+            return new SearchViewModel();
         }
 
         public virtual async Task<JsonResult> Search(SearchViewModel searchModel)

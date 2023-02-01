@@ -31,9 +31,10 @@
     <div class="col-lg-4">
         <div class="form-group profile-input">
             <label asp-for="Status" class="control-label form-label fw-600"></label>
-            <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control">
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(StatusSearchEnum))" class="form-control">
                 <option selected="selected" value="">Select Status</option>
             </select>
+            <input type="hidden" asp-for="StatusNot" />
         </div>
     </div>
 </div>
