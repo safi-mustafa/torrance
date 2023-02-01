@@ -105,6 +105,7 @@ namespace TorranceApi.Controllers
                            );
 
                         var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
+                        userDetail.Id = user.UserId;// Temporary For TOT LOG
 
                         var responseModel = new RepositoryResponseWithModel<EmployeeTokenVM>();
                         responseModel.ReturnModel = new EmployeeTokenVM
