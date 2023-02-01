@@ -9,8 +9,8 @@ namespace ViewModels.WeldingRodRecord
         public bool IsValidationEnabled { get => true; }
 
         [RequiredMultiSelect2("ErrorMessage", "IsValidationEnabled")]
-        public List<long> EmployeeIds { get; set; }
-        public List<EmployeeBriefViewModel> Employees { get; set; }
+        public List<long> EmployeeIds { get; set; } = new();
+        public List<EmployeeBriefViewModel> Employees { get; set; } = new();
     }
 
 }

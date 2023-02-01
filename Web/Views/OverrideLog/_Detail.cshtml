@@ -1,0 +1,115 @@
+﻿@using ViewModels.OverrideLogs.ORLog;
+@model ORLogDetailViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Requester" class="form-label fw-600"></label>
+            <div>@Model.Requester</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.ReasonForRequest.Name) ? "-" : Model.ReasonForRequest.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="RequesterEmail" class="form-label fw-600"></label>
+            <div>@Model.RequesterEmail</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Employees" class="form-label fw-600"></label>
+            <div>@(Model.Employees != null && Model.EmployeeMultiselect.Employees.Count > 0 ? "-" : string.Join(", ", Model.EmployeeMultiselect.Employees.Select(x => x.Name)))</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="DateSubmitted" class="form-label fw-600"></label>
+            <div>@Model.FormattedDateSubmitted</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="CraftRate" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.CraftRate.Name) ? "-" : Model.CraftRate.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="TimeSubmitted" class="form-label fw-600"></label>
+            <div>@Model.FormattedTimeSubmitted</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="CraftSkill" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.CraftSkill.Name) ? "-" : Model.CraftSkill.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="DateOfWorkCompleted" class="form-label fw-600"></label>
+            <div>@Model.FormattedDateOfWorkCompleted</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="OverrideType" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.OverrideType.Name) ? "-" : Model.OverrideType.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="WorkScope" class="form-label fw-600"></label>
+            <div>@Model.WorkScope</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="PONumber" class="form-label fw-600"></label>
+            <div>@Model.PONumber</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="OverrideHours" class="form-label fw-600"></label>
+            <div>@Model.OverrideHours</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Contractor" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Contractor.Name) ? "-" : Model.Contractor.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Shift" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Shift.Name) ? "-" : Model.Shift.Name)</div>
+        </div>
+    </div>
+
+</div>
+
+

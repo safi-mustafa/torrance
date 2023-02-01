@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
@@ -13,6 +14,7 @@ using System.Linq.Expressions;
 using ViewModels;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
@@ -51,15 +53,42 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (string.IsNullOrEmpty(searchFilters.RequesterEmail) || x.RequesterEmail == searchFilters.RequesterEmail)
                             &&
                             (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
-            //&&
-            //(
-            //    (loggedInUserRole == "SuperAdmin" || loggedInUserRole == "Admin")
-            //    ||
-            //    (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
-            //    ||
-            //    (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
-            //)
             ;
+        }
+
+        public async override Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
+        {
+            try
+            {
+                var filters = SetQueryFilter(search);
+                var resultQuery = _db.Set<OverrideLog>()
+                    .Include(x => x.Contractor)
+                    .Include(x => x.Employees)
+                    .Include(x => x.OverrideType)
+                    .Include(x => x.ReasonForRequest)
+                    .Include(x => x.Shift)
+                    .Include(x => x.CraftSkill)
+                    .Include(x => x.CraftRate)
+                    .Where(filters);
+                var query = resultQuery.ToQueryString();
+                var result = await resultQuery.Paginate(search);
+                if (result != null)
+                {
+                    var paginatedResult = new PaginatedResultModel<M>();
+                    paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    paginatedResult._meta = result._meta;
+                    paginatedResult._links = result._links;
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for {typeof(OverrideLog).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for {typeof(OverrideLog).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
         }
 
         public override async Task<IRepositoryResponse> GetById(long id)
@@ -77,7 +106,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
-                    mappedModel.Employees = await GetOverrideLogEmployees(id);
+                    //var selectedEmployees = await GetOverrideLogEmployees(id);
+                    mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -148,6 +178,5 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 return null;
             }
         }
-
     }
 }

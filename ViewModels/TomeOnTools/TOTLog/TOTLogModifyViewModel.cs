@@ -72,6 +72,5 @@ namespace ViewModels.TomeOnTools.TOTLog
 
         private EmployeeBriefViewModel? _employee;
         public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
-
     }
 }

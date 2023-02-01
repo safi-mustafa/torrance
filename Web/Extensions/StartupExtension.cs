@@ -21,6 +21,7 @@ using Repositories.Services.FolderService;
 using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
 using Repositories.Services.OverrideLogServices.LeadPlannerService;
+using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Services.OverrideLogServices.OverrideTypeService;
 using Repositories.Services.OverrideLogServices.ReasonForRequestService;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
@@ -127,6 +128,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(ILeadPlannerService<,,>), typeof(LeadPlannerService<,,>));
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
+            services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();

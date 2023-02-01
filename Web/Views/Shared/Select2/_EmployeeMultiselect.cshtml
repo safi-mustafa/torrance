@@ -3,7 +3,7 @@
 @{
     var accessAllowed = ViewData["AccessAllowed"] != null && !string.IsNullOrEmpty(ViewData["AccessAllowed"].ToString()) ? bool.Parse(ViewData["AccessAllowed"].ToString()) : false;
     var multiSelect = ViewData["MultiSelect"] != null && !string.IsNullOrEmpty(ViewData["MultiSelect"].ToString()) ? bool.Parse(ViewData["MultiSelect"].ToString()) : false;
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "employee-id";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "employees-id";
     var employees = Model.Employees.Select(m =>
                              new SelectListItem()
                              {
@@ -16,15 +16,14 @@
 <div class="form-group">
     <label class="form-label">Employee Names(s)  </label>
     <select class="form-control disable-field select2-hidden-accessible" id="@elementId" multiple="" name="EmployeeIds" data-val="@Model.IsValidationEnabled.ToString().ToLower()" data-val-required="@Model.ErrorMessage" aria-hidden="true">
+        <option>Select</option>
         @foreach (var item in employees)
         {
             <option selected=@(item.Selected ? "selected" : "") value="@item.Value">@item.Text</option>
         }
     </select>
     <span asp-validation-for="EmployeeIds" class="validation-invalid-label"></span>
-
 </div>
-
 
 <script src="~/js/custom-scripts/Select2Methods.js"></script>
 <script>

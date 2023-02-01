@@ -1,0 +1,126 @@
+﻿@using Enums;
+@using ViewModels.OverrideLogs.ORLog;
+@model ORLogModifyViewModel
+@{
+    Layout = null;
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Admin");
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            @if (isAdmin)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="Requester" class="form-label fw-600"></label>
+                        <input asp-for="Requester" type="text" class="form-control" />
+                        <span asp-validation-for="Requester" class="validation-invalid-label"></span>
+                    </div>
+                </div>
+            }
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="RequesterEmail" class="form-label fw-600"></label>
+                    <input asp-for="RequesterEmail" type="email" class="form-control" placeholder="Add Request Email" />
+                    <span asp-validation-for="RequesterEmail" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_EmployeeMultiselect.cshtml" for="EmployeeMultiselect" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DateSubmitted" class="form-label fw-600"></label>
+                    <input asp-for="DateSubmitted" type="date" class="form-control" />
+                    <span asp-validation-for="DateSubmitted" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_CraftRate.cshtml" for="CraftRate" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="TimeSubmitted" class="form-label fw-600"></label>
+                    <input asp-for="TimeSubmitted" type="time" class="form-control" />
+                    <span asp-validation-for="TimeSubmitted" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" for="CraftSkill" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DateOfWorkCompleted" class="form-label fw-600"></label>
+                    <input asp-for="DateOfWorkCompleted" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfWorkCompleted" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="WorkScope" class="form-label fw-600"></label>
+                    <input asp-for="WorkScope" type="text" class="form-control" />
+                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="PONumber" class="form-label fw-600"></label>
+                    <input asp-for="PONumber" type="number" class="form-control" />
+                    <span asp-validation-for="PONumber" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="OverrideHours" class="form-label fw-600"></label>
+                    <input asp-for="OverrideHours" type="number" class="form-control" />
+                    <span asp-validation-for="OverrideHours" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@*<input asp-for="Status" type="hidden" id="status-id" />
+    <input asp-for="Employee.Id" type="hidden" />*@
+<input asp-for="Id" type="hidden" />

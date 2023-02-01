@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -27,7 +28,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public string RequesterEmail { get; set; }
 
         [Display(Name = "Date Submitted")]
-        public DateTime DateSubmitted { get; set; } 
+        public DateTime DateSubmitted { get; set; }
         public string FormattedDateSubmitted
         {
             get
@@ -78,6 +79,9 @@ namespace ViewModels.OverrideLogs.ORLog
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
-        public List<EmployeeBriefViewModel> Employees { get; set; } = new List<EmployeeBriefViewModel>();
+
+        public List<EmployeeBriefViewModel> Employees { get; set; } = new();
+
+        public EmployeeMultiselectBriefViewModel EmployeeMultiselect { get; set; } = new();
     }
 }

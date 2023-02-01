@@ -20,6 +20,7 @@ using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.ReworkDelay;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.OverrideLogs.ORLog
@@ -60,10 +61,10 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
 
-        public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel(); 
+        public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
-        public List<long> EmployeeIds { get; set; } = new List<long>();
-        public List<EmployeeBriefViewModel> Employees { get; set; } = new List<EmployeeBriefViewModel>();
+
+        public EmployeeMultiselectBriefViewModel Employees { get; set; } = new();
     }
 }

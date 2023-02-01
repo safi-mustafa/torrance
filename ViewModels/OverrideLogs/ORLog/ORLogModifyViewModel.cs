@@ -4,6 +4,7 @@ using ViewModels.Shared;
 using ViewModels.Common.Contractor;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.WeldingRodRecord.Employee;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -46,8 +47,9 @@ namespace ViewModels.OverrideLogs.ORLog
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
-        public List<long> EmployeeIds { get; set; } = new List<long>();
-        public List<EmployeeBriefViewModel> Employees { get; set; } = new List<EmployeeBriefViewModel>();
 
+        public List<EmployeeBriefViewModel> Employees { get; set; } = new();
+
+        public EmployeeMultiselectBriefViewModel EmployeeMultiselect { get; set; } = new();
     }
 }

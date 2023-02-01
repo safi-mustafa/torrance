@@ -42,5 +42,7 @@ namespace Models.OverrideLogs
         [ForeignKey("Contractor")]
         public long ContractorId { get; set; }
         public Contractor Contractor { get; set; }
+
+        public List<OverrideLogEmployee> Employees { get; set; }
     }
 }

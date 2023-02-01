@@ -193,7 +193,7 @@ namespace Models.Mapper
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel,TOTLogDetailViewModel>()
+            CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
@@ -270,7 +270,7 @@ namespace Models.Mapper
                 .ForMember(dest => dest.FolderId, act => act.Condition(src => src.Folder != null))
                 .ForMember(d => d.Folder, s => s.Ignore())
                 .ReverseMap();
-            CreateMap<AttachmentResponseVM,AttachmentModifyViewModel>().ReverseMap();
+            CreateMap<AttachmentResponseVM, AttachmentModifyViewModel>().ReverseMap();
 
 
             //Approver
@@ -318,6 +318,8 @@ namespace Models.Mapper
 
 
             //ORLog
+            CreateMap<OverrideLogEmployee, EmployeeBriefViewModel>().ReverseMap();
+
             CreateMap<ORLogModifyViewModel, OverrideLog>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
@@ -331,8 +333,10 @@ namespace Models.Mapper
                 .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
                 .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
+                .ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<OverrideLog, ORLogDetailViewModel>()
+            CreateMap<ORLogDetailViewModel, OverrideLog>()
+                //.ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
