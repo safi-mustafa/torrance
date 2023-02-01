@@ -14,6 +14,7 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.TomeOnTools.PermitType;
@@ -186,12 +187,12 @@ namespace Models.Mapper
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<TOTLog, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLog, ViewModels.OverrideLogs.ORLog.TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLogModifyViewModel, ViewModels.OverrideLogs.ORLog.TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
