@@ -14,6 +14,7 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.TomeOnTools.PermitType;
@@ -187,12 +188,12 @@ namespace Models.Mapper
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<TOTLog, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel, ViewModels.TomeOnTools.TOTLog.TOTLogDetailViewModel>()
+            CreateMap<TOTLogModifyViewModel,TOTLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
@@ -269,7 +270,7 @@ namespace Models.Mapper
                 .ForMember(dest => dest.FolderId, act => act.Condition(src => src.Folder != null))
                 .ForMember(d => d.Folder, s => s.Ignore())
                 .ReverseMap();
-            CreateMap<AttachmentResponseVM, AttachmentModifyViewModel>().ReverseMap();
+            CreateMap<AttachmentResponseVM,AttachmentModifyViewModel>().ReverseMap();
 
 
             //Approver
@@ -314,6 +315,29 @@ namespace Models.Mapper
             CreateMap<ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel>().ReverseMap();
             CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
+
+
+            //ORLog
+            CreateMap<ORLogModifyViewModel, OverrideLog>()
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
+                .ForMember(x => x.Shift, opt => opt.Ignore())
+                .ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
+                .ForMember(x => x.CraftRate, opt => opt.Ignore())
+                .ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
+                .ForMember(x => x.CraftSkill, opt => opt.Ignore())
+                .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
+                .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
+                .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
+                .ForMember(x => x.OverrideType, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<OverrideLog, ORLogDetailViewModel>()
+                .ReverseMap();
+            CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
+                .ReverseMap();
+            CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ORLogBriefViewModel>().ReverseMap();
 
         }
     }

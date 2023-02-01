@@ -6,6 +6,7 @@ using AutoMapper;
 using Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
+using ViewModels.OverrideLogs.ORLog;
 
 namespace API.Controllers
 {

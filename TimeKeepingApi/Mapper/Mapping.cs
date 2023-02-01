@@ -28,6 +28,7 @@ using Helpers.Models.Shared;
 using ViewModels.Authentication.Approver;
 using Models.OverrideLogs;
 using ViewModels.WeldingRodRecord;
+using ViewModels.OverrideLogs.ORLog;
 
 namespace TorranceApi.Mapper
 {
