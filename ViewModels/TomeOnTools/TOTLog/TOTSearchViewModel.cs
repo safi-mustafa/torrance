@@ -1,5 +1,7 @@
 ﻿using Enums;
 using Pagination;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -9,7 +11,8 @@ namespace ViewModels.TomeOnTools.TOTLog
 {
     public class TOTLogSearchViewModel : BaseSearchModel
     {
-        public long EquipmentNo { get; set; }
+        [Display(Name = "Equipment No")]
+        public long? EquipmentNo { get; set; }
         public Status? Status { get; set; } = null;
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
