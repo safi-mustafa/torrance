@@ -5,10 +5,11 @@ using ViewModels.Common.Contractor;
 using ViewModels.TomeOnTools.Shift;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord;
+using Models.Common.Interfaces.OverrideLog;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IEmployeeMultiselect
     {
         public string Requester { get; set; }
 

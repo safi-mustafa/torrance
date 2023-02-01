@@ -37,8 +37,7 @@ namespace ViewModels.TomeOnTools.TOTLog
         public string JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         public long ManPowerAffected { get; set; }
-        [RegularExpression("^[0-9]+$", ErrorMessage = "EquipmentNo must be a natural number")]
-        //[Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
         public long EquipmentNo { get; set; }
 
         [Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]

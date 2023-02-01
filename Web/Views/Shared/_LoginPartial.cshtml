@@ -20,9 +20,6 @@
                 <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" title="Change Password">Change Password</a>
             </li>
             <li>
-                <a class="dropdown-item text-dark"  href="#" title="Profile">Profile</a>
-            </li>
-            <li>
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                     <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
                 </form>

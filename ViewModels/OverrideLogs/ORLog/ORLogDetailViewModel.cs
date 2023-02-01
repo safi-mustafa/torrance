@@ -1,24 +1,17 @@
-﻿using Enums;
-using System.ComponentModel;
-using ViewModels.Common.Department;
-using ViewModels.Common.Unit;
-using ViewModels.Shared;
+﻿using ViewModels.Shared;
 using ViewModels.Common.Contractor;
-using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.PermitType;
 using ViewModels.TomeOnTools.Shift;
-using ViewModels.Authentication;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.TomeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord;
+using Models.Common.Interfaces.OverrideLog;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogDetailViewModel : BaseCrudViewModel
+    public class ORLogDetailViewModel : BaseCrudViewModel, IEmployeeMultiselect
     {
         public long Id { get; set; }
         public string Requester { get; set; }

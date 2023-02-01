@@ -10,6 +10,7 @@
     <Compile Remove="OverrideLogs\Log\**" />
     <EmbeddedResource Remove="OverrideLogs\Log\**" />
     <None Remove="OverrideLogs\Log\**" />
+    <None Remove="OverrideLogs\Interface\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
     <Folder Include="OverrideLogs\CraftRates\" />
     <Folder Include="OverrideLogs\LeadPlanners\" />
     <Folder Include="OverrideLogs\OverrideType\" />
+    <Folder Include="OverrideLogs\Interface\" />
   </ItemGroup>
 
   <ItemGroup>

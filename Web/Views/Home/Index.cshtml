@@ -21,12 +21,70 @@
 </style>
 <div class="container-fluid">
     <main>
-        <div id="progress-charts-container" class="row">
-        </div>
+        
         <h3 class="default-heading">
             Torrance Admin Dashboard
         </h3>
         <br>
+
+        <div class="row dashboard-filters-row">
+            <div class="col-md-12">
+                <p>Filter By:</p>
+                <div class="filter-select">
+                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option selected>Select Departments</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option selected>Select Units</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            SHIFT DELAYS
+                        </h5>
+                        <p class="card-text">
+                            <div id="pie-shift-chart"></div>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            START OF WORK
+                        </h5>
+                        <p class="card-text">
+                            <div id="pie-work-chart"></div>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            REWORK DELAYS
+                        </h5>
+                        <p class="card-text">
+                            <div id="pie-rework-chart"></div>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row dashboard-stats-row">
             <div class="col-md-4">
                 <div class="card w-100">
@@ -74,64 +132,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="row dashboard-filters-row">
-            <div class="col-md-12">
-                <p>Filter By:</p>
-                <div class="filter-select">
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Departments</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Units</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            SHIFT DELAYS
-                        </h5>
-                        <p class="card-text">
-
-                        </p>
-                      
-                    </div>
-                </div>
-            </div>
-             <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            START OF WORK
-                        </h5>
-                        <p class="card-text">
-
-                        </p>
-                      
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            REWORK DELAYS
-                        </h5>
-                        <p class="card-text">
-
-                        </p>
-
-                    </div>
-                </div>
-            </div>
+        <div id="progress-charts-container" class="row">
+            <div id="progress-chart-div"></div>
         </div>
     </main>
 </div>

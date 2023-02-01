@@ -16,10 +16,12 @@
 	  <None Remove="Interfaces\Folder\" />
 	  <None Remove="Interfaces\Attachment\" />
 	  <None Remove="Interfaces\Approval\" />
+	  <None Remove="Interfaces\OverrideLog\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Interfaces\Folder\" />
 	  <Folder Include="Interfaces\Attachment\" />
 	  <Folder Include="Interfaces\Approval\" />
+	  <Folder Include="Interfaces\OverrideLog\" />
 	</ItemGroup>
 </Project>

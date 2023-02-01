@@ -102,7 +102,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "First Name",data = "FirstName"},
                 new DataTableViewModel{title = "Last Name",data = "LastName"},
                 new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Is Approver?",data = "IsApprover"},
+                //new DataTableViewModel{title = "Is Approver?",data = "IsApprover"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

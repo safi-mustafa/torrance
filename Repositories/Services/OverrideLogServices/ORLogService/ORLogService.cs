@@ -6,6 +6,7 @@ using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
+using Models.Common.Interfaces.OverrideLog;
 using Models.OverrideLogs;
 using Pagination;
 using Repositories.Shared;
@@ -20,9 +21,9 @@ using ViewModels.WeldingRodRecord.Employee;
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
     public class ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<OverrideLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
+        where DetailViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -176,6 +177,84 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 _logger.LogError($"OverrideLogService GetOverrideLogEmployees method threw an exception, Message: {ex.Message}");
                 return null;
+            }
+        }
+
+        public async override Task<IRepositoryResponse> Create(CreateViewModel model)
+        {
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var mappedModel = _mapper.Map<OverrideLog>(model);
+                    await _db.Set<OverrideLog>().AddAsync(mappedModel);
+                    await _db.SaveChangesAsync();
+
+                    await CreateEmployees(model, mappedModel.Id);
+                    await transaction.CommitAsync();
+                    var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Exception thrown in Create method of {typeof(OverrideLog).FullName}");
+                    await transaction.RollbackAsync();
+                    return Response.BadRequestResponse(_response);
+                }
+            }
+        }
+
+        public async override Task<IRepositoryResponse> Update(UpdateViewModel model)
+        {
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var updateModel = model as BaseUpdateVM;
+                    if (updateModel != null)
+                    {
+                        var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
+                        if (record != null)
+                        {
+                            var dbModel = _mapper.Map(model, record);
+                            await _db.SaveChangesAsync();
+
+                            _db.RemoveRange(await _db.OverrideLogEmployees.Where(x => model.EmployeeMultiselect.EmployeeIds.Contains(x.Id)).ToListAsync());
+                            await _db.SaveChangesAsync();
+
+                            await CreateEmployees(model, dbModel.Id);
+                            await transaction.CommitAsync();
+                            var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
+                            return response;
+                        }
+                        _logger.LogWarning($"Record for id: {updateModel?.Id} not found in {typeof(OverrideLogEmployee).FullName} in Update()");
+                    }
+                    return Response.NotFoundResponse(_response);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Update() for {typeof(OverrideLogEmployee).FullName} threw the following exception");
+                    await transaction.RollbackAsync();
+                    return Response.BadRequestResponse(_response);
+                }
+            }
+        }
+
+        private async Task CreateEmployees(IEmployeeMultiselect model, long overridingLogId)
+        {
+            if (overridingLogId > 0)
+            {
+                var employees = new List<OverrideLogEmployee>();
+                foreach (var item in model.EmployeeMultiselect.EmployeeIds)
+                {
+                    employees.Add(new OverrideLogEmployee
+                    {
+                        EmployeeId = item,
+                        OverrideLogId = overridingLogId
+                    });
+                }
+                await _db.AddRangeAsync(employees);
+                await _db.SaveChangesAsync();
             }
         }
     }

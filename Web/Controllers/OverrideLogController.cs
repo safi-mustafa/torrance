@@ -72,13 +72,6 @@ namespace Web.Controllers
             return View("~/Views/OverrideLog/_Index.cshtml", vm);
         }
 
-        protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
-        {
-            result.ActionsList = new List<DataTableActionViewModel>()
-            {
-                new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/OverrideLog/Detail/Id"},
-            };
-        }
     }
 
 }
