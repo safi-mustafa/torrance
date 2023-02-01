@@ -41,6 +41,7 @@ using Repositories.Services.AppSettingServices.DropboxServices;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
 using Repositories.Services.OverrideLogServices.LeadPlannerService;
 using Repositories.Services.OverrideLogServices.OverrideTypeService;
+using Repositories.Services.OverrideLogServices.ORLogService;
 
 namespace Web.Extensions
 {
@@ -174,6 +175,7 @@ namespace Web.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
+            services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));

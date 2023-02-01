@@ -15,7 +15,7 @@
 
 <div class="form-group">
     <label class="form-label">Employee Names(s)  </label>
-    <select class="form-control disable-field select2-hidden-accessible" id="@elementId" multiple="" name="EmployeeIds" data-val="@Model.IsValidationEnabled.ToString().ToLower()" data-val-required="@Model.ErrorMessage" aria-hidden="true">
+    <select class="form-control disable-field select2-hidden-accessible" id="@elementId" multiple="" name="EmployeeMultiselect.EmployeeIds" data-val="@Model.IsValidationEnabled.ToString().ToLower()" data-val-required="@Model.ErrorMessage" aria-hidden="true">
         <option>Select</option>
         @foreach (var item in employees)
         {
