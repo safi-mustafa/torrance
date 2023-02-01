@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> _overrideTypeService;
         private readonly ILogger<OverrideTypeController> _logger;
 
-        public OverrideTypeController(IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> overrideTypeService, ILogger<OverrideTypeController> logger, IMapper mapper) : base(overrideTypeService, logger, mapper, "OverrideType", "OverrideTypes")
+        public OverrideTypeController(IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> overrideTypeService, ILogger<OverrideTypeController> logger, IMapper mapper) : base(overrideTypeService, logger, mapper, "OverrideType", "Override Types")
         {
             _overrideTypeService = overrideTypeService;
             _logger = logger;

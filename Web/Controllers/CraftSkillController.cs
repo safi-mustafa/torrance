@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> _craftSkillService;
         private readonly ILogger<CraftSkillController> _logger;
 
-        public CraftSkillController(ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> craftSkillService, ILogger<CraftSkillController> logger, IMapper mapper) : base(craftSkillService, logger, mapper, "CraftSkill", "CraftSkills")
+        public CraftSkillController(ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> craftSkillService, ILogger<CraftSkillController> logger, IMapper mapper) : base(craftSkillService, logger, mapper, "CraftSkill", "Craft Skills")
         {
             _craftSkillService = craftSkillService;
             _logger = logger;
