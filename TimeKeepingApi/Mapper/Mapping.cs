@@ -337,6 +337,21 @@ namespace TorranceApi.Mapper
                 .ForMember(d => d.Id, s => s.MapFrom(s => s.Employee.Id))
                 .ForMember(dest => dest.Id, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
+            CreateMap<ORLogModifyViewModel, OverrideLog>()
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
+                .ForMember(x => x.Shift, opt => opt.Ignore())
+                .ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
+                .ForMember(x => x.CraftRate, opt => opt.Ignore())
+                .ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
+                .ForMember(x => x.CraftSkill, opt => opt.Ignore())
+                .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
+                .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
+                .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
+                .ForMember(x => x.OverrideType, opt => opt.Ignore())
+                .ForMember(x => x.Employees, opt => opt.Ignore())
+                .ReverseMap();
             CreateMap<ORLogDetailViewModel, OverrideLog>()
                 //.ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
