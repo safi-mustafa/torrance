@@ -6,6 +6,7 @@ function GeneratePieChart(id, seriesData) {
         if (roots.find(x => x.type == id) === undefined) {
             roots.push({ type: id, root: root });
         }
+
         root.setThemes([
             am5themes_Animated.new(root)
         ]);
@@ -39,9 +40,11 @@ function GeneratePieChart(id, seriesData) {
 function DisposeRoot(root) {
     if (roots.length > 0) {
         if (root !== undefined && root !== "") {
-            var rootObj = roots.find(x => x.type == root)?.root;
-            if (!$.isEmptyObject(rootObj))
-                rootObj.dispose();
+            am5.array.each(am5.registry.rootElements, function (r) {
+                if (r !== undefined && r.dom.id == root) {
+                    r.dispose();
+                }
+            });
         }
         //else
         //    roots.forEach(function (v, i) {

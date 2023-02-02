@@ -1,8 +1,8 @@
-﻿function GetWrrChartData() {
+﻿function GetWrrChartData(formData = "") {
     $.ajax({
         type: "GET",
         url: "/Home/GetWrrChartsData",
-        data: "",
+        data: formData,
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
