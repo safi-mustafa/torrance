@@ -357,6 +357,8 @@ namespace TorranceApi.Mapper
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
+            CreateMap<ApproverBriefViewModel, ToranceUser>()
+                .ReverseMap();
         }
     }
 }

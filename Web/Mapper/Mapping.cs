@@ -348,6 +348,9 @@ namespace Models.Mapper
             CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ORLogBriefViewModel>().ReverseMap();
 
+            CreateMap<ApproverBriefViewModel, ToranceUser>()
+                .ReverseMap();
+
         }
     }
 }
