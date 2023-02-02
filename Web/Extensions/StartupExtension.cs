@@ -17,6 +17,7 @@ using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
+using Repositories.Services.DashboardService;
 using Repositories.Services.FolderService;
 using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
@@ -129,6 +130,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
+            services.AddScoped<IDashboardService,DashboardService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();

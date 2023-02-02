@@ -1,4 +1,6 @@
-﻿using ViewModels;
+﻿using Select2.Model;
+using System.ComponentModel;
+using ViewModels;
 
 namespace ViewModels.Authentication
 {
@@ -19,6 +21,15 @@ namespace ViewModels.Authentication
         //private string _name;
         //public new string Name { get { return string.IsNullOrEmpty(_name) ? $"{FirstName} {LastName}" : _name; } set { _name = value; } }
         //public string Role { get; set; }
+    }
+    public class ApproverBriefViewModel : BaseBriefVM
+    {
+        public ApproverBriefViewModel() : base(true, "The Approver field is required.")
+        {
+
+        }
+        [DisplayName("Approver")]
+        public override string Name { get; set; }
     }
 
 }

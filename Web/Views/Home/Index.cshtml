@@ -1,7 +1,7 @@
 ﻿@using ViewModels.Dashboard;
 @model DashboardViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 <style>
     *[class^='progress-done-'] {
@@ -21,70 +21,13 @@
 </style>
 <div class="container-fluid">
     <main>
-        
+
         <h3 class="default-heading">
             Torrance Admin Dashboard
         </h3>
         <br>
 
-        <div class="row dashboard-filters-row">
-            <div class="col-md-12">
-                <p>Filter By:</p>
-                <div class="filter-select">
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Departments</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Units</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            SHIFT DELAYS
-                        </h5>
-                        <p class="card-text">
-                            <div id="pie-shift-chart"></div>
-                        </p>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            START OF WORK
-                        </h5>
-                        <p class="card-text">
-                            <div id="pie-work-chart"></div>
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            REWORK DELAYS
-                        </h5>
-                        <p class="card-text">
-                            <div id="pie-rework-chart"></div>
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row dashboard-stats-row">
             <div class="col-md-4">
                 <div class="card w-100">
@@ -132,91 +75,48 @@
                 </div>
             </div>
         </div>
-        <div id="progress-charts-container" class="row">
+       @* <div id="progress-charts-container" class="row">
             <div id="progress-chart-div"></div>
+        </div>*@
+        <div class="row dashboard-filters-row">
+            <div class="col-md-12">
+                <p>Filter By:</p>
+                <div class="filter-select">
+                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option selected>Select Departments</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                        <option selected>Select Units</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+            <partial name="_TOTPieCharts" />
+            <partial name="_WrrPieCharts" />
         </div>
     </main>
 </div>
-
-<script type="text/javascript">
-    //$(function () {
-    //    $.ajax({
-    //        url: "/Home/ContractProgress",
-    //        type: 'GET',
-    //        success: function (res) {
-    //            $("#progress-charts-container").html(res);
-    //            $('[class*="progress-done"]').each(function (i, element) {
-    //                setTimeout(() => {
-    //                    element.style.opacity = 1;
-    //                    element.style.width = element.getAttribute('data-done') + '%';
-    //                }, 500)
-    //            });
-    //        }
-    //    });
-    //})
-                //const progress = document.querySelector('.progress-done');
-
-                //setTimeout(() => {
-                //    progress1.style.opacity = 1;
-                //    progress1.style.width = progress1.getAttribute('data-done') + '%';
-                //}, 500)
-
-
-</script>
-
-
-@{
-    ViewData["Title"] = "Home Page";
-}
 <style>
-    *[class^='progress-done-'] {
-        height: 100%;
-        width: 0;
-        opacity: 0;
-        background: linear-gradient(to left, #f2709c,#ff9472);
-        color: #fff;
-        border-radius: 8px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #fac090;
-        box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
-        transition: 1s ease;
+    .pie-chart {
+        width: 100%;
+        height: 350px;
     }
 </style>
-<div class="container-fluid">
-    <main>
-        <div id="progress-charts-container" class="row">
-        </div>
-
-
-    </main>
-</div>
-
-<script type="text/javascript">
-    //$(function () {
-    //    $.ajax({
-    //        url: "/Home/ContractProgress",
-    //        type: 'GET',
-    //        success: function (res) {
-    //            $("#progress-charts-container").html(res);
-    //            $('[class*="progress-done"]').each(function (i, element) {
-    //                setTimeout(() => {
-    //                    element.style.opacity = 1;
-    //                    element.style.width = element.getAttribute('data-done') + '%';
-    //                }, 500)
-    //            });
-    //        }
-    //    });
-    //})
-                //const progress = document.querySelector('.progress-done');
-
-                //setTimeout(() => {
-                //    progress1.style.opacity = 1;
-                //    progress1.style.width = progress1.getAttribute('data-done') + '%';
-                //}, 500)
-
-
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>
+<!-- Chart code -->
+<script>
+    $(function () {
+        GetTOTChartData();
+        GetWrrChartData();
+    })
 </script>
-
-

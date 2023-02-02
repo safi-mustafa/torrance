@@ -70,7 +70,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
 
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
     }
 }

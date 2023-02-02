@@ -59,7 +59,7 @@ namespace ViewModels.TomeOnTools.TOTLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();

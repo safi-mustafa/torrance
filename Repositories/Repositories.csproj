@@ -26,5 +26,6 @@
   <ItemGroup>
     <Folder Include="Services\CommonServices\ApprovalService\" />
     <Folder Include="Services\CommonServices\ApprovalService\Interface\" />
+    <Folder Include="Services\DashboardService\TOTService\" />
   </ItemGroup>
 </Project>

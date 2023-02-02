@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pagination;
+using Repositories.Services.DashboardService;
 using System.Diagnostics;
+using ViewModels.Dashboard;
 using Web.Models;
 
 namespace Web.Controllers
@@ -10,10 +13,12 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IDashboardService _dashboardService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IDashboardService dashboardService)
         {
             _logger = logger;
+            _dashboardService = dashboardService;
         }
         [Authorize(Roles = "SuperAdmin")]
         public IActionResult Index()
@@ -36,7 +41,7 @@ namespace Web.Controllers
         {
             try
             {
-                            Object[] data = {
+                Object[] data = {
                     new { x = "Jan", value1 = 0.5,value2 = 1, value3 = 1.2},
                     new { x = "Feb", value1 = 1,value2 = 1,value3 = 2.2},
                     new { x = "March", value1 = 0.5,value2 = 1, value3 = 3.2},
@@ -67,6 +72,18 @@ namespace Web.Controllers
             {
                 throw ex;
             }
+        }
+
+        public async Task<ActionResult> GetTotChartsData()
+        {
+            var data = await _dashboardService.GetTotChartsData();
+            return Json(data);
+        }
+
+        public async Task<ActionResult> GetWrrChartsData()
+        {
+            var data = await _dashboardService.GetWrrChartsData();
+            return Json(data);
         }
 
     }

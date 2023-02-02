@@ -11,4 +11,22 @@ namespace ViewModels.Dashboard
         public long TotalTotLogs { get; set; } = 0;
         public long TotalWRRLogs { get; set; } = 0;
     }
+
+    public class TOTPieChartViewModel
+    {
+        public List<LogPieChartViewModel> ShiftDelays { get; set; }
+        public List<LogPieChartViewModel> ReworkDelays { get; set; }
+    }
+
+    public class WrrPieChartViewModel
+    {
+        public List<LogPieChartViewModel> WeldMethods { get; set; }
+        public List<LogPieChartViewModel> RodTypes { get; set; }
+    }
+    public class LogPieChartViewModel
+    {
+        public string Category { get; set; }
+        public float Value { get; set; }
+    }
+
 }
