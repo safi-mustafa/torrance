@@ -8,6 +8,7 @@
         background: #d61a5e
     }
 
+
     .dropdown-menu {
         padding: 0;
         margin: 0;
@@ -119,17 +120,28 @@
     .navbar-nav .show .dropdown-menu .dropdown-menu .dropdown-menu > li > a {
         padding: 16px 15px 16px 45px
     }
+
+    
 </style>
 <script type="text/javascript">$(document).ready(function () {
         $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
             if (!$(this).next().hasClass('show')) {
-                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                console.log("hasclass")
+               $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                $(this).parents('.dropdown-menu').first().find('.active').removeClass("active");
             }
             var $subMenu = $(this).next(".dropdown-menu");
             $subMenu.toggleClass('show');
-
+            if ($subMenu.hasClass("show")) {
+                $subMenu.parent().addClass('active');
+            }
+            else
+            {
+                $subMenu.parent().removeClass('active');
+            }
             $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
                 $('.dropdown-submenu .show').removeClass("show");
+               
             });
 
             return false;
