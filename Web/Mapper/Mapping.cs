@@ -307,6 +307,9 @@ namespace Models.Mapper
             //CraftRate
             CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
+            CreateMap<CraftRateBriefViewModel, CraftRateBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Name))
+                .ReverseMap();
             CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
             CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
             CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
