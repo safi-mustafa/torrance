@@ -100,7 +100,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();

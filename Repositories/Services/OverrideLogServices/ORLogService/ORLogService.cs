@@ -57,8 +57,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (
                                 (loggedInUserRole == "SuperAdmin")
                                 ||
-                                //(loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
-                                //||
+                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                ||
                                 (loggedInUserRole == "Employee" && x.RequesterId == parsedLoggedInId)
                             )
             //  &&
@@ -115,6 +115,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Shift)
                     .Include(x => x.Requester)
                     .Include(x => x.Unit)
+                    .Include(x => x.Approver)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

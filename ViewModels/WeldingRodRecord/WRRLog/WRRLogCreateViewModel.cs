@@ -43,6 +43,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
     }
 }
