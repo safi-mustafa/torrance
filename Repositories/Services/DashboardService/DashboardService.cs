@@ -1,6 +1,7 @@
 ﻿using DataLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using System;
@@ -9,23 +10,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Dashboard;
+using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Repositories.Services.DashboardService
 {
     public class DashboardService : IDashboardService
     {
         private readonly ToranceContext _db;
+        private readonly ILogger<DashboardService> _logger;
 
-        public DashboardService(ToranceContext db)
+        public DashboardService(ToranceContext db, ILogger<DashboardService> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
-        public async Task<TOTPieChartViewModel> GetTotChartsData()
+        public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
             var model = new TOTPieChartViewModel();
-            var totCount = await GetFilteredTOTLogs().CountAsync();
-            model.ShiftDelays = await GetFilteredTOTLogs()
+            var totCount = await GetFilteredTOTLogs(search).CountAsync();
+            model.ShiftDelays = await GetFilteredTOTLogs(search)
               .Include(x => x.ShiftDelay)
               .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
               {
@@ -33,7 +38,7 @@ namespace Repositories.Services.DashboardService
                   Value = x.Count() * 100 / totCount
               }).ToListAsync();
 
-            model.ReworkDelays = await GetFilteredTOTLogs()
+            model.ReworkDelays = await GetFilteredTOTLogs(search)
                 .Include(x => x.ReworkDelay)
                 .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
                 {
@@ -41,16 +46,15 @@ namespace Repositories.Services.DashboardService
                     Value = x.Count() * 100 / totCount
                 }).ToListAsync();
 
-
             return model;
 
         }
 
-        public async Task<WrrPieChartViewModel> GetWrrChartsData()
+        public async Task<WrrPieChartViewModel> GetWrrChartsData(WRRLogSearchViewModel search)
         {
             var model = new WrrPieChartViewModel();
-            var totCount = await GetFilteredWrrLogs().CountAsync();
-            model.WeldMethods = await GetFilteredWrrLogs()
+            var totCount = await GetFilteredWrrLogs(search).CountAsync();
+            model.WeldMethods = await GetFilteredWrrLogs(search)
               .Include(x => x.WeldMethod)
               .GroupBy(x => x.WeldMethodId).Select(x => new LogPieChartViewModel
               {
@@ -58,7 +62,7 @@ namespace Repositories.Services.DashboardService
                   Value = x.Count() * 100 / totCount
               }).ToListAsync();
 
-            model.RodTypes = await GetFilteredWrrLogs()
+            model.RodTypes = await GetFilteredWrrLogs(search)
                 .Include(x => x.RodType)
                 .GroupBy(x => x.RodTypeId).Select(x => new LogPieChartViewModel
                 {
@@ -71,14 +75,41 @@ namespace Repositories.Services.DashboardService
 
         }
 
-        private IQueryable<TOTLog> GetFilteredTOTLogs()
+        public async Task<DashboardViewModel> GetDashboardData()
         {
-            return _db.TOTLogs;
+            try
+            {
+                var dashboardData = new DashboardViewModel
+                {
+                    TotalORLogs = await _db.OverrideLogs.CountAsync(),
+                    TotalWRRLogs = await _db.WRRLogs.CountAsync(),
+                    TotalTotLogs = await _db.TOTLogs.CountAsync()
+                };
+                return dashboardData;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetDashboardData() threw the following exception");
+                return new DashboardViewModel();
+            }
         }
 
-        private IQueryable<WRRLog> GetFilteredWrrLogs()
+        private IQueryable<TOTLog> GetFilteredTOTLogs(TOTLogSearchViewModel search)
         {
-            return _db.WRRLogs;
+            return _db.TOTLogs.Where(x =>
+                    (search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
+                    &&
+                    (search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
+                );
+        }
+
+        private IQueryable<WRRLog> GetFilteredWrrLogs(WRRLogSearchViewModel search)
+        {
+            return _db.WRRLogs.Where(x =>
+                    (search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
+                    &&
+                    (search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
+                );
         }
     }
 }

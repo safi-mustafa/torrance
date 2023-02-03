@@ -5,6 +5,8 @@ using Pagination;
 using Repositories.Services.DashboardService;
 using System.Diagnostics;
 using ViewModels.Dashboard;
+using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.WeldingRodRecord.WRRLog;
 using Web.Models;
 
 namespace Web.Controllers
@@ -21,9 +23,9 @@ namespace Web.Controllers
             _dashboardService = dashboardService;
         }
         [Authorize(Roles = "SuperAdmin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _dashboardService.GetDashboardData());
         }
 
         public IActionResult Privacy()
@@ -74,15 +76,15 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<ActionResult> GetTotChartsData()
+        public async Task<ActionResult> GetTotChartsData(TOTLogSearchViewModel search)
         {
-            var data = await _dashboardService.GetTotChartsData();
+            var data = await _dashboardService.GetTotChartsData(search);
             return Json(data);
         }
 
-        public async Task<ActionResult> GetWrrChartsData()
+        public async Task<ActionResult> GetWrrChartsData(WRRLogSearchViewModel search)
         {
-            var data = await _dashboardService.GetWrrChartsData();
+            var data = await _dashboardService.GetWrrChartsData(search);
             return Json(data);
         }
 

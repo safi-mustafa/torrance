@@ -1,8 +1,8 @@
-﻿function GetTOTChartData() {
+﻿function GetTOTChartData(formData = "") {
     $.ajax({
         type: "GET",
         url: "/Home/GetTotChartsData",
-        data: "",
+        data: formData,
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {

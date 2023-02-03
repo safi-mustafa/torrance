@@ -1,4 +1,7 @@
 ﻿@using ViewModels.Dashboard;
+@using ViewModels.Common.Unit;
+@using ViewModels.Common.Department;
+
 @model DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
@@ -34,7 +37,7 @@
                     <div class="card-body">
                         <div class="content">
                             <h5 class="card-title"> Total TOTs</h5>
-                            <p class="card-text">0</p>
+                            <p class="card-text">@Model.TotalTotLogs</p>
                         </div>
 
                         <div class="icon">
@@ -48,7 +51,7 @@
                     <div class="card-body">
                         <div class="content">
                             <h5 class="card-title"> Total WWRs</h5>
-                            <p class="card-text">0</p>
+                            <p class="card-text">@Model.TotalWRRLogs</p>
                         </div>
 
                         <div class="icon">
@@ -65,7 +68,7 @@
                     <div class="card-body">
                         <div class="content">
                             <h5 class="card-title">Total Overrides</h5>
-                            <p class="card-text">0</p>
+                            <p class="card-text">@Model.TotalORLogs</p>
                         </div>
 
                         <div class="icon">
@@ -75,26 +78,29 @@
                 </div>
             </div>
         </div>
-       @* <div id="progress-charts-container" class="row">
-            <div id="progress-chart-div"></div>
-        </div>*@
+        @* <div id="progress-charts-container" class="row">
+                <div id="progress-chart-div"></div>
+            </div>*@
         <div class="row dashboard-filters-row">
+
             <div class="col-md-12">
-                <p>Filter By:</p>
-                <div class="filter-select">
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Departments</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>Select Units</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
+                <form id="dashboard-filter-form">
+                    <p>Filter By:</p>
+                    <div class="filter-select">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <partial name="_TOTPieCharts" />
             <partial name="_WrrPieCharts" />
@@ -114,9 +120,17 @@
 <script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
 <script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>
 <!-- Chart code -->
-<script>
-    $(function () {
+<script>$(function () {
         GetTOTChartData();
         GetWrrChartData();
-    })
-</script>
+
+        $(document).on("change", "#department-id, #unit-id", function () {
+            var departmentId = $("#department-id").val();
+            var unitId = $("#unit-id").val();
+
+            var formData = { "Department.Id": departmentId, "Unit.Id": unitId };
+
+            GetTOTChartData(formData);
+            GetWrrChartData(formData);
+        });
+    })</script>

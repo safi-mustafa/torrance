@@ -264,6 +264,9 @@ namespace TorranceApi.Mapper
             CreateMap<ToranceUser, UserBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
+            CreateMap<ToranceUser, ApproverBriefViewModel>()
+               .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
+               .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>().ReverseMap();
             CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();
             CreateMap<UserDetailViewModel, Employee>().ReverseMap();
@@ -365,8 +368,6 @@ namespace TorranceApi.Mapper
                 //.ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
-                .ReverseMap();
-            CreateMap<ApproverBriefViewModel, ToranceUser>()
                 .ReverseMap();
         }
     }

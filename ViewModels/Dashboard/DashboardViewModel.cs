@@ -10,6 +10,7 @@ namespace ViewModels.Dashboard
     {
         public long TotalTotLogs { get; set; } = 0;
         public long TotalWRRLogs { get; set; } = 0;
+        public long TotalORLogs { get; set; } = 0;
     }
 
     public class TOTPieChartViewModel

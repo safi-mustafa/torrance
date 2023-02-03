@@ -19,6 +19,15 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     public class WRRLogDetailViewModel : BaseCrudViewModel, IApprove
     {
         public long Id { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime Date { get { return CreatedOn; } }
+        public string FormattedDate
+        {
+            get
+            {
+                return Date.Date.ToString("MM/dd/yyyy");
+            }
+        }
         [DisplayName("Date Rod Returned")]
         public DateTime DateRodReturned { get; set; }
         public string FormattedDateRodReturned
