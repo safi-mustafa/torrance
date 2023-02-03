@@ -6,7 +6,7 @@ namespace ViewModels.WeldingRodRecord.WeldMethod
 {
     public class WeldMethodDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Name")]
         public string Name { get; set; }
     }

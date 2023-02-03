@@ -16,6 +16,7 @@ namespace ViewModels.Authentication
             base(isValidationEnabled, errorMessage)
         {
         }
+        public override string? Name { get; set; }
         //public string FirstName { get; set; }
         //public string LastName { get; set; }
         //private string _name;

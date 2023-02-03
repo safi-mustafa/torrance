@@ -44,7 +44,7 @@ namespace Web.Controllers
                     //new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Employee/Delete/Id"},
                 });
             }
-            
+
         }
 
         public async Task<ActionResult> ResetPassword(int id)
@@ -58,7 +58,7 @@ namespace Web.Controllers
                     var model = parsedResponse?.ReturnModel ?? new();
                     ChangeAccessCodeVM viewModel = new ChangeAccessCodeVM
                     {
-                        Id = model.Id,
+                        Id = model.Id ?? 0,
                         UserId = model.UserId,
                         CurrentAccessCode = model.EmployeeId
                     };

@@ -6,7 +6,7 @@ namespace ViewModels.OverrideLogs
 {
     public class ReasonForRequestDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Reason for Request")]
         public string Name { get; set; }
     }

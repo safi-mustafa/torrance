@@ -5,12 +5,12 @@ namespace ViewModels.TomeOnTools.ReworkDelay
 {
     public class ReworkDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public ReworkDelayBriefViewModel() : base(true, "The Rework Delay field is required.")
+        public ReworkDelayBriefViewModel() : base(false, "The Rework Delay field is required.")
         {
 
         }
         [DisplayName("ReworkDelay")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

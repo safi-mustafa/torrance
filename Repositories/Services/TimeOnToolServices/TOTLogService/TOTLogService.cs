@@ -52,12 +52,12 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (searchFilters.EquipmentNo == null || x.EquipmentNo == searchFilters.EquipmentNo)
+                            //&&
+                            //(searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
+                            //&&
+                            //(searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
-                            (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
-                            &&
-                            (searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
-                            &&
-                            (searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
+                            (searchFilters.Unit.Id == 0 || searchFilters.Unit.Id == null || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
                                 (loggedInUserRole == "SuperAdmin")

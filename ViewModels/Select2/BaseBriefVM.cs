@@ -6,7 +6,7 @@ namespace ViewModels
 
     public interface IBaseBriefVM
     {
-        long Id { get; set; }
+        long? Id { get; set; }
         string? Name { get; set; }
     }
     public class BaseBriefVM : IBaseBriefVM
@@ -30,7 +30,7 @@ namespace ViewModels
             ErrorMessage = errorMessage;
         }
         [RequiredSelect2("ErrorMessage", "IsValidationEnabled")]
-        public virtual long Id { get; set; }
+        public virtual long? Id { get; set; }
         public virtual string? Name { get; set; }
     }
 

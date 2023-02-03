@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230203071758_RemovedRequiredFromFieldsInTOTLog")]
+    partial class RemovedRequiredFromFieldsInTOTLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -982,6 +985,7 @@ namespace DataLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("ContractorId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<long>("CreatedBy")
@@ -997,6 +1001,7 @@ namespace DataLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("DepartmentId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<long?>("EmployeeId")
@@ -1028,12 +1033,14 @@ namespace DataLibrary.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long?>("PermittingIssueId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ReworkDelayId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ShiftDelayId")
+                    b.Property<long>("ShiftDelayId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ShiftId")
@@ -1655,11 +1662,15 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
-                        .HasForeignKey("ContractorId");
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Common.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
@@ -1677,15 +1688,21 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.PermittingIssue", "PermittingIssue")
                         .WithMany()
-                        .HasForeignKey("PermittingIssueId");
+                        .HasForeignKey("PermittingIssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.ReworkDelay", "ReworkDelay")
                         .WithMany()
-                        .HasForeignKey("ReworkDelayId");
+                        .HasForeignKey("ReworkDelayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.ShiftDelay", "ShiftDelay")
                         .WithMany()
-                        .HasForeignKey("ShiftDelayId");
+                        .HasForeignKey("ShiftDelayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.Shift", "Shift")
                         .WithMany()

@@ -10,12 +10,12 @@ namespace Models.TimeOnTools
 {
     public class TOTLog : BaseDBModel, IApprove
     {
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public string Twr { get; set; }
         public long? ManHours { get; set; }
-        public DateTime StartOfWork { get; set; }
-        public TimeSpan TimeRequested { get; set; }
-        public TimeSpan TimeSigned { get; set; }
+        public DateTime? StartOfWork { get; set; }
+        public TimeSpan? TimeRequested { get; set; }
+        public TimeSpan? TimeSigned { get; set; }
         public string? DelayReason { get; set; }
         public string JobDescription { get; set; }
         public string? Comment { get; set; }
@@ -25,32 +25,32 @@ namespace Models.TimeOnTools
         public Status Status { get; set; }
 
         [ForeignKey("Department")]
-        public long DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public long? DepartmentId { get; set; }
+        public Department? Department { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }
         public Unit Unit { get; set; }
 
         [ForeignKey("Contractor")]
-        public long ContractorId { get; set; }
-        public Contractor Contractor { get; set; }
+        public long? ContractorId { get; set; }
+        public Contractor? Contractor { get; set; }
 
         [ForeignKey("ShiftDelay")]
-        public long ShiftDelayId { get; set; }
-        public ShiftDelay ShiftDelay { get; set; }
+        public long? ShiftDelayId { get; set; }
+        public ShiftDelay? ShiftDelay { get; set; }
 
         [ForeignKey("ReworkDelay")]
-        public long ReworkDelayId { get; set; }
-        public ReworkDelay ReworkDelay { get; set; }
+        public long? ReworkDelayId { get; set; }
+        public ReworkDelay? ReworkDelay { get; set; }
 
         [ForeignKey("PermitType")]
         public long PermitTypeId { get; set; }
         public PermitType PermitType { get; set; }
 
         [ForeignKey("PermittingIssue")]
-        public long PermittingIssueId { get; set; }
-        public PermittingIssue PermittingIssue { get; set; }
+        public long? PermittingIssueId { get; set; }
+        public PermittingIssue? PermittingIssue { get; set; }
 
         [ForeignKey("Shift")]
         public long ShiftId { get; set; }

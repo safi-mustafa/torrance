@@ -6,7 +6,7 @@ namespace ViewModels.OverrideLogs
 {
     public class OverrideTypeDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Override Type")]
         public string Name { get; set; }
     }

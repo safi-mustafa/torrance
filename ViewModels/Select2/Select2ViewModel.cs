@@ -6,7 +6,7 @@ namespace Select2.Model
 {
     public interface ISelect2Data
     {
-        long Id { get; set; }
+        long? Id { get; set; }
         string Name { get; set; }
     }
     public class Select2ViewModel

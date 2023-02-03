@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230203072114_RemovedRequiredFromRelationshipsInTOTLog")]
+    partial class RemovedRequiredFromRelationshipsInTOTLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1033,7 +1036,7 @@ namespace DataLibrary.Migrations
                     b.Property<long?>("ReworkDelayId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ShiftDelayId")
+                    b.Property<long>("ShiftDelayId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ShiftId")
@@ -1685,7 +1688,9 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.ShiftDelay", "ShiftDelay")
                         .WithMany()
-                        .HasForeignKey("ShiftDelayId");
+                        .HasForeignKey("ShiftDelayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.Shift", "Shift")
                         .WithMany()
