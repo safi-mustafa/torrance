@@ -14,23 +14,45 @@
 
 <div class="card-header header-elements-inline">
     <div class="row col-12 p-0 m-0">
-        <div class="selected-filters-container col-10 mt-2 p-0"></div>
-        <div class="row col-2 p-0  m-0">
-            <div class="col-12">
-                @if (!string.IsNullOrEmpty(Model.DataTableHeaderHtml))
-                {
-                    @Html.Raw(Model.DataTableHeaderHtml)
-                }
-                @if (Model.DisableSearch == false)
-                {
-                    <button type="button" id="search-filters" class="btn-circle mb-2 float-right" data-toggle="tooltip" title="Search"><i class="icon-filter3 icon-1x"></i></button>
-                }
-                @if (Model.HideCreateButton == false)
-                {
-                    <button class="btn-circle mb-1 float-right" onclick="loadCreateModalPanel('@createUrl')"><i class="icon-plus-circle2 icon-1x" data-toggle="tooltip" title="Create"></i></button>
-                }
+        @if (string.IsNullOrEmpty(Model.DataTableHeaderHtml))
+        {
+            <div class="selected-filters-container col-10 mt-2 p-0"></div>
+            <div class="row col-2 p-0  m-0">
+                <div class="col-12">
+                    @if (!string.IsNullOrEmpty(Model.DataTableHeaderHtml))
+                    {
+                        @Html.Raw(Model.DataTableHeaderHtml)
+                    }
+                    @if (Model.DisableSearch == false)
+                    {
+                        <button type="button" id="search-filters" class="btn-circle mb-2 float-right" data-toggle="tooltip" title="Search"><i class="icon-filter3 icon-1x"></i></button>
+                    }
+                    @if (Model.HideCreateButton == false)
+                    {
+                        <button class="btn-circle mb-1 float-right" onclick="loadCreateModalPanel('@createUrl')"><i class="icon-plus-circle2 icon-1x" data-toggle="tooltip" title="Create"></i></button>
+                    }
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="selected-filters-container col-7 mt-2 p-0"></div>
+            <div class="row col-5 p-0  m-0">
+                <div class="col-lg-9 d-flex flex-row-reverse">
+                    @Html.Raw(Model.DataTableHeaderHtml)
+                </div>
+                <div class="col-3">
+                    @if (Model.DisableSearch == false)
+                    {
+                        <button type="button" id="search-filters" class="btn-circle mb-2 float-right" data-toggle="tooltip" title="Search"><i class="icon-filter3 icon-1x"></i></button>
+                    }
+                    @if (Model.HideCreateButton == false)
+                    {
+                        <button class="btn-circle mb-1 float-right" onclick="loadCreateModalPanel('@createUrl')"><i class="icon-plus-circle2 icon-1x" data-toggle="tooltip" title="Create"></i></button>
+                    }
+                </div>
+            </div>
+        }
     </div>
 </div>
 
