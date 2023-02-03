@@ -11,6 +11,7 @@ using Models.Common.Interfaces;
 using Web.Helpers;
 using Centangle.Common.ResponseHelpers.Models;
 using Repositories.Shared.Interfaces;
+using Enums;
 
 namespace Web.Controllers
 {
@@ -69,6 +70,20 @@ namespace Web.Controllers
                 return null;
             }
 
+        }
+
+        public async Task<bool> ApprovedStatus(long id, Status status )
+        {
+            try
+            {
+                if (await _service.SetApproveStatus(id, status))
+                {
+                    _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.Now);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex) { _logger.LogError($"{_controllerName} Approve method threw an exception for record with id: {id}, Message: {ex.Message}"); return false; }
         }
 
 

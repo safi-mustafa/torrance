@@ -2,6 +2,7 @@
 using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Helpers.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,25 @@ namespace Repositories.Shared
             {
                 _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
             }
+        }
+
+        public async Task<bool> SetApproveStatus(long id, Status status)
+        {
+            try
+            {
+                var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+                if (logRecord != null)
+                {
+                    logRecord.Status = status;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
+            }
+            return false;
         }
     }
 }
