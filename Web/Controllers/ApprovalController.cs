@@ -212,8 +212,8 @@ namespace Web.Controllers
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Approval/Detail?Id&Type"},
                     new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Approval/Update?Id&Type"},
-                    new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
-                    new DataTableActionViewModel() {Action="Approve",Title="Approve",Href=$"/Approval/Approve?Id&Type"},
+                    //new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
+                    //new DataTableActionViewModel() {Action="Approve",Title="Approve",Href=$"/Approval/Approve?Id&Type"},
             };
         }
 
@@ -243,7 +243,8 @@ namespace Web.Controllers
             {
                 Title = $"{_detailTitle} Details",
                 DetailViewPath = _detailViewPath,
-                DetailModel = model
+                DetailModel = model,
+                IsApprovalForm = true
             };
             return vm;
         }

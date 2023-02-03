@@ -24,6 +24,32 @@ function rejectRecord(element, modalPanelId = "crudModalPanel") {
     updateRecord(element, modalPanelId)
 }
 
+function approveDetail(element) {
+    sendApproveAjax(1);
+}
+
+function rejectDetail(element) {
+    sendApproveAjax(2);
+}
+
+function sendApproveAjax(status) {
+    var controller = $("#controller-name").val();
+    var id = $("#log-id").val();
+    var url = "/" + controller + "/UpdateStatus";
+    var data = { statusId: status, id: id };
+
+    $.ajax({
+        type: "Get",
+        url: url,
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            ReInitializeDataTables();
+        }
+    });
+}
+
 function updateRecord(element, modalPanelId = "crudModalPanel") {
     var form = element.closest("form")
     var updateUrl = form.action;

@@ -16,7 +16,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Department" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Department.Name) ? "-" : Model.Department.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Department?.Name) ? "-" : Model.Department.Name)</div>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Contractor" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Contractor.Name) ? "-" : Model.Contractor.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Contractor?.Name) ? "-" : Model.Contractor.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -52,13 +52,13 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ShiftDelay" class="form-label fw-600">Shift Delay</label>
-                    <div>@(string.IsNullOrEmpty(Model.ShiftDelay.Name) ? "-" : Model.ShiftDelay.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.ShiftDelay?.Name) ? "-" : Model.ShiftDelay.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
-                    <div>@(string.IsNullOrEmpty(Model.ReworkDelay.Name) ? "-" : Model.ReworkDelay.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="PermitType" class="form-label fw-600">Permit Type</label>
-                    <div>@(string.IsNullOrEmpty(Model.PermitType.Name) ? "-" : Model.PermitType.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.PermitType?.Name) ? "-" : Model.PermitType.Name)</div>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Unit" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Unit?.Name) ? "-" : Model.Unit.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -94,7 +94,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Shift" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Shift.Name) ? "-" : Model.Shift.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Shift?.Name) ? "-" : Model.Shift.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -108,7 +108,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Foreman" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Foreman.Name) ? "-" : Model.Foreman.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Foreman?.Name) ? "-" : Model.Foreman.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -122,7 +122,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Approver" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Approver.Name) ? "-" : Model.Approver.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? "-" : Model.Approver.Name)</div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -136,21 +136,21 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Unit" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Unit?.Name) ? "-" : Model.Unit.Name)</div>
                 </div>
             </div>
-@*
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="PermittingIssue" class="form-label fw-600">Permitting Issue</label>
-                    <div>@(string.IsNullOrEmpty(Model.PermittingIssue.Name) ? "-" : Model.PermittingIssue.Name)</div>
-                </div>
-            </div>*@
+            @*
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="PermittingIssue" class="form-label fw-600">Permitting Issue</label>
+                        <div>@(string.IsNullOrEmpty(Model.PermittingIssue.Name) ? "-" : Model.PermittingIssue.Name)</div>
+                    </div>
+                </div>*@
         </div>
     </div>
 
-
-
+    <input type="hidden" id="log-id" asp-for="Id" />
+    <input type="hidden" id="controller-name" value="TOTLog" />
 
 </div>
 

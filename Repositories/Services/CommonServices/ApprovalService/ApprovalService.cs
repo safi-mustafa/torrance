@@ -70,7 +70,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             TotalHours = x.HoursDelayed,
                             Date = x.CreatedOn,
                             Status = x.Status,
-                            TWR = x.Twr,
+                            //TWR = x.Twr,
                             Reason = x.DelayReason ?? "",
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
@@ -111,6 +111,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 var overrideLogsQueryable = _db.OverrideLogs
                     .Include(x => x.Requester)
                     .Include(x => x.Approver)
+                    .Include(x => x.ReasonForRequest)
                     //.Include(x => x.re)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -130,18 +131,18 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     {
                         Id = x.Id,
                         Approver = x.Approver != null ? x.Approver.UserName : "",
-                        Contractor = x.Contractor != null ? x.Contractor.Name : "",
+                        //Contractor = x.Contractor != null ? x.Contractor.Name : "",
                         Date = x.CreatedOn,
                         Status = x.Status,
                         TotalHours = x.OverrideHours,
                         Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                         //TWR = x.Twr,
                         Unit = x.Unit != null ? x.Unit.Name : "",
-                        Type = LogType.WeldingRodRecord,
+                        Type = LogType.Override,
                         Employee = x.Requester
                     }).AsQueryable();
                 var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable)).AsQueryable();
-                //var check = logsQueryable.ToQueryString();
+                var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
                 {
