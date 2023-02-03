@@ -66,6 +66,7 @@
     <Content Remove="wwwroot\js\bundles\datepicker.min.js" />
     <Content Remove="wwwroot\js\bundles\site.js" />
     <Content Remove="wwwroot\js\bundles\site.min.js" />
+    <None Remove="Views\DelayType\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -165,6 +166,7 @@
     <Folder Include="Controllers\SharedControllers\" />
     <Folder Include="Views\Approval\" />
     <Folder Include="Views\OverrideLog\" />
+    <Folder Include="Views\DelayType\" />
   </ItemGroup>
 
 </Project>

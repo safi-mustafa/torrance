@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.ReworkDelay
+namespace ViewModels.TimeOnTools.ReworkDelay
 {
     public class ReworkDelayModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Dashboard;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Repositories.Services.DashboardService

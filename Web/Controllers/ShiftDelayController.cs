@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.ShiftDelayService;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
 
 namespace Web.Controllers
 {

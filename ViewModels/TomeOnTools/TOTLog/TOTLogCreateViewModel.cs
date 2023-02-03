@@ -13,14 +13,14 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.WeldingRodRecord;
 
-namespace ViewModels.TomeOnTools.TOTLog
+namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {

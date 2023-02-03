@@ -22,10 +22,12 @@
   <ItemGroup>
     <None Remove="Services\CommonServices\ApprovalService\" />
     <None Remove="Services\CommonServices\ApprovalService\Interface\" />
+    <None Remove="Services\TimeOnToolServices\DelayTypeService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\CommonServices\ApprovalService\" />
     <Folder Include="Services\CommonServices\ApprovalService\Interface\" />
     <Folder Include="Services\DashboardService\TOTService\" />
+    <Folder Include="Services\TimeOnToolServices\DelayTypeService\" />
   </ItemGroup>
 </Project>

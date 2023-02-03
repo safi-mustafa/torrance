@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.TomeOnTools.ReworkDelay
+namespace ViewModels.TimeOnTools.ReworkDelay
 {
     public class ReworkDelaySearchViewModel : BaseSearchModel
     {

@@ -1,6 +1,6 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.Shift;
+using ViewModels.TimeOnTools.Shift;
 using Repositories.Services.TimeOnToolServices.ShiftService;
 using ViewModels.AppSettings.Map;
 using Microsoft.AspNetCore.Authorization;

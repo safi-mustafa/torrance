@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.TomeOnTools.Shift
+namespace ViewModels.TimeOnTools.Shift
 {
     public class ShiftSearchViewModel : BaseSearchModel
     {

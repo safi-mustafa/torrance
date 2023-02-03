@@ -1,7 +1,7 @@
 ﻿using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.PermitType;
+using ViewModels.TimeOnTools.PermitType;
 
 namespace Repositories.Services.TimeOnToolServices.PermitTypeService
 {

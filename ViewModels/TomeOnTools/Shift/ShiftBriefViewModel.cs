@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.Shift
+namespace ViewModels.TimeOnTools.Shift
 {
     public class ShiftBriefViewModel : BaseBriefVM, ISelect2Data
     {

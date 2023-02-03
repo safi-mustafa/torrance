@@ -1,10 +1,10 @@
 ﻿using ViewModels.Shared;
 using ViewModels.Common.Contractor;
-using ViewModels.TomeOnTools.Shift;
+using ViewModels.TimeOnTools.Shift;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
-using ViewModels.TomeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord;
 using Models.Common.Interfaces.OverrideLog;

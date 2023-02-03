@@ -11,7 +11,7 @@ using ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Enums;
 using Centangle.Common.ResponseHelpers.Models;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools.TOTLog;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using ViewModels.WeldingRodRecord.WRRLog;

@@ -10,7 +10,7 @@ using Repositories.Common;
 using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
 
 namespace Repositories.Services.TimeOnToolServices.ShiftDelayService
 {

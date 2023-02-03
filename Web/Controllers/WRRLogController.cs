@@ -7,7 +7,7 @@ using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers

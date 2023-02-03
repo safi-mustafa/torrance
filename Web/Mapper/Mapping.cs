@@ -17,13 +17,14 @@ using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.TomeOnTools.SOW;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools;
+using ViewModels.TimeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.TimeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.SOW;
+using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
@@ -43,7 +44,7 @@ namespace Models.Mapper
             CreateMap<ContractorModifyViewModel, ContractorDetailViewModel>().ReverseMap();
             CreateMap<Contractor, ContractorBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ContractorBriefViewModel>().ReverseMap();
-            
+
             //Company
             CreateMap<CompanyModifyViewModel, Company>().ReverseMap();
             CreateMap<Company, CompanyDetailViewModel>().ReverseMap();
@@ -86,6 +87,13 @@ namespace Models.Mapper
             CreateMap<LocationModifyViewModel, LocationDetailViewModel>().ReverseMap();
             CreateMap<Location, LocationBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, LocationBriefViewModel>().ReverseMap();
+
+            //PermitType
+            CreateMap<DelayTypeModifyViewModel, DelayType>().ReverseMap();
+            CreateMap<DelayType, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayTypeModifyViewModel, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayType, DelayTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, DelayTypeBriefViewModel>().ReverseMap();
 
             //PermitType
             CreateMap<PermitTypeModifyViewModel, PermitType>().ReverseMap();
@@ -134,6 +142,8 @@ namespace Models.Mapper
             CreateMap<EmployeeModifyViewModel, Employee>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
+                //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                //.ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
@@ -214,7 +224,9 @@ namespace Models.Mapper
             CreateMap<ToranceUser, ApproverBriefViewModel>()
                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
-            CreateMap<SignUpModel, ToranceUser>().ReverseMap();
+            CreateMap<SignUpModel, ToranceUser>()
+
+                .ReverseMap();
 
             //Employee
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();

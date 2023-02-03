@@ -11,6 +11,7 @@
     <EmbeddedResource Remove="OverrideLogs\Log\**" />
     <None Remove="OverrideLogs\Log\**" />
     <None Remove="OverrideLogs\Interface\" />
+    <None Remove="TomeOnTools\DelayType\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
     <Folder Include="OverrideLogs\LeadPlanners\" />
     <Folder Include="OverrideLogs\OverrideType\" />
     <Folder Include="OverrideLogs\Interface\" />
+    <Folder Include="TomeOnTools\DelayType\" />
   </ItemGroup>
 
   <ItemGroup>

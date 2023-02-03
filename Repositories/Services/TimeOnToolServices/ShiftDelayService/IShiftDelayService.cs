@@ -1,7 +1,7 @@
 ﻿using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
 
 namespace Repositories.Services.TimeOnToolServices.ShiftDelayService
 {

@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.TOTLog
+namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogBriefViewModel : BaseBriefVM, ISelect2Data
     {

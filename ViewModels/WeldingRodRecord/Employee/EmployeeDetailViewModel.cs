@@ -6,6 +6,7 @@ using System.ComponentModel;
 using ViewModels.CRUD;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
+using ViewModels.Common.Company;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -68,7 +69,7 @@ namespace ViewModels.WeldingRodRecord.Employee
         //    }
         //}
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public ApproverStatus IsApprover { get; set; }
     }
     

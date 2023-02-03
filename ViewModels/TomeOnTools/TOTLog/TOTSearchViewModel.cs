@@ -7,7 +7,7 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 
-namespace ViewModels.TomeOnTools.TOTLog
+namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogSearchViewModel : BaseSearchModel
     {

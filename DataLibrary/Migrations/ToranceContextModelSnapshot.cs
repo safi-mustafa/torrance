@@ -754,6 +754,41 @@ namespace DataLibrary.Migrations
                     b.ToTable("ReasonForRequests");
                 });
 
+            modelBuilder.Entity("Models.TimeOnTools.DelayType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("ActiveStatus")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DelayTypes");
+                });
+
             modelBuilder.Entity("Models.TimeOnTools.PermitType", b =>
                 {
                     b.Property<long>("Id")
@@ -1227,6 +1262,9 @@ namespace DataLibrary.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ContractorId")
                         .HasColumnType("bigint");
 
@@ -1301,6 +1339,8 @@ namespace DataLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ContractorId");
 
@@ -1724,11 +1764,19 @@ namespace DataLibrary.Migrations
 
             modelBuilder.Entity("Models.WeldingRodRecord.Employee", b =>
                 {
+                    b.HasOne("Models.Common.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("Contractor");
                 });
