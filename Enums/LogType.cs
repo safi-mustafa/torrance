@@ -8,6 +8,8 @@ namespace Enums
         [Display(Name = "Time On Tools")]
         TimeOnTools,
         [Display(Name = "Welding Rod Record")]
-        WeldingRodRecord
+        WeldingRodRecord,
+        [Display(Name = "Override")]
+        Override
     }
 }

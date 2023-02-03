@@ -221,6 +221,7 @@ namespace Models.Mapper
 
             //User
             CreateMap<ToranceUser, UserBriefViewModel>()
+                .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
             CreateMap<ToranceUser, ApproverBriefViewModel>()
@@ -346,7 +347,7 @@ namespace Models.Mapper
 
 
             //ORLog
-            
+
             CreateMap<OverrideLog, ORLogDetailViewModel>()
                  .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();

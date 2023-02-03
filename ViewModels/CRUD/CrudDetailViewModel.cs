@@ -11,6 +11,7 @@ namespace ViewModels.CRUD
         }
         public string Title { get; set; }
         public string DetailViewPath { get; set; }
+        public bool IsApprovalForm { get; set; }
         public IBaseCrudViewModel DetailModel { get; set; }
     }
 }

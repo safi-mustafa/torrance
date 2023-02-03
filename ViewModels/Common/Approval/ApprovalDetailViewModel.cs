@@ -26,7 +26,7 @@ namespace ViewModels.Common
         public string Department { get; set; }
         public string Contractor { get; set; }
         public DelayType DelayType { get; set; }
-        public string ResonForDelay { get => DelayType.Name; }
+        public string ResonForDelay { get => DelayType != null ? DelayType.Name : ""; }
 
         public string Reason { get; set; }
 
