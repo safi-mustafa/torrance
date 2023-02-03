@@ -26,9 +26,31 @@ namespace Web.Controllers
             _logger = logger;
         }
 
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+            <div class=""col-lg-6"">
+	            <div class=""d-flex flex-row"">
+                    <div class=""col-4"">
+                        <span class=""badge Submitted""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>
+                    <div class=""col-4"">
+                        <span class=""badge Approved""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""col-4"">
+                        <span class=""badge Rejected""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>
+	            </div>
+            </div>";
+            return vm;
+        }
+
         protected override TOTLogSearchViewModel SetDefaultFilters()
         {
-            var filters= base.SetDefaultFilters();
+            var filters = base.SetDefaultFilters();
             filters.StatusNot = Enums.Status.Pending;
             return filters;
         }
