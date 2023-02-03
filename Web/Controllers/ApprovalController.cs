@@ -36,7 +36,8 @@ namespace Web.Controllers
         private string _detailViewPath;
         private string _detailTitle;
 
-        public ApprovalController(
+        public
+            ApprovalController(
             IApprovalService approvaleService,
             ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> totService,
             IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
