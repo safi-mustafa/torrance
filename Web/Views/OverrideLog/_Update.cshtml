@@ -12,13 +12,8 @@
             {
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" />
-                    </div>
-                </div>
 
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
             }
@@ -34,7 +29,6 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
-
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -109,6 +103,20 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+@*<input asp-for="Status" type="hidden" id="status-id" />
+    <input asp-for="Employee.Id" type="hidden" />*@
+<input asp-for="Id" type="hidden" />
+
+@section Scripts{
+    $(function(){
+    $(document).on("change", "#requester-id", function(){
+
+    });
+    });
+}
+=======
 @*<input asp-for="Status" type="hidden" id="status-id" />*@
 <input asp-for="Requester.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
+>>>>>>> c156145a4d31fdda7682babc5cff11cabf0acde4

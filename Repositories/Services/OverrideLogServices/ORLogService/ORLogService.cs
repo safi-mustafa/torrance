@@ -53,8 +53,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Requester.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.Requester.Name) || x.Requester.FirstName == searchFilters.Requester.Name)
-                          //  &&
-                            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
+            //  &&
+            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
         }
 
@@ -113,7 +113,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
                     //var selectedEmployees = await GetOverrideLogEmployees(id);
-                 //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
+                    //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -127,7 +127,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-      
+
 
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
@@ -183,6 +183,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        
+
     }
 }

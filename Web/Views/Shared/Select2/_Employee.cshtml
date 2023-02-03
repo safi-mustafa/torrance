@@ -3,11 +3,13 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "employee-id";
+    var heading = ViewData["Heading"] != null && !string.IsNullOrEmpty(ViewData["Heading"].ToString()) ? ViewData["Heading"].ToString() : "Employee";
+
 }
 
 
 <div class="form-group">
-    <label class="form-label fw-600">Employee</label>
+    <label class="form-label fw-600">@heading</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
         {
@@ -41,6 +43,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Employee");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select @heading");
     });
 </script>
