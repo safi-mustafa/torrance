@@ -35,6 +35,7 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Id");
                 ModelState.Remove("Requester.Name");
             }
+            ModelState.Remove("Company.Name");
             return base.Post(model);
         }
 
@@ -47,6 +48,7 @@ namespace API.Controllers
             {
                 model.Requester = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
+            ModelState.Remove("Company.Name");
             return base.Put(model);
         }
     }

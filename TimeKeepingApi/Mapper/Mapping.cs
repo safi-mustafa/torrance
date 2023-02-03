@@ -357,8 +357,10 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
                 .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
-                //.ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
-                //.ForMember(x => x.Requester, opt => opt.Ignore())
+                .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
+                .ForMember(x => x.Requester, opt => opt.Ignore())
+                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogDetailViewModel, OverrideLog>()
                 //.ForMember(x => x.Employees, opt => opt.Ignore())
