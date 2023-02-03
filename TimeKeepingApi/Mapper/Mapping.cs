@@ -30,6 +30,7 @@ using Models.OverrideLogs;
 using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.OverrideLogs;
+using ViewModels.Common.Company;
 
 namespace TorranceApi.Mapper
 {
@@ -44,6 +45,14 @@ namespace TorranceApi.Mapper
             CreateMap<ContractorModifyViewModel, ContractorDetailViewModel>().ReverseMap();
             CreateMap<Contractor, ContractorBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ContractorBriefViewModel>().ReverseMap();
+
+            //Company
+            CreateMap<CompanyCreateViewModel, Company>().ReverseMap();
+            CreateMap<CompanyModifyViewModel, Company>().ReverseMap();
+            CreateMap<Company, CompanyDetailViewModel>().ReverseMap();
+            CreateMap<CompanyModifyViewModel, CompanyDetailViewModel>().ReverseMap();
+            CreateMap<Company, CompanyBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CompanyBriefViewModel>().ReverseMap();
 
             //Department
             CreateMap<DepartmentModifyViewModel, Department>().ReverseMap();

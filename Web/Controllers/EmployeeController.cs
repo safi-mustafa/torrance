@@ -76,24 +76,24 @@ namespace Web.Controllers
         public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
         {
             var response = await _employeeService.ResetAccessCode(model);
-
-            if (response.Status==System.Net.HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index");
-            }
-            ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
-            //if (Request.IsAjaxRequest())
+            return RedirectToAction("Index");
+            //if (response.Status==System.Net.HttpStatusCode.OK)
             //{
-            var errors = ModelState.Keys.SelectMany(k => ModelState[k].Errors)
-                               .Select(m => m.ErrorMessage).ToList();
-
-            return Json(new JsonResultViewModel
-            {
-                Success = false,
-                Errors = errors
-            });
+            //    return RedirectToAction("Index");
             //}
-           
+            //ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
+            ////if (Request.IsAjaxRequest())
+            ////{
+            //var errors = ModelState.Keys.SelectMany(k => ModelState[k].Errors)
+            //                   .Select(m => m.ErrorMessage).ToList();
+
+            //return Json(new JsonResultViewModel
+            //{
+            //    Success = false,
+            //    Errors = errors
+            //});
+            ////}
+
         }
         public override List<DataTableViewModel> GetColumns()
         {

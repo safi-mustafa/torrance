@@ -14,6 +14,7 @@ using Repositories.Services.AppSettingServices.DropboxServices;
 using Repositories.Services.AppSettingServices.MappService;
 using Repositories.Services.CommonServices.ApprovalService;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
+using Repositories.Services.CommonServices.CompanyService;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
@@ -103,6 +104,7 @@ namespace Web.Extensions
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddHostedService<SeedWorker>();
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
+            services.AddScoped(typeof(ICompanyService<,,>), typeof(CompanyService<,,>));
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));

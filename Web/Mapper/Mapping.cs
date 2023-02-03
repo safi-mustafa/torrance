@@ -10,6 +10,7 @@ using ViewModels.AppSettings.Map;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
+using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -42,6 +43,13 @@ namespace Models.Mapper
             CreateMap<ContractorModifyViewModel, ContractorDetailViewModel>().ReverseMap();
             CreateMap<Contractor, ContractorBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ContractorBriefViewModel>().ReverseMap();
+            
+            //Company
+            CreateMap<CompanyModifyViewModel, Company>().ReverseMap();
+            CreateMap<Company, CompanyDetailViewModel>().ReverseMap();
+            CreateMap<CompanyModifyViewModel, CompanyDetailViewModel>().ReverseMap();
+            CreateMap<Company, CompanyBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, CompanyBriefViewModel>().ReverseMap();
 
             //Department
             CreateMap<DepartmentModifyViewModel, Department>().ReverseMap();
