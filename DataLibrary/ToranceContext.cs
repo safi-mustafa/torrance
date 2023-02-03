@@ -24,7 +24,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     {
         _httpContextAccessor = httpContextAccessor;
     }
-   
+
     public DbSet<Contractor> Contractors { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Unit> Units { get; set; }
@@ -38,6 +38,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<RodType> RodTypes { get; set; }
+    public DbSet<DelayType> DelayTypes { get; set; }
     public DbSet<WeldMethod> WeldMethods { get; set; }
     public DbSet<WRRLog> WRRLogs { get; set; }
     public DbSet<TOTLog> TOTLogs { get; set; }
