@@ -53,6 +53,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Requester.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.Requester.Name) || x.Requester.FirstName == searchFilters.Requester.Name)
+                            &&
+                            (
+                                (loggedInUserRole == "SuperAdmin")
+                                ||
+                                //(loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                //||
+                                (loggedInUserRole == "Employee" && x.RequesterId == parsedLoggedInId)
+                            )
             //  &&
             //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
