@@ -63,20 +63,22 @@ namespace Web.Controllers
         {
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Employee.Id");
-                ModelState.Remove("Employee.Name");
+                ModelState.Remove("Requester.Id");
+                ModelState.Remove("Requester.Name");
             }
+            ModelState.Remove("Company.Name");
             return base.Create(model);
         }
 
-        public override Task<ActionResult> Update(int id)
+        public override Task<ActionResult> Update(ORLogModifyViewModel model)
         {
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Employee.Id");
-                ModelState.Remove("Employee.Name");
+                ModelState.Remove("Requester.Id");
+                ModelState.Remove("Requester.Name");
             }
-            return base.Update(id);
+            ModelState.Remove("Company.Name");
+            return base.Update(model);
         }
 
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
