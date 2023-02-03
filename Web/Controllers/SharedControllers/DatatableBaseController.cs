@@ -46,7 +46,13 @@ namespace Web.Controllers.SharedControllers
             vm.ControllerName = _controllerName;
             vm.DataUrl = $"/{_controllerName}/Search";
             vm.SearchViewPath = $"~/Views/{_controllerName}/_Search.cshtml";
+            vm = OverrideCrudListVM(vm);
             return DataTableIndexView(vm);
+        }
+
+        protected virtual CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            return vm;
         }
 
         protected virtual SearchViewModel SetDefaultFilters()
