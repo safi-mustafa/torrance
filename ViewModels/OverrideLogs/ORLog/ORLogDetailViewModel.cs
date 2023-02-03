@@ -46,6 +46,18 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Override Hours")]
         public int OverrideHours { get; set; }
 
+        public float FormattedCraft
+        {
+            get
+            {
+                if(CraftRate != null)
+                {
+                    return CraftRate.Rate * OverrideHours;
+                }
+                return 0;
+            }
+        }
+
         [Display(Name = "PO Number")]
 
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]

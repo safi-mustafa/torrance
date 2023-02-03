@@ -31,17 +31,17 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Company",data = "Company.Name"},
+                new DataTableViewModel{title = "Submitted",data = "FormattedDateSubmitted"},
                 new DataTableViewModel{title = "Requester",data = "Requester.Name"},
-                new DataTableViewModel{title = "Date Submitted",data = "FormattedDateSubmitted"},
-                new DataTableViewModel{title = "Description",data = "Description"},
+                new DataTableViewModel{title = "Company",data = "Company.Name"},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name"},
+                new DataTableViewModel{title = "Unit",data = "Unit.Name"},
+                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name"},
+                new DataTableViewModel{title = "Override Type",data = "OverrideType.Name"},
+                new DataTableViewModel{title = "Craft",data = "FormattedCraft"},
                 new DataTableViewModel{title = "Override Hours",data = "OverrideHours"},
                 new DataTableViewModel{title = "PO Number",data = "PONumber"},
-                new DataTableViewModel{title = "Shift",data = "Shift.Name"},
-                new DataTableViewModel{title = "Reason for Request",data = "ReasonForRequest.Name"},
-                new DataTableViewModel{title = "Craft Rate",data = "CraftRate.Name"},
-                new DataTableViewModel{title = "Craft Skill",data = "CraftSkill.Name"},
-                new DataTableViewModel{title = "Override Type",data = "OverrideType.Name"},
+                new DataTableViewModel{title = "Work Completed Date",data = "FormattedDateOfWorkCompleted"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;
