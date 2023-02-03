@@ -26,6 +26,8 @@ namespace ViewModels.TimeOnTools.TOTLog
     {
         public DateTime? Date { get; set; } = DateTime.Now;
         public string Twr { get; set; }
+
+        [Display(Name = "Total Manhours")]
         public long? ManHours { get; set; }
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
@@ -36,6 +38,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string DelayReason { get; set; }
         public string? JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
+        [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
         public long EquipmentNo { get; set; }

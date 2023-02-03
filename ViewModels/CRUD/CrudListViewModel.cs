@@ -22,6 +22,8 @@ namespace ViewModels.CRUD
         }
         public string DataUrl { get; set; }
         public string SearchViewPath { get; set; }
+
+        public string DataTableHeaderHtml { get; set; }
         public bool HideCreateButton { get; set; } = false;
         public bool HideSearchFiltersButton { get; set; } = false;
         public string CreateButtonAction { get; set; } = "Create";
