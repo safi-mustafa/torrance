@@ -97,9 +97,9 @@ namespace Repositories.Services.DashboardService
         private IQueryable<TOTLog> GetFilteredTOTLogs(TOTLogSearchViewModel search)
         {
             return _db.TOTLogs.Where(x =>
-                    (search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
+                    (search.Department.Id == null || search.Department.Id == x.DepartmentId)
                     &&
-                    (search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
+                    (search.Unit.Id == null || search.Unit.Id == x.UnitId)
                 );
         }
 
