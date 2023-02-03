@@ -21,9 +21,9 @@ using ViewModels.WeldingRodRecord.Employee;
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
     public class ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<OverrideLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, IIdentitifier, new()
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -107,6 +107,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Shift)
                     .Include(x => x.Requester)
                     .Include(x => x.Company)
+                    .Include(x => x.Unit)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
