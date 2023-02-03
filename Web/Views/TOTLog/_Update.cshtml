@@ -13,7 +13,8 @@
             {
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
             }
@@ -88,7 +89,7 @@
 
 
 
-         
+
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -112,58 +113,58 @@
                 <input asp-for="Approver.Id" type="hidden" />
             }
             @*  <div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="HoursDelayed" class="form-label fw-600"></label>
-            <input asp-for="HoursDelayed" type="number" class="form-control" />
-            <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="HoursDelayed" class="form-label fw-600"></label>
+                <input asp-for="HoursDelayed" type="number" class="form-control" />
+                <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
 
             @*          <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
-            </div>
-            </div>
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
+                </div>
+                </div>
             *@
 
 
             @*   <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-            </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+                </div>
+                <div class="col-lg-6">
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+                </div>
+                </div>*@
             @*<div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="Date" class="form-label fw-600"></label>
-            <input asp-for="Date" type="date" class="form-control" />
-            <span asp-validation-for="Date" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Date" class="form-label fw-600"></label>
+                <input asp-for="Date" type="date" class="form-control" />
+                <span asp-validation-for="Date" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
             @* <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-            </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+                </div>
+                <div class="col-lg-6">
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+                </div>*@
             @*<div class="col-lg-6">
-            <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
-            <input asp-for="TimeSigned" type="time" class="form-control" />
-            <span asp-validation-for="TimeSigned" class="text-danger"></span>
-            </div>
-            <div class="col-lg-6">
-            <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
-            <input asp-for="TimeRequested" type="time" class="form-control" />
-            <span asp-validation-for="TimeRequested" class="text-danger"></span>
-            </div>*@
+                <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeSigned" type="time" class="form-control" />
+                <span asp-validation-for="TimeSigned" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeRequested" type="time" class="form-control" />
+                <span asp-validation-for="TimeRequested" class="text-danger"></span>
+                </div>*@
         </div>
     </div>
 </div>

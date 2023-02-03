@@ -67,5 +67,9 @@ namespace Models.TimeOnTools
         [ForeignKey("Employee")]
         public long? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
+
+        [ForeignKey("Company")]
+        public long CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }
