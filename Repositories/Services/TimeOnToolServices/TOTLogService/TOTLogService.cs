@@ -7,11 +7,13 @@ using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
+using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
 using Repositories.Shared;
 using Repositories.Shared.UserInfoServices;
+using System.Data;
 using System.Linq.Expressions;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
@@ -73,64 +75,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             ;
         }
 
-        //public override IQueryable<TOTLog> GetPaginationDbSet()
-        //{
-        //    return _db.TOTLogs
-        //            .Include(x => x.Unit)
-        //            .Include(x => x.Department)
-        //            .Include(x => x.Contractor)
-        //            .Include(x => x.ReworkDelay)
-        //            .Include(x => x.ShiftDelay)
-        //            .Include(x => x.Shift)
-        //            .Include(x => x.PermitType)
-        //            .Include(x => x.Approver)
-        //            .Include(x => x.Foreman)
-        //            .Include(x => x.Employee)
-        //            .Include(x => x.PermittingIssue).AsQueryable();
-        //}
-
-        //public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
-        //{
-        //    var searchFilters = search as TOTLogSearchViewModel;
-        //    var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-        //    var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-        //    var parsedLoggedInId = long.Parse(loggedInUserId);
-
-        //    try
-        //    {
-        //        var filters = SetQueryFilter(search);
-        //        var result =  _db.TOTLogs.Where(filters).AsQueryable();
-
-        //        if(loggedInUserRole == "Employee")
-        //        {
-        //            result = result.Where(x => x.CreatedBy == parsedLoggedInId).AsQueryable();
-        //        }
-        //        if(loggedInUserRole == "Approver")
-        //        {
-        //            result = result.Where(x => x.ApproverId == parsedLoggedInId).AsQueryable();
-        //        }
-        //        var paginatedResult = await result.Paginate(search);
-        //        if (paginatedResult != null)
-        //        {
-        //            var paginatedResponse = new PaginatedResultModel<M>();
-        //            paginatedResponse.Items = _mapper.Map<List<M>>(paginatedResult.Items.ToList());
-        //            paginatedResponse._meta = paginatedResult._meta;
-        //            paginatedResponse._links = paginatedResult._links;
-        //            var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResponse };
-        //            return response;
-        //        }
-        //        _logger.LogWarning($"No record found for TOTLog in GetAll()");
-        //        return Response.NotFoundResponse(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"GetAll() method for TOTLogs threw an exception.");
-        //        return Response.BadRequestResponse(_response);
-        //    }
-
-        //   // return base.GetAll<M>(search);
-        //}
-
         public override async Task<IRepositoryResponse> GetById(long id)
         {
             try
@@ -164,7 +108,59 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
+        public async override Task<IRepositoryResponse> Create(CreateViewModel model)
+        {
+            try
+            {
+                var mappedModel = _mapper.Map<TOTLog>(model);
+                await SetRequesterId(mappedModel);
+                await _db.Set<TOTLog>().AddAsync(mappedModel);
+                await _db.SaveChangesAsync();
+                var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception thrown in Create method of {typeof(TOTLog).FullName}");
+                return Response.BadRequestResponse(_response);
+            }
+        }
 
+        public async override Task<IRepositoryResponse> Update(UpdateViewModel model)
+        {
+            try
+            {
+                var updateModel = model as BaseUpdateVM;
+                if (updateModel != null)
+                {
+                    var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
+                    if (record != null)
+                    {
+                        var dbModel = _mapper.Map(model, record);
+                        await SetRequesterId(dbModel);
+                        await _db.SaveChangesAsync();
+                        var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
+                        return response;
+                    }
+                    _logger.LogWarning($"Record for id: {updateModel?.Id} not found in {typeof(TOTLog).FullName} in Update()");
+                }
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Update() for {typeof(TOTLog).FullName} threw the following exception");
+                return Response.BadRequestResponse(_response);
+            }
+        }
 
+        private async Task SetRequesterId(TOTLog mappedModel)
+        {
+            var role = _userInfoService.LoggedInUserRole();
+            if (role != "Employee")
+            {
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
+            }
+            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+        }
     }
 }
