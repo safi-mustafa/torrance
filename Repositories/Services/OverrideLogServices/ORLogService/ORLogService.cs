@@ -106,7 +106,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.OverrideType)
                     .Include(x => x.Shift)
                     .Include(x => x.Requester)
-                    .Include(x => x.Company)
                     .Include(x => x.Unit)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
@@ -136,6 +135,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 try
                 {
                     var mappedModel = _mapper.Map<OverrideLog>(model);
+                    mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
 
@@ -165,6 +165,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         if (record != null)
                         {
                             var dbModel = _mapper.Map(model, record);
+                            dbModel.CompanyId = await _db.Employees.Where(x => x.Id == dbModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
                             await _db.SaveChangesAsync();
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
