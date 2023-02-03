@@ -26,6 +26,7 @@ using Repositories.Services.OverrideLogServices.LeadPlannerService;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Services.OverrideLogServices.OverrideTypeService;
 using Repositories.Services.OverrideLogServices.ReasonForRequestService;
+using Repositories.Services.TimeOnToolServices.DelayTypeService;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
 using Repositories.Services.TimeOnToolServices.ReworkService;
@@ -108,6 +109,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));
+            services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
             services.AddScoped(typeof(IPermittingIssueService<,,>), typeof(PermittingIssueService<,,>));
             services.AddScoped(typeof(IReworkDelayService<,,>), typeof(ReworkDelayService<,,>));
             services.AddScoped(typeof(IShiftDelayService<,,>), typeof(ShiftDelayService<,,>));
@@ -132,7 +134,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
-            services.AddScoped<IDashboardService,DashboardService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();

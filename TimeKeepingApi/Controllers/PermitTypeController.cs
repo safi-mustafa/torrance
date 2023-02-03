@@ -1,7 +1,7 @@
 ﻿using System;
 using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.PermitType;
+using ViewModels.TimeOnTools.PermitType;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
 using Microsoft.AspNetCore.Authorization;
 

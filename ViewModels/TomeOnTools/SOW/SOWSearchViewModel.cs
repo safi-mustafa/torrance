@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.TomeOnTools.SOW
+namespace ViewModels.TimeOnTools.SOW
 {
     public class SOWSearchViewModel : BaseSearchModel
     {

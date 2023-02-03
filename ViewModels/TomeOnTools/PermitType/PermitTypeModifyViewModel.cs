@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.PermitType
+namespace ViewModels.TimeOnTools.PermitType
 {
     public class PermitTypeModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {

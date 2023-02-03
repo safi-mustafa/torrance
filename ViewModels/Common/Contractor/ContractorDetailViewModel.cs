@@ -6,7 +6,7 @@ namespace ViewModels.Common.Contractor
 {
     public class ContractorDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Name")]
         public string Name { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.SOW;
+using ViewModels.TimeOnTools.SOW;
 using Repositories.Services.TimeOnToolServices.SOWService;
 using Microsoft.AspNetCore.Authorization;
 

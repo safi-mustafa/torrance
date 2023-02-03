@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.SOW
+namespace ViewModels.TimeOnTools.SOW
 {
     public class SOWBriefViewModel : BaseBriefVM, ISelect2Data
     {

@@ -1,6 +1,6 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.ReworkDelay;
 using Repositories.Services.TimeOnToolServices.ReworkService;
 using Microsoft.AspNetCore.Authorization;
 

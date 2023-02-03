@@ -1,6 +1,6 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
 using Repositories.Services.TimeOnToolServices.ShiftDelayService;
 using Microsoft.AspNetCore.Authorization;
 

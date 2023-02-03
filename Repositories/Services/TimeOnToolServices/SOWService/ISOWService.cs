@@ -1,7 +1,7 @@
 ﻿using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.SOW;
+using ViewModels.TimeOnTools.SOW;
 
 
 namespace Repositories.Services.TimeOnToolServices.SOWService

@@ -8,7 +8,7 @@ namespace ViewModels.Shared
 {
     public class FolderDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Name")]
         public string Name { get; set; }
         public string? IconUrl { get; set; }

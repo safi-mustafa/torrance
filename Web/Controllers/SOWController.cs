@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.SOWService;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.SOW;
+using ViewModels.TimeOnTools.SOW;
 
 namespace Web.Controllers
 {

@@ -8,7 +8,7 @@ using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.SOW;
+using ViewModels.TimeOnTools.SOW;
 
 namespace Repositories.Services.TimeOnToolServices.SOWService
 {

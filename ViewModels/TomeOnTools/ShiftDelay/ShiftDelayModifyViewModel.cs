@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.ShiftDelay
+namespace ViewModels.TimeOnTools.ShiftDelay
 {
     public class ShiftDelayModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {

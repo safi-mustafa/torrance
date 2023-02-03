@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.ShiftService;
 using ViewModels.AppSettings.Map;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.Shift;
+using ViewModels.TimeOnTools.Shift;
 
 namespace Web.Controllers
 {

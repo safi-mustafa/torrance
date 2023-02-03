@@ -7,7 +7,7 @@ namespace ViewModels.OverrideLogs
 {
     public class LeadPlannerDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [DisplayName("Lead Planner Email")]
         public string Email { get; set; }
         public string Name { get => Email; set { } }

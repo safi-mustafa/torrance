@@ -1016,7 +1016,7 @@ namespace DataLibrary.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ContractorId")
+                    b.Property<long?>("ContractorId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CreatedBy")
@@ -1025,13 +1025,13 @@ namespace DataLibrary.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DelayReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("EmployeeId")
@@ -1062,28 +1062,28 @@ namespace DataLibrary.Migrations
                     b.Property<long>("PermitTypeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PermittingIssueId")
+                    b.Property<long?>("PermittingIssueId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ReworkDelayId")
+                    b.Property<long?>("ReworkDelayId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ShiftDelayId")
+                    b.Property<long?>("ShiftDelayId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ShiftId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("StartOfWork")
+                    b.Property<DateTime?>("StartOfWork")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("TimeRequested")
+                    b.Property<TimeSpan?>("TimeRequested")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("TimeSigned")
+                    b.Property<TimeSpan?>("TimeSigned")
                         .HasColumnType("time");
 
                     b.Property<string>("Twr")
@@ -1695,15 +1695,11 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
-                        .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContractorId");
 
                     b.HasOne("Models.Common.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
@@ -1721,21 +1717,15 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.PermittingIssue", "PermittingIssue")
                         .WithMany()
-                        .HasForeignKey("PermittingIssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PermittingIssueId");
 
                     b.HasOne("Models.TimeOnTools.ReworkDelay", "ReworkDelay")
                         .WithMany()
-                        .HasForeignKey("ReworkDelayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ReworkDelayId");
 
                     b.HasOne("Models.TimeOnTools.ShiftDelay", "ShiftDelay")
                         .WithMany()
-                        .HasForeignKey("ShiftDelayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShiftDelayId");
 
                     b.HasOne("Models.TimeOnTools.Shift", "Shift")
                         .WithMany()

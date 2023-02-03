@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ViewModels.Common.Contractor;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 

@@ -50,11 +50,11 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
-                    .Include(x => x.Department)
-                    .Include(x => x.Contractor)
+                    //.Include(x => x.Department)
+                    //.Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
-                         (search.Employee.Id == 0 || search.Employee.Id == x.EmployeeId)
+                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
                          (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
                          &&
@@ -78,7 +78,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
                         }).AsQueryable();
-
                 var wrrLogsQueryable = _db.WRRLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
@@ -86,7 +85,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
-                         (search.Employee.Id == 0 || search.Employee.Id == x.EmployeeId)
+                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
                          (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
                          &&

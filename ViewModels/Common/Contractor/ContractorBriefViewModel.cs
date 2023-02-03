@@ -5,12 +5,12 @@ namespace ViewModels.Common.Contractor
 {
     public class ContractorBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public ContractorBriefViewModel() : base(true, "The Contractor field is required.")
+        public ContractorBriefViewModel() : base(false, "The Contractor field is required.")
         {
 
         }
         [DisplayName("Contractor")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

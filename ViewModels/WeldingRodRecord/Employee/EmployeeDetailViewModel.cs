@@ -12,7 +12,7 @@ namespace ViewModels.WeldingRodRecord.Employee
 {
     public class EmployeeDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public long UserId { get; set; }
         [DisplayName("First Name")]
         public string FirstName { get; set; }

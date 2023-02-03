@@ -6,20 +6,20 @@ using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.TimeOnTools.ShiftDelay;
 using Enums;
 using ViewModels.AppSettings.Map;
-using ViewModels.TomeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
 
-namespace ViewModels.TomeOnTools.TOTLog
+namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime? Date { get; set; } = DateTime.Now;
         [Display(Name = "Twr", Prompt = "Add Twr")]
         public string Twr { get; set; }
 
@@ -29,15 +29,15 @@ namespace ViewModels.TomeOnTools.TOTLog
         [Display(Name = "Start Of Work")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
-        public TimeSpan TimeRequested { get; set; } = TimeSpan.Zero;
+        public TimeSpan? TimeRequested { get; set; } = TimeSpan.Zero;
         [Display(Name = "Time Signed")]
-        public TimeSpan TimeSigned { get; set; } = TimeSpan.Zero;
+        public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
 
         [Display(Name = "Delay Reason", Prompt = "Add Delay Reason")]
         public string DelayReason { get; set; }
         [Display(Name = "Job Description", Prompt = "Add Job Descriptions")]
-        public string JobDescription { get; set; }
+        public string? JobDescription { get; set; }
         [Display(Name = "Man Power", Prompt = "Add Man Power")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         public long ManPowerAffected { get; set; }
@@ -45,8 +45,8 @@ namespace ViewModels.TomeOnTools.TOTLog
         [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
         public long EquipmentNo { get; set; }
         [Display(Name = "Hours Delayed", Prompt = "Add Hours Delayed")]
-        [Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
-        public double HoursDelayed { get; set; }
+        //[Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
+        public double? HoursDelayed { get; set; }
         public Status Status { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();

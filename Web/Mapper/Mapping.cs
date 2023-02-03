@@ -17,13 +17,14 @@ using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.PermittingIssue;
-using ViewModels.TomeOnTools.PermitType;
-using ViewModels.TomeOnTools.ReworkDelay;
-using ViewModels.TomeOnTools.Shift;
-using ViewModels.TomeOnTools.ShiftDelay;
-using ViewModels.TomeOnTools.SOW;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools;
+using ViewModels.TimeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.TimeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.SOW;
+using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
@@ -86,6 +87,13 @@ namespace Models.Mapper
             CreateMap<LocationModifyViewModel, LocationDetailViewModel>().ReverseMap();
             CreateMap<Location, LocationBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, LocationBriefViewModel>().ReverseMap();
+
+            //PermitType
+            CreateMap<DelayTypeModifyViewModel, DelayType>().ReverseMap();
+            CreateMap<DelayType, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayTypeModifyViewModel, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayType, DelayTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, DelayTypeBriefViewModel>().ReverseMap();
 
             //PermitType
             CreateMap<PermitTypeModifyViewModel, PermitType>().ReverseMap();

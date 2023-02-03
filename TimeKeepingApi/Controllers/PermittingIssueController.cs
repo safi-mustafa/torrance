@@ -1,7 +1,7 @@
 ﻿using System;
 using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.PermittingIssue;
+using ViewModels.TimeOnTools.PermittingIssue;
 using Repositories.Services.TimeOnToolServices.PermittingIssueService;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
