@@ -27,11 +27,8 @@ namespace API.Controllers
         public override Task<IActionResult> Post([FromBody] ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
-                model.Requester.Id = parsedLoggedInId;
                 ModelState.Remove("Requester.Id");
                 ModelState.Remove("Requester.Name");
                 ModelState.Remove("Approver.Name");
@@ -43,12 +40,9 @@ namespace API.Controllers
         public override Task<IActionResult> Put([FromBody] ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
                 ModelState.Remove("Approver.Name");
-                model.Requester = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
             ModelState.Remove("Company.Name");
             return base.Put(model);
