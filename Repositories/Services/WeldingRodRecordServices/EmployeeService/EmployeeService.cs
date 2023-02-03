@@ -66,6 +66,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                     var mappedModel = _mapper.Map<Employee>(model);
                     mappedModel.UserId = userId;
                     mappedModel.Contractor = null;
+                    mappedModel.Company = null;
                     await _db.AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
                     if (mappedModel.Id > 0)
@@ -129,6 +130,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             {
                 var dbModel = await _db.Employees
                     .Include(x => x.Contractor)
+                    .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
