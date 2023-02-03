@@ -1,20 +1,15 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
-using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.Common;
-using ViewModels.Shared;
 
 namespace Repositories.Services.CommonServices.ApprovalService
 {
@@ -50,6 +45,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
+                    //.Include(x => x.)
                     //.Include(x => x.Department)
                     //.Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -68,12 +64,14 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         new ApprovalDetailViewModel
                         {
                             Id = x.Id,
-                            Contractor = x.Contractor != null ? x.Contractor.Name : "",
-                            Department = x.Department != null ? x.Department.Name : "",
+                            //Contractor = x.Contractor != null ? x.Contractor.Name : "",
+                            //Department = x.Department != null ? x.Department.Name : "",
                             Approver = x.Approver != null ? x.Approver.UserName : "",
+                            TotalHours = x.HoursDelayed,
                             Date = x.CreatedOn,
                             Status = x.Status,
                             TWR = x.Twr,
+                            Reason = x.DelayReason ?? "",
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
@@ -112,15 +110,15 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var overrideLogsQueryable = _db.OverrideLogs
                     .Include(x => x.Requester)
-                    //.Include(x => x.Approver)
-                    //.Include(x => x.Department)
+                    .Include(x => x.Approver)
+                    //.Include(x => x.re)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.RequesterId)
                          &&
-                         //(!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
-                         //&&
+                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         &&
                          (search.Type == null || search.Type == LogType.WeldingRodRecord)
                          &&
                          (search.Status == null || search.Status == x.Status)
@@ -131,11 +129,12 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        //Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = x.Approver != null ? x.Approver.UserName : "",
                         Contractor = x.Contractor != null ? x.Contractor.Name : "",
-                        //Department = x.Department != null ? x.Department.Name : "",
                         Date = x.CreatedOn,
                         Status = x.Status,
+                        TotalHours = x.OverrideHours,
+                        Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                         //TWR = x.Twr,
                         Unit = x.Unit != null ? x.Unit.Name : "",
                         Type = LogType.WeldingRodRecord,

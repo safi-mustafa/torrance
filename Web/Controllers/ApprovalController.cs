@@ -225,11 +225,13 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Date",data = "FormattedDate"},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType"},
                 new DataTableViewModel{title = "Requester",data = "Requester"},
-                new DataTableViewModel{title = "Approver",data = "Approver"},
-                new DataTableViewModel{title = "Department",data = "Department"},
-                new DataTableViewModel{title = "Contractor",data = "Contractor"},
+                //new DataTableViewModel{title = "Approver",data = "Approver"},
+                //new DataTableViewModel{title = "Department",data = "Department"},
+                //new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit"},
-                new DataTableViewModel{title = "TWR",data = "TWR"},
+                //new DataTableViewModel{title = "TWR",data = "TWR"},
+                new DataTableViewModel{title = "Reason",data = "ResonForDelay"},
+                new DataTableViewModel{title = "Total Hours",data = "TotalHours"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
