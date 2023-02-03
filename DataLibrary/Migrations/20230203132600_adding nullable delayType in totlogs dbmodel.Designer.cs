@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230203132600_adding nullable delayType in totlogs dbmodel")]
+    partial class addingnullabledelayTypeintotlogsdbmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1008,7 +1011,7 @@ namespace DataLibrary.Migrations
                     b.Property<string>("DelayReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("DelayTypeId")
+                    b.Property<long?>("DelayTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("DepartmentId")
@@ -1698,9 +1701,7 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.DelayType", "DelayType")
                         .WithMany()
-                        .HasForeignKey("DelayTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DelayTypeId");
 
                     b.HasOne("Models.Common.Department", "Department")
                         .WithMany()
