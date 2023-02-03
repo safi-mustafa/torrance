@@ -15,6 +15,7 @@ using ViewModels.AppSettings.Map;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
 using Helpers.Extensions;
+using ViewModels.Common.Company;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -99,6 +100,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 

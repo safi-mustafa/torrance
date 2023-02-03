@@ -91,6 +91,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Foreman)
                     .Include(x => x.Employee)
                     .Include(x => x.PermittingIssue)
+                    .Include(x => x.DelayType)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
@@ -104,6 +105,40 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"GetById() for TOTLog threw the following exception");
+                return Response.BadRequestResponse(_response);
+            }
+        }
+
+        public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
+        {
+            try
+            {
+                var filters = SetQueryFilter(search);
+                var resultQuery = _db.Set<TOTLog>()
+                    .Include(x => x.Unit)
+                    .Include(x => x.DelayType)
+                    .Include(x => x.Shift)
+                    .Include(x => x.PermitType)
+                    .Include(x => x.Employee)
+                    .Include(x => x.Company)
+                    .Where(filters);
+                var query = resultQuery.ToQueryString();
+                var result = await resultQuery.Paginate(search);
+                if (result != null)
+                {
+                    var paginatedResult = new PaginatedResultModel<M>();
+                    paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    paginatedResult._meta = result._meta;
+                    paginatedResult._links = result._links;
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for {typeof(TOTLog).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for {typeof(TOTLog).FullName} threw an exception.");
                 return Response.BadRequestResponse(_response);
             }
         }

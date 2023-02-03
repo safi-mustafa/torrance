@@ -226,6 +226,8 @@ namespace TorranceApi.Mapper
                .ForMember(x => x.Foreman, opt => opt.Ignore())
                 .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
                 .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
+                .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
+                .ForMember(x => x.DelayType, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<TOTLogCreateViewModel, TOTLog>()
                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
@@ -343,7 +345,7 @@ namespace TorranceApi.Mapper
             CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
 
             //ORLog
-            
+
             CreateMap<ORLogModifyViewModel, OverrideLog>()
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 .ForMember(x => x.Company, opt => opt.Ignore())
