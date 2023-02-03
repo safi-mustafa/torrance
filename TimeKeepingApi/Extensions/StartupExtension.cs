@@ -42,6 +42,7 @@ using Repositories.Services.OverrideLogServices.CraftSkillService;
 using Repositories.Services.OverrideLogServices.LeadPlannerService;
 using Repositories.Services.OverrideLogServices.OverrideTypeService;
 using Repositories.Services.OverrideLogServices.ORLogService;
+using Repositories.Services.CommonServices.CompanyService;
 
 namespace Web.Extensions
 {
@@ -177,6 +178,7 @@ namespace Web.Extensions
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
+            services.AddScoped(typeof(ICompanyService<,,>), typeof(CompanyService<,,>));
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));
             services.AddScoped(typeof(IUnitService<,,>), typeof(UnitService<,,>));
             services.AddScoped(typeof(IPermitTypeService<,,>), typeof(PermitTypeService<,,>));
