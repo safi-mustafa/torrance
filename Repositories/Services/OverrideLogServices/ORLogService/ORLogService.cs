@@ -107,6 +107,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Shift)
                     .Include(x => x.Requester)
                     .Include(x => x.Company)
+                    .Include(x => x.Unit)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

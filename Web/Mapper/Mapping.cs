@@ -343,13 +343,14 @@ namespace Models.Mapper
             //ORLog
             
             CreateMap<ORLogDetailViewModel, OverrideLog>()
-                //.ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, OverrideLog>()
-                //.ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
-                //.ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
+                .ForMember(x => x.Requester, opt => opt.Ignore())
+                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 .ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
@@ -360,7 +361,8 @@ namespace Models.Mapper
                 .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
                 .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
-                //.ForMember(x => x.Employees, opt => opt.Ignore())
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();
