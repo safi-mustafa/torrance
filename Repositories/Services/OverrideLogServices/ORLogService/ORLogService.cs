@@ -50,13 +50,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var parsedLoggedInId = long.Parse(loggedInUserId);
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.RequesterEmail.ToString().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Requester.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.RequesterEmail) || x.RequesterEmail == searchFilters.RequesterEmail)
-                            &&
-                            (searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
-                            &&
-                            (!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
+                            (string.IsNullOrEmpty(searchFilters.Requester.Name) || x.Requester.FirstName == searchFilters.Requester.Name)
+                          //  &&
+                            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
         }
 
@@ -66,13 +64,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
-                    .Include(x => x.Contractor)
+                    .Include(x => x.Unit)
                     .Include(x => x.OverrideType)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
                     .Include(x => x.CraftSkill)
                     .Include(x => x.CraftRate)
-                    .Include(x => x.Employees).ThenInclude(x => x.Employee)
+                    .Include(x => x.Requester)
+                    .Include(x => x.Company)
                     .Where(filters);
                 var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
@@ -106,13 +105,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.OverrideType)
                     .Include(x => x.Shift)
-                    .Include(x => x.Employees).ThenInclude(x => x.Employee)
+                    .Include(x => x.Requester)
+                    .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
                     //var selectedEmployees = await GetOverrideLogEmployees(id);
-                    mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
+                 //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -126,63 +126,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        public async Task<bool> SetOverrideLogEmployees(List<long> employeeIds, long overrideLogId)
-        {
-            try
-            {
-                var oldOREmployees = await _db.OverrideLogEmployees.Where(x => x.OverrideLogId == overrideLogId).ToListAsync();
-                if (oldOREmployees.Count() > 0)
-                {
-                    foreach (var oldOREmployee in oldOREmployees)
-                    {
-                        oldOREmployee.IsDeleted = true;
-                        _db.Entry(oldOREmployee).State = EntityState.Modified;
-                    }
-                    _db.SaveChanges();
-                }
-                if (employeeIds.Count() > 0)
-                {
-                    List<OverrideLogEmployee> list = new List<OverrideLogEmployee>();
-                    foreach (var employeeId in employeeIds)
-                    {
-                        OverrideLogEmployee orLogEmployee = new OverrideLogEmployee();
-                        orLogEmployee.OverrideLogId = overrideLogId;
-                        orLogEmployee.EmployeeId = employeeId;
-                        list.Add(orLogEmployee);
-                    }
-                    await _db.AddRangeAsync(list);
-                    await _db.SaveChangesAsync();
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"OverrideLogService SetOverrideLogEmployees method threw an exception, Message: {ex.Message}");
-                return false;
-            }
-        }
-
-        public async Task<List<EmployeeBriefViewModel>> GetOverrideLogEmployees(long id)
-        {
-            try
-            {
-                var ORLogEmployees = await (from oe in _db.OverrideLogEmployees
-                                            where oe.OverrideLogId == id
-                                            join c in _db.Employees on oe.EmployeeId equals c.Id
-                                            select new EmployeeBriefViewModel()
-                                            {
-                                                Id = oe.EmployeeId,
-                                                Name = c.FirstName + " " + c.LastName,
-                                            }).ToListAsync();
-                return ORLogEmployees;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"OverrideLogService GetOverrideLogEmployees method threw an exception, Message: {ex.Message}");
-                return null;
-            }
-        }
+      
 
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
@@ -194,7 +138,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
 
-                    await CreateEmployees(model, mappedModel.Id);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -222,44 +165,23 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         {
                             var dbModel = _mapper.Map(model, record);
                             await _db.SaveChangesAsync();
-
-                            _db.RemoveRange(await _db.OverrideLogEmployees.Where(x => x.OverrideLogId == record.Id).ToListAsync());
-                            await _db.SaveChangesAsync();
-
-                            await CreateEmployees(model, dbModel.Id);
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                             return response;
                         }
-                        _logger.LogWarning($"Record for id: {updateModel?.Id} not found in {typeof(OverrideLogEmployee).FullName} in Update()");
+                        _logger.LogWarning($"Record for id: {updateModel?.Id} not found in ORLogService in Update()");
                     }
                     return Response.NotFoundResponse(_response);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Update() for {typeof(OverrideLogEmployee).FullName} threw the following exception");
+                    _logger.LogError(ex, $"Update() for ORLogService threw the following exception");
                     await transaction.RollbackAsync();
                     return Response.BadRequestResponse(_response);
                 }
             }
         }
 
-        private async Task CreateEmployees(IEmployeeMultiselect model, long overridingLogId)
-        {
-            if (overridingLogId > 0)
-            {
-                var employees = new List<OverrideLogEmployee>();
-                foreach (var item in model.EmployeeMultiselect.EmployeeIds)
-                {
-                    employees.Add(new OverrideLogEmployee
-                    {
-                        EmployeeId = item,
-                        OverrideLogId = overridingLogId
-                    });
-                }
-                await _db.AddRangeAsync(employees);
-                await _db.SaveChangesAsync();
-            }
-        }
+        
     }
 }

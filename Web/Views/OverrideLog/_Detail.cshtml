@@ -8,7 +8,7 @@
     <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="Requester" class="form-label fw-600"></label>
-            <div>@Model.Requester</div>
+            <div>@Model.Requester.Name</div>
         </div>
     </div>
 
@@ -19,20 +19,8 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="RequesterEmail" class="form-label fw-600"></label>
-            <div>@Model.RequesterEmail</div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="Employees" class="form-label fw-600"></label>
-            <div>@(Model.Employees != null && Model.EmployeeMultiselect.Employees.Count > 0 ? string.Join(", ", Model.EmployeeMultiselect.Employees.Select(x => x.Name)) : "-")</div>
-        </div>
-    </div>
-
+  
+   
     <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="DateSubmitted" class="form-label fw-600"></label>
@@ -63,7 +51,7 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="DateOfWorkCompleted" class="form-label fw-600"></label>
+            <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
             <div>@Model.FormattedDateOfWorkCompleted</div>
         </div>
     </div>
@@ -77,8 +65,8 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="WorkScope" class="form-label fw-600"></label>
-            <div>@Model.WorkScope</div>
+            <label asp-for="Description" class="form-label fw-600"></label>
+            <div>@Model.Description</div>
         </div>
     </div>
 
@@ -96,12 +84,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="Contractor" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Contractor.Name) ? "-" : Model.Contractor.Name)</div>
-        </div>
-    </div>
+  
 
     <div class="col-lg-6">
         <div class="mb-3">
