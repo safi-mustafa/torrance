@@ -23,7 +23,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Twr", Prompt = "Add Twr")]
         public string Twr { get; set; }
 
-        [Display(Name = "Man Hours", Prompt = "Add Man Hours")]
+        [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
         public long ManHours { get; set; }
         [Display(Name = "Start Of Work")]
@@ -38,8 +38,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string DelayReason { get; set; }
         [Display(Name = "Job Description", Prompt = "Add Job Descriptions")]
         public string? JobDescription { get; set; }
-        [Display(Name = "Man Power", Prompt = "Add Man Power")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
+        [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Head Count must be greater than zero.")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No", Prompt = "Add Equipment No")]
         [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]

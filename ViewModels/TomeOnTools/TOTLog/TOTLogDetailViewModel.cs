@@ -29,9 +29,19 @@ namespace ViewModels.TimeOnTools.TOTLog
                 return Date.Date.ToString("MM/dd/yyyy");
             }
         }
+
+        public DateTime CreatedOn { get; set; }
+
+        public string FormattedCreatedOn
+        {
+            get
+            {
+                return CreatedOn.Date.ToString("MM/dd/yyyy");
+            }
+        }
         public string Twr { get; set; }
 
-        [Display(Name = "Man Hours")]
+        [Display(Name = "Total Manhours")]
         public long ManHours { get; set; }
         [Display(Name = "Start Of Work")]
         public DateTime StartOfWork { get; set; }
@@ -67,7 +77,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string DelayReason { get; set; }
         [Display(Name = "Job Description")]
         public string JobDescription { get; set; }
-        [Display(Name = "Man Power")]
+        [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No")]
         public long EquipmentNo { get; set; }

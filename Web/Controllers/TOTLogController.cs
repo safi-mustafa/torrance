@@ -38,12 +38,18 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
-                new DataTableViewModel{title = "Date",data = "FormattedDate"},
-                new DataTableViewModel{title = "Twr",data = "Twr"},
+                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
+                new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "Man Hours",data = "ManHours"},
-                new DataTableViewModel{title = "Start Of Work",data = "FormattedStartOfWork"},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name"},
+                new DataTableViewModel{title = "Unit",data = "Unit.Name"},
+                new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
-                new DataTableViewModel{title = "Hours Delayed",data = "HoursDelayed"},
+                new DataTableViewModel{title = "Delay Reason",data = "DelayReason"},
+                new DataTableViewModel{title = "Permit Type",data = "PermitType.Name"},
+                new DataTableViewModel{title = "Start Date",data = "FormattedStartOfWork"},
+                new DataTableViewModel{title = "Total Head Count",data = "ManPowerAffected"},
+                new DataTableViewModel{title = "Total Manhours",data = "ManHours"},
                 //new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
