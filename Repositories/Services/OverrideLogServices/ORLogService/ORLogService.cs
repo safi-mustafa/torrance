@@ -126,16 +126,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-
-
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
                 try
                 {
+
                     var mappedModel = _mapper.Map<OverrideLog>(model);
-                    mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+                    await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
 
@@ -165,7 +164,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         if (record != null)
                         {
                             var dbModel = _mapper.Map(model, record);
-                            dbModel.CompanyId = await _db.Employees.Where(x => x.Id == dbModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+                            await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
@@ -184,6 +183,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-
+        private async Task SetRequesterId(OverrideLog mappedModel)
+        {
+            var role = _userInfoService.LoggedInUserRole();
+            if (role != "Employee")
+            {
+                mappedModel.RequesterId = long.Parse(_userInfoService.LoggedInUserId());
+            }
+            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+        }
     }
 }
