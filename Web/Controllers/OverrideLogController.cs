@@ -31,12 +31,12 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Requester",data = "Requester"},
+                new DataTableViewModel{title = "Company",data = "Company.Name"},
+                new DataTableViewModel{title = "Requester",data = "Requester.Name"},
                 new DataTableViewModel{title = "Date Submitted",data = "FormattedDateSubmitted"},
-                new DataTableViewModel{title = "Work Scope",data = "WorkScope"},
+                new DataTableViewModel{title = "Description",data = "Description"},
                 new DataTableViewModel{title = "Override Hours",data = "OverrideHours"},
                 new DataTableViewModel{title = "PO Number",data = "PONumber"},
-                new DataTableViewModel{title = "Contractor",data = "Contractor.Name"},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name"},
                 new DataTableViewModel{title = "Reason for Request",data = "ReasonForRequest.Name"},
                 new DataTableViewModel{title = "Craft Rate",data = "CraftRate.Name"},
