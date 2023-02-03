@@ -3,15 +3,10 @@
 @using ViewModels.OverrideLogs.ORLog;
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="RequesterEmail" class="control-label form-label fw-600"></label>
-            <input asp-for="RequesterEmail" type="search" class="form-control" placeholder="Search Requester Email" />
-        </div>
-    </div>
+  
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" />
         </div>
     </div>
 </div>

@@ -1,24 +1,15 @@
 ﻿using ViewModels.Shared;
-using ViewModels.Common.Contractor;
-using ViewModels.TimeOnTools.Shift;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-using ViewModels.AppSettings.Map;
-using ViewModels.TimeOnTools.PermittingIssue;
-using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord;
-using Models.Common.Interfaces.OverrideLog;
+using ViewModels.Common.Unit;
+using ViewModels.Common.Company;
+using ViewModels.TimeOnTools.Shift;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogDetailViewModel : BaseCrudViewModel, IEmployeeMultiselect
+    public class ORLogDetailViewModel : BaseCrudViewModel
     {
         public long Id { get; set; }
-        public string Requester { get; set; }
-
-        [Display(Name = "Requester Email")]
-        [EmailAddress]
-        public string RequesterEmail { get; set; }
 
         [Display(Name = "Date Submitted")]
         public DateTime DateSubmitted { get; set; }
@@ -40,18 +31,17 @@ namespace ViewModels.OverrideLogs.ORLog
             }
         }
 
-        [Display(Name = "Date of Work Completed")]
-        public DateTime DateOfWorkCompleted { get; set; } = DateTime.Now;
+        [Display(Name = "Work Completed Date")]
+        public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
         public string FormattedDateOfWorkCompleted
         {
             get
             {
-                return DateOfWorkCompleted.Date.ToString("MM/dd/yyyy");
+                return WorkCompletedDate.Date.ToString("MM/dd/yyyy");
             }
         }
 
-        [Display(Name = "Work Scope")]
-        public string? WorkScope { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Override Hours")]
         public int OverrideHours { get; set; }
@@ -61,7 +51,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PONumber { get; set; }
 
-        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
@@ -73,8 +63,8 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
 
-        public List<EmployeeBriefViewModel> Employees { get; set; } = new List<EmployeeBriefViewModel>();
+        public EmployeeBriefViewModel Requester { get; set; } = new();
 
-        public EmployeeMultiselectBriefViewModel EmployeeMultiselect { get; set; } = new EmployeeMultiselectBriefViewModel();
+        public CompanyBriefViewModel Company { get; set; } = new();
     }
 }

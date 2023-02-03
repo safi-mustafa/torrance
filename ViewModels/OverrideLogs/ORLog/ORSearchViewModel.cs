@@ -1,21 +1,15 @@
-﻿using Enums;
-using Pagination;
-using ViewModels.Authentication;
-using ViewModels.Common.Contractor;
-using ViewModels.Common.Department;
-using ViewModels.Common.Unit;
+﻿using Pagination;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogSearchViewModel : BaseSearchModel
     {
-        public string RequesterEmail { get; set; }
-        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+        public EmployeeBriefViewModel Requester { get; set; } = new();
     }
 
     public class ORLogAPISearchViewModel : BaseSearchModel
     {
-        public long RequesterEmail { get; set; }
-        public long ContractorId { get; set; }
+        public long RequesterId { get; set; }
     }
 }
