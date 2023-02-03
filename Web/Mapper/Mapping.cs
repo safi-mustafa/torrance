@@ -345,7 +345,8 @@ namespace Models.Mapper
 
             //ORLog
             
-            CreateMap<ORLogDetailViewModel, OverrideLog>()
+            CreateMap<OverrideLog, ORLogDetailViewModel>()
+                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
@@ -366,6 +367,9 @@ namespace Models.Mapper
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ReverseMap();
 
             CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();

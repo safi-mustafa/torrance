@@ -34,6 +34,7 @@ namespace API.Controllers
                 model.Requester.Id = parsedLoggedInId;
                 ModelState.Remove("Requester.Id");
                 ModelState.Remove("Requester.Name");
+                ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
             return base.Post(model);
@@ -46,6 +47,7 @@ namespace API.Controllers
             var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
+                ModelState.Remove("Approver.Name");
                 model.Requester = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
             ModelState.Remove("Company.Name");

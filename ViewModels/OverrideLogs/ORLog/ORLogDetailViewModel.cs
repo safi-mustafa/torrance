@@ -4,6 +4,7 @@ using ViewModels.WeldingRodRecord;
 using ViewModels.Common.Unit;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
+using ViewModels.Authentication;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -78,5 +79,6 @@ namespace ViewModels.OverrideLogs.ORLog
         public EmployeeBriefViewModel Requester { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
     }
 }

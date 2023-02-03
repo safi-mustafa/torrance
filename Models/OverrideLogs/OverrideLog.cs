@@ -55,5 +55,8 @@ namespace Models.OverrideLogs
         public long? ContractorId { get; set; }
         public Contractor? Contractor { get; set; }
 
+        [ForeignKey("Approver")]
+        public long? ApproverId { get; set; }
+        public ToranceUser? Approver { get; set; }
     }
 }
