@@ -2,6 +2,8 @@
 using Enums;
 using Helpers.Extensions;
 using Models.Common.Interfaces;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels.Shared;
 
@@ -23,10 +25,15 @@ namespace ViewModels.Common
         public string Requester { get => Employee != null ? $"{Employee.FirstName} {Employee.LastName}" : ""; }
         public string Department { get; set; }
         public string Contractor { get; set; }
+        public DelayType DelayType { get; set; }
+        public string ResonForDelay { get => DelayType.Name; }
+
+        public string Reason { get; set; }
 
         public string Approver { get; set; }
         public string Unit { get; set; }
         public string TWR { get; set; }
+        public double TotalHours { get; set; }
         public ActiveStatus ActiveStatus { get; set; }
     }
 }
