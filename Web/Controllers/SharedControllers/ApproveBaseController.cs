@@ -72,7 +72,7 @@ namespace Web.Controllers
 
         }
 
-        public async Task<bool> ApprovedStatus(long id, Status status )
+        public async Task<bool> ApproveStatus(long id, Status status )
         {
             try
             {
