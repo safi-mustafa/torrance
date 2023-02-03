@@ -21,9 +21,9 @@ using ViewModels.WeldingRodRecord.Employee;
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
     public class ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<OverrideLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IEmployeeMultiselect, IIdentitifier, new()
+        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where CreateViewModel : class, IBaseCrudViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -53,8 +53,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Requester.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.Requester.Name) || x.Requester.FirstName == searchFilters.Requester.Name)
-                          //  &&
-                            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
+            //  &&
+            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
         }
 
@@ -112,7 +112,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
                     //var selectedEmployees = await GetOverrideLogEmployees(id);
-                 //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
+                    //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -126,7 +126,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-      
+
 
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
@@ -182,6 +182,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        
+
     }
 }

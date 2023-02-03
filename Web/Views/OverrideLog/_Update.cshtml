@@ -10,7 +10,11 @@
         <div class="row">
             @if (isAdmin)
             {
-               
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                    </div>
+                </div>
             }
 
             <div class="col-lg-6">
@@ -18,9 +22,6 @@
                     <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
             </div>
-
-           
-         
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -113,3 +114,11 @@
 @*<input asp-for="Status" type="hidden" id="status-id" />
     <input asp-for="Employee.Id" type="hidden" />*@
 <input asp-for="Id" type="hidden" />
+
+@section Scripts{
+    $(function(){
+    $(document).on("change", "#requester-id", function(){
+
+    });
+    });
+}
