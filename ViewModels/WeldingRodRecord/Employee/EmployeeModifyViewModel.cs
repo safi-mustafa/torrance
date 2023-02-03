@@ -7,6 +7,7 @@ using Helpers.ValidationAttributes;
 using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using Enums;
+using ViewModels.Common.Company;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
@@ -67,6 +68,7 @@ namespace ViewModels.WeldingRodRecord.Employee
         }
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
         public ApproverStatus IsApprover { get; set; }
 

@@ -134,6 +134,8 @@ namespace Models.Mapper
             CreateMap<EmployeeModifyViewModel, Employee>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
@@ -214,7 +216,9 @@ namespace Models.Mapper
             CreateMap<ToranceUser, ApproverBriefViewModel>()
                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
-            CreateMap<SignUpModel, ToranceUser>().ReverseMap();
+            CreateMap<SignUpModel, ToranceUser>()
+                 
+                .ReverseMap();
 
             //Employee
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();

@@ -129,6 +129,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             {
                 var dbModel = await _db.Employees
                     .Include(x => x.Contractor)
+                    .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

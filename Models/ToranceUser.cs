@@ -1,6 +1,8 @@
 ﻿using Enums;
 using Microsoft.AspNetCore.Identity;
+using Models.Common;
 using Models.Common.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
@@ -13,5 +15,9 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     public long CreatedBy { get; set; }
     public DateTime UpdatedOn { get; set; }
     public long UpdatedBy { get; set; }
+
+    [ForeignKey("Company")]
+    public long CompanyId { get; set; }
+    public Company Company { get; set; }
 }
 

@@ -2,6 +2,7 @@
 using Helpers.ValidationAttributes;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Common.Company;
 
 namespace ViewModels.Authentication
 {
