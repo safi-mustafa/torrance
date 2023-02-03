@@ -15,9 +15,5 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     public long CreatedBy { get; set; }
     public DateTime UpdatedOn { get; set; }
     public long UpdatedBy { get; set; }
-
-    [ForeignKey("Company")]
-    public long CompanyId { get; set; }
-    public Company Company { get; set; }
 }
 

@@ -43,7 +43,7 @@ namespace Models.Mapper
             CreateMap<ContractorModifyViewModel, ContractorDetailViewModel>().ReverseMap();
             CreateMap<Contractor, ContractorBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ContractorBriefViewModel>().ReverseMap();
-            
+
             //Company
             CreateMap<CompanyModifyViewModel, Company>().ReverseMap();
             CreateMap<Company, CompanyDetailViewModel>().ReverseMap();
@@ -134,8 +134,8 @@ namespace Models.Mapper
             CreateMap<EmployeeModifyViewModel, Employee>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
-                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
-                .ForMember(x => x.Company, opt => opt.Ignore())
+                //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                //.ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
@@ -217,7 +217,7 @@ namespace Models.Mapper
                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
-                 
+
                 .ReverseMap();
 
             //Employee

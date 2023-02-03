@@ -41,8 +41,13 @@ namespace Models.WeldingRodRecord
         public DateTime? DateOfHire { get; set; }
         public DateTime? TerminationDate { get; set; }
         public ApproverStatus? IsApprover { get; set; }
+
         [ForeignKey("Contractor")]
         public long ContractorId { get; set; }
         public Contractor Contractor { get; set; }
+
+        [ForeignKey("Company")]
+        public long CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }
