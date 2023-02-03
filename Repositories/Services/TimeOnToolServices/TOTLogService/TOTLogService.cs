@@ -156,7 +156,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private async Task SetRequesterId(TOTLog mappedModel)
         {
             var role = _userInfoService.LoggedInUserRole();
-            if (role != "Employee")
+            if (role == "Employee")
             {
                 mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
             }

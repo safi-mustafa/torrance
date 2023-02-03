@@ -194,7 +194,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private async Task SetRequesterId(OverrideLog mappedModel)
         {
             var role = _userInfoService.LoggedInUserRole();
-            if (role != "Employee")
+            if (role == "Employee")
             {
                 mappedModel.RequesterId = long.Parse(_userInfoService.LoggedInUserId());
             }
