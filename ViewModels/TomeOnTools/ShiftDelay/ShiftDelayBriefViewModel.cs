@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.ShiftDelay
+namespace ViewModels.TimeOnTools.ShiftDelay
 {
     public class ShiftDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {

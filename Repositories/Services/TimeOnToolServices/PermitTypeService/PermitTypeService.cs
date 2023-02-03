@@ -9,7 +9,7 @@ using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.PermitType;
+using ViewModels.TimeOnTools.PermitType;
 
 namespace Repositories.Services.TimeOnToolServices.PermitTypeService
 {

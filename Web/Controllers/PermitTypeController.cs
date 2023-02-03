@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.PermitType;
+using ViewModels.TimeOnTools.PermitType;
 
 namespace Web.Controllers
 {

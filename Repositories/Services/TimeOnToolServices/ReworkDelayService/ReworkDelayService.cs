@@ -10,7 +10,7 @@ using Repositories.Common;
 using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
-using ViewModels.TomeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.ReworkDelay;
 
 namespace Repositories.Services.TimeOnToolServices.ReworkService
 {

@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.TomeOnTools.PermitType
+namespace ViewModels.TimeOnTools.PermitType
 {
     public class PermitTypeSearchViewModel : BaseSearchModel
     {

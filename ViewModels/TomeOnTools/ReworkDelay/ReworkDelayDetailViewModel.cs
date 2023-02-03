@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.ReworkDelay
+namespace ViewModels.TimeOnTools.ReworkDelay
 {
     public class ReworkDelayDetailViewModel : BaseCrudViewModel, ISelect2Data
     {

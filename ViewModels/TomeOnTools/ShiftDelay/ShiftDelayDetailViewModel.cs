@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.ShiftDelay
+namespace ViewModels.TimeOnTools.ShiftDelay
 {
     public class ShiftDelayDetailViewModel : BaseCrudViewModel, ISelect2Data
     {

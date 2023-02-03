@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.ReworkDelay
+namespace ViewModels.TimeOnTools.ReworkDelay
 {
     public class ReworkDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {

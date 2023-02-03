@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.SOW
+namespace ViewModels.TimeOnTools.SOW
 {
     public class SOWDetailViewModel : BaseCrudViewModel, ISelect2Data
     {

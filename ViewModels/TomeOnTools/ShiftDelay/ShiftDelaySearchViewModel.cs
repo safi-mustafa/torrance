@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.TomeOnTools.ShiftDelay
+namespace ViewModels.TimeOnTools.ShiftDelay
 {
     public class ShiftDelaySearchViewModel : BaseSearchModel
     {

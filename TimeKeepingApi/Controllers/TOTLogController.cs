@@ -1,6 +1,6 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.TomeOnTools.TOTLog;
+using ViewModels.TimeOnTools.TOTLog;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using AutoMapper;
 using Pagination;

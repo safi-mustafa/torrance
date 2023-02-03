@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.TimeOnToolServices.ReworkService;
 using ViewModels.DataTable;
-using ViewModels.TomeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.ReworkDelay;
 
 namespace Web.Controllers
 {

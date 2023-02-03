@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.PermitType
+namespace ViewModels.TimeOnTools.PermitType
 {
     public class PermitTypeDetailViewModel : BaseCrudViewModel, ISelect2Data
     {

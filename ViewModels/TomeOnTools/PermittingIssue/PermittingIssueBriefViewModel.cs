@@ -1,7 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 
-namespace ViewModels.TomeOnTools.PermittingIssue
+namespace ViewModels.TimeOnTools.PermittingIssue
 {
     public class PermittingIssueBriefViewModel : BaseBriefVM, ISelect2Data
     {

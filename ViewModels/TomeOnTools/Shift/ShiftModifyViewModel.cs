@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 
-namespace ViewModels.TomeOnTools.Shift
+namespace ViewModels.TimeOnTools.Shift
 {
     public class ShiftModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
