@@ -68,7 +68,7 @@
             </div>*@
         <div class="row dashboard-filters-row">
 
-            <div class="col-md-12">
+           @* <div class="col-md-12">
                 <form id="dashboard-filter-form">
                     <p>Filter By:</p>
                     <div class="filter-select">
@@ -86,36 +86,41 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            <partial name="_TOTPieCharts" />
+            </div>*@
+            <partial name="_TOTStatusChart" />
+            <partial name="_OverrideStatusChart" />
            @* <partial name="_WrrPieCharts" />*@
         </div>
     </main>
 </div>
 <style>
-    .pie-chart {
+    .am-chart {
         width: 100%;
         height: 350px;
     }
 </style>
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
 <script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>
+@*<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>*@
+<script src="~/js/custom-scripts/dashboard/tot-status-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/override-status-chart.js"></script>
 <!-- Chart code -->
 <script>$(function () {
-        GetTOTChartData();
-        GetWrrChartData();
+        GetTOTStatusChartData();
+        GetOverrideStatusChartData();
 
-        $(document).on("change", "#department-id, #unit-id", function () {
-            var departmentId = $("#department-id").val();
-            var unitId = $("#unit-id").val();
+        //$(document).on("change", "#department-id, #unit-id", function () {
+        //    var departmentId = $("#department-id").val();
+        //    var unitId = $("#unit-id").val();
 
-            var formData = { "Department.Id": departmentId, "Unit.Id": unitId };
+        //    var formData = { "Department.Id": departmentId, "Unit.Id": unitId };
 
-            GetTOTChartData(formData);
-            GetWrrChartData(formData);
-        });
+        //    GetTOTChartData(formData);
+        //    GetWrrChartData(formData);
+        //});
     })</script>

@@ -27,7 +27,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = true) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     var currentController = window.location.pathname.split('/')[1];
@@ -105,9 +105,13 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
-    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
+    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive);
 }
-function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
+function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive) {
+    if (typeof isResponsive != "boolean") {
+        isResponsive = isResponsive == "true";
+    }
+
 
     var columnsIndexExcludingAction = [];
     for (var i = 0; i <= (dtColumns.length - 1); i++) {
@@ -117,7 +121,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
         "serverSide": true,
         "proccessing": true,
         "searching": true,
-        "responsive": true,
+        "responsive": isResponsive,
         "ordering": false,
         "pagingType": "full_numbers",
         "lengthMenu": [[10, 25, 50, 250], [10, 25, 50, 250]],

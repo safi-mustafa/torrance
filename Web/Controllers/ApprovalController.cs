@@ -57,6 +57,16 @@ namespace Web.Controllers
             filters.Status = Status.Pending;
             return filters;
         }
+
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+	                <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            return vm;
+        }
         public async Task<IActionResult> Detail(long id, LogType type)
         {
             try

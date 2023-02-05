@@ -14,11 +14,11 @@ namespace ViewModels.WeldingRodRecord.Employee
     public class EmployeeModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         [MaxLength(200)]
-        [DisplayName("First Name")]
+        [DisplayName("Full Name")]
         public string FirstName { get; set; }
         [MaxLength(200)]
         [DisplayName("Last Name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         [DisplayName("Access Code")]
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Access Code must be of 4-digits.")]
         [Remote(action: "ValidateEmployeeId", controller: "Employee", AdditionalFields = "Id,EmployeeId", ErrorMessage = "Access Code already in use.")]

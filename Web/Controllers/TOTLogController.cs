@@ -29,10 +29,6 @@ namespace Web.Controllers
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
             vm.DataTableHeaderHtml = @"
-	                <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>
                     <div class=""p-2 row"">
                         <span class=""badge Approved m-1""> </span>
                         <span class=""stat-name"">Approved</span>
@@ -41,6 +37,7 @@ namespace Web.Controllers
                         <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
                     </div>";
+            vm.IsResponsiveDatatable = false;
             return vm;
         }
 

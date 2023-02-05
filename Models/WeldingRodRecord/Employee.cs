@@ -19,9 +19,9 @@ namespace Models.WeldingRodRecord
         [Required]
         [MaxLength(200, ErrorMessage = "First Name cannot be greater than 200 characters.")]
         public string FirstName { get; set; }
-        [Required]
+        //[Required]
         [MaxLength(200, ErrorMessage = "Last Name cannot be greater than 200 characters.")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         [Required]
         [StringLength(4, ErrorMessage = "Employee Id must be of 4-digits.", MinimumLength = 4)]
         public string EmployeeId { get; set; }
@@ -43,8 +43,8 @@ namespace Models.WeldingRodRecord
         public ApproverStatus? IsApprover { get; set; }
 
         [ForeignKey("Contractor")]
-        public long ContractorId { get; set; }
-        public Contractor Contractor { get; set; }
+        public long? ContractorId { get; set; }
+        public Contractor? Contractor { get; set; }
 
         [ForeignKey("Company")]
         public long CompanyId { get; set; }

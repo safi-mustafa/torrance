@@ -1365,4 +1365,7 @@ header {
     margin-left: -5px;
     list-style: none;
 }
+#crud-list-table_wrapper .datatable-scroll {
+    overflow: auto;
+}
 

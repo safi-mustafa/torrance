@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using System;
@@ -45,6 +46,34 @@ namespace Repositories.Services.DashboardService
                     Category = x.Max(y => y.ReworkDelay.Name),
                     Value = x.Count() * 100 / totCount
                 }).ToListAsync();
+
+            return model;
+
+        }
+
+        public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
+        {
+            var model = new StatusChartViewModel();
+            model.ChartData = await GetFilteredTOTLogs(search)
+              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              {
+                  Category = x.Max(y => y.Status).ToString(),
+                  Value = x.Count()
+              }).ToListAsync();
+
+            return model;
+
+        }
+
+        public async Task<StatusChartViewModel> GetOverrideStatusChartData(TOTLogSearchViewModel search)
+        {
+            var model = new StatusChartViewModel();
+            model.ChartData = await GetFilteredORLogs(search)
+              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              {
+                  Category = x.Max(y => y.Status).ToString(),
+                  Value = x.Count()
+              }).ToListAsync();
 
             return model;
 
@@ -100,6 +129,13 @@ namespace Repositories.Services.DashboardService
                     (search.Department.Id == null || search.Department.Id == x.DepartmentId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == x.UnitId)
+            );
+        }
+
+        private IQueryable<OverrideLog> GetFilteredORLogs(TOTLogSearchViewModel search)
+        {
+            return _db.OverrideLogs.Where(x =>
+                    search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
                 );
         }
 

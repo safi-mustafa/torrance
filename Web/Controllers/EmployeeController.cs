@@ -99,9 +99,10 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "First Name",data = "FirstName"},
-                new DataTableViewModel{title = "Last Name",data = "LastName"},
+                new DataTableViewModel{title = "Full Name",data = "FirstName"},
+                new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "Email",data = "Email"},
+                 new DataTableViewModel{title = "Access Code",data = "EmployeeId"},
                 //new DataTableViewModel{title = "Is Approver?",data = "IsApprover"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
