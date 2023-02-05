@@ -31,6 +31,7 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedDateSubmitted"},
                 new DataTableViewModel{title = "Requester",data = "Requester.Name"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},
@@ -88,6 +89,20 @@ namespace Web.Controllers
             return View("~/Views/OverrideLog/_Index.cshtml", vm);
         }
 
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>";
+            vm.IsResponsiveDatatable = false;
+            return vm;
+        }
     }
 
 }

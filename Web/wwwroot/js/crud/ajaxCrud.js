@@ -35,16 +35,15 @@ function rejectDetail(element) {
 function sendApproveAjax(status) {
     var controller = $("#controller-name").val();
     var id = $("#log-id").val();
-    var url = "/" + controller + "/UpdateStatus";
-    var data = { statusId: status, id: id };
+    var url = "/" + controller + "/ApproveStatus";
+    var data = { status: status, id: id };
 
     $.ajax({
         type: "Get",
         url: url,
         data: data,
-        processData: false,
-        contentType: false,
         success: function (result) {
+            $("#crudModalPanel").modal("toggle");
             ReInitializeDataTables();
         }
     });

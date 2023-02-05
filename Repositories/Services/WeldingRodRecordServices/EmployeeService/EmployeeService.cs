@@ -53,6 +53,10 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                         ;
         }
+        public override IQueryable<Employee> GetPaginationDbSet()
+        {
+            return _db.Employees.Include(x => x.Company);
+        }
 
         public override async Task<IRepositoryResponse> Create(CreateViewModel model)
         {

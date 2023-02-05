@@ -36,7 +36,8 @@ namespace Web.Controllers
         private string _detailViewPath;
         private string _detailTitle;
 
-        public ApprovalController(
+        public
+            ApprovalController(
             IApprovalService approvaleService,
             ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> totService,
             IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
@@ -55,6 +56,16 @@ namespace Web.Controllers
             var filters = base.SetDefaultFilters();
             filters.Status = Status.Pending;
             return filters;
+        }
+
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+	                <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            return vm;
         }
         public async Task<IActionResult> Detail(long id, LogType type)
         {
@@ -221,7 +232,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                //new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate"},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType"},
                 new DataTableViewModel{title = "Requester",data = "Requester"},

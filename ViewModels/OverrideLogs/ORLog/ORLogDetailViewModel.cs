@@ -5,6 +5,8 @@ using ViewModels.Common.Unit;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.Authentication;
+using Enums;
+using Helpers.Extensions;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -51,7 +53,7 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                if(CraftRate != null)
+                if (CraftRate != null)
                 {
                     return CraftRate.Rate * OverrideHours;
                 }
@@ -63,6 +65,10 @@ namespace ViewModels.OverrideLogs.ORLog
 
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PONumber { get; set; }
+
+        public Status Status { get; set; }
+
+        public string FormattedStatus { get => Status.GetDisplayName(); }
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

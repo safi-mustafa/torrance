@@ -29,22 +29,15 @@ namespace Web.Controllers
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
             vm.DataTableHeaderHtml = @"
-            <div class=""col-lg-6"">
-	            <div class=""d-flex flex-row"">
-                    <div class=""col-4"">
-                        <span class=""badge Submitted""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>
-                    <div class=""col-4"">
-                        <span class=""badge Approved""> </span>
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
                         <span class=""stat-name"">Approved</span>
                     </div>
-                    <div class=""col-4"">
-                        <span class=""badge Rejected""> </span>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
-                    </div>
-	            </div>
-            </div>";
+                    </div>";
+            vm.IsResponsiveDatatable = false;
             return vm;
         }
 
@@ -59,7 +52,7 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-               // new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},

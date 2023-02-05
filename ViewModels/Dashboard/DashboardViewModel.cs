@@ -12,7 +12,10 @@ namespace ViewModels.Dashboard
         public long TotalWRRLogs { get; set; } = 0;
         public long TotalORLogs { get; set; } = 0;
     }
-
+    public class StatusChartViewModel
+    {
+        public List<BarChartViewModel> ChartData { get; set; }
+    }
     public class TOTPieChartViewModel
     {
         public List<LogPieChartViewModel> ShiftDelays { get; set; }
@@ -25,6 +28,12 @@ namespace ViewModels.Dashboard
         public List<LogPieChartViewModel> RodTypes { get; set; }
     }
     public class LogPieChartViewModel
+    {
+        public string Category { get; set; }
+        public float Value { get; set; }
+    }
+
+    public class BarChartViewModel
     {
         public string Category { get; set; }
         public float Value { get; set; }

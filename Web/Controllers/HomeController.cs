@@ -82,6 +82,18 @@ namespace Web.Controllers
             return Json(data);
         }
 
+        public async Task<ActionResult> GetTotStatusChartData(TOTLogSearchViewModel search)
+        {
+            var data = await _dashboardService.GetTotStatusChartData(search);
+            return Json(data);
+        }
+
+        public async Task<ActionResult> GetOverrideStatusChartData(TOTLogSearchViewModel search)
+        {
+            var data = await _dashboardService.GetOverrideStatusChartData(search);
+            return Json(data);
+        }
+
         public async Task<ActionResult> GetWrrChartsData(WRRLogSearchViewModel search)
         {
             var data = await _dashboardService.GetWrrChartsData(search);
