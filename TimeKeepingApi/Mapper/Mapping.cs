@@ -327,22 +327,40 @@ namespace TorranceApi.Mapper
             //CraftRate
             CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
+            CreateMap<CraftRateBriefViewModel, CraftRateBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Name))
+                .ReverseMap();
+            CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
+            CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
+            CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
 
             //CraftSkill
             CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
+            CreateMap<CraftSkillModifyViewModel, CraftSkill>().ReverseMap();
+            CreateMap<CraftSkill, CraftSkillDetailViewModel>().ReverseMap();
+            CreateMap<CraftSkillModifyViewModel, CraftSkillDetailViewModel>().ReverseMap();
 
             //LeadPlanner
             CreateMap<LeadPlanner, LeadPlannerBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, LeadPlannerBriefViewModel>().ReverseMap();
+            CreateMap<LeadPlannerModifyViewModel, LeadPlanner>().ReverseMap();
+            CreateMap<LeadPlanner, LeadPlannerDetailViewModel>().ReverseMap();
+            CreateMap<LeadPlannerModifyViewModel, LeadPlannerDetailViewModel>().ReverseMap();
 
             //OverrideType
             CreateMap<OverrideType, OverrideTypeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, OverrideTypeBriefViewModel>().ReverseMap();
+            CreateMap<OverrideTypeModifyViewModel, OverrideType>().ReverseMap();
+            CreateMap<OverrideType, OverrideTypeDetailViewModel>().ReverseMap();
+            CreateMap<OverrideTypeModifyViewModel, OverrideTypeDetailViewModel>().ReverseMap();
 
             //ReasonForRequest
             CreateMap<ReasonForRequest, ReasonForRequestBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ReasonForRequestBriefViewModel>().ReverseMap();
+            CreateMap<ReasonForRequestModifyViewModel, ReasonForRequest>().ReverseMap();
+            CreateMap<ReasonForRequest, ReasonForRequestDetailViewModel>().ReverseMap();
+            CreateMap<ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel>().ReverseMap();
 
             //ORLog
 

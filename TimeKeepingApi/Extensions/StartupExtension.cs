@@ -43,6 +43,8 @@ using Repositories.Services.OverrideLogServices.LeadPlannerService;
 using Repositories.Services.OverrideLogServices.OverrideTypeService;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Services.CommonServices.CompanyService;
+using Repositories.Services.OverrideLogServices.CraftRateService;
+using Repositories.Services.OverrideLogServices.ReasonForRequestService;
 
 namespace Web.Extensions
 {
@@ -196,6 +198,11 @@ namespace Web.Extensions
             services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
+            services.AddScoped(typeof(ICraftRateService<,,>), typeof(CraftRateService<,,>));
+            services.AddScoped(typeof(ICraftSkillService<,,>), typeof(CraftSkillService<,,>));
+            services.AddScoped(typeof(ILeadPlannerService<,,>), typeof(LeadPlannerService<,,>));
+            services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
+            services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
