@@ -45,6 +45,7 @@ using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Services.CommonServices.CompanyService;
 using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.ReasonForRequestService;
+using Repositories.Services.TimeOnToolServices.DelayTypeService;
 
 namespace Web.Extensions
 {
@@ -203,6 +204,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(ILeadPlannerService<,,>), typeof(LeadPlannerService<,,>));
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
+            services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();

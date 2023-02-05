@@ -88,7 +88,7 @@ namespace Models.Mapper
             CreateMap<Location, LocationBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, LocationBriefViewModel>().ReverseMap();
 
-            //PermitType
+            //DelayType
             CreateMap<DelayTypeModifyViewModel, DelayType>().ReverseMap();
             CreateMap<DelayType, DelayTypeDetailViewModel>().ReverseMap();
             CreateMap<DelayTypeModifyViewModel, DelayTypeDetailViewModel>().ReverseMap();

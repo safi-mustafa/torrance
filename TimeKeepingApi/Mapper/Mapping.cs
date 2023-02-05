@@ -31,6 +31,7 @@ using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.OverrideLogs;
 using ViewModels.Common.Company;
+using ViewModels.TimeOnTools;
 
 namespace TorranceApi.Mapper
 {
@@ -144,6 +145,13 @@ namespace TorranceApi.Mapper
             CreateMap<FolderModifyViewModel, FolderDetailViewModel>().ReverseMap();
             CreateMap<Folder, FolderBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, FolderBriefViewModel>().ReverseMap();
+
+            //DelayType
+            CreateMap<DelayTypeModifyViewModel, DelayType>().ReverseMap();
+            CreateMap<DelayType, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayTypeModifyViewModel, DelayTypeDetailViewModel>().ReverseMap();
+            CreateMap<DelayType, DelayTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, DelayTypeBriefViewModel>().ReverseMap();
 
             //Employee
             CreateMap<EmployeeModifyViewModel, Employee>().ReverseMap();
