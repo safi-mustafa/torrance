@@ -17,19 +17,30 @@
                     </div>
                 </div>
             }
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                </div>
+            </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+
 
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
             </div>
-
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                    <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
                 </div>
             </div>
 
+          
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" for="CraftSkill" />
@@ -43,26 +54,11 @@
 
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
-                    <input asp-for="WorkCompletedDate" type="date" class="form-control" />
-                    <span asp-validation-for="WorkCompletedDate" class="validation-invalid-label"></span>
+                    <label asp-for="OverrideHours" class="form-label fw-600"></label>
+                    <input asp-for="OverrideHours" type="number" class="form-control" />
+                    <span asp-validation-for="OverrideHours" class="validation-invalid-label"></span>
                 </div>
             </div>
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Description" class="form-label fw-600"></label>
-                    <input asp-for="Description" type="text" class="form-control" />
-                    <span asp-validation-for="Description" class="validation-invalid-label"></span>
-                </div>
-            </div>
-
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="PONumber" class="form-label fw-600"></label>
@@ -71,19 +67,27 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="OverrideHours" class="form-label fw-600"></label>
-                    <input asp-for="OverrideHours" type="number" class="form-control" />
-                    <span asp-validation-for="OverrideHours" class="validation-invalid-label"></span>
-                </div>
-            </div>
 
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                    <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
+                    <input asp-for="WorkCompletedDate" type="date" class="form-control" />
+                    <span asp-validation-for="WorkCompletedDate" class="validation-invalid-label"></span>
                 </div>
             </div>
+
+           
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-600"></label>
+                    <input asp-for="Description" type="text" class="form-control" />
+                    <span asp-validation-for="Description" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+           
+           
+         
             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
                     <div class="col-lg-6">

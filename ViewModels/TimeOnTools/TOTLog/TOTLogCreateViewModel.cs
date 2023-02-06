@@ -30,6 +30,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Total Manhours")]
         public long? ManHours { get; set; }
+        [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
         public TimeSpan? TimeRequested { get; set; } = TimeSpan.Zero;

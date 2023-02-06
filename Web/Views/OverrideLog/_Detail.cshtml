@@ -7,6 +7,19 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="mb-3">
+            <label asp-for="Status" class="form-label fw-600"></label>
+            <div>@Model.Status</div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="FormattedCreatedOn" class="form-label fw-600"></label>
+            <div>@Model.FormattedCreatedOn</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
             <label asp-for="Requester" class="form-label fw-600"></label>
             <div>@Model.Requester.Name</div>
         </div>
@@ -14,8 +27,22 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="Requester" class="form-label fw-600"></label>
+            <label asp-for="Company" class="form-label fw-600"></label>
             <div>@Model.Company.Name</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Shift" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Shift.Name) ? "-" : Model.Shift.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Unit" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
         </div>
     </div>
 
@@ -25,13 +52,13 @@
             <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
         </div>
     </div>
-
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="FormattedCreatedOn" class="form-label fw-600"></label>
-            <div>@Model.FormattedCreatedOn</div>
+            <label asp-for="OverrideType" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.OverrideType?.Name) ? "-" : Model.OverrideType.Name)</div>
         </div>
     </div>
+
 
     <div class="col-lg-6">
         <div class="mb-3">
@@ -47,28 +74,13 @@
             <div>@(string.IsNullOrEmpty(Model.CraftRate?.Name) ? "-" : Model.CraftRate.Name)</div>
         </div>
     </div>
-
-
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
-            <div>@Model.FormattedDateOfWorkCompleted</div>
+            <label asp-for="OverrideHours" class="form-label fw-600"></label>
+            <div>@Model.OverrideHours</div>
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="OverrideType" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.OverrideType?.Name) ? "-" : Model.OverrideType.Name)</div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label fw-600"></label>
-            <div>@Model.Description</div>
-        </div>
-    </div>
 
     <div class="col-lg-6">
         <div class="mb-3">
@@ -79,8 +91,8 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="OverrideHours" class="form-label fw-600"></label>
-            <div>@Model.OverrideHours</div>
+            <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
+            <div>@Model.FormattedDateOfWorkCompleted</div>
         </div>
     </div>
 
@@ -88,17 +100,23 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="Shift" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Shift.Name) ? "-" : Model.Shift.Name)</div>
+            <label asp-for="Description" class="form-label fw-600"></label>
+            <div>@Model.Description</div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Approver" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? "-" : Model.Approver.Name)</div>
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="Unit" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
-        </div>
-    </div>
+
+
+
+
+
+
 
 </div>
 

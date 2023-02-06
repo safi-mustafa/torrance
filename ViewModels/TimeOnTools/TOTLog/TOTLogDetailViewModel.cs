@@ -33,7 +33,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         }
 
         public DateTime CreatedOn { get; set; }
-
+        [Display(Name = "Submitted")]
         public string FormattedCreatedOn
         {
             get
@@ -45,7 +45,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Total Manhours")]
         public long ManHours { get; set; }
-        [Display(Name = "Start Of Work")]
+        [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; }
         public string FormattedStartOfWork
         {

@@ -203,6 +203,8 @@ namespace Models.Mapper
                 .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
                 .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
                 .ForMember(x => x.Foreman, opt => opt.Ignore())
+                .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
+                .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))

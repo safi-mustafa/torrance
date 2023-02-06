@@ -258,10 +258,12 @@ namespace TorranceApi.Mapper
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
                .ForMember(src => src.ForemanId, opt => opt.MapFrom(dest => dest.Foreman.Id))
-                .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
+               .ForMember(dest => dest.ForemanId, act => act.Condition(src => (src.Foreman.Id != 0)))
                .ForMember(x => x.Foreman, opt => opt.Ignore())
-                .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
-                .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
+               .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
+               .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
+               .ForMember(src => src.PermittingIssueId, opt => opt.MapFrom(dest => dest.PermittingIssue.Id))
+               .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ReverseMap();

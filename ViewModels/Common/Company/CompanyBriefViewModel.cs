@@ -10,7 +10,7 @@ namespace ViewModels.Common.Company
 
         }
         [DisplayName("Company")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

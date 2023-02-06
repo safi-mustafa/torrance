@@ -13,7 +13,6 @@ namespace ViewModels.WeldingRodRecord
         [DisplayName("Employee")]
         public override string? Name { get; set; }
 
-        public CompanyBriefViewModel Company { get; set; }
     }
 
 }

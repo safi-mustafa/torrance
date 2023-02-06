@@ -82,7 +82,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 var dbModel = await _db.TOTLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
-                    .Include(x => x.Contractor)
+                    .Include(x => x.Company)
                     .Include(x => x.ReworkDelay)
                     .Include(x => x.ShiftDelay)
                     .Include(x => x.Shift)
