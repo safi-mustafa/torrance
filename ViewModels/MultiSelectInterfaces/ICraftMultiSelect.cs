@@ -1,4 +1,4 @@
-﻿namespace ViewModels.CRUD.Interfaces
+﻿namespace ViewModels.MultiSelectInterfaces
 {
     public interface ICraftMultiSelect
     {

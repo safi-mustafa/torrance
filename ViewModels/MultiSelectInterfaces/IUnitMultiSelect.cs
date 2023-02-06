@@ -1,6 +1,6 @@
 ﻿using ViewModels.Common.Unit;
 
-namespace ViewModels.Interface
+namespace ViewModels.MultiSelectInterfaces
 {
     public interface IUnitMultiSelect
     {

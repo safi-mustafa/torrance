@@ -1,7 +1,7 @@
 ﻿using System;
 using ViewModels.WeldingRodRecord;
 
-namespace ViewModels.Interface
+namespace ViewModels.MultiSelectInterfaces
 {
     public interface IEmployeeMultiselect
     {

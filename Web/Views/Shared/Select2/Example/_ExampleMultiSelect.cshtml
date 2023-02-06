@@ -1,4 +1,5 @@
-﻿@model ICraftMultiSelect
+﻿@using ViewModels.MultiSelectInterfaces;
+@model ICraftMultiSelect
 
 @{
     var accessAllowed = ViewData["AccessAllowed"] != null && !string.IsNullOrEmpty(ViewData["AccessAllowed"].ToString()) ? bool.Parse(ViewData["AccessAllowed"].ToString()) : false;
