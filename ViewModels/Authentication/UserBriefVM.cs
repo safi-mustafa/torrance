@@ -30,6 +30,7 @@ namespace ViewModels.Authentication
         {
             IsValidationEnabled = isValidationEnabled;
         }
+
         [DisplayName("Approver")]
         public override string Name { get; set; }
         public bool IsValidationEnabled { get; set; } = true;

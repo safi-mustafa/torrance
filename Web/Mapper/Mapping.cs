@@ -227,9 +227,10 @@ namespace Models.Mapper
                 .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
-            CreateMap<ToranceUser, ApproverBriefViewModel>()
-               .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
-               .ReverseMap();
+           
+            CreateMap<ApproverBriefViewModel, ToranceUser>()
+             .ForMember(src => src.Email, opt => opt.MapFrom(dest => dest.Name))
+             .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
                 .ReverseMap();
 

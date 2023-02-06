@@ -123,9 +123,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Requester)
                     .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
+
+
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
+                    mappedModel.Approver = new ViewModels.Authentication.ApproverBriefViewModel
+                    {
+                        Id = dbModel.ApproverId,
+                        Name = dbModel.Approver.Email
+                    };
                     //var selectedEmployees = await GetOverrideLogEmployees(id);
                     //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
@@ -149,6 +156,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
 
                     var mappedModel = _mapper.Map<OverrideLog>(model);
+                    mappedModel.Approver = null;
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();

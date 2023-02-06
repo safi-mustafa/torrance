@@ -65,12 +65,14 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
 
-        private ApproverBriefViewModel? _approver;
-        public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(true) : _approver; set => _approver = value; }
+        //private ApproverBriefViewModel? _approver;
+        //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(true) : _approver; set => _approver = value; }
 
-        private UserBriefViewModel? _foreman;
-        public UserBriefViewModel Foreman { get => _foreman == null ? new UserBriefViewModel() : _foreman; set => _foreman = value; }
+        //private UserBriefViewModel? _foreman;
+        //public UserBriefViewModel Foreman { get => _foreman == null ? new UserBriefViewModel() : _foreman; set => _foreman = value; }
 
         private EmployeeBriefViewModel? _employee;
         public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }

@@ -75,7 +75,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
-                        }).AsQueryable();
+                        }).OrderByDescending(x => x.Id).AsQueryable();
                 //var wrrLogsQueryable = _db.WRRLogs
                 //    .Include(x => x.Employee)
                 //    .Include(x => x.Approver)
@@ -140,7 +140,11 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Unit = x.Unit != null ? x.Unit.Name : "",
                         Type = LogType.Override,
                         Employee = x.Requester
-                    }).AsQueryable();
+                    }).OrderByDescending(x => x.Id).AsQueryable();
+
+                var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();
+
+
                 var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable)).AsQueryable();
                 var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);

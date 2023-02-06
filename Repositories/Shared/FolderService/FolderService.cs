@@ -75,7 +75,7 @@ namespace Repositories.Services.FolderService
         {
             try
             {
-                var dbModel = await _db.Set<Folder>().Include(x => x.Attachments).Where(x => x.Id == id).FirstOrDefaultAsync();
+                var dbModel = await _db.Set<Folder>().Include(x => x.Attachments.OrderByDescending(x => x.Id)).Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<DetailViewModel>(dbModel);

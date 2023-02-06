@@ -41,7 +41,7 @@ namespace Web.Controllers
                 {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Employee/Detail/Id"},
                     new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Employee/Update/Id"},
-                    //new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Employee/Delete/Id"},
+                    new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Employee/Delete/Id"},
                 });
             }
 

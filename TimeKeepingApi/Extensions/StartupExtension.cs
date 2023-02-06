@@ -46,6 +46,7 @@ using Repositories.Services.CommonServices.CompanyService;
 using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.ReasonForRequestService;
 using Repositories.Services.TimeOnToolServices.DelayTypeService;
+using Repositories.Shared.NotificationServices;
 
 namespace Web.Extensions
 {
@@ -209,6 +210,7 @@ namespace Web.Extensions
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

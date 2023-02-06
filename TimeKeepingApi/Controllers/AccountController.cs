@@ -65,7 +65,7 @@ namespace TorranceApi.Controllers
                     var user = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
                     if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
                     {
-                        ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
+                        ModelState.AddModelError("pincode", "Approval for this account is still pending.");
                         _logger.LogError("Approval for this account is still pending.");
 
                         result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
@@ -118,7 +118,7 @@ namespace TorranceApi.Controllers
 
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
                         _logger.LogError("Invalid login attempt");
                         result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
                         return ReturnProcessedResponse(result);
@@ -127,7 +127,7 @@ namespace TorranceApi.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError("pincode", ex.Message);
                 _logger.LogError(ex.Message, "Login Endpoint Exception msg");
             }
             result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
@@ -149,6 +149,11 @@ namespace TorranceApi.Controllers
                     _logger.LogInformation("Model State is valid", "login method 2");
 
                     var user = await _userManager.FindByEmailAsync(model.Email);
+                    if(user == null)
+                    {
+                        ModelState.AddModelError("Email", "Invalid login attempt. The Email is incorrect.");
+                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
+                    }
                     //if (user?.IsApproved == false)
                     //{
                     //    ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
@@ -212,10 +217,9 @@ namespace TorranceApi.Controllers
                         };
                         return ReturnProcessedResponse<UserTokenVM>(responseModel);
                     }
-
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError("Password", "Invalid login attempt. The Password is incorrect.");
                         _logger.LogError("Invalid login attempt");
                         result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
                         return ReturnProcessedResponse(result);
@@ -224,7 +228,7 @@ namespace TorranceApi.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError("Email", ex.Message);
                 _logger.LogError(ex.Message, "Login Endpoint Exception msg");
             }
             result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);

@@ -1376,3 +1376,7 @@ header {
 #crud-list-table_wrapper .datatable-scroll {
     overflow: auto;
 }
+
+.card-header{
+    padding: 0.5rem !important;
+}
