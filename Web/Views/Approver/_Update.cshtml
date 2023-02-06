@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        @if(Model.Id < 1)
+        @if (Model.Id < 1)
         {
             <div class="row">
                 <div class="col-lg-6">
@@ -34,7 +34,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label asp-for="ConfirmPassword" class="form-label fw-600"></label>
-                        <input asp-for="ConfirmPassword" type="text" class="form-control" placeholder="Confirm Password" />
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
                         <span asp-validation-for="ConfirmPassword" class="validation-invalid-label"></span>
                     </div>
                 </div>
@@ -48,8 +48,13 @@
                     <span asp-validation-for="PhoneNumber" class="validation-invalid-label"></span>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3 profile-input">
+                    <partial name="~/Views/Shared/Select2/_UnitMultiSelect.cshtml" model="Model" view-data='new ViewDataDictionary(ViewData) { { "MultiSelect", true} }' />
+                </div>
+            </div>
         </div>
-      
+
 
     </div>
 </div>

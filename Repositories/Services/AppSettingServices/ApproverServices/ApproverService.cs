@@ -12,6 +12,10 @@ using Centangle.Common.ResponseHelpers;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 using Models;
+using ViewModels;
+using Models.Common;
+using ViewModels.Common.Unit;
+using ViewModels.Authentication.Approver;
 
 namespace Repositories.Services.WeldRodRecordServices.ApproverService
 {
@@ -40,11 +44,13 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
+                var viewModel = model as ApproverModifyViewModel;
                 var user = _mapper.Map<SignUpModel>(model);
                 user.Role = "Approver";
                 var userId = await _identity.CreateUser(user, transaction);
                 if (userId > 0)
                 {
+                    await SetApproverUnits(viewModel.UnitIds, userId);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = userId };
                     return response;
@@ -66,6 +72,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
+                var viewModel = model as ApproverModifyViewModel;
                 if (model != null)
                 {
                     var record = await _db.Users.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
@@ -76,9 +83,10 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                         var result = await _identity.UpdateUser(user, transaction);
                         if (result)
                         {
-                                await transaction.CommitAsync();
-                                var response = new RepositoryResponseWithModel<long> { ReturnModel = user.Id };
-                                return response;
+                            await SetApproverUnits(viewModel.UnitIds, model.Id);
+                            await transaction.CommitAsync();
+                            var response = new RepositoryResponseWithModel<long> { ReturnModel = user.Id };
+                            return response;
                         }
                     }
                     _logger.LogWarning($"Record for id: {model?.Id} not found in Approver");
@@ -101,8 +109,9 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 var dbModel = await _db.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
-                    var result = _mapper.Map<UserDetailViewModel>(dbModel);
-                    var response = new RepositoryResponseWithModel<UserDetailViewModel> { ReturnModel = result };
+                    var result = _mapper.Map<ApproverDetailViewModel>(dbModel);
+                    result.Units = await GetApproverUnits(id);
+                    var response = new RepositoryResponseWithModel<ApproverDetailViewModel> { ReturnModel = result };
                     return response;
                 }
                 _logger.LogWarning($"No record found for id:{id} for Approver");
@@ -156,6 +165,64 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             {
                 _logger.LogError(ex, $"Delete() for Approver threw the following exception");
                 return Response.BadRequestResponse(_response);
+            }
+        }
+
+        public async Task<bool> SetApproverUnits(List<long> unitIds, long approverId)
+        {
+            try
+            {
+                var oldApproverUnits = await _db.ApproverUnits.Where(x => x.ApproverId == approverId).ToListAsync();
+                if (oldApproverUnits.Count() > 0)
+                {
+                    foreach (var oldApproverUnit in oldApproverUnits)
+                    {
+                        oldApproverUnit.IsDeleted = true;
+                        _db.Entry(oldApproverUnit).State = EntityState.Modified;
+                    }
+                    _db.SaveChanges();
+                }
+                if (unitIds.Count() > 0)
+                {
+                    List<ApproverUnit> list = new List<ApproverUnit>();
+                    foreach (var unitId in unitIds)
+                    {
+                        ApproverUnit approverUnit = new ApproverUnit();
+                        approverUnit.ApproverId = approverId;
+                        approverUnit.UnitId = unitId;
+                        list.Add(approverUnit);
+                    }
+                    await _db.AddRangeAsync(list);
+                    await _db.SaveChangesAsync();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ApproverService SetApproverUnits method threw an exception, Message: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<List<UnitBriefViewModel>> GetApproverUnits(long id)
+        {
+            try
+            {
+                var employeeCrafts = await (from au in _db.ApproverUnits
+                                            where au.ApproverId == id
+                                            join u in _db.Units on au.UnitId equals u.Id
+                                            select new UnitBriefViewModel()
+                                            {
+                                                Id = au.UnitId,
+                                                Name = u.Name
+                                            }).ToListAsync();
+                return employeeCrafts;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ApproverService GetApproverUnits method threw an exception, Message: {ex.Message}");
+                return null;
             }
         }
     }
