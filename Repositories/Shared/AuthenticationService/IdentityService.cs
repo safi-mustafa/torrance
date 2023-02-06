@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Models;
 using Pagination;
+using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
+using ViewModels.Notification;
 
 namespace Repositories.Shared.AuthenticationService
 {
@@ -23,6 +25,7 @@ namespace Repositories.Shared.AuthenticationService
         private readonly IMapper _mapper;
         private readonly ToranceContext _db;
         private readonly IUserInfoService _userInfoService;
+        private readonly INotificationService _notificationService;
 
         public IdentityService(
             UserManager<ToranceUser> userManager,
@@ -31,7 +34,8 @@ namespace Repositories.Shared.AuthenticationService
             ILogger<IdentityService> logger,
             IMapper mapper,
             ToranceContext db,
-            IUserInfoService userInfoService
+            IUserInfoService userInfoService,
+            INotificationService notificationService
             )
         {
             _userManager = userManager;
@@ -41,6 +45,7 @@ namespace Repositories.Shared.AuthenticationService
             _mapper = mapper;
             _db = db;
             _userInfoService = userInfoService;
+            _notificationService = notificationService;
         }
 
         public async Task<long> CreateUser(SignUpModel model, IDbContextTransaction transaction, string optionalUsernamePrefix = "")
@@ -211,6 +216,31 @@ namespace Repositories.Shared.AuthenticationService
             {
                 _logger.LogError($"BeneficiaryService GetAll method threw an exception, Message: {ex.Message}");
                 return new PaginatedResultModel<T>();
+            }
+        }
+
+        public async Task<bool> SendNotification(MailRequestViewModel mailRequest)
+        {
+            try
+            {
+                NotificationViewModel viewModel = new()
+                {
+                    Message = mailRequest.Body,
+                    SendTo = mailRequest.SendTo,
+                    Type = mailRequest.Type,
+                    Subject = mailRequest.Subject
+                };
+
+                if (await _notificationService.AddNotificationAsync(viewModel))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"IdentityService SendMessage method threw an exception, Message: {ex.Message}");
+                return false;
             }
         }
     }

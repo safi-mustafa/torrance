@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Pagination;
 using ViewModels.Authentication;
+using ViewModels.Notification;
 
 namespace Repositories.Shared.AuthenticationService
 {
@@ -14,5 +15,6 @@ namespace Repositories.Shared.AuthenticationService
             IDbContextTransaction transaction);
 
         Task<PaginatedResultModel<T>> GetAll<T>(BaseSearchModel search);
+        Task<bool> SendNotification(MailRequestViewModel mailRequest);
     }
 }

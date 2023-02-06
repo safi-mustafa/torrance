@@ -14,6 +14,7 @@ using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.Notification;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
@@ -381,6 +382,7 @@ namespace Models.Mapper
             CreateMap<BaseBriefVM, ORLogBriefViewModel>().ReverseMap();
 
 
+            CreateMap<Notification, NotificationViewModel>().ReverseMap();
         }
     }
 }

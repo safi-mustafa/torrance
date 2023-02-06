@@ -4,9 +4,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -14,6 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Models;
+using Repositories.Shared.AuthenticationService;
+using ViewModels.Notification;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -21,11 +25,13 @@ namespace Web.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ToranceUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IIdentityService _identity;
 
-        public ForgotPasswordModel(UserManager<ToranceUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ToranceUser> userManager, IEmailSender emailSender, IIdentityService identity)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _identity = identity;
         }
 
         /// <summary>
@@ -71,12 +77,19 @@ namespace Web.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                //await _emailSender.SendEmailAsync(
+                //    Input.Email,
+                //    "Reset Password",
+                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                var message = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                var mailRequest = new MailRequestViewModel(Input.Email, "Reset Password", message,Input.Email, NotificationType.Email);
+
+                await _identity.SendNotification(mailRequest);
+
+
+
+                    return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
             return Page();

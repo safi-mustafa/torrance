@@ -43,6 +43,7 @@ using Repositories.Services.WeldRodRecordServices.WeldMethodService;
 using Repositories.Services.WeldRodRecordServices.WRRLogService;
 using Repositories.Shared.AttachmentService;
 using Repositories.Shared.AuthenticationService;
+using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 
 namespace Web.Extensions
@@ -138,6 +139,7 @@ namespace Web.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }
