@@ -12,7 +12,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class EmployeeController : CrudBaseBriefController<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel, EmployeeDetailViewModel, EmployeeAPISearchViewModel>
+    public class EmployeeController : CrudBaseBriefController<EmployeeDetailViewModel, EmployeeAPISearchViewModel>
     {
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly IMapper _mapper;

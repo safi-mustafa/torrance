@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReworkDelayController : CrudBaseBriefController<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel, ReworkDelayDetailViewModel, ReworkDelaySearchViewModel>
+    public class ReworkDelayController : CrudBaseBriefController<ReworkDelayDetailViewModel, ReworkDelaySearchViewModel>
     {
         public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> reworkDelayService) : base(reworkDelayService)
         {

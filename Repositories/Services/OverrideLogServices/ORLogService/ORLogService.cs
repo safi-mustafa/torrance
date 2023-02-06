@@ -10,9 +10,11 @@ using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Pagination;
 using Repositories.Shared;
+using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using ViewModels;
+using ViewModels.Notification;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord;
@@ -30,14 +32,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
+        private readonly INotificationService _notificationService;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, logger, mapper, response)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
             _userInfoService = userInfoService;
+            _notificationService = notificationService;
         }
 
         public override Expression<Func<OverrideLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -152,6 +156,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel { EntityId = mappedModel.Id, Message = "", Type = NotificationType.Push, Subject = "A new Override Log has been created" });
 
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };

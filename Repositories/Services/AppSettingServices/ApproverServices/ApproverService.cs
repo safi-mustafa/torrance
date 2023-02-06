@@ -16,10 +16,12 @@ using ViewModels;
 using Models.Common;
 using ViewModels.Common.Unit;
 using ViewModels.Authentication.Approver;
+using Helpers.Extensions;
+using System.Net;
 
 namespace Repositories.Services.WeldRodRecordServices.ApproverService
 {
-    public class ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>: IApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel> : IApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
@@ -30,7 +32,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public ApproverService(ToranceContext db, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) 
+        public ApproverService(ToranceContext db, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response)
         {
             _db = db;
             _logger = logger;
@@ -68,7 +70,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
 
         public async Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
-            
+
             var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
@@ -106,7 +108,11 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
         {
             try
             {
-                var dbModel = await _db.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var dbModel = await (from u in _db.Users
+                                     join ur in _db.UserRoles on u.Id equals ur.UserId
+                                     join r in _db.Roles on ur.RoleId equals r.Id
+                                     where r.Name == "Approver" && u.Id == id
+                                     select u).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<ApproverDetailViewModel>(dbModel);
@@ -131,19 +137,84 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
 
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
-            var searchFilter = search as UserSearchViewModel;
-            searchFilter.Roles = new List<UserRolesVM>
+
+            try
             {
-                new UserRolesVM()
+                var searchFilter = search as ApproverSearchViewModel;
+
+                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
+
+                var userQueryable = (from user in _db.Users
+                                     join approverUnit in _db.ApproverUnits on user.Id equals approverUnit.ApproverId
+                                     join userRole in _db.UserRoles on user.Id equals userRole.UserId
+                                     join r in _db.Roles on userRole.RoleId equals r.Id
+                                     where
+                                     (
+                                        (
+                                            string.IsNullOrEmpty(searchFilter.Search.value) || user.Email.ToLower().Contains(searchFilter.Search.value.ToLower())
+                                        )
+                                        &&
+                                        (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverUnit.UnitId == searchFilter.Unit.Id)
+                                        &&
+                                        ("Approver" == r.Name)
+                                        &&
+                                        (
+                                            string.IsNullOrEmpty(searchFilter.Email) || user.Email.ToLower().Contains(searchFilter.Email.ToLower())
+                                        )
+                                    )
+                                     select new ApproverDetailViewModel { Id = user.Id }
+                            ).GroupBy(x => x.Id)
+                            .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
+                            .AsQueryable();
+
+                var queryString = userQueryable.ToQueryString();
+
+                var users = await userQueryable.Paginate(searchFilter);
+                var filteredUserIds = users.Items.Select(x => x.Id);
+
+                var userList = await _db.Users
+                    .Where(x => filteredUserIds.Contains(x.Id))
+                    .Select(x => new ApproverDetailViewModel
+                    {
+                        Id = x.Id,
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        PhoneNumber = x.PhoneNumber,
+                    }).ToListAsync();
+                var roles = await _db.UserRoles
+                  .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
+                              ur => ur.RoleId,
+                              r => r.Id,
+                              (ur, r) => new { UR = ur, R = r })
+                  .Where(x => filteredUserIds.Contains(x.UR.UserId))
+                  .Select(x => new UserRoleVM
+                  {
+                      RoleId = x.R.Id,
+                      UserId = x.UR.UserId,
+                      RoleName = x.R.Name
+                  })
+                  .ToListAsync();
+
+                users.Items.ForEach(x =>
                 {
-                    Id = 0,
-                    Name = "Approver"
-                }
-            };
-            var result = await _identity.GetAll<M>(searchFilter);
-            var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();
-            responseModel.ReturnModel = result;
-            return responseModel;
+                    x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
+                    x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
+                    x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
+                    x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
+                    x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
+                });
+                var mappedUserList = _mapper.Map<List<M>>(users.Items);
+                var paginatedModel = new PaginatedResultModel<M> { Items = mappedUserList, _links = users._links, _meta = users._meta };
+
+                var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();
+                responseModel.ReturnModel = paginatedModel;
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ApproverService GetAll method threw an exception, Message: {ex.Message}");
+                return Response.BadRequestResponse(_response);
+            }
         }
 
         public async Task<IRepositoryResponse> Delete(long id)

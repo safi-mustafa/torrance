@@ -46,6 +46,11 @@ using Repositories.Services.CommonServices.CompanyService;
 using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.ReasonForRequestService;
 using Repositories.Services.TimeOnToolServices.DelayTypeService;
+using Repositories.Shared.NotificationServices;
+using Repositories.Services.WeldRodRecordServices.ApproverService;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Repositories.Services.CommonServices.ApprovalService.Interface;
+using Repositories.Services.CommonServices.ApprovalService;
 
 namespace Web.Extensions
 {
@@ -177,7 +182,9 @@ namespace Web.Extensions
         public static void ConfigureDependencies(this IServiceCollection services)
         {
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
@@ -205,6 +212,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
+            services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
+            services.AddScoped<IApprovalService, ApprovalService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();

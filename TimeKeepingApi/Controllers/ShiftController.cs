@@ -10,7 +10,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ShiftController : CrudBaseBriefController<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel, ShiftDetailViewModel, ShiftSearchViewModel>
+    public class ShiftController : CrudBaseBriefController<ShiftDetailViewModel, ShiftSearchViewModel>
     {
         public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> shiftService) : base(shiftService)
         {

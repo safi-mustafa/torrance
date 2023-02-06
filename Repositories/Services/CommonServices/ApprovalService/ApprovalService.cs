@@ -40,19 +40,21 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var search = model as ApprovalSearchViewModel;
             var userRoles = _userInfo.LoggedInUserRoles();
             var loggedInUserId = long.Parse(_userInfo.LoggedInUserId());
+            var isApprover = userRoles.Contains("Approver");
+            var isEmployee = userRoles.Contains("Employee");
+
             try
             {
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
-                    //.Include(x => x.)
-                    //.Include(x => x.Department)
-                    //.Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
-                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         (!isApprover || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         &&
+                         (!isEmployee)
                          &&
                          (search.Type == null || search.Type == LogType.TimeOnTools)
                          &&
@@ -64,18 +66,16 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         new ApprovalDetailViewModel
                         {
                             Id = x.Id,
-                            //Contractor = x.Contractor != null ? x.Contractor.Name : "",
-                            //Department = x.Department != null ? x.Department.Name : "",
                             Approver = x.Approver != null ? x.Approver.UserName : "",
                             TotalHours = x.HoursDelayed,
                             Date = x.CreatedOn,
                             Status = x.Status,
-                            //TWR = x.Twr,
                             Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
                         }).AsQueryable();
+
                 //var wrrLogsQueryable = _db.WRRLogs
                 //    .Include(x => x.Employee)
                 //    .Include(x => x.Approver)
@@ -112,13 +112,14 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Requester)
                     .Include(x => x.Approver)
                     .Include(x => x.ReasonForRequest)
-                    //.Include(x => x.re)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.RequesterId)
                          &&
-                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         (!isApprover || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         &&
+                         (!isEmployee)
                          &&
                          (search.Type == null || search.Type == LogType.WeldingRodRecord)
                          &&
@@ -131,12 +132,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     {
                         Id = x.Id,
                         Approver = x.Approver != null ? x.Approver.UserName : "",
-                        //Contractor = x.Contractor != null ? x.Contractor.Name : "",
                         Date = x.CreatedOn,
                         Status = x.Status,
                         TotalHours = x.OverrideHours,
                         Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
-                        //TWR = x.Twr,
                         Unit = x.Unit != null ? x.Unit.Name : "",
                         Type = LogType.Override,
                         Employee = x.Requester

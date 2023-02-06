@@ -232,10 +232,17 @@ namespace Models.Mapper
                .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
                 .ReverseMap();
+            CreateMap<UserUpdateViewModel, ToranceUser>()
+              .ReverseMap();
+            CreateMap<ToranceUser, UserDetailViewModel>().ReverseMap();
+            CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
+            CreateMap<UserUpdateViewModel, SignUpModel>().ReverseMap();
 
             //Approver
             CreateMap<ApproverModifyViewModel, ToranceUser>().ReverseMap();
+            CreateMap<ApproverModifyViewModel, SignUpModel>().ReverseMap();
             CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
+            CreateMap<UserDetailViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
@@ -306,15 +313,6 @@ namespace Models.Mapper
                 .ForMember(d => d.Folder, s => s.Ignore())
                 .ReverseMap();
             CreateMap<AttachmentResponseVM, AttachmentModifyViewModel>().ReverseMap();
-
-
-            //Approver
-            CreateMap<UserUpdateViewModel, ToranceUser>()
-              .ReverseMap();
-            CreateMap<ToranceUser, UserDetailViewModel>().ReverseMap();
-            CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
-            CreateMap<UserUpdateViewModel, SignUpModel>().ReverseMap();
-
 
             //CraftRate
             CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();

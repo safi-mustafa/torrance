@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Centangle.Common.ResponseHelpers.Models;
+using Enums;
 
 namespace Repositories.Shared.Interfaces
 {
@@ -6,6 +7,6 @@ namespace Repositories.Shared.Interfaces
     {
         Task<List<long>> GetApprovedRecordIds();
         Task ApproveRecords(List<long> ids, bool Status);
-        Task<bool> SetApproveStatus(long id, Status status);
+        Task<IRepositoryResponse> SetApproveStatus(long id, Status status);
     }
 }

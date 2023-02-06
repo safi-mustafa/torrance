@@ -13,16 +13,13 @@ namespace TorranceApi.Controllers
 {
 
     [Controller]
-    public abstract class CrudBaseBriefController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : TorranceController
-        where DetailViewModel : class, IBaseCrudViewModel, new()
+    public abstract class CrudBaseBriefController<PaginatedResultViewModel, SearchViewModel> : TorranceController
         where PaginatedResultViewModel : class, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
         where SearchViewModel : IBaseSearchModel, new()
     {
-        private readonly IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> _service;
+        private readonly IBaseSearch _service;
 
-        public CrudBaseBriefController(IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> service)
+        public CrudBaseBriefController(IBaseSearch service)
         {
             this._service = service;
         }
