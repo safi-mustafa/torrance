@@ -27,7 +27,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
         public long ManHours { get; set; }
-        [Display(Name = "Start Of Work")]
+        [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
         public TimeSpan? TimeRequested { get; set; } = TimeSpan.Zero;
@@ -37,7 +37,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
-        [Display(Name = "Job Description", Prompt = "Add Job Descriptions")]
+        [Display(Name = "Description", Prompt = "Add Descriptions")]
         public string? JobDescription { get; set; }
         [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
         [Range(1, long.MaxValue, ErrorMessage = "The Head Count must be greater than zero.")]

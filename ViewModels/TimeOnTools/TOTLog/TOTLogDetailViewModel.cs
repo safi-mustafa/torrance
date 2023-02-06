@@ -77,7 +77,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? Comment { get; set; }
         [Display(Name = "Reason")]
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
-        [Display(Name = "Job Description")]
+        [Display(Name = "Description")]
         public string JobDescription { get; set; }
         [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
