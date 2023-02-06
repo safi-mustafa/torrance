@@ -28,8 +28,9 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DateTime? Date { get; set; } = DateTime.Now;
         public string Twr { get; set; }
 
-        [Display(Name = "Total Manhours")]
-        public long? ManHours { get; set; }
+        [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        public long ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
         [Display(Name = "Time Requested")]
@@ -38,6 +39,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         [Display(Name = "Total Head Count")]

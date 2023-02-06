@@ -244,7 +244,6 @@ namespace Models.Mapper
             CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
             CreateMap<UserDetailViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
-            CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee

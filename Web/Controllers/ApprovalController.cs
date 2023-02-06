@@ -250,7 +250,7 @@ namespace Web.Controllers
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit"},
                 //new DataTableViewModel{title = "TWR",data = "TWR"},
-                new DataTableViewModel{title = "Reason",data = "ResonForDelay"},
+                new DataTableViewModel{title = "Reason",data = "Reason"},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 

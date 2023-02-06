@@ -14,9 +14,12 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public string Description { get; set; }
 
+        [Required]
+        [Display(Name = "Override Hours")]
         public int OverrideHours { get; set; }
 
-
+        [Display(Name = "PO Number")]
+        [Required]
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PONumber { get; set; }
 

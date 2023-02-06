@@ -67,7 +67,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         {
                             Id = x.Id,
                             Approver = x.Approver != null ? x.Approver.UserName : "",
-                            TotalHours = x.HoursDelayed,
+                            TotalHours = x.ManHours ?? 0,
                             Date = x.CreatedOn,
                             Status = x.Status,
                             Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
