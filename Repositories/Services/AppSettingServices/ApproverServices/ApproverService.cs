@@ -145,7 +145,8 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
                 var userQueryable = (from user in _db.Users
-                                     join approverUnit in _db.ApproverUnits on user.Id equals approverUnit.ApproverId
+                                     join approverUnit in _db.ApproverUnits on user.Id equals approverUnit.ApproverId into aul
+                                     from approverUnit in aul.DefaultIfEmpty()
                                      join userRole in _db.UserRoles on user.Id equals userRole.UserId
                                      join r in _db.Roles on userRole.RoleId equals r.Id
                                      where

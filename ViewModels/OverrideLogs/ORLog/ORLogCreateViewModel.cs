@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ViewModels.Authentication;
 using ViewModels.Common.Company;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
@@ -10,21 +11,21 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
 
+        [Display(Name = "Work Completed Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
-        public string Description { get; set; }
-
-        [Required]
         [Display(Name = "Override Hours")]
         public int OverrideHours { get; set; }
 
         [Display(Name = "PO Number")]
-        [Required]
+
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PONumber { get; set; }
+        public string Description { get; set; }
+
+        public UnitBriefViewModel Unit { get; set; } = new();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
-        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
 
@@ -35,5 +36,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
 
         public EmployeeBriefViewModel Requester { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new();
+
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
     }
 }

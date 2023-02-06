@@ -158,13 +158,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var mappedModel = _mapper.Map<TOTLog>(model);
                     await SetRequesterId(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
-                    await _db.SaveChangesAsync();
+                    var result = await _db.SaveChangesAsync() > 0;
                     await _notificationService.AddNotificationAsync(new NotificationViewModel { EntityId = mappedModel.Id, Message = "", Type = NotificationType.Push, Subject = "A new TOT Log has been created" });
+
+                    await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
                 }
                 catch (Exception ex)
                 {
+                    await transaction.RollbackAsync();
                     _logger.LogError(ex, $"Exception thrown in Create method of {typeof(TOTLog).FullName}");
                     return Response.BadRequestResponse(_response);
                 }
