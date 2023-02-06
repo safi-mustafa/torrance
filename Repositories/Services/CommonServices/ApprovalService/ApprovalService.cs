@@ -145,7 +145,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();
 
 
-                var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable)).AsQueryable();
+                var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable)).OrderByDescending(x => x.Date).AsQueryable();
                 var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
