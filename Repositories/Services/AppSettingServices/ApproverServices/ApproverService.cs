@@ -12,7 +12,6 @@ using Centangle.Common.ResponseHelpers;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 using Models;
-using ViewModels.Authentication.Approver;
 
 namespace Repositories.Services.WeldRodRecordServices.ApproverService
 {

@@ -25,13 +25,13 @@ using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using ViewModels.WeldingRodRecord.WRRLog;
 using Helpers.Models.Shared;
-using ViewModels.Authentication.Approver;
 using Models.OverrideLogs;
 using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.OverrideLogs;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools;
+using ViewModels.Authentication.Approver;
 
 namespace TorranceApi.Mapper
 {
@@ -284,6 +284,13 @@ namespace TorranceApi.Mapper
             CreateMap<SignUpModel, ToranceUser>().ReverseMap();
             CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();
             CreateMap<UserDetailViewModel, Employee>().ReverseMap();
+
+            //Approver
+            CreateMap<ApproverModifyViewModel, ToranceUser>().ReverseMap();
+            CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
+            CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
+            CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();

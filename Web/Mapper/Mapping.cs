@@ -231,8 +231,14 @@ namespace Models.Mapper
                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
-
                 .ReverseMap();
+
+            //Approver
+            CreateMap<ApproverModifyViewModel, ToranceUser>().ReverseMap();
+            CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
+            CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
+            CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();

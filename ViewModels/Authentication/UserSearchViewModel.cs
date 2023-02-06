@@ -1,6 +1,6 @@
 ﻿using Pagination;
 
-namespace ViewModels.Authentication.Approver
+namespace ViewModels.Authentication
 {
     public class UserSearchViewModel : BaseSearchModel
     {

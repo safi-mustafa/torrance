@@ -10,7 +10,6 @@ using Pagination;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.Authentication;
-using ViewModels.Authentication.Approver;
 using ViewModels.Notification;
 
 namespace Repositories.Shared.AuthenticationService

@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using ViewModels.Shared;
 
-namespace ViewModels.Authentication.Approver
+namespace ViewModels.Authentication
 {
     public class UserDetailViewModel : BaseCrudViewModel
     {

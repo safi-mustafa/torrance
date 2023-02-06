@@ -1,5 +1,4 @@
-﻿using ViewModels.Authentication.Approver;
-using ViewModels.WeldingRodRecord.Employee;
+﻿using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.Authentication
 {
