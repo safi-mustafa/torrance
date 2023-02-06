@@ -32,20 +32,6 @@
 
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="DateSubmitted" class="form-label fw-600"></label>
-                    <input asp-for="DateSubmitted" type="date" class="form-control" />
-                    <span asp-validation-for="DateSubmitted" class="validation-invalid-label"></span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="TimeSubmitted" class="form-label fw-600"></label>
-                    <input asp-for="TimeSubmitted" type="time" class="form-control" />
-                    <span asp-validation-for="TimeSubmitted" class="validation-invalid-label"></span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" for="CraftSkill" />
                 </div>
             </div>

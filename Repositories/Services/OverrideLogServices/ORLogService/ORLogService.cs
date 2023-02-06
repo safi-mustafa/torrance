@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -44,6 +45,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         {
             var searchFilters = filters as ORLogSearchViewModel;
             searchFilters.OrderByColumn = "Status";
+            var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var employeeCheck = loggedInUserRole == "Employee";
@@ -61,6 +63,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 ||
                                 (loggedInUserRole == "Employee" && x.RequesterId == parsedLoggedInId)
                             )
+                            &&
+                            (status == null || status == x.Status)
+                            &&
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
             //  &&
             //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
@@ -113,9 +119,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.OverrideType)
                     .Include(x => x.Shift)
-                    .Include(x => x.Requester)
                     .Include(x => x.Unit)
                     .Include(x => x.Approver)
+                    .Include(x => x.Requester)
+                    .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

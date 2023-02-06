@@ -30,33 +30,33 @@
                             <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
                         </div>
                     </li>
-                      <li class="nav-item dropdown">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Settings
+                            Settings
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                       @* <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @* <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>All</b>
                         </a>*@
-                        <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
-                        <a class="dropdown-item px-3" asp-controller="Company" asp-action="Index">Company</a>
-                        <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                        <a class="dropdown-item px-3" asp-controller="DelayType" asp-action="Index">Delay Type</a>
-                        <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                        <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft</a>
-                        <a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>
-                        <a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>
-                        <a class="dropdown-item px-3" asp-controller="ReasonForRequest" asp-action="Index">Reason for Request</a>
+                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
+                            <a class="dropdown-item px-3" asp-controller="Company" asp-action="Index">Companies</a>
+                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
+                            <a class="dropdown-item px-3" asp-controller="DelayType" asp-action="Index">Delay Type</a>
+                            <a class="dropdown-item px-3" asp-controller="ReasonForRequest" asp-action="Index">Reason for Request</a>
+                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
+                            <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft</a>
+                            <a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>
+                            <a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>
                         </div>
-                        </li>
+                    </li>
 
 
 
-                 
+
                 }
                 <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files </a></li>
-             
+
                 @if (User.IsInRole("Approver"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>

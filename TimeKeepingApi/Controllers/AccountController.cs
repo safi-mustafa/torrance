@@ -63,7 +63,7 @@ namespace TorranceApi.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model State is valid", "login method 2");
-                    var user = await _db.Employees.Include(x => x.Contractor).Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
+                    var user = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
                     if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
                     {
                         ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");

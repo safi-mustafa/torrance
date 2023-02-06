@@ -16,6 +16,7 @@ using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
 using Helpers.Extensions;
 using ViewModels.Common.Company;
+using ViewModels.OverrideLogs;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -74,8 +75,8 @@ namespace ViewModels.TimeOnTools.TOTLog
             }
         }
         public string? Comment { get; set; }
-        [Display(Name = "Delay Reason")]
-        public string DelayReason { get; set; }
+        [Display(Name = "Reason")]
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         [Display(Name = "Job Description")]
         public string JobDescription { get; set; }
         [Display(Name = "Total Head Count")]

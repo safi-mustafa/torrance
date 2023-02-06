@@ -12,6 +12,7 @@ using ViewModels.Authentication;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.OverrideLogs;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.TimeOnTools.PermitType;
@@ -35,7 +36,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Time Signed")]
         public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
-        public string DelayReason { get; set; }
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         public string? JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         [Display(Name = "Total Head Count")]

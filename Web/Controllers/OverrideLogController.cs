@@ -10,6 +10,7 @@ using ViewModels.OverrideLogs.ORLog;
 using ViewModels.OverrideLogs;
 using ViewModels.WeldingRodRecord.WRRLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
+using ViewModels.TimeOnTools.TOTLog;
 
 namespace Web.Controllers
 {
@@ -32,7 +33,7 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
-                new DataTableViewModel{title = "Submitted",data = "FormattedDateSubmitted"},
+                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
                 new DataTableViewModel{title = "Requester",data = "Requester.Name"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name"},
@@ -51,13 +52,19 @@ namespace Web.Controllers
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
             var actions = new List<DataTableActionViewModel>();
-            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-            {
-                actions.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id" });
-                actions.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
-            }
+            //if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+            //{
+            //    actions.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id" });
+            //    actions.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
+            //}
             actions.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/OverrideLog/Detail/Id" });
             result.ActionsList = actions;
+        }
+        protected override ORLogSearchViewModel SetDefaultFilters()
+        {
+            var filters = base.SetDefaultFilters();
+            filters.StatusNot = Enums.Status.Pending;
+            return filters;
         }
 
         public override Task<ActionResult> Create(ORLogModifyViewModel model)

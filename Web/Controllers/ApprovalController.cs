@@ -20,6 +20,7 @@ using ViewModels.CRUD;
 using ViewModels.Shared;
 using Web.Helpers;
 using ViewModels.OverrideLogs.ORLog;
+using Repositories.Services.OverrideLogServices.ORLogService;
 
 namespace Web.Controllers
 {
@@ -29,6 +30,7 @@ namespace Web.Controllers
         private readonly IApprovalService _approvalService;
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _totService;
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _wrrService;
+        private readonly IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> _overrideLogService;
         private readonly ILogger<ApprovalController> _logger;
         private readonly IMapper _mapper;
         private string _controllerName;
@@ -41,6 +43,7 @@ namespace Web.Controllers
             IApprovalService approvaleService,
             ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> totService,
             IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
+            IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> overrideLogService,
             ILogger<ApprovalController> logger,
             IMapper mapper
             ) : base(approvaleService, logger, mapper, "Approval", "Approvals", true)
@@ -48,6 +51,7 @@ namespace Web.Controllers
             _approvalService = approvaleService;
             _totService = totService;
             _wrrService = wrrService;
+            _overrideLogService = overrideLogService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -58,15 +62,6 @@ namespace Web.Controllers
             return filters;
         }
 
-        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
-        {
-            vm.DataTableHeaderHtml = @"
-	                <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>";
-            return vm;
-        }
         public async Task<IActionResult> Detail(long id, LogType type)
         {
             try
@@ -84,6 +79,12 @@ namespace Web.Controllers
                     _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                     response = await _wrrService.GetById(id);
                     return GetDetailView<TOTLogDetailViewModel>(response, id, type);
+                }
+                else
+                {
+                    _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
+                    response = await _overrideLogService.GetById(id);
+                    return GetDetailView<ORLogDetailViewModel>(response, id, type);
                 }
             }
             catch (Exception ex) { _logger.LogError($"{_controllerName} Detail method threw an exception, Message: {ex.Message}"); }
@@ -145,6 +146,14 @@ namespace Web.Controllers
                     response = await _wrrService.GetById(id);
 
                     return GetUpdateView<WRRLogModifyViewModel, WRRLogDetailViewModel>(response, id, type, view);
+                }
+                else
+                {
+                    _controllerName = "OverrideLog";
+                    _updateViewPath = "~/Views/OverrideLog/_Update.cshtml";
+                    response = await _overrideLogService.GetById(id);
+
+                    return GetUpdateView<ORLogModifyViewModel, ORLogDetailViewModel>(response, id, type, view);
                 }
             }
             catch (Exception ex) { _logger.LogError($"Approval for LogType: {type.GetDisplayName()} GetById method threw an exception, Message: {ex.Message}"); }

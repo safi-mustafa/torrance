@@ -2,6 +2,7 @@
 using Helpers.Models.Shared;
 using Models.Common;
 using Models.Common.Interfaces;
+using Models.OverrideLogs;
 using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Timers;
@@ -16,7 +17,10 @@ namespace Models.TimeOnTools
         public DateTime? StartOfWork { get; set; }
         public TimeSpan? TimeRequested { get; set; }
         public TimeSpan? TimeSigned { get; set; }
-        public string? DelayReason { get; set; }
+
+        [ForeignKey("ReasonForRequest")]
+        public long? ReasonForRequestId { get; set; }
+        public ReasonForRequest? ReasonForRequest { get; set; }
         public string JobDescription { get; set; }
         public string? Comment { get; set; }
         public long ManPowerAffected { get; set; }

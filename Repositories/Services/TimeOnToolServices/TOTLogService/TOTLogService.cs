@@ -92,6 +92,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Employee)
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
+                    .Include(x => x.ReasonForRequest)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
@@ -121,6 +122,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermitType)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
+                    .Include(x => x.ReasonForRequest)
                     .Where(filters);
                 var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);

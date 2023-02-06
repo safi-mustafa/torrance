@@ -10,8 +10,6 @@ namespace Models.OverrideLogs
 {
     public class OverrideLog : BaseDBModel, IApprove
     {
-        public DateTime DateSubmitted { get; set; } = DateTime.Now;
-        public TimeSpan TimeSubmitted { get; set; }
         public DateTime WorkCompletedDate { get; set; }
         public string? WorkScope { get; set; }
         public string Description { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
+using ViewModels.Common.Company;
 
 namespace ViewModels.WeldingRodRecord
 {
@@ -11,6 +12,8 @@ namespace ViewModels.WeldingRodRecord
         }
         [DisplayName("Employee")]
         public override string? Name { get; set; }
+
+        public CompanyBriefViewModel Company { get; set; }
     }
 
 }

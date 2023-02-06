@@ -51,9 +51,7 @@
 
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="DelayReason" class="form-label fw-600"></label>
-                    <input asp-for="DelayReason" type="text" class="form-control" />
-                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
             </div>
             <div class="col-lg-6">

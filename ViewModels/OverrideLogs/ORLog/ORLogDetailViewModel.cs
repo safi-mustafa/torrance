@@ -14,25 +14,16 @@ namespace ViewModels.OverrideLogs.ORLog
     {
         public long Id { get; set; }
 
-        [Display(Name = "Date Submitted")]
-        public DateTime DateSubmitted { get; set; }
-        public string FormattedDateSubmitted
+        public DateTime CreatedOn { get; set; }
+
+        public string FormattedCreatedOn
         {
             get
             {
-                return DateSubmitted.Date.ToString("MM/dd/yyyy");
+                return CreatedOn.Date.ToString("MM/dd/yyyy");
             }
         }
 
-        [Display(Name = "Time Submitted")]
-        public TimeSpan TimeSubmitted { get; set; }
-        public string FormattedTimeSubmitted
-        {
-            get
-            {
-                return TimeSubmitted.ToString();
-            }
-        }
 
         [Display(Name = "Work Completed Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;

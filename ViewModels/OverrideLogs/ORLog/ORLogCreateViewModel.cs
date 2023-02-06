@@ -10,10 +10,6 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
 
-        public DateTime DateSubmitted { get; set; } = DateTime.Now;
-
-        public TimeSpan TimeSubmitted { get; set; } = TimeSpan.Zero;
-
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
         public string Description { get; set; }

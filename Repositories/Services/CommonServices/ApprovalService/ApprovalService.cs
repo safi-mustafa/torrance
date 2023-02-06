@@ -71,7 +71,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Date = x.CreatedOn,
                             Status = x.Status,
                             //TWR = x.Twr,
-                            Reason = x.DelayReason ?? "",
+                            Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee

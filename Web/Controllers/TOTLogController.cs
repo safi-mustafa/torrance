@@ -61,7 +61,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Twr",data = "Twr"},
                 new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
                 new DataTableViewModel{title = "Delay Type",data = "DelayType.Name"},
-                new DataTableViewModel{title = "Delay Reason",data = "DelayReason"},
+                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name"},
                 new DataTableViewModel{title = "Permit Type",data = "PermitType.Name"},
                 new DataTableViewModel{title = "Start Date",data = "FormattedStartOfWork"},
                 new DataTableViewModel{title = "Total Head Count",data = "ManPowerAffected"},

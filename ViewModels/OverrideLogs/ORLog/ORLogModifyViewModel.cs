@@ -11,11 +11,6 @@ namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
-        [Display(Name = "Date Submitted")]
-        public DateTime DateSubmitted { get; set; } = DateTime.Now;
-
-        [Display(Name = "Time Submitted")]
-        public TimeSpan TimeSubmitted { get; set; } = TimeSpan.Zero;
 
         [Display(Name = "Work Completed Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;

@@ -14,6 +14,7 @@ using Enums;
 using ViewModels.AppSettings.Map;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
+using ViewModels.OverrideLogs;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -34,8 +35,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
 
-        [Display(Name = "Delay Reason", Prompt = "Add Delay Reason")]
-        public string DelayReason { get; set; }
+        [Display(Name = "Reason", Prompt = "Add Delay Reason")]
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         [Display(Name = "Job Description", Prompt = "Add Job Descriptions")]
         public string? JobDescription { get; set; }
         [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
