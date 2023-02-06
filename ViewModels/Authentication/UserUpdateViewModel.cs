@@ -4,7 +4,7 @@ using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Shared;
 
-namespace ViewModels.Authentication.Approver
+namespace ViewModels.Authentication
 {
     public class UserUpdateViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {

@@ -7,7 +7,6 @@ using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
-using Models.Common.Interfaces.OverrideLog;
 using Models.OverrideLogs;
 using Pagination;
 using Repositories.Shared;

@@ -23,7 +23,6 @@
     <Folder Include="OverrideLogs\CraftRates\" />
     <Folder Include="OverrideLogs\LeadPlanners\" />
     <Folder Include="OverrideLogs\OverrideType\" />
-    <Folder Include="OverrideLogs\Interface\" />
   </ItemGroup>
 
   <ItemGroup>

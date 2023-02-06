@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.WeldRodRecordServices.ApproverService;
+using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
 using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
     [Authorize(Roles = "SuperAdmin,Admin")]
-    public class ApproverController : CrudBaseController<UserUpdateViewModel, UserUpdateViewModel, UserDetailViewModel, UserDetailViewModel, UserSearchViewModel>
+    public class ApproverController : CrudBaseController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, ApproverSearchViewModel>
     {
-        private readonly IApproverService<UserUpdateViewModel, UserUpdateViewModel, UserDetailViewModel> _approverService;
+        private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly ILogger<ApproverController> _logger;
 
-        public ApproverController(IApproverService<UserUpdateViewModel, UserUpdateViewModel, UserDetailViewModel> employeeService, ILogger<ApproverController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Approver", "Approvers")
+        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> employeeService, ILogger<ApproverController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Approver", "Approvers")
         {
             _approverService = employeeService;
             _logger = logger;
@@ -29,7 +30,7 @@ namespace Web.Controllers
 
             };
         }
-        public override async Task<ActionResult> Update(UserUpdateViewModel model)
+        public override async Task<ActionResult> Update(ApproverModifyViewModel model)
         {
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
