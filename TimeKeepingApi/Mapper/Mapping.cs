@@ -268,6 +268,7 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.DelayType, opt => opt.Ignore())
                .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
+                .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
             CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>().ReverseMap();
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();

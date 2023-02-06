@@ -187,6 +187,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         if (record != null)
                         {
                             var dbModel = _mapper.Map(model, record);
+                            dbModel.Approver = null;
                             await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
                             await transaction.CommitAsync();
