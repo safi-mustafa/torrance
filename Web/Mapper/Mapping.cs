@@ -173,10 +173,10 @@ namespace Models.Mapper
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                 .ReverseMap();
-            CreateMap<WRRLog, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>()
+            CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
-            CreateMap<WRRLogModifyViewModel, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>().ReverseMap();
+            CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
 
