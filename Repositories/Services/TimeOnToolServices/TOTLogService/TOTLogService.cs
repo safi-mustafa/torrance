@@ -164,7 +164,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "A new TOT Log has been created", NotificationType.Push, NotificationEntityType.Logs));
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "TOT Log Created", "A new TOT Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -182,12 +182,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         {
             try
             {
-                var updateModel = model as BaseUpdateVM;
+                var updateModel = model as TOTLogModifyViewModel;
                 if (updateModel != null)
                 {
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                        if (record.ApproverId != updateModel.Approver.Id)
+                        {
+                            await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", "TOT Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                        }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
@@ -221,13 +225,13 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             {
                 var list = GetTWRNumericList();
 
-              
+
                 if (list != null && list.Count > 0)
                 {
                     var paginatedResult = new PaginatedResultModel<Select2ViewModel>();
                     paginatedResult.Items = list;
                     paginatedResult._meta = new();
-                    paginatedResult._links = new() ;
+                    paginatedResult._links = new();
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>> { ReturnModel = paginatedResult };
                     return response;
                 }

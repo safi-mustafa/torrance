@@ -161,7 +161,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -187,9 +187,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
-                            if(record.ApproverId != updateModel.Approver.Id)
+                            if (record.ApproverId != updateModel.Approver.Id)
                             {
-                                await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                                await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
