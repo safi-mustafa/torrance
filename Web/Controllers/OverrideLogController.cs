@@ -32,6 +32,7 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
+                new DataTableViewModel{title = "", data = ""},//<input type='checkbox' class='select-checkbox'>
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn="CreatedOn", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},

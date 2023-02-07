@@ -51,7 +51,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as TOTLogSearchViewModel;
-            searchFilters.OrderByColumn = "Status";
+            //searchFilters.OrderByColumn = "Status";
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
@@ -61,10 +61,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (searchFilters.EquipmentNo == null || x.EquipmentNo == searchFilters.EquipmentNo)
-                            //&&
-                            //(searchFilters.Contractor.Id == 0 || x.Contractor.Id == searchFilters.Contractor.Id)
-                            //&&
-                            //(searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
+                            &&
+                            (searchFilters.Shift.Id == null || x.Shift.Id == searchFilters.Shift.Id)
+                            &&
+                            (searchFilters.DelayType.Id == null || x.DelayType.Id == searchFilters.DelayType.Id)
+                            &&
+                            (searchFilters.Requester.Id == null || x.Employee.Id == searchFilters.Requester.Id)
+                            &&
+                            (searchFilters.Approver.Id == null || x.Approver.Id == searchFilters.Approver.Id)
+                            &&
+                            (searchFilters.PermitType.Id == null || x.PermitType.Id == searchFilters.PermitType.Id)
                             &&
                             (searchFilters.Unit.Id == 0 || searchFilters.Unit.Id == null || x.Unit.Id == searchFilters.Unit.Id)
                             &&
@@ -107,6 +113,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+
+                    
+
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }

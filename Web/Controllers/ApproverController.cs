@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Pagination;
 using Repositories.Services.WeldRodRecordServices.ApproverService;
+using Select2.Model;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
 using ViewModels.DataTable;
@@ -39,6 +42,27 @@ namespace Web.Controllers
         public async Task<IActionResult> ValidateApproverEmail(int id, string email)
         {
             return Json(await _approverService.IsApproverEmailUnique(id, email));
+        }
+
+        protected override ApproverSearchViewModel SetSelect2CustomParams(string customParams)
+        {
+            var svm = JsonConvert.DeserializeObject<ApproverSearchViewModel>(customParams);
+            return svm;
+        }
+
+        public override List<Select2OptionModel<ISelect2Data>> GetSelect2List(PaginatedResultModel<ApproverDetailViewModel> paginatedResult)
+        {
+            List<Select2OptionModel<ISelect2Data>> response = new List<Select2OptionModel<ISelect2Data>>();
+            foreach (var item in paginatedResult.Items)
+            {
+                response.Add(new Select2OptionModel<ISelect2Data>
+                {
+                    id = item.Id.ToString(),
+                    text = item.Email
+                });
+            }
+
+            return response.OrderBy(m => m.id).ToList();
         }
     }
 }

@@ -3,10 +3,11 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "user-id";
-    var title = ViewData["UserTitle"] != null && !string.IsNullOrEmpty(ViewData["UserTitle"].ToString()) ? ViewData["UserTitle"].ToString() : "User";
+    var title = ViewData["UserTitle"] != null && !string.IsNullOrEmpty(ViewData["UserTitle"].ToString()) ? ViewData["UserTitle"].ToString() : "Approver";
     var name = title + ".Name";
     var type = ViewData["Type"] != null && !string.IsNullOrEmpty(ViewData["Type"].ToString()) ? ViewData["Type"].ToString() : "Approver";
-    var label = "Select "+title;
+    var unitId = ViewData["UnitId"] != null && !string.IsNullOrEmpty(ViewData["UnitId"].ToString()) ? ViewData["UnitId"].ToString() : "unit-id";
+    var label = "Select " + title;
 }
 
 
@@ -27,24 +28,36 @@
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
     <input type="hidden" name="@name" value="@Model.Name" />
-   @* <span asp-validation-for="Id" class="validation-invalid-label"></span>*@
+    @* <span asp-validation-for="Id" class="validation-invalid-label"></span>*@
 </div>
 
 <script src="~/js/custom-scripts/Select2Methods.js"></script>
 <script>
     $(function () {
         var id = "#" + "@elementId";
+        var unitId = "#" + "@unitId";
         var pageSize = 10;
-        var url = '/User/Select2';
+        var url = '/Approver/Select2';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
-                customParams: JSON.stringify({type: "@type"})
+                customParams: JSON.stringify({
+                    type: "@type",
+                    Unit:{
+                        Id: $(unitId).val()
+                    }
+                })
+
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "@label");
+         $(unitId).on("change", function (e) {
+            if ($(id).length > 0) {
+                $(id).val(null).trigger('change');
+            }
+        });
     });
 </script>
