@@ -47,9 +47,7 @@
                         <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
                         <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
                     <div class="col-2">
-                        <div class="form-group mt-2">
-                            <span>TWR</span>
-                        </div>
+                            <input type="text" value="TWR" class="form-control" readonly />
                     </div>
 
                     <div class="col-3">
@@ -62,6 +60,7 @@
 
                     <div class="col-3">
                         <input type="text" asp-for="TWRModel.Text" class="form-control" />
+                        <span asp-validation-for="TWRModel.Text" class="validation-invalid-label"></span>
                     </div>
 
                 </div>
