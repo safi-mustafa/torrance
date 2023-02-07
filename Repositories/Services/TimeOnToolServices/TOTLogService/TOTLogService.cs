@@ -160,8 +160,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel { EntityId = mappedModel.Id, Message = "", Type = NotificationType.Push, Subject = "A new TOT Log has been created" });
-
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "A new TOT Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

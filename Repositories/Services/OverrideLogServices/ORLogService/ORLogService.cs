@@ -15,6 +15,7 @@ using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using ViewModels;
 using ViewModels.Notification;
+using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord;
@@ -158,8 +159,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel { EntityId = mappedModel.Id, Message = "", Type = NotificationType.Push, Subject = "A new Override Log has been created" });
-
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -179,16 +179,21 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 try
                 {
-                    var updateModel = model as BaseUpdateVM;
+                    var updateModel = model as ORLogModifyViewModel;
                     if (updateModel != null)
                     {
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
+                            if(record.ApproverId != updateModel.Approver.Id)
+                            {
+                                await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                            }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
                             await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
+
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                             return response;

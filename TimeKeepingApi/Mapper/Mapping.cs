@@ -32,6 +32,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools;
 using ViewModels.Authentication.Approver;
+using ViewModels.Notification;
 
 namespace TorranceApi.Mapper
 {
@@ -411,6 +412,9 @@ namespace TorranceApi.Mapper
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
+
+            //Notification
+            CreateMap<Notification, NotificationViewModel>().ReverseMap();
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var notificationModel = _mapper.Map<Notification>(model);
-                _db.Add(notificationModel);
+                await _db.AddAsync(notificationModel);
                 await _db.SaveChangesAsync();
                 _logger.LogInformation("Notification has been sent!");
                 return true;

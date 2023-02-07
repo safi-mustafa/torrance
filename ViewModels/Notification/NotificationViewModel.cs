@@ -13,7 +13,7 @@ namespace ViewModels.Notification
         {
 
         }
-        public NotificationViewModel(Status status, long logId, Type logType, string sendTo, string message)
+        public NotificationViewModel(long logId, Type logType, string sendTo, string message, NotificationType type, NotificationEntityType entityType)
         {
             var pushNotification = new PushNotificationViewModel
             {
@@ -22,20 +22,23 @@ namespace ViewModels.Notification
                 Message = message
             };
 
-            EntityId = logId;
+            Entity = logId;
             Message = JsonConvert.SerializeObject(pushNotification);
             SendTo = sendTo;
+            Type = type;
+            EntityType = entityType;
         }
-        public long EntityId { get; set; }
+        public long Entity { get; set; }
         public string Message { get; set; }
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
         public string SendTo { get; set; }
         public NotificationType Type { get; set; }
+        public NotificationEntityType? EntityType { get; set; }
 
 
         private LogType GetLogType(Type entity)
         {
-            return entity is TOTLog ? LogType.TimeOnTools : entity is OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
+            return entity == typeof(TOTLog) ? LogType.TimeOnTools : entity is OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
         }
     }
 }

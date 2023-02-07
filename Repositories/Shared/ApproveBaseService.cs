@@ -93,15 +93,18 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
-                        await _notificationService.AddNotificationAsync(new NotificationViewModel(status, logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status.ToString()}"));
+                        await _notificationService.AddNotificationAsync(new NotificationViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push, NotificationEntityType.Logs));
+                        await transaction.CommitAsync();
                         return _response;
                     }
                     _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
 
+                    await transaction.RollbackAsync();
                     return Response.NotFoundResponse(_response);
                 }
                 catch (Exception ex)
                 {
+                    await transaction.RollbackAsync();
                     _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
                     return Response.BadRequestResponse(_response);
                 }
