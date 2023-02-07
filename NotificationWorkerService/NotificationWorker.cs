@@ -41,6 +41,7 @@ public class NotificationWorker : BackgroundService
             var notifications = await _db.Notifications.Where(x => x.ResendCount < 3 && x.SendTo != null && (x.CreatedOn.Date <= currentDate.Date && !x.IsSent)).ToListAsync();
             var emails = notifications.Where(x => x.Type == NotificationType.Email).ToList();
             var smss = notifications.Where(x => x.Type == NotificationType.Sms).ToList();
+            var pushNotifications = notifications.Where(x => x.Type == NotificationType.Push).ToList();
             var appEmail = _configuration["AppEmail"];
             foreach (var email in emails)
             {
@@ -52,7 +53,7 @@ public class NotificationWorker : BackgroundService
                 else
                 {
                     email.IsSent = false;
-                   // email.ResendCount += 1;
+                    // email.ResendCount += 1;
                 }
             }
             foreach (var sms in smss)
@@ -63,9 +64,21 @@ public class NotificationWorker : BackgroundService
                 else
                 {
                     sms.IsSent = false;
-                 //   sms.ResendCount += 1;
+                    //   sms.ResendCount += 1;
                 }
             }
+            foreach (var notification in pushNotifications)
+            {
+                var smsResult = await _smsService.SendSms(notification.SendTo, notification.Message);
+                if (smsResult)
+                    sms.IsSent = true;
+                else
+                {
+                    sms.IsSent = false;
+                    //   sms.ResendCount += 1;
+                }
+            }
+
             await _db.SaveChangesAsync();
             return true;
         }
@@ -74,7 +87,7 @@ public class NotificationWorker : BackgroundService
         }
         _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
         return false;
-       
+
     }
 }
 

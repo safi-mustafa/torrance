@@ -70,6 +70,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            &&
+                            x.IsDeleted == false
             //  &&
             //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
@@ -89,7 +91,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.CraftRate)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
-                    .Where(filters);
+                    .Where(filters).IgnoreQueryFilters();
                 var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
@@ -126,13 +128,13 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
-                    .Where(x => x.Id == id).FirstOrDefaultAsync();
+                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
 
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
-                
+
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
