@@ -34,7 +34,7 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
-                new DataTableViewModel{title = "Requester",data = "Requester.Name"},
+                new DataTableViewModel{title = "Requester",data = "Employee.Name"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name"},

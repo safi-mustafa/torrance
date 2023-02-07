@@ -76,6 +76,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            &&
+                            x.IsDeleted == false
             ;
         }
 
@@ -97,11 +99,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
                     .Include(x => x.ReasonForRequest)
-                    .Where(x => x.Id == id).FirstOrDefaultAsync();
+                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                 
+
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -128,7 +130,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
                     .Include(x => x.ReasonForRequest)
-                    .Where(filters);
+                    .Where(filters).IgnoreQueryFilters();
                 var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)

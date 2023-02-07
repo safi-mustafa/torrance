@@ -50,6 +50,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Approver)
                     .Include(x => x.Unit)
                     .Where(x =>
+                         x.IsDeleted == false
+                         &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
                          (!isApprover || (x.Approver != null && x.ApproverId == loggedInUserId))
@@ -74,7 +76,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
-                        }).OrderByDescending(x => x.Id).AsQueryable();
+                        }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
                 //var wrrLogsQueryable = _db.WRRLogs
                 //    .Include(x => x.Employee)
                 //    .Include(x => x.Approver)
@@ -114,6 +116,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
+                         x.IsDeleted
+                         &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
                          (!isApprover || (x.Approver != null && x.ApproverId == loggedInUserId))
@@ -138,7 +142,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Unit = x.Unit != null ? x.Unit.Name : "",
                         Type = LogType.Override,
                         Employee = x.Employee
-                    }).OrderByDescending(x => x.Id).AsQueryable();
+                    }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();
 
