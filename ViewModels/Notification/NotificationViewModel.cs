@@ -13,13 +13,14 @@ namespace ViewModels.Notification
         {
 
         }
-        public NotificationViewModel(long logId, Type logType, string sendTo, string message, NotificationType type, NotificationEntityType entityType)
+        public NotificationViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEntityType entityType)
         {
             var pushNotification = new PushNotificationViewModel
             {
                 LogId = logId,
                 LogType = GetLogType(logType),
-                Message = message
+                Message = message,
+                Title = title
             };
 
             Entity = logId;

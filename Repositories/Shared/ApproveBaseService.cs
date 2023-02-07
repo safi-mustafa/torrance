@@ -93,7 +93,7 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
-                        await _notificationService.AddNotificationAsync(new NotificationViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push, NotificationEntityType.Logs));
+                        await _notificationService.AddNotificationAsync(new NotificationViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push, NotificationEntityType.Logs));
                         await transaction.CommitAsync();
                         return _response;
                     }

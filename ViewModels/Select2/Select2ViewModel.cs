@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Select2.Model
@@ -11,9 +12,9 @@ namespace Select2.Model
     }
     public class Select2ViewModel
     {
+        [Required(ErrorMessage = "Required")]
         public string id { get; set; }
-
-        public string text { get; set; }
+        public string? text { get; set; }
     }
 
     public class Select2PagedResultViewModel
@@ -31,7 +32,7 @@ namespace Select2.Model
 
         public T additionalAttributesModel { get; set; }
     }
-  
+
 
     public class Select2PagedResult<T>
     {
