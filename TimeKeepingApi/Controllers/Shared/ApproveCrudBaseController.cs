@@ -85,8 +85,12 @@ namespace TorranceApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> Put([FromBody] UpdateViewModel model)
         {
-            var result = await _service.Update(model);
-            return ReturnProcessedResponse(result);
+            if (ModelState.IsValid)
+            {
+                var data = await _service.Update(model);
+                return ReturnProcessedResponse(data);
+            }
+            return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 
         [HttpDelete("{id}")]
