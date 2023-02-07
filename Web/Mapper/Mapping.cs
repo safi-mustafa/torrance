@@ -227,7 +227,7 @@ namespace Models.Mapper
                 .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
-           
+
             CreateMap<ApproverBriefViewModel, ToranceUser>()
              .ForMember(src => src.Email, opt => opt.MapFrom(dest => dest.Name))
              .ReverseMap();
@@ -361,8 +361,8 @@ namespace Models.Mapper
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, OverrideLog>()
-                .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
-                .ForMember(x => x.Requester, opt => opt.Ignore())
+                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+                .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 .ForMember(x => x.Company, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))

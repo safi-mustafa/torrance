@@ -8,8 +8,13 @@ using Helpers.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
+using Newtonsoft.Json;
 using Repositories.Common;
 using Repositories.Shared.Interfaces;
+using Repositories.Shared.NotificationServices;
+using ViewModels.Notification;
 using ViewModels.Shared;
 
 namespace Repositories.Shared
@@ -25,13 +30,15 @@ namespace Repositories.Shared
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly INotificationService _notificationService;
 
-        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, INotificationService notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
+            _notificationService = notificationService;
         }
 
         public async Task<List<long>> GetApprovedRecordIds()
@@ -77,24 +84,45 @@ namespace Repositories.Shared
 
         public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status)
         {
-            try
+            using (var transaction = await _db.Database.BeginTransactionAsync())
             {
-                var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
-                if (logRecord != null)
+                try
                 {
-                    logRecord.Status = status;
-                    await _db.SaveChangesAsync();
-                    return _response;
-                }
-                _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
+                    var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+                    if (logRecord != null)
+                    {
+                        logRecord.Status = status;
+                        await _db.SaveChangesAsync();
+                        var pushNotification = new PushNotificationViewModel
+                        {
+                            LogId = logRecord.Id,
+                            LogType = GetLogType(logRecord),
+                            Message = $"Log for {logRecord.CreatedOn.ToString("U")} has been {status.ToString()}"
+                        };
+                        //var deviceId = await _db.Users.Where(x => x.Id == logRecor)
+                        await _notificationService.AddNotificationAsync(new NotificationViewModel
+                        {
+                            EntityId = logRecord.Id,
+                            Message = JsonConvert.SerializeObject(pushNotification),
+                            //SendTo = 
+                        });
+                        return _response;
+                    }
+                    _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
 
-                return Response.NotFoundResponse(_response);
+                    return Response.NotFoundResponse(_response);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
+                    return Response.BadRequestResponse(_response);
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
-                return Response.BadRequestResponse(_response);
-            }
+        }
+
+        private LogType GetLogType(TEntity entity)
+        {
+            return entity is TOTLog ? LogType.TimeOnTools : entity is OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
         }
     }
 }

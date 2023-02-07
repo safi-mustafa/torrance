@@ -73,7 +73,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
 
-        public EmployeeBriefViewModel Requester { get; set; } = new();
+        public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
