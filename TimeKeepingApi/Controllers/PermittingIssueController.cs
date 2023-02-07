@@ -13,7 +13,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class PermittingIssueController : CrudBaseBriefController<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel, PermittingIssueDetailViewModel, PermittingIssueSearchViewModel>
+    public class PermittingIssueController : CrudBaseBriefController<PermittingIssueDetailViewModel, PermittingIssueSearchViewModel>
     {
         public PermittingIssueController(IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> permitTypeService) : base(permitTypeService)
         {

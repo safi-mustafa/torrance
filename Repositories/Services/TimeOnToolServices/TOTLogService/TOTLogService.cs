@@ -12,9 +12,11 @@ using Models.TimeOnTools;
 using Pagination;
 using Repositories.Common;
 using Repositories.Shared;
+using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Data;
 using System.Linq.Expressions;
+using ViewModels.Notification;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.TOTLog;
@@ -31,14 +33,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
+        private readonly INotificationService _notificationService;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, logger, mapper, response)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
             _userInfoService = userInfoService;
+            _notificationService = notificationService;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -152,19 +156,26 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
-            try
+            using (var transaction = await _db.Database.BeginTransactionAsync())
             {
-                var mappedModel = _mapper.Map<TOTLog>(model);
-                await SetRequesterId(mappedModel);
-                await _db.Set<TOTLog>().AddAsync(mappedModel);
-                await _db.SaveChangesAsync();
-                var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Exception thrown in Create method of {typeof(TOTLog).FullName}");
-                return Response.BadRequestResponse(_response);
+                try
+                {
+                    var mappedModel = _mapper.Map<TOTLog>(model);
+                    await SetRequesterId(mappedModel);
+                    await _db.Set<TOTLog>().AddAsync(mappedModel);
+                    var result = await _db.SaveChangesAsync() > 0;
+                    await _notificationService.AddNotificationAsync(new NotificationViewModel { EntityId = mappedModel.Id, Message = "", Type = NotificationType.Push, Subject = "A new TOT Log has been created" });
+
+                    await transaction.CommitAsync();
+                    var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(ex, $"Exception thrown in Create method of {typeof(TOTLog).FullName}");
+                    return Response.BadRequestResponse(_response);
+                }
             }
         }
 

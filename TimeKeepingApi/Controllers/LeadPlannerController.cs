@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class LeadPlannerController : CrudBaseBriefController<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel, LeadPlannerDetailViewModel, LeadPlannerSearchViewModel>
+    public class LeadPlannerController : CrudBaseBriefController<LeadPlannerDetailViewModel, LeadPlannerSearchViewModel>
     {
         public LeadPlannerController(ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> permitTypeService) : base(permitTypeService)
         {

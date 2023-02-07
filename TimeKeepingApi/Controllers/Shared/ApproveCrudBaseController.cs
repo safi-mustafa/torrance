@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using Enums;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Interfaces;
+using Repositories.Shared.Interfaces;
 using System.Net;
 using System.Security.Claims;
 using ViewModels.Shared;
@@ -13,16 +15,17 @@ namespace TorranceApi.Controllers
 {
 
     [Controller]
-    public abstract class CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : TorranceController
+    public abstract class ApproveCrudBaseController<Service, CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : TorranceController
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where PaginatedResultViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
         where SearchViewModel : IBaseSearchModel, new()
+        where Service : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
     {
-        private readonly IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> _service;
+        private readonly Service _service;
 
-        public CrudBaseController(IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> service)
+        public ApproveCrudBaseController(Service service)
         {
             _service = service;
         }
@@ -47,6 +50,17 @@ namespace TorranceApi.Controllers
         {
             var result = await _service.GetById(id);
             return ReturnProcessedResponse<DetailViewModel>(result);
+        }
+
+        [HttpGet("{id}/{status}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public virtual async Task<IActionResult> Approve(long id, Status status)
+        {
+            var result = await _service.SetApproveStatus(id, status);
+            return ReturnProcessedResponse(result);
         }
 
         [HttpPost]
@@ -87,4 +101,3 @@ namespace TorranceApi.Controllers
         }
     }
 }
-

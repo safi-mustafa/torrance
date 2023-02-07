@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ShiftDelayController : CrudBaseBriefController<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel, ShiftDelayDetailViewModel, ShiftDelaySearchViewModel>
+    public class ShiftDelayController : CrudBaseBriefController<ShiftDelayDetailViewModel, ShiftDelaySearchViewModel>
     {
         public ShiftDelayController(IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> shiftDelayService) : base(shiftDelayService)
         {

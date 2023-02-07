@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class OverrideTypeController : CrudBaseBriefController<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel, OverrideTypeDetailViewModel, OverrideTypeSearchViewModel>
+    public class OverrideTypeController : CrudBaseBriefController<OverrideTypeDetailViewModel, OverrideTypeSearchViewModel>
     {
         public OverrideTypeController(IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> permitTypeService) : base(permitTypeService)
         {

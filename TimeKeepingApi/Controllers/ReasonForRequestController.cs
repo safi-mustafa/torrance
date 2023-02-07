@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReasonForRequestController : CrudBaseBriefController<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel, ReasonForRequestDetailViewModel, ReasonForRequestSearchViewModel>
+    public class ReasonForRequestController : CrudBaseBriefController<ReasonForRequestDetailViewModel, ReasonForRequestSearchViewModel>
     {
         public ReasonForRequestController(IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> permitTypeService) : base(permitTypeService)
         {

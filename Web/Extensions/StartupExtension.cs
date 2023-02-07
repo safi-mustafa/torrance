@@ -5,7 +5,9 @@ using IdentityProvider.Data.IdentityStore;
 using IdentityProvider.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Models;
 using Models.Mapper;
 using Newtonsoft.Json;
@@ -105,6 +107,7 @@ namespace Web.Extensions
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddHostedService<SeedWorker>();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
             services.AddScoped(typeof(ICompanyService<,,>), typeof(CompanyService<,,>));
             services.AddScoped(typeof(IDepartmentService<,,>), typeof(DepartmentService<,,>));

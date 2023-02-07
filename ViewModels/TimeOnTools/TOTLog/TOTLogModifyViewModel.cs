@@ -37,7 +37,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
-        [Display(Name = "Description", Prompt = "Add Descriptions")]
+        [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
         [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
         [Range(1, long.MaxValue, ErrorMessage = "The Head Count must be greater than zero.")]
@@ -74,7 +74,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         //private UserBriefViewModel? _foreman;
         //public UserBriefViewModel Foreman { get => _foreman == null ? new UserBriefViewModel() : _foreman; set => _foreman = value; }
 
-        private EmployeeBriefViewModel? _employee;
-        public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
+        //private EmployeeBriefViewModel? _employee;
+        //public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
+
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+
+        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
 }

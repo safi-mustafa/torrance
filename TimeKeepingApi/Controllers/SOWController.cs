@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SOWController : CrudBaseBriefController<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel, SOWDetailViewModel, SOWSearchViewModel>
+    public class SOWController : CrudBaseBriefController<SOWDetailViewModel, SOWSearchViewModel>
     {
         public SOWController(ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> sowService) : base(sowService)
         {

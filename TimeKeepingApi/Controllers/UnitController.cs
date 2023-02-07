@@ -10,7 +10,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UnitController : CrudBaseBriefController<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel, UnitDetailViewModel, UnitSearchViewModel>
+    public class UnitController : CrudBaseBriefController<UnitDetailViewModel, UnitSearchViewModel>
     {
         public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> unitService) : base(unitService)
         {

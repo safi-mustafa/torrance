@@ -10,7 +10,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class WeldMethodController : CrudBaseBriefController<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel, WeldMethodDetailViewModel, WeldMethodSearchViewModel>
+    public class WeldMethodController : CrudBaseBriefController<WeldMethodDetailViewModel, WeldMethodSearchViewModel>
     {
         public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> weldMethodService) : base(weldMethodService)
         {

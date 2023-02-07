@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DataLibrary;
 using Helpers.Extensions;
+using Helpers.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
@@ -25,6 +27,7 @@ namespace Repositories.Shared.AuthenticationService
         private readonly ToranceContext _db;
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
+        private readonly IActionContextAccessor _actionContext;
 
         public IdentityService(
             UserManager<ToranceUser> userManager,
@@ -34,7 +37,8 @@ namespace Repositories.Shared.AuthenticationService
             IMapper mapper,
             ToranceContext db,
             IUserInfoService userInfoService,
-            INotificationService notificationService
+            INotificationService notificationService,
+            IActionContextAccessor actionContext
             )
         {
             _userManager = userManager;
@@ -45,6 +49,7 @@ namespace Repositories.Shared.AuthenticationService
             _db = db;
             _userInfoService = userInfoService;
             _notificationService = notificationService;
+            _actionContext = actionContext;
         }
 
         public async Task<long> CreateUser(SignUpModel model, IDbContextTransaction transaction, string optionalUsernamePrefix = "")
@@ -66,6 +71,7 @@ namespace Repositories.Shared.AuthenticationService
                     }
                     else
                     {
+                        Errors.AddErrorsToModelState(result, _actionContext.ActionContext.ModelState);
                         await transaction.RollbackAsync();
                     }
                 }
@@ -100,7 +106,7 @@ namespace Repositories.Shared.AuthenticationService
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        if(model.Password != null)
+                        if (!string.IsNullOrEmpty(model.Password))
                         {
                             await _userManager.RemovePasswordAsync(user);
                             var response = await _userManager.AddPasswordAsync(user, model.EmployeeId);
@@ -118,7 +124,9 @@ namespace Repositories.Shared.AuthenticationService
                     }
                     else
                     {
+                        Errors.AddErrorsToModelState(result, _actionContext.ActionContext.ModelState);
                         _logger.LogWarning(errorMsg, "Warning while updating user");
+
                         await transaction.RollbackAsync();
                     }
                 }
@@ -144,7 +152,7 @@ namespace Repositories.Shared.AuthenticationService
             {
                 var search = searchFilter as UserSearchViewModel;
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
-              
+
                 var rolesName = search.Roles.Select(x => x.Name).ToList();
                 var userQueryable = (from user in _db.Users
                                      join userRole in _db.UserRoles on user.Id equals userRole.UserId
@@ -152,18 +160,18 @@ namespace Repositories.Shared.AuthenticationService
                                      where
                                      (
                                         (
-                                            string.IsNullOrEmpty(search.Search.value)|| user.Email.ToLower().Contains(search.Search.value.ToLower())
+                                            string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
                                         )
-                                         &&
-                                         (string.IsNullOrEmpty(search.Role) || search.Role == r.Name)
-                                          &&
-                                         (search.Roles.Count == 0 || rolesName.Contains(r.Name))
-                                         &&
-                                         (r.Name != "SuperAdmin")
-                                         &&
-                                         (
-                                            string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
-                                         )
+                                        &&
+                                        (string.IsNullOrEmpty(search.Role) || search.Role == r.Name)
+                                        &&
+                                        (search.Roles.Count == 0 || rolesName.Contains(r.Name))
+                                        &&
+                                        (r.Name != "SuperAdmin")
+                                        &&
+                                        (
+                                        string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
+                                        )
                                     )
                                      select new UserDetailViewModel { Id = user.Id }
                             ).GroupBy(x => x.Id)
@@ -172,10 +180,8 @@ namespace Repositories.Shared.AuthenticationService
 
                 var queryString = userQueryable.ToQueryString();
 
-
                 var users = await userQueryable.Paginate(searchFilter);
                 var filteredUserIds = users.Items.Select(x => x.Id);
-
 
                 var userList = await _db.Users
                     .Where(x => filteredUserIds.Contains(x.Id))
@@ -208,7 +214,8 @@ namespace Repositories.Shared.AuthenticationService
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                 });
-                var paginatedModel = new PaginatedResultModel<T> { Items = users.Items as List<T>, _links = users._links, _meta = users._meta };
+                var mappedUserList = _mapper.Map<List<T>>(users.Items);
+                var paginatedModel = new PaginatedResultModel<T> { Items = mappedUserList, _links = users._links, _meta = users._meta };
                 return paginatedModel;
             }
             catch (Exception ex)
@@ -230,11 +237,8 @@ namespace Repositories.Shared.AuthenticationService
                     Subject = mailRequest.Subject
                 };
 
-                if (await _notificationService.AddNotificationAsync(viewModel))
-                {
-                    return true;
-                }
-                return false;
+                return await _notificationService.AddNotificationAsync(viewModel);
+
             }
             catch (Exception ex)
             {

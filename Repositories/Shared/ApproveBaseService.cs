@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
@@ -13,8 +14,8 @@ using ViewModels.Shared;
 
 namespace Repositories.Shared
 {
-        
-    public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>,IBaseApprove
+
+    public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
         where TEntity : BaseDBModel, IApprove
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
@@ -74,7 +75,7 @@ namespace Repositories.Shared
             }
         }
 
-        public async Task<bool> SetApproveStatus(long id, Status status)
+        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status)
         {
             try
             {
@@ -83,14 +84,17 @@ namespace Repositories.Shared
                 {
                     logRecord.Status = status;
                     await _db.SaveChangesAsync();
-                    return true;
+                    return _response;
                 }
+                _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
+
+                return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"ApproveRecords method for {typeof(TEntity).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
             }
-            return false;
         }
     }
 }

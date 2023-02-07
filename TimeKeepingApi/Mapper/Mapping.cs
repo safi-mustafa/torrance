@@ -288,9 +288,11 @@ namespace TorranceApi.Mapper
 
             //Approver
             CreateMap<ApproverModifyViewModel, ToranceUser>().ReverseMap();
+            CreateMap<ApproverModifyViewModel, SignUpModel>().ReverseMap();
+            CreateMap<ApproverModifyViewModel, ApproverProfileModifyViewModel>().ReverseMap();
             CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
-            CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
+            //CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
@@ -399,7 +401,10 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.OverrideType, opt => opt.Ignore())
                 .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
                 .ForMember(x => x.Requester, opt => opt.Ignore())
-                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogDetailViewModel, OverrideLog>()

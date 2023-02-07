@@ -72,11 +72,12 @@ namespace Web.Controllers
 
         }
 
-        public async Task<bool> ApproveStatus(long id, Status status )
+        public async Task<bool> ApproveStatus(long id, Status status)
         {
             try
             {
-                if (await _service.SetApproveStatus(id, status))
+                var response = await _service.SetApproveStatus(id, status);
+                if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.Now);
                     return true;
@@ -85,9 +86,5 @@ namespace Web.Controllers
             }
             catch (Exception ex) { _logger.LogError($"{_controllerName} Approve method threw an exception for record with id: {id}, Message: {ex.Message}"); return false; }
         }
-
-
-
-
     }
 }

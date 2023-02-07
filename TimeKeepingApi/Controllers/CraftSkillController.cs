@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CraftSkillController : CrudBaseBriefController<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel, CraftSkillDetailViewModel, CraftSkillSearchViewModel>
+    public class CraftSkillController : CrudBaseBriefController<CraftSkillDetailViewModel, CraftSkillSearchViewModel>
     {
         public CraftSkillController(ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> permitTypeService) : base(permitTypeService)
         {

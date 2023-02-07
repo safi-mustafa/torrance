@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class RodTypeController : CrudBaseBriefController<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel, RodTypeDetailViewModel, RodTypeSearchViewModel>
+    public class RodTypeController : CrudBaseBriefController<RodTypeDetailViewModel, RodTypeSearchViewModel>
     {
         public RodTypeController(IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> rodTypeService) : base(rodTypeService)
         {

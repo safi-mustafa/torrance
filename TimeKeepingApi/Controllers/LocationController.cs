@@ -9,7 +9,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class LocationController : CrudBaseBriefController<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel, LocationDetailViewModel, LocationSearchViewModel>
+    public class LocationController : CrudBaseBriefController<LocationDetailViewModel, LocationSearchViewModel>
     {
         public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> locationService) : base(locationService)
         {
