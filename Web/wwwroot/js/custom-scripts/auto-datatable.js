@@ -1,4 +1,4 @@
-﻿var datatable;
+﻿var dataTable;
 var actionIcons = {};
 var showSelectedFilters = true;
 var isAjaxBasedCrud = true;
@@ -126,7 +126,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
     for (var i = 0; i <= (dtColumns.length - 1); i++) {
         columnsIndexExcludingAction.push(i);
     }
-    datatable = $('#' + tableId).dataTable({
+    dataTable = $('#' + tableId).DataTable({
         "serverSide": true,
         "proccessing": true,
         "searching": true,
@@ -565,7 +565,7 @@ function shouldBeIgnoredInPdfExport(element) {
 }
 function customizePdfExport(doc) {
     var colCount = new Array();
-    $(datatable).find('tbody tr:first-child td').each(function () {
+    $(dataTable).find('tbody tr:first-child td').each(function () {
         if (!shouldBeIgnoredInPdfExport($(this))) {
             if ($(this).attr('colspan')) {
                 for (var i = 1; i <= $(this).attr('colspan'); $i++) {
@@ -579,7 +579,7 @@ function customizePdfExport(doc) {
     });
     if (colCount.length < 8)// Cuts columns for table with more than 8 columns
         doc.content[1].table.widths = colCount;
-    var rowCount = datatable[0].rows.length;
+    var rowCount = dataTable[0].rows.length;
     for (i = 0; i < rowCount; i++) {
         for (j = 0; j < colCount.length; j++) {
             doc.content[1].table.body[i][j].alignment = 'center';
@@ -588,30 +588,10 @@ function customizePdfExport(doc) {
     };
 }
 
-//datatable.on("click", "th.select-checkbox", function () {
-//    if ($("th.select-checkbox").hasClass("selected")) {
-//        example.rows().deselect();
-//        $("th.select-checkbox").removeClass("selected");
-//    } else {
-//        example.rows().select();
-//        $("th.select-checkbox").addClass("selected");
-//    }
-//}).on("select deselect", function () {
-//    ("Some selection or deselection going on")
-//    if (example.rows({
-//        selected: true
-//    }).count() !== example.rows().count()) {
-//        $("th.select-checkbox").removeClass("selected");
-//    } else {
-//        $("th.select-checkbox").addClass("selected");
-//    }
-//});
-
-$("th.select-checkbox").on("click", function (e) {
-    debugger;
-    if ($(this).is(":checked")) {
-        datatable.rows().select();
-    } else {
-        datatable.rows().deselect();
-    }
-});
+function selectAllCheckBoxChanged(element) {
+    if ($(element).is(":checked")) {
+        dataTable.rows().select();
+        } else {
+        dataTable.rows().deselect();
+        }
+}
