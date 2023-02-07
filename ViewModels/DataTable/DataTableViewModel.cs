@@ -7,6 +7,6 @@
         public string format { get; set; }
         public string formatValue { get; set; }
         public bool orderable { get; set; }
-        public string className { get; set; }
+        public string className { get; set; } = "";
     }
 }

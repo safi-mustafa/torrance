@@ -1,4 +1,4 @@
-﻿var dataTable;
+﻿var datatable;
 var actionIcons = {};
 var showSelectedFilters = true;
 var isAjaxBasedCrud = true;
@@ -27,7 +27,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = true) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = true, selectableRow = false) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     var currentController = window.location.pathname.split('/')[1];
@@ -105,19 +105,28 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
-    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive);
+    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow);
 }
-function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive) {
+function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow) {
     if (typeof isResponsive != "boolean") {
         isResponsive = isResponsive == "true";
     }
-
+    var selectableRowObj = {}
+    if (selectableRow) {
+        selectableRowObj = {
+            orderable: false,
+            className: 'select-checkbox',
+            targets: 0,
+            data: null,
+            defaultContent: ''
+        };
+    }
 
     var columnsIndexExcludingAction = [];
     for (var i = 0; i <= (dtColumns.length - 1); i++) {
         columnsIndexExcludingAction.push(i);
     }
-    dataTable = $('#' + tableId).dataTable({
+    datatable = $('#' + tableId).dataTable({
         "serverSide": true,
         "proccessing": true,
         "searching": true,
@@ -186,6 +195,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         },
         columns: dtColumns,
         "columnDefs": [
+            selectableRowObj,
             {
                 "targets": columnsIndexExcludingAction,
                 "render": function (data, type, row, meta) {
@@ -195,6 +205,9 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                         }
                         else if (dtColumns[meta.col].format === 'numeric') {
                             return RenderNumericValue(data, dtColumns, meta);
+                        }
+                        else if (dtColumns[meta.col].title == '' || dtColumns[meta.col].data == '') {
+                            return '';
                         }
                         else {
                             return data;
@@ -208,7 +221,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             {
                 "targets": -1,
                 "className": "text-right",
-            }
+            },
             //{
             //    "targets": -1,
             //    "createdCell": function (td, cellData, rowData, row, col) {
@@ -218,7 +231,10 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             //    }
             //}
         ],
-
+        select: {
+            style: 'multi',
+            selector: 'td:first-child'
+        },
         "buttons": {
             dom: {
                 button: {
@@ -361,13 +377,13 @@ function GetCellObjectValue(cellData, Prop) {
 }
 function RenderHtml(data, dtColumns, meta) {
     if (dtColumns[meta.col].formatValue === "checkbox") {
-        return '<input type="checkbox" class="checkbox-items ' + classValue + '" value="' + data + '" />';
+        return '<input type="checkbox" class="checkbox-items ' + dtColumns[meta.col].className + '" value="' + data + '" />';
     }
     else if (dtColumns[meta.col].formatValue === "textbox") {
-        return '<input type="text" class="text-box-items ' + classValue + '" value="' + data + '" />';
+        return '<input type="text" class="text-box-items ' + dtColumns[meta.col].className + '" value="' + data + '" />';
     }
     else if (dtColumns[meta.col].formatValue === "number-textbox") {
-        return '<input type="number" class="number-text-box-items ' + classValue + '" value="' + data + '" />';
+        return '<input type="number" class="number-text-box-items ' + dtColumns[meta.col].className + '" value="' + data + '" />';
     }
     else if (dtColumns[meta.col].formatValue === "badge") {
         return '<span class="badge ' + data + '">' + data + '</span>';
@@ -388,10 +404,10 @@ function RenderHtml(data, dtColumns, meta) {
         return '<span class="details-control" data-url="' + dtColumns[meta.col].detailUrl + '">' + (data === undefined ? "" : data) + '</span>';
     }
     else if (dtColumns[meta.col].formatValue === "hidden") {
-        return '<div>' + data + '</div><input type="hidden" class="hidden ' + classValue + '" value="' + data + '">';
+        return '<div>' + data + '</div><input type="hidden" class="hidden ' + dtColumns[meta.col].className + '" value="' + data + '">';
     }
     else if (dtColumns[meta.col].formatValue === "hidden-div") {
-        return '<input type="hidden" class="hidden ' + classValue + '" value="' + data + '">';
+        return '<input type="hidden" class="hidden ' + dtColumns[meta.col].className + '" value="' + data + '">';
     }
 }
 function RenderNumericValue(data, dtColumns, meta) {
@@ -535,7 +551,7 @@ function shouldBeIgnoredInPdfExport(element) {
 }
 function customizePdfExport(doc) {
     var colCount = new Array();
-    $(dataTable).find('tbody tr:first-child td').each(function () {
+    $(datatable).find('tbody tr:first-child td').each(function () {
         if (!shouldBeIgnoredInPdfExport($(this))) {
             if ($(this).attr('colspan')) {
                 for (var i = 1; i <= $(this).attr('colspan'); $i++) {
@@ -549,7 +565,7 @@ function customizePdfExport(doc) {
     });
     if (colCount.length < 8)// Cuts columns for table with more than 8 columns
         doc.content[1].table.widths = colCount;
-    var rowCount = dataTable[0].rows.length;
+    var rowCount = datatable[0].rows.length;
     for (i = 0; i < rowCount; i++) {
         for (j = 0; j < colCount.length; j++) {
             doc.content[1].table.body[i][j].alignment = 'center';
@@ -557,3 +573,31 @@ function customizePdfExport(doc) {
 
     };
 }
+
+//datatable.on("click", "th.select-checkbox", function () {
+//    if ($("th.select-checkbox").hasClass("selected")) {
+//        example.rows().deselect();
+//        $("th.select-checkbox").removeClass("selected");
+//    } else {
+//        example.rows().select();
+//        $("th.select-checkbox").addClass("selected");
+//    }
+//}).on("select deselect", function () {
+//    ("Some selection or deselection going on")
+//    if (example.rows({
+//        selected: true
+//    }).count() !== example.rows().count()) {
+//        $("th.select-checkbox").removeClass("selected");
+//    } else {
+//        $("th.select-checkbox").addClass("selected");
+//    }
+//});
+
+$("th.select-checkbox").on("click", function (e) {
+    debugger;
+    if ($(this).is(":checked")) {
+        datatable.rows().select();
+    } else {
+        datatable.rows().deselect();
+    }
+});
