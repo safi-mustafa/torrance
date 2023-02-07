@@ -58,19 +58,19 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
-                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name"},
-                new DataTableViewModel{title = "Company",data = "Company.Name"},
-                new DataTableViewModel{title = "Shift",data = "Shift.Name"},
-                new DataTableViewModel{title = "Unit",data = "Unit.Name"},
-                new DataTableViewModel{title = "Twr",data = "Twr"},
-                new DataTableViewModel{title = "Equipment No",data = "EquipmentNo"},
-                new DataTableViewModel{title = "Delay Type",data = "DelayType.Name"},
-                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name"},
-                new DataTableViewModel{title = "Permit Type",data = "PermitType.Name"},
-                new DataTableViewModel{title = "Start Date",data = "FormattedStartOfWork"},
-                new DataTableViewModel{title = "Total Head Count",data = "ManPowerAffected"},
-                new DataTableViewModel{title = "Total Manhours",data = "ManHours"},
+                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
+                new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
+                new DataTableViewModel{title = "Company",data = "Company.Name", orderable=true},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
+                new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
+                new DataTableViewModel{title = "Twr",data = "Twr", orderable=true},
+                new DataTableViewModel{title = "Equipment No",data = "EquipmentNo", orderable=true},
+                new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
+                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
+                new DataTableViewModel{title = "Permit Type",data = "PermitType.Name", orderable=true},
+                new DataTableViewModel{title = "Start Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
+                new DataTableViewModel{title = "Total Head Count",data = "ManPowerAffected", orderable=true},
+                new DataTableViewModel{title = "Total Manhours",data = "ManHours", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;
@@ -133,10 +133,10 @@ namespace Web.Controllers
                 return null;
             }
 
-            
+
         }
 
-     
+
     }
 
 }

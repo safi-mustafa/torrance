@@ -27,7 +27,6 @@ namespace Pagination
         public PaginationMeta _meta { get; set; }
     }
 
-
     public interface IBaseSearchModel
     {
         bool CalculateTotal { get; set; }

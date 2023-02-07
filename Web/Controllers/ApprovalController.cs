@@ -242,16 +242,16 @@ namespace Web.Controllers
             return new List<DataTableViewModel>()
             {
                 //new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
-                new DataTableViewModel{title = "Date",data = "FormattedDate"},
-                new DataTableViewModel{title = "Type",data = "FormattedLogType"},
-                new DataTableViewModel{title = "Requester",data = "Requester"},
+                new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
+                new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
+                new DataTableViewModel{title = "Requester",data = "Requester", orderable=true},
                 //new DataTableViewModel{title = "Approver",data = "Approver"},
                 //new DataTableViewModel{title = "Department",data = "Department"},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
-                new DataTableViewModel{title = "Unit",data = "Unit"},
+                new DataTableViewModel{title = "Unit",data = "Unit", orderable=true},
                 //new DataTableViewModel{title = "TWR",data = "TWR"},
-                new DataTableViewModel{title = "Reason",data = "Reason"},
-                new DataTableViewModel{title = "Total Hours",data = "TotalHours"},
+                new DataTableViewModel{title = "Reason",data = "Reason", orderable=true},
+                new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
