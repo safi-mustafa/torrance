@@ -97,7 +97,7 @@ namespace TorranceApi.Controllers
 
                         var authClaims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.NameIdentifier, aspNetUser.Id.ToString()),
                             new Claim(ClaimTypes.Name, user.FirstName),
                             new Claim("FullName", fullName),
                             new Claim("EmployeeId", user.Id.ToString()),
@@ -255,7 +255,7 @@ namespace TorranceApi.Controllers
         public async Task Logout(string deviceId)
         {
             var loggedInUserId = long.Parse(_userInfoService.LoggedInUserId());
-            var user = await _db.Users.Where(x => x.Id == loggedInUserId).FirstOrDefaultAsync();
+            var user = await _db.Users.Where(x => (deviceId != null && x.DeviceId == deviceId) ||  (x.Id == loggedInUserId)).FirstOrDefaultAsync();
             if (user != null)
             {
                 user.DeviceId = null;
