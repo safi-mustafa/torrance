@@ -1,8 +1,9 @@
 ﻿@using Select2.Model;
+@using ViewModels.TimeOnTools.TOTLog;
 @model Select2ViewModel
 
 @{
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "twr-numeric-id";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "twr-alphabetic-id";
 }
 
 
@@ -18,11 +19,11 @@
     new
     {
     @id = elementId,
-    @class = "form-control disable-field",
+    @class = "form-control",
     //data_val_required = Model.ErrorMessage,
     //data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
-    <input type="hidden" name="TWRModel.NumericPart.Name" value="@Model.text" />
+    <input type="hidden" name="TWRModel.AlphabeticPart.Name" value="@Model.text" />
     <span asp-validation-for="id" class="validation-invalid-label"></span>
 </div>
 
@@ -31,7 +32,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var pageSize = 10;
-        var url = '/TOTLog/GetTWRNumericValues';
+        var url = '/TOTLog/GetTWRAlphabeticValues';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
@@ -40,6 +41,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select TWR Numeric value");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select TWR Alphabetic value");
     });
 </script>

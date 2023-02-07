@@ -136,7 +136,34 @@ namespace Web.Controllers
             
         }
 
-     
+        public async Task<JsonResult> GetTWRAlphabeticValues(string prefix, int pageSize, int pageNumber, string customParams)
+        {
+            try
+            {
+                var svm = SetSelect2CustomParams(customParams);
+                svm.PerPage = pageSize;
+                svm.CalculateTotal = true;
+                svm.CurrentPage = pageNumber;
+                svm.Search = new DataTableSearchViewModel() { value = prefix };
+                var response = await _TOTLogService.GetTWRAphabeticValues<Select2ViewModel>(svm);
+                PaginatedResultModel<Select2ViewModel> items = new();
+                if (response.Status == System.Net.HttpStatusCode.OK)
+                {
+                    var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>>;
+                    items = parsedResponse?.ReturnModel ?? new();
+                }
+                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, items.Items.ToList()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"TOTLog Select2 method threw an exception, Message: {ex.Message}");
+                return null;
+            }
+
+
+        }
+
+
     }
 
 }
