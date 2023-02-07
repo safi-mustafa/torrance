@@ -21,7 +21,7 @@ namespace Repositories.Shared
 {
 
     public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
-        where TEntity : BaseDBModel, IApprove
+        where TEntity : BaseDBModel, IApprove, IEmployeeId
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
@@ -93,19 +93,7 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
-                        var pushNotification = new PushNotificationViewModel
-                        {
-                            LogId = logRecord.Id,
-                            LogType = GetLogType(logRecord),
-                            Message = $"Log for {logRecord.CreatedOn.ToString("U")} has been {status.ToString()}"
-                        };
-                        //var deviceId = await _db.Users.Where(x => x.Id == logRecor)
-                        await _notificationService.AddNotificationAsync(new NotificationViewModel
-                        {
-                            EntityId = logRecord.Id,
-                            Message = JsonConvert.SerializeObject(pushNotification),
-                            //SendTo = 
-                        });
+                        await _notificationService.AddNotificationAsync(new NotificationViewModel(status, logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status.ToString()}"));
                         return _response;
                     }
                     _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
@@ -118,11 +106,6 @@ namespace Repositories.Shared
                     return Response.BadRequestResponse(_response);
                 }
             }
-        }
-
-        private LogType GetLogType(TEntity entity)
-        {
-            return entity is TOTLog ? LogType.TimeOnTools : entity is OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
         }
     }
 }
