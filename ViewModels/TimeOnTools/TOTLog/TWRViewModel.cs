@@ -20,10 +20,13 @@ namespace ViewModels.TimeOnTools.TOTLog
                     id = twrSplitted[1],
                     text =twrSplitted[1]
                 } : new Select2ViewModel();
+                var alphabeticPartId = twrSplitted[2];
+                var twrList = GetTWRAlphabeticList();
+                var alphabeticText = twrList.Where(x => x.id == alphabeticPartId).Select(x => x.text).FirstOrDefault();
                 AlphabeticPart = twrSplitted.Count() > 2 ? new Select2ViewModel
                 {
                     id = twrSplitted[2],
-                    text = twrSplitted[2]
+                    text = alphabeticText
                 } : new Select2ViewModel();
                 Text = twrSplitted[3] ?? "";
             }

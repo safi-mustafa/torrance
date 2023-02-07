@@ -113,6 +113,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+
+                    
+
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
