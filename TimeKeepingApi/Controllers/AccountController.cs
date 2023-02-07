@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Models;
 using Pagination;
 using Repositories.Shared.AuthenticationService;
+using Repositories.Shared.UserInfoServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -30,6 +31,7 @@ namespace TorranceApi.Controllers
         private readonly IIdentityService _identity;
         private readonly UserManager<ToranceUser> _userManager;
         private readonly SignInManager<ToranceUser> _signInManager;
+        private readonly IUserInfoService _userInfoService;
 
         public AccountController
             (
@@ -40,7 +42,8 @@ namespace TorranceApi.Controllers
                 IMapper mapper,
                 IIdentityService identity,
                 UserManager<ToranceUser> userManager,
-                SignInManager<ToranceUser> signInManager
+                SignInManager<ToranceUser> signInManager,
+                IUserInfoService userInfoService
             )
         {
             _configuration = configuration;
@@ -51,6 +54,7 @@ namespace TorranceApi.Controllers
             _identity = identity;
             _userManager = userManager;
             _signInManager = signInManager;
+            _userInfoService = userInfoService;
         }
 
         [HttpPost]
@@ -248,9 +252,10 @@ namespace TorranceApi.Controllers
         [Authorize]
         [HttpPost]
         [Route("/api/Account/Logout")]
-        public async Task Logout(string deviceId)
+        public async Task Logout()
         {
-            var user = await _db.Users.Where(x => x.DeviceId == deviceId).FirstOrDefaultAsync();
+            var loggedInUserId = long.Parse(_userInfoService.LoggedInUserId());
+            var user = await _db.Users.Where(x => x.Id == loggedInUserId).FirstOrDefaultAsync();
             if (user != null)
             {
                 user.DeviceId = null;
