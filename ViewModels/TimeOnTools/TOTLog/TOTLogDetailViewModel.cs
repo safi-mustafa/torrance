@@ -43,6 +43,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         }
         public string Twr { get; set; }
 
+        public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+
         [Display(Name = "Total Manhours")]
         public long ManHours { get; set; }
         [Display(Name = "Start Date")]

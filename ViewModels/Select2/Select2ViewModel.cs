@@ -31,6 +31,7 @@ namespace Select2.Model
 
         public T additionalAttributesModel { get; set; }
     }
+  
 
     public class Select2PagedResult<T>
     {

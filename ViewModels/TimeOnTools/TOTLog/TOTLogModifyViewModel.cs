@@ -15,6 +15,7 @@ using ViewModels.AppSettings.Map;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs;
+using Helpers.Extensions;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -22,7 +23,14 @@ namespace ViewModels.TimeOnTools.TOTLog
     {
         public DateTime? Date { get; set; } = DateTime.Now;
         [Display(Name = "Twr", Prompt = "Add Twr")]
-        public string Twr { get; set; }
+        public string? Twr
+        {
+            get
+            {
+                return TWRModel.Name + "-" + TWRModel.NumericPart.id + "-" + TWRModel.AlphabeticPart.id + "-" + TWRModel.Text;
+            }
+        }
+        public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
@@ -68,29 +76,12 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-
-        //private UserBriefViewModel? _foreman;
-        //public UserBriefViewModel Foreman { get => _foreman == null ? new UserBriefViewModel() : _foreman; set => _foreman = value; }
-
-        //private EmployeeBriefViewModel? _employee;
-        //public EmployeeBriefViewModel Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
-        //private ApproverBriefViewModel? _approver;
-        //public ApproverBriefViewModel Approver
-        //{
-        //    get
-        //    {
-        //        return _approver == null ? new ApproverBriefViewModel(true) : _approver;
-        //    }
-        //    set
-        //    {
-        //        _approver = value;
-        //    }
-        //}
-
-         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
+
+   
 }

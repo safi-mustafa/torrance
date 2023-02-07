@@ -26,7 +26,14 @@ namespace ViewModels.TimeOnTools.TOTLog
     public class TOTLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
         public DateTime? Date { get; set; } = DateTime.Now;
-        public string Twr { get; set; }
+        public string? Twr
+        {
+            get
+            {
+                return TWRModel.Name + "-" + TWRModel.NumericPart.id + "-" + TWRModel.AlphabeticPart.id + "-" + TWRModel.Text;
+            }
+        }
+        public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]

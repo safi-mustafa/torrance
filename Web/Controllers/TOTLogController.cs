@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
+using Pagination;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
 using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
+using Select2;
+using Select2.Model;
+using ViewModels;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.OverrideLogs.ORLog;
@@ -104,7 +109,34 @@ namespace Web.Controllers
             };
         }
 
+        public async Task<JsonResult> GetTWRNumericValues(string prefix, int pageSize, int pageNumber, string customParams)
+        {
+            try
+            {
+                var svm = SetSelect2CustomParams(customParams);
+                svm.PerPage = pageSize;
+                svm.CalculateTotal = true;
+                svm.CurrentPage = pageNumber;
+                svm.Search = new DataTableSearchViewModel() { value = prefix };
+                var response = await _TOTLogService.GetTWRNumericValues<Select2ViewModel>(svm);
+                PaginatedResultModel<Select2ViewModel> items = new();
+                if (response.Status == System.Net.HttpStatusCode.OK)
+                {
+                    var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>>;
+                    items = parsedResponse?.ReturnModel ?? new();
+                }
+                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, items.Items.ToList()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"TOTLog Select2 method threw an exception, Message: {ex.Message}");
+                return null;
+            }
 
+            
+        }
+
+     
     }
 
 }
