@@ -210,5 +210,15 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
             mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
         }
+
+        public Task<IRepositoryResponse> GetTWRNumericValues<M>(IBaseSearchModel search)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IRepositoryResponse> GetTWRAphabeticValues<M>(IBaseSearchModel search)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
