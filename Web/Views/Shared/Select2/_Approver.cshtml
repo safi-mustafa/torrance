@@ -3,7 +3,7 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "user-id";
-    var title = ViewData["UserTitle"] != null && !string.IsNullOrEmpty(ViewData["UserTitle"].ToString()) ? ViewData["UserTitle"].ToString() : "User";
+    var title = ViewData["UserTitle"] != null && !string.IsNullOrEmpty(ViewData["UserTitle"].ToString()) ? ViewData["UserTitle"].ToString() : "Approver";
     var name = title + ".Name";
     var type = ViewData["Type"] != null && !string.IsNullOrEmpty(ViewData["Type"].ToString()) ? ViewData["Type"].ToString() : "Approver";
     var label = "Select "+title;

@@ -17,7 +17,7 @@ namespace NotificationWorkerService.Repository
                 IPushApiClient _client = new PushApiClient(sendTo);
                 PushTicketRequest pushTicketRequest = new PushTicketRequest()
                 {
-                    PushTo = new List<string>() { ... },
+                 //   PushTo = new List<string>() { ... },
                     PushTitle = "TEST 1",
                     PushBody = "TEST 1",
                     PushChannelId = "test"

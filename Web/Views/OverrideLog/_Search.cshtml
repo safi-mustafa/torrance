@@ -6,7 +6,27 @@
 
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
         </div>
     </div>
     <div class="col-lg-4">

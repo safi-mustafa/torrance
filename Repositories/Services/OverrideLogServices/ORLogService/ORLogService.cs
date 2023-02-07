@@ -58,7 +58,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Employee.Name) || x.Employee.FirstName == searchFilters.Employee.Name)
+                            (searchFilters.Requester.Id == null || x.Employee.Id == searchFilters.Requester.Id)
+                            &&
+                            (searchFilters.Approver.Id == null || x.Approver.Id == searchFilters.Approver.Id)
+                            &&
+                            (searchFilters.Unit.Id == 0 || searchFilters.Unit.Id == null || x.Unit.Id == searchFilters.Unit.Id)
+                            &&
+                            (searchFilters.OverrideType.Id == null || x.OverrideType.Id == searchFilters.OverrideType.Id)
+                            &&
+                            (searchFilters.Company.Id == null || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (
                                 (loggedInUserRole == "SuperAdmin")
