@@ -132,13 +132,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
-                    mappedModel.Approver = new ViewModels.Authentication.ApproverBriefViewModel
-                    {
-                        Id = dbModel.ApproverId,
-                        Name = dbModel.Approver.Email
-                    };
-                    //var selectedEmployees = await GetOverrideLogEmployees(id);
-                    //   mappedModel.EmployeeMultiselect.Employees = mappedModel.Employees;
+                
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }

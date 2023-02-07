@@ -101,11 +101,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                    mappedModel.Approver = new ViewModels.Authentication.ApproverBriefViewModel
-                    {
-                        Id = dbModel.ApproverId,
-                        Name = dbModel.Approver.Email
-                    };
+                 
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
