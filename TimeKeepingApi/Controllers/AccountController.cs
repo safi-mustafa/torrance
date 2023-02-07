@@ -252,7 +252,7 @@ namespace TorranceApi.Controllers
         [Authorize]
         [HttpPost]
         [Route("/api/Account/Logout")]
-        public async Task Logout()
+        public async Task Logout(string deviceId)
         {
             var loggedInUserId = long.Parse(_userInfoService.LoggedInUserId());
             var user = await _db.Users.Where(x => x.Id == loggedInUserId).FirstOrDefaultAsync();
