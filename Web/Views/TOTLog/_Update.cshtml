@@ -41,10 +41,11 @@
 
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="Twr" class="form-label fw-600"></label>
+                   @* <label asp-for="Twr" class="form-label fw-600"></label>
                     <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
-                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>
-                    @* <partial name="~/Views/Shared/Select2/_TWRNumeric.cshtml" for="TWRModel.NumericPart" />*@
+                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
+                    <partial name="~/Views/Shared/Select2/_TWRNumeric.cshtml" for="TWRModel.NumericPart" />
+                    <partial name="~/Views/Shared/Select2/_TWRAlphabetic.cshtml" for="TWRModel.AlphabeticPart" />
 
                 </div>
             </div>

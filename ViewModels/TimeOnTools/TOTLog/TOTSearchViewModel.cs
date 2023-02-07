@@ -1,11 +1,11 @@
 ﻿using Enums;
 using Pagination;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using ViewModels.Authentication;
-using ViewModels.Common.Contractor;
-using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.Shift;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -16,28 +16,24 @@ namespace ViewModels.TimeOnTools.TOTLog
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
-
-        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
-        //public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
-
-        //public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+        public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
+        public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
     }
 
     public class TOTLogAPISearchViewModel : BaseSearchModel
     {
         public long? EquipmentNo { get; set; }
-        public long DepartmentId { get; set; }
+        public long? UnitId { get; set; }
+        public long? ShiftId { get; set; }
+        public long? DelayTypeId { get; set; }
+        public long? PermitTypeId { get; set; }
+        public long? RequesterId { get; set; }
+        public long? ApproverId { get; set; }
 
-        public long UnitId { get; set; }
-
-        public long ContractorId { get; set; }
-
-        //public long ApproverId { get; set; }
-
-        //public long ForemanId { get; set; }
     }
 }

@@ -34,19 +34,19 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "", data = ""},//<input type='checkbox' class='select-checkbox'>
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
-                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn"},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name"},
-                new DataTableViewModel{title = "Company",data = "Company.Name"},
-                new DataTableViewModel{title = "Shift",data = "Shift.Name"},
-                new DataTableViewModel{title = "Unit",data = "Unit.Name"},
-                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name"},
-                new DataTableViewModel{title = "Override Type",data = "OverrideType.Name"},
-                new DataTableViewModel{title = "Craft",data = "FormattedCraft"},
-                new DataTableViewModel{title = "Override Hours",data = "OverrideHours"},
-                new DataTableViewModel{title = "PO Number",data = "PONumber"},
-                new DataTableViewModel{title = "Work Completed Date",data = "FormattedDateOfWorkCompleted"},
+                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn="CreatedOn", orderable=true},
+                new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
+                new DataTableViewModel{title = "Company",data = "Company.Name", orderable=true},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
+                new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
+                new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
+                new DataTableViewModel{title = "Override Type",data = "OverrideType.Name", orderable=true},
+                new DataTableViewModel{title = "Craft",data = "FormattedCraft" },
+                new DataTableViewModel{title = "Override Hours",data = "OverrideHours", orderable=true},
+                new DataTableViewModel{title = "PO Number",data = "PONumber", orderable=true},
+                new DataTableViewModel{title = "Work Completed Date",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
-            });
+            }); ;
             return dataColumns;
         }
 

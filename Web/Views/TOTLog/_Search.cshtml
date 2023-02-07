@@ -11,21 +11,32 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
         </div>
     </div>
-
-</div>
-
-<div class="row">
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
         </div>
     </div>
     <div class="col-lg-4">

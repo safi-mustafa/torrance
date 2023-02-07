@@ -67,16 +67,19 @@ public class NotificationWorker : BackgroundService
                     //   sms.ResendCount += 1;
                 }
             }
-            foreach (var notification in pushNotifications)
+            if (pushNotifications.Count > 0)
             {
-                var smsResult = await _smsService.SendSms(notification.SendTo, notification.Message);
-                //if (smsResult)
-                //    sms.IsSent = true;
-                //else
-                //{
-                //    sms.IsSent = false;
-                //    //   sms.ResendCount += 1;
-                //}
+                foreach (var notification in pushNotifications)
+                {
+                    var smsResult = await _smsService.SendSms(notification);
+                    //if (smsResult)
+                    //    sms.IsSent = true;
+                    //else
+                    //{
+                    //    sms.IsSent = false;
+                    //    //   sms.ResendCount += 1;
+                    //}
+                }
             }
 
             await _db.SaveChangesAsync();

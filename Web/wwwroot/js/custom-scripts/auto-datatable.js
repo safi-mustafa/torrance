@@ -131,7 +131,8 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         "proccessing": true,
         "searching": true,
         "responsive": isResponsive,
-        "ordering": false,
+        "ordering": true,
+        "order": GetColumnSortings(dtColumns),
         "pagingType": "full_numbers",
         "lengthMenu": [[10, 25, 50, 250], [10, 25, 50, 250]],
         //lBfrtipF
@@ -177,8 +178,10 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 searchParams["CurrentPage"] = (searchParams.start / searchParams.length) + 1;
                 searchParams["PerPage"] = searchParams.length;
                 searchParams["CalculateTotal"] = true;
-                //searchParams["OrderByColumn"] = searchParams.columns[searchParams.order[0].column].data;
-                //searchParams["OrderDir"] = searchParams.order[0].dir;
+                if (searchParams.order.length > 0) {
+                    searchParams["OrderByColumn"] = dtColumns[searchParams.order[0].column].sortingColumn;
+                    searchParams["OrderDir"] = searchParams.order[0].dir;
+                }
                 searchParams["Draw"] = searchParams.draw;
                 return searchParams;
             },
@@ -289,6 +292,17 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         }
     });
     SetSearchFilters();
+}
+function GetColumnSortings(columns) {
+    var sortedColumns = [];
+    $.each(columns, function (i, v) {
+        if (v.orderable) {
+            console.log("orderable column");
+            var sortedColumn = [i, 'asc'];
+            sortedColumns.push(sortedColumn);
+        }
+    });
+    return sortedColumns;
 }
 function GetActionLinks(actionsList, cellData) {
     var actionHtml = "";

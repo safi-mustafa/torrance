@@ -33,6 +33,7 @@ namespace ViewModels.TimeOnTools.TOTLog
                 return TWRModel.Name + "-" + TWRModel.NumericPart.id + "-" + TWRModel.AlphabeticPart.id + "-" + TWRModel.Text;
             }
         }
+        [Required(ErrorMessage = "*")]
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
