@@ -292,7 +292,6 @@ namespace TorranceApi.Mapper
             CreateMap<ApproverModifyViewModel, ApproverProfileModifyViewModel>().ReverseMap();
             CreateMap<ToranceUser, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
-            //CreateMap<ToranceUser, ApproverBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
