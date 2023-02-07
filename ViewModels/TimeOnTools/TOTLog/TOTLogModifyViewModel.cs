@@ -16,6 +16,7 @@ using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs;
 using Helpers.Extensions;
+using ViewModels.Common.Company;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -81,7 +82,9 @@ namespace ViewModels.TimeOnTools.TOTLog
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }
 
-   
+
 }

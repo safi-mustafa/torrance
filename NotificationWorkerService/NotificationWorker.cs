@@ -2,6 +2,7 @@
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NotificationWorkerService.Context;
+using NotificationWorkerService.Interface;
 
 namespace NotificationWorkerService;
 
@@ -12,13 +13,15 @@ public class NotificationWorker : BackgroundService
     private readonly IConfiguration _configuration;
     private readonly IEmail _emailService;
     private readonly ISms _smsService;
+    private readonly IPushNotification _pushNotification;
 
-    public NotificationWorker(ILogger<NotificationWorker> logger, IConfiguration configuration, IEmail emailService, ISms smsService, IServiceScopeFactory factory)
+    public NotificationWorker(ILogger<NotificationWorker> logger, IConfiguration configuration, IEmail emailService, ISms smsService, IPushNotification pushNotification, IServiceScopeFactory factory)
     {
         _logger = logger;
         _configuration = configuration;
         _emailService = emailService;
         _smsService = smsService;
+        _pushNotification = pushNotification;
         _db = factory.CreateScope().ServiceProvider.GetRequiredService<NotificationDbContext>();
     }
 
@@ -71,14 +74,14 @@ public class NotificationWorker : BackgroundService
             {
                 foreach (var notification in pushNotifications)
                 {
-                    var smsResult = await _smsService.SendSms(notification);
-                    //if (smsResult)
-                    //    sms.IsSent = true;
-                    //else
-                    //{
-                    //    sms.IsSent = false;
-                    //    //   sms.ResendCount += 1;
-                    //}
+                    var pushNotificationResult = await _pushNotification.SendPushNotification(notification);
+                    if (pushNotificationResult)
+                        notification.IsSent = true;
+                    else
+                    {
+                        notification.IsSent = false;
+                        //   sms.ResendCount += 1;
+                    }
                 }
             }
 

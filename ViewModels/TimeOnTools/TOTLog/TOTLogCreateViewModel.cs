@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.Authentication;
+using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -77,6 +78,10 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+
     }
 }

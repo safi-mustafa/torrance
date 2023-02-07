@@ -1,9 +1,11 @@
 ﻿using System;
+using Models;
+
 namespace NotificationWorkerService.Interface
 {
     public interface IPushNotification
     {
-        Task<bool> SendPushNotification(string sendTo, string message);
+        Task<bool> SendPushNotification(Notification notification);
     }
 }
 

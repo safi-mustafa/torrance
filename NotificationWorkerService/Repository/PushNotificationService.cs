@@ -2,23 +2,31 @@
 using DataLibrary;
 using Expo.Server.Client;
 using Expo.Server.Models;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Newtonsoft.Json;
 using NotificationWorkerService.Interface;
+using ViewModels.Notification;
 
 namespace NotificationWorkerService.Repository
 {
     public class PushNotificationService : IPushNotification
     {
-        public async Task<bool> SendPushNotification(string sendTo, string message)
+        private readonly ToranceContext _db;
+        private readonly ILogger<PushNotificationService> _logger;
+
+        public PushNotificationService(ToranceContext db, ILogger<PushNotificationService> logger)
+        {
+            _db = db;
+            _logger = logger;
+        }
+        public async Task<bool> SendPushNotification(Notification notification)
         {
             try
             {
-                var deviceIds = await _db.Users.Where(x => x.Id == .Contains(x.UserId) && x.IsDeleted == false).Select(x => x.DeviceId).ToListAsync();
+                var deviceId = await _db.Users.Where(x => x.Id == int.Parse(notification.SendTo) && x.IsDeleted == false).Select(x => x.DeviceId).FirstOrDefaultAsync();
 
-                var notificationBody = JsonConvert.DeserializeObject<PushNotificationModel>(message);
-                notificationBody.TaskId = notificationBody.TaskId == 0 ? notification.EntityId : notificationBody.TaskId;
-                var notificationFor = notificationBody.TaskType == AuditTaskType.WithCheckpoints ? "Audit" : "Task";
+                var notificationBody = JsonConvert.DeserializeObject<PushNotificationViewModel>(notification.Message);
 
                 var expoSDKClient = new PushApiClient();
                 var pushTicketReq = new PushTicketRequest()
@@ -28,24 +36,18 @@ namespace NotificationWorkerService.Repository
                     PushTitle = notificationBody.Title,
                     PushBody = notificationBody.Message
                 };
-                var notificationStatus = PushNotificationStatus.Sent;
-                pushTicketReq.PushTo = new List<string>() { sendTo };
                 var result = await expoSDKClient.PushSendAsync(pushTicketReq);
+                _logger.LogInformation($"Entity Id: {notification.Entity}");
                 if (result?.PushTicketErrors?.Count() > 0)
-                    notificationStatus = PushNotificationStatus.Pending;
-                else
-                    notificationStatus = PushNotificationStatus.Sent;
-                notification.Status = PushNotificationStatus.Sent;
-                _logger.LogInformation($"Entity Id: {notification.EntityId}");
-                await _db.SaveChangesAsync();
+                    return false;
                 return true;
-            }
             }
             catch (Exception ex)
             {
                 return false;
             }
-}
+        }
+    }
 
 }
 
