@@ -12,5 +12,12 @@ namespace ViewModels.Authentication
         public string Password { get; set; }
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+        public string? DeviceId { get; set; }
+    }
+
+    public class LoginBriefVM
+    {
+        public string Pincode { get; set; }
+        public string? DeviceId { get; set; }
     }
 }

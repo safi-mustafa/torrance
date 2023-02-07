@@ -29,6 +29,7 @@ namespace TorranceApi.Controllers
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly UserManager<ToranceUser> _userManager;
+        private readonly SignInManager<ToranceUser> _signInManager;
 
         public AccountController
             (
@@ -38,7 +39,8 @@ namespace TorranceApi.Controllers
                 IRepositoryResponse response,
                 IMapper mapper,
                 IIdentityService identity,
-                UserManager<ToranceUser> userManager
+                UserManager<ToranceUser> userManager,
+                SignInManager<ToranceUser> signInManager
             )
         {
             _configuration = configuration;
@@ -48,12 +50,13 @@ namespace TorranceApi.Controllers
             _mapper = mapper;
             _identity = identity;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
         [Route("/api/Account/LoginUsingPincode")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginUsingPincode(string pincode)
+        public async Task<IActionResult> LoginUsingPincode(LoginBriefVM model)
         {
             IRepositoryResponse result;
             try
@@ -62,7 +65,7 @@ namespace TorranceApi.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model State is valid", "login method 2");
-                    var user = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == pincode).FirstOrDefaultAsync();
+                    var user = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
                     if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
                     {
                         ModelState.AddModelError("pincode", "Approval for this account is still pending.");
@@ -76,6 +79,11 @@ namespace TorranceApi.Controllers
                     if (user != null)
                     {
                         var aspNetUser = await _db.Users.Where(x => x.Id == user.UserId).FirstOrDefaultAsync();
+                        if (aspNetUser != null)
+                        {
+                            aspNetUser.DeviceId = model.DeviceId;
+                            await _db.SaveChangesAsync();
+                        }
                         var name = User?.Identity?.Name;
                         _logger.LogInformation("User logged in.", "login method 4");
 
@@ -166,6 +174,8 @@ namespace TorranceApi.Controllers
                     var response = await _userManager.CheckPasswordAsync(user, model.Password);
                     if (user != null && response)
                     {
+                        user.DeviceId = model.DeviceId;
+                        await _db.SaveChangesAsync();
                         var name = User?.Identity?.Name;
                         _logger.LogInformation("User logged in.", "login method 4");
                         var userRoles = await _userManager.GetRolesAsync(user);
@@ -235,6 +245,20 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse(result);
         }
 
+        [Authorize]
+        [HttpPost]
+        [Route("/api/Account/Logout")]
+        public async Task Logout(string deviceId)
+        {
+            var user = await _db.Users.Where(x => x.DeviceId == deviceId).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                user.DeviceId = null;
+                await _db.SaveChangesAsync();
+            }
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+        }
 
         [Authorize]
         [HttpGet]
