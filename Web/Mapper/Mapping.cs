@@ -210,6 +210,7 @@ namespace Models.Mapper
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
                 .ForMember(x => x.DelayType, opt => opt.Ignore())
+                .ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))

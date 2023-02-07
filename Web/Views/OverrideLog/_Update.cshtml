@@ -19,7 +19,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600">Company</label>
-                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="" readonly />
+                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
                     </div>
                 </div>
             }
@@ -111,8 +111,7 @@
 </div>
 <input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
-<script>
-    $(function(){
+<script>$(function () {
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");
@@ -121,6 +120,5 @@
                 $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
             }
         });
-    });
-</script>
+    });</script>
 

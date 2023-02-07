@@ -19,7 +19,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600">Company</label>
-                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="" readonly />
+                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
                     </div>
                 </div>
             }
@@ -40,12 +40,29 @@
             </div>
 
             <div class="col-lg-6">
-                <div class="mb-3">
-                   @* <label asp-for="Twr" class="form-label fw-600"></label>
-                    <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
-                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
-                    <partial name="~/Views/Shared/Select2/_TWRNumeric.cshtml" for="TWRModel.NumericPart" />
-                    <partial name="~/Views/Shared/Select2/_TWRAlphabetic.cshtml" for="TWRModel.AlphabeticPart" />
+                <label class="form-label fw-600">TWR</label>
+
+                <div class="mb-3 d-flex justify-content-start">
+                    @* <label asp-for="Twr" class="form-label fw-600"></label>
+                        <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
+                        <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
+                    <div class="col-2">
+                        <div class="form-group mt-2">
+                            <span>TWR</span>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <partial name="~/Views/Shared/Select2/_TWRNumeric.cshtml" for="TWRModel.NumericPart" />
+                    </div>
+
+                    <div class="col-3">
+                        <partial name="~/Views/Shared/Select2/_TWRAlphabetic.cshtml" for="TWRModel.AlphabeticPart" />
+                    </div>
+
+                    <div class="col-3">
+                        <input type="text" asp-for="TWRModel.Text" class="form-control" />
+                    </div>
 
                 </div>
             </div>
@@ -123,58 +140,58 @@
                 <input asp-for="Approver.Id" type="hidden" />
             }
             @*  <div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="HoursDelayed" class="form-label fw-600"></label>
-            <input asp-for="HoursDelayed" type="number" class="form-control" />
-            <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="HoursDelayed" class="form-label fw-600"></label>
+                <input asp-for="HoursDelayed" type="number" class="form-control" />
+                <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
 
             @*          <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
-            </div>
-            </div>
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
+                </div>
+                </div>
             *@
 
 
             @*   <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-            </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+                </div>
+                <div class="col-lg-6">
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+                </div>
+                </div>*@
             @*<div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="Date" class="form-label fw-600"></label>
-            <input asp-for="Date" type="date" class="form-control" />
-            <span asp-validation-for="Date" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Date" class="form-label fw-600"></label>
+                <input asp-for="Date" type="date" class="form-control" />
+                <span asp-validation-for="Date" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
             @* <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-            </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+                </div>
+                <div class="col-lg-6">
+                <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+                </div>*@
             @*<div class="col-lg-6">
-            <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
-            <input asp-for="TimeSigned" type="time" class="form-control" />
-            <span asp-validation-for="TimeSigned" class="text-danger"></span>
-            </div>
-            <div class="col-lg-6">
-            <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
-            <input asp-for="TimeRequested" type="time" class="form-control" />
-            <span asp-validation-for="TimeRequested" class="text-danger"></span>
-            </div>*@
+                <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeSigned" type="time" class="form-control" />
+                <span asp-validation-for="TimeSigned" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
+                <input asp-for="TimeRequested" type="time" class="form-control" />
+                <span asp-validation-for="TimeRequested" class="text-danger"></span>
+                </div>*@
         </div>
     </div>
 </div>
@@ -183,8 +200,7 @@
 <input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
-<script>
-    $(function () {
+<script>$(function () {
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");
@@ -193,5 +209,4 @@
                 $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
             }
         });
-    });
-</script>
+    });</script>
