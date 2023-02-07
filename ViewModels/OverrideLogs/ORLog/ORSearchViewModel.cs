@@ -8,7 +8,7 @@ namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogSearchViewModel : BaseSearchModel
     {
-        public EmployeeBriefViewModel Requester { get; set; } = new();
+        public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]

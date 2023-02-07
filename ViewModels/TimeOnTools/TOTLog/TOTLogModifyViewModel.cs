@@ -61,12 +61,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
 
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
+
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
+
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(true) : _approver; set => _approver = value; }
@@ -80,6 +80,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
 }

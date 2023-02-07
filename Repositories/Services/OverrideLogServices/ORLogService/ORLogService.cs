@@ -34,7 +34,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -55,16 +55,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var parsedLoggedInId = long.Parse(loggedInUserId);
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Requester.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (string.IsNullOrEmpty(searchFilters.Requester.Name) || x.Requester.FirstName == searchFilters.Requester.Name)
+                            (string.IsNullOrEmpty(searchFilters.Employee.Name) || x.Employee.FirstName == searchFilters.Employee.Name)
                             &&
                             (
                                 (loggedInUserRole == "SuperAdmin")
                                 ||
                                 (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
                                 ||
-                                (loggedInUserRole == "Employee" && x.RequesterId == parsedLoggedInId)
+                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
                             (status == null || status == x.Status)
@@ -87,7 +87,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Shift)
                     .Include(x => x.CraftSkill)
                     .Include(x => x.CraftRate)
-                    .Include(x => x.Requester)
+                    .Include(x => x.Employee)
                     .Include(x => x.Company)
                     .Where(filters);
                 var query = resultQuery.ToQueryString();
@@ -124,7 +124,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Shift)
                     .Include(x => x.Unit)
                     .Include(x => x.Approver)
-                    .Include(x => x.Requester)
+                    .Include(x => x.Employee)
                     .Include(x => x.Company)
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
 
@@ -217,9 +217,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var role = _userInfoService.LoggedInUserRole();
             if (role == "Employee")
             {
-                mappedModel.RequesterId = long.Parse(_userInfoService.LoggedInUserId());
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
             }
-            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.RequesterId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
         }
     }
 }

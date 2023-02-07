@@ -10,6 +10,7 @@ using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Shared;
+using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Data.Common;
 using System.Linq.Expressions;
@@ -29,7 +30,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
 
-        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, logger, mapper, response)
+        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -70,18 +71,7 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
             ;
         }
-        //public override IQueryable<WRRLog> GetPaginationDbSet()
-        //{
-        //    return _db.WRRLogs
-        //            .Include(x => x.Unit)
-        //            .Include(x => x.Department)
-        //            .Include(x => x.Location)
-        //            .Include(x => x.Employee)
-        //            .Include(x => x.RodType)
-        //            .Include(x => x.WeldMethod)
-        //            .Include(x => x.Approver)
-        //            .Include(x => x.Contractor).AsQueryable();
-        //}
+
         public override async Task<IRepositoryResponse> GetById(long id)
         {
             try

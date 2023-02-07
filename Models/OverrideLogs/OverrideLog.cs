@@ -34,8 +34,8 @@ namespace Models.OverrideLogs
         public Company Company { get; set; }
 
         [ForeignKey("Employee")]
-        public long RequesterId { get; set; }
-        public Employee Requester { get; set; }
+        public long EmployeeId { get; set; }
+        public Employee Employee { get; set; }
 
         [ForeignKey("CraftRate")]
         public long CraftRateId { get; set; }

@@ -13,7 +13,7 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
 
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
             }
@@ -22,7 +22,7 @@
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-              <div class="col-lg-6">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-          
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" for="CraftSkill" />
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-           
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Description" class="form-label fw-600"></label>
@@ -85,24 +85,24 @@
                 </div>
             </div>
 
-           
-           
-         
+
+
+
             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
-                        </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"} }' />
                     </div>
+                </div>
             }
             else
             {
-                    <input asp-for="Approver.Id" type="hidden" />
+                <input asp-for="Approver.Id" type="hidden" />
             }
         </div>
     </div>
 </div>
-<input asp-for="Requester.Id" type="hidden" />
+<input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
