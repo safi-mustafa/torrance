@@ -58,15 +58,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (searchFilters.Requester.Id == null || x.Employee.Id == searchFilters.Requester.Id)
+                            (searchFilters.Requester.Id == null || searchFilters.Requester.Id == 0 || x.Employee.Id == searchFilters.Requester.Id)
                             &&
-                            (searchFilters.Approver.Id == null || x.Approver.Id == searchFilters.Approver.Id)
+                            (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
-                            (searchFilters.Unit.Id == 0 || searchFilters.Unit.Id == null || x.Unit.Id == searchFilters.Unit.Id)
+                            (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
-                            (searchFilters.OverrideType.Id == null || x.OverrideType.Id == searchFilters.OverrideType.Id)
+                            (searchFilters.OverrideType.Id == null || searchFilters.OverrideType.Id == 0 || x.OverrideType.Id == searchFilters.OverrideType.Id)
                             &&
-                            (searchFilters.Company.Id == null || x.Company.Id == searchFilters.Company.Id)
+                            (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (
                                 (loggedInUserRole == "SuperAdmin")
@@ -226,7 +226,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var role = _userInfoService.LoggedInUserRole();
             if (role == "Employee")
             {
-                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInEmployeeId());
             }
             mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
         }

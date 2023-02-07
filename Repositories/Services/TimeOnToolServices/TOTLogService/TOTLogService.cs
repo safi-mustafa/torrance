@@ -62,17 +62,17 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (searchFilters.EquipmentNo == null || x.EquipmentNo == searchFilters.EquipmentNo)
                             &&
-                            (searchFilters.Shift.Id == null || x.Shift.Id == searchFilters.Shift.Id)
+                            (searchFilters.Shift.Id == null || searchFilters.Shift.Id == 0 || x.Shift.Id == searchFilters.Shift.Id)
                             &&
-                            (searchFilters.DelayType.Id == null || x.DelayType.Id == searchFilters.DelayType.Id)
+                            (searchFilters.DelayType.Id == null || searchFilters.DelayType.Id == 0 || x.DelayType.Id == searchFilters.DelayType.Id)
                             &&
-                            (searchFilters.Requester.Id == null || x.Employee.Id == searchFilters.Requester.Id)
+                            (searchFilters.Requester.Id == null || searchFilters.Requester.Id == 0 || x.Employee.Id == searchFilters.Requester.Id)
                             &&
-                            (searchFilters.Approver.Id == null || x.Approver.Id == searchFilters.Approver.Id)
+                            (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
-                            (searchFilters.PermitType.Id == null || x.PermitType.Id == searchFilters.PermitType.Id)
+                            (searchFilters.PermitType.Id == null || searchFilters.PermitType.Id == 0 || x.PermitType.Id == searchFilters.PermitType.Id)
                             &&
-                            (searchFilters.Unit.Id == 0 || searchFilters.Unit.Id == null || x.Unit.Id == searchFilters.Unit.Id)
+                            (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0  || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
                                 (loggedInUserRole == "SuperAdmin")
