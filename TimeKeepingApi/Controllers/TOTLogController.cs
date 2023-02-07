@@ -9,6 +9,7 @@ using Repositories.Shared.UserInfoServices;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.WeldingRodRecord;
 using Select2.Model;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace API.Controllers
 {
@@ -61,6 +62,7 @@ namespace API.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Post(model);
         }
 
@@ -73,7 +75,18 @@ namespace API.Controllers
             {
                 model.Employee = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
+            AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Put(model);
+        }
+
+        private void AddTWRModelStateErrors(ModelStateDictionary modelState, TWRViewModel model)
+        {
+            if (model.AlphabeticPart == null || string.IsNullOrEmpty(model.AlphabeticPart.id) || model.AlphabeticPart.id == "0")
+                modelState.AddModelError("AlphabeticPart", "Required");
+            if (model.NumericPart == null || string.IsNullOrEmpty(model.NumericPart.id) || model.NumericPart.id == "0")
+                modelState.AddModelError("NumericPart", "Required");
+            if (string.IsNullOrEmpty(model.Text))
+                modelState.AddModelError("TWRModel.Text", "Required");
         }
     }
 }

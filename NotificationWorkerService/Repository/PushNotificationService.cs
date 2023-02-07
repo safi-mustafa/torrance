@@ -10,12 +10,6 @@ namespace NotificationWorkerService.Repository
 {
     public class PushNotificationService : IPushNotification
     {
-        private readonly ToranceContext _db;
-
-        public PushNotificationService(ToranceContext db)
-        {
-            _db = db;
-        }
         public async Task<bool> SendPushNotification(string sendTo, string message)
         {
             try
