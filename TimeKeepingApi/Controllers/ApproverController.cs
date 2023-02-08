@@ -17,13 +17,13 @@ namespace API.Controllers
     [Authorize]
     public class ApproverController : CrudBaseController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, ApproverSearchViewModel>
     {
-        private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _ApproverService;
+        private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly IMapper _mapper;
         private readonly IUserInfoService _userInfoService;
 
         public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> ApproverService, IMapper mapper, IUserInfoService userInfoService) : base(ApproverService)
         {
-            _ApproverService = ApproverService;
+            _approverService = ApproverService;
             _mapper = mapper;
             _userInfoService = userInfoService;
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
 using Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Common.Interfaces;
@@ -52,6 +53,7 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse<DetailViewModel>(result);
         }
 
+        [Authorize(Roles = ("Admin,SuperAdmin,Approver"))]
         [HttpPut("{id}/{status}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

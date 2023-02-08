@@ -210,7 +210,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     x.Units = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
-                var mappedUserList = _mapper.Map<List<M>>(users.Items);
+                var mappedUserList = users.Items as List<M>;
                 var paginatedModel = new PaginatedResultModel<M> { Items = mappedUserList, _links = users._links, _meta = users._meta };
 
                 var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();

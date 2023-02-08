@@ -256,9 +256,6 @@ namespace Models.Mapper
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
-         
-
-
             //Folder
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
             CreateMap<FolderCreateViewModel, Folder>()
