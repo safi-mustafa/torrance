@@ -93,7 +93,8 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
-                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push));
+                        var userId = await _db.Employees.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.UserId).FirstOrDefaultAsync();
+                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push));
                         await transaction.CommitAsync();
                         return _response;
                     }

@@ -93,7 +93,6 @@ namespace TorranceApi.Controllers
 
                     if (user != null)
                     {
-
                         user.DeviceId = model.DeviceId;
                         await _db.SaveChangesAsync();
                         var name = User?.Identity?.Name;
@@ -110,10 +109,10 @@ namespace TorranceApi.Controllers
 
                         };
 
-                        var employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
+                        var employee = new Employee();
                         if (role == "Employee")
                         {
-                            var employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
+                            employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
                             var fullName = $"{employee?.FirstName} {employee?.LastName}";
                             authClaims.AddRange(new List<Claim>
                             {
@@ -122,19 +121,7 @@ namespace TorranceApi.Controllers
                                 new Claim("EmployeeId", employee.Id.ToString()),
                             });
                         }
-
-                        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-                        var token = new JwtSecurityToken
-                            (
-                                issuer: _configuration["JWT:ValidIssuer"],
-                                audience: _configuration["JWT:ValidAudience"],
-                                expires: DateTime.Now.AddHours(12),
-                                claims: authClaims,
-                                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                           );
-
-                        RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>> responseModel = await GetResponseWithUserDetailForPin(user, role, employee, token);
-                        return ReturnProcessedResponse<ApproverTokenVM>(responseModel);
+                        return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetResponseWithUserDetailForPin(user, role, employee, authClaims));
                     }
 
                     else
@@ -153,33 +140,6 @@ namespace TorranceApi.Controllers
             }
             result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
             return ReturnProcessedResponse(result);
-        }
-
-        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetResponseWithUserDetailForPin(ToranceUser? user, string role, Employee? employee, JwtSecurityToken token)
-        {
-            var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
-            responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiry = token.ValidTo
-            };
-            if (role == "Employee")
-            {
-                var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
-                userDetail.Id = user.Id;// Temporary For TOT LOG
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
-            }
-            else
-            {
-                var response = await _approverService.GetById(user.Id);
-                var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
-                var userDetail = parsedResponse?.ReturnModel ?? new();
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
-            }
-
-            return responseModel;
         }
 
         [HttpPost]
@@ -201,15 +161,7 @@ namespace TorranceApi.Controllers
                         ModelState.AddModelError("Email", "Invalid login attempt. The Email is incorrect.");
                         return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
                     }
-                    //if (user?.IsApproved == false)
-                    //{
-                    //    ModelState.AddModelError(string.Empty, "Approval for this account is still pending.");
-                    //    _logger.LogError("Approval for this account is still pending.");
 
-                    //    result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-                    //    var check = ReturnProcessedResponse(result);
-                    //    return check;
-                    //}
                     var response = await _userManager.CheckPasswordAsync(user, model.Password);
                     if (user != null && response)
                     {
@@ -238,43 +190,7 @@ namespace TorranceApi.Controllers
                                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                             }
                         }
-
-                        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                        var token = new JwtSecurityToken
-                            (
-                                issuer: _configuration["JWT:ValidIssuer"],
-                                audience: _configuration["JWT:ValidAudience"],
-                                expires: DateTime.Now.AddHours(12),
-                                claims: authClaims,
-                                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                           );
-                        var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
-                        responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
-                        {
-                            Token = new JwtSecurityTokenHandler().WriteToken(token),
-                            Expiry = token.ValidTo
-                        };
-
-                        if (role == "Approver")
-                        {
-                            var approverResponse = await _approverService.GetById(user.Id);
-                            var parsedResponse = approverResponse as RepositoryResponseWithModel<ApproverDetailViewModel>;
-                            var userDetail = parsedResponse?.ReturnModel ?? new();
-
-                            userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
-                            userDetail.Role = role;
-                            responseModel.ReturnModel.UserDetail = userDetail;
-                        }
-                        else
-                        {
-                            var userDetail = _mapper.Map<UserDetailViewModel>(user);
-                            userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
-                            userDetail.Role = role;
-                            responseModel.ReturnModel.UserDetail = userDetail;
-                        }
-
-                        return ReturnProcessedResponse<TokenVM>(responseModel);
+                        return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetUserDetailForLoginWithPassword(user, userRoles, role, authClaims));
                     }
                     else
                     {
@@ -320,5 +236,86 @@ namespace TorranceApi.Controllers
             responseModel.ReturnModel = result;
             return ReturnProcessedResponse<PaginatedResultModel<UserDetailViewModel>>(responseModel);
         }
+
+        #region Helping Methods
+
+        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetResponseWithUserDetailForPin(ToranceUser? user, string role, Employee? employee, List<Claim> claims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var token = new JwtSecurityToken
+                (
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(12),
+                    claims: claims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+               );
+
+            var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
+            responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiry = token.ValidTo
+            };
+            if (role == "Employee")
+            {
+                var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
+                userDetail.Id = user.Id;// Temporary For TOT LOG
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+            else
+            {
+                var response = await _approverService.GetById(user.Id);
+                var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                var userDetail = parsedResponse?.ReturnModel ?? new();
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+
+            return responseModel;
+        }
+
+        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetUserDetailForLoginWithPassword(ToranceUser? user, IList<string> userRoles, string role, List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken
+                (
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(12),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+               );
+            var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
+            responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiry = token.ValidTo
+            };
+
+            if (role == "Approver")
+            {
+                var approverResponse = await _approverService.GetById(user.Id);
+                var parsedResponse = approverResponse as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                var userDetail = parsedResponse?.ReturnModel ?? new();
+
+                userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+            else
+            {
+                var userDetail = _mapper.Map<UserDetailViewModel>(user);
+                userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+
+            return responseModel;
+        }
+
+        #endregion
     }
 }

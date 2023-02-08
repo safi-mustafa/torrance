@@ -37,7 +37,8 @@ namespace ViewModels.Notification
         public string SendTo { get; set; }
         public NotificationType Type { get; set; }
         public NotificationEntityType? EntityType { get; set; }
-
+        public DateTime CreatedOn { get; set; }
+        public string FormattedCreatedOn { get => CreatedOn.ToString("U"); }
 
         private LogType GetLogType(Type entity)
         {

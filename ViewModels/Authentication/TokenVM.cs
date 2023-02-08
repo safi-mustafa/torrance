@@ -3,7 +3,12 @@ using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.Authentication
 {
-    public class TokenVM
+    public interface ITokenVM
+    {
+        string Token { get; set; }
+    }
+
+    public class TokenVM : ITokenVM
     {
         public string Email { get; set; }
         public string Token { get; set; }
