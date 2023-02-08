@@ -81,6 +81,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                     var record = await _db.Users.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                     if (record != null)
                     {
+                        viewModel.AccessCode = record.AccessCode;
                         var user = _mapper.Map<SignUpModel>(model);
                         user.Role = "Approver";
                         var result = await _identity.UpdateUser(user, transaction);

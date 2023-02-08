@@ -10,8 +10,8 @@ namespace ViewModels.Authentication
     {
         [DisplayName("New Access Code")]
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Access Code must be of 4-digits.")]
-        [Remote(action: "ValidateEmployeeId", controller: "Employee", AdditionalFields = "Id,EmployeeId", ErrorMessage = "Access Code already in use.")]
-        public string EmployeeId { get; set; }
+        [Remote(action: "ValidateAccessCode", controller: "Approver", AdditionalFields = "Id,AccessCode", ErrorMessage = "Access Code already in use.")]
+        public string AccessCode { get; set; }
         public long Id { get; set; }
         public long UserId { get; set; }
         public string CurrentAccessCode { get; set; }
@@ -19,7 +19,7 @@ namespace ViewModels.Authentication
 
         [Required]
         [DisplayName("Confirm Access Code")]
-        [Compare("EmployeeId", ErrorMessage = "Confirm Access Code Does not Match.")]
-        public string ConfirmEmployeeId { get; set; }
+        [Compare("AccessCode", ErrorMessage = "Confirm Access Code Does not Match.")]
+        public string ConfirmAccessCode { get; set; }
     }
 }
