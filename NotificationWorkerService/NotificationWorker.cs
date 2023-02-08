@@ -33,7 +33,7 @@ public class NotificationWorker : BackgroundService
             _logger.LogInformation("Notification Worker running at: {time}", DateTimeOffset.Now);
 
             await SendNotifications();
-            await Task.Delay((int)8.64e+7, stoppingToken);
+            await Task.Delay(5000, stoppingToken);
         }
     }
 
@@ -42,7 +42,7 @@ public class NotificationWorker : BackgroundService
         try
         {
             var currentDate = DateTime.Now;
-            var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && (x.CreatedOn.Date <= currentDate.Date && !x.IsSent)).ToListAsync();
+            var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && x.CreatedOn.Date <= currentDate.Date && x.IsSent==false).Skip(0).Take(5).ToListAsync();
             var emails = notifications.Where(x => x.Type == NotificationType.Email).ToList();
             var smss = notifications.Where(x => x.Type == NotificationType.Sms).ToList();
             var pushNotifications = notifications.Where(x => x.Type == NotificationType.Push).ToList();
@@ -59,6 +59,7 @@ public class NotificationWorker : BackgroundService
                     email.IsSent = false;
                     email.ResendCount += 1;
                 }
+                await _db.SaveChangesAsync();
             }
             foreach (var sms in smss)
             {
@@ -70,6 +71,7 @@ public class NotificationWorker : BackgroundService
                     sms.IsSent = false;
                     sms.ResendCount += 1;
                 }
+                await _db.SaveChangesAsync();
             }
             if (pushNotifications.Count > 0)
             {
@@ -89,11 +91,12 @@ public class NotificationWorker : BackgroundService
                             notification.IsSent = false;
                             notification.ResendCount += 1;
                         }
+                        await _db.SaveChangesAsync();
                     }
                 }
             }
 
-            await _db.SaveChangesAsync();
+
             return true;
         }
         catch (Exception ex)
