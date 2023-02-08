@@ -170,7 +170,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push));
+                    string notificationTitle = "Override Log Created";
+                    string notificationMessage = $"A new Override Log with PO# ({mappedModel.PoNumber}) has been created";
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -198,7 +200,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         {
                             if (record.ApproverId != updateModel.Approver.Id)
                             {
-                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push));
+                                string notificationTitle = "Override Log Updated";
+                                string notificationMessage = $"The Override Log with PO# ({updateModel.PoNumber}) has been updated";
+                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;

@@ -175,7 +175,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "TOT Log Created", "A new TOT Log has been created", NotificationType.Push));
+                    string notificationTitle = "TOT Log Created";
+                    string notificationMessage = $"A new TOT Log with TWR# ({mappedModel.Twr}) has been created";
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -201,7 +203,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     {
                         if (record.ApproverId != updateModel.Approver.Id)
                         {
-                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", "TOT Log updated", "You have a new log to approve.", NotificationType.Push));
+                            string notificationTitle = "TOT Log Updated";
+                            string notificationMessage = $"The TOT Log with TWR# ({updateModel.Twr}) has been updated";
+                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                         }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
