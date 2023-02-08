@@ -2,22 +2,23 @@
 @model EmployeeDetailViewModel
 @{
     Layout = null;
+    var fullName = Model.FirstName + " " + Model.LastName;
 }
 
 
 <div class="row">
     <div class="col-lg-4">
         <div class="mb-3">
-            <label asp-for="FirstName" class="form-label fw-600"></label>
-            <div>@Model.FirstName</div>
+            <label class="form-label fw-600">Full Name</label>
+            <div>@fullName </div>
         </div>
     </div>
-    <div class="col-lg-4">
+   @* <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="LastName" class="form-label fw-600"></label>
             <div>@Model.LastName</div>
         </div>
-    </div>
+    </div>*@
    @* <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Telephone" class="form-label fw-600"></label>
@@ -26,10 +27,25 @@
     </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
+            <label asp-for="Company" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Company.Name) ? "-" : Model.Company.Name)</div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
             <label asp-for="Email" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
         </div>
     </div>
+
+     <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="EmployeeId" class="form-label fw-600">Access Code</label>
+            <div>@(string.IsNullOrEmpty(Model.EmployeeId) ? "-" : Model.EmployeeId)</div>
+        </div>
+    </div>
+
 
    @* <div class="col-lg-4">
         <div class="mb-3">

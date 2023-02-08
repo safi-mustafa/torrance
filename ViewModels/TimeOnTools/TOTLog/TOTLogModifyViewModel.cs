@@ -47,7 +47,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         [Display(Name = "Description", Prompt = "Add Description")]
-        public string? JobDescription { get; set; }
+        public string JobDescription { get; set; }
         [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
         [Range(1, long.MaxValue, ErrorMessage = "The Head Count must be greater than zero.")]
         public long ManPowerAffected { get; set; }
