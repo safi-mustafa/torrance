@@ -1,5 +1,6 @@
 ﻿using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.EventLog;
 using NotificationWorkerService;
 using NotificationWorkerService.Context;
 using NotificationWorkerService.Interface;
@@ -49,7 +50,13 @@ namespace NotificationWService
                     {
                         config.UseSqlServer(connectionString);
                     });
-                    services.AddHostedService<NotificationWorker>();
+
+                    services.AddHostedService<NotificationWorker>()
+                    .Configure<EventLogSettings>(config =>
+                    {
+                        config.LogName = "Worker Logging Demo";
+                        config.SourceName = "Event Logging Source";
+                    });
                     services.AddDbContext<NotificationDbContext>();
                     services.AddSingleton<IEmail, EmailService>();
                     services.AddSingleton<ISms, SmsService>();
