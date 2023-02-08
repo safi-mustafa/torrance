@@ -39,7 +39,7 @@ namespace NotificationWorkerService.Repository
                 //pushTicketReq.PushTo = new List<string>() { "PRMSxIGfT1w_sWA9xXqK_9" };
 
                 var result = await expoSDKClient.PushSendAsync(pushTicketReq);
-                _logger.LogInformation($"Entity Id: {notification.Entity}");
+                _logger.LogInformation($"Entity Id: {notification.EntityId}");
                 if (result == null || result?.PushTicketErrors?.Count() > 0)
                     return false;
                 foreach (var stat in result?.PushTicketStatuses)

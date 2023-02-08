@@ -1,4 +1,5 @@
-﻿using ViewModels.Common.Unit;
+﻿using Helpers.Extensions;
+using ViewModels.Common.Unit;
 
 namespace ViewModels.Authentication.Approver
 {
@@ -13,5 +14,6 @@ namespace ViewModels.Authentication.Approver
             }
         }
         public string AccessCode { get; set; }
+        public string FormattedAccessCode { get => AccessCode.DecodeFrom64(); }
     }
 }

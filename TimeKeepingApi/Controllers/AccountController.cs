@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Services.WeldRodRecordServices.ApproverService;
 using Repositories.Shared.AuthenticationService;
@@ -18,6 +19,7 @@ using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
+using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace TorranceApi.Controllers
@@ -105,12 +107,13 @@ namespace TorranceApi.Controllers
                             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Role, role),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                            
+
                         };
 
                         var employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
-                        if(role == "Employee")
+                        if (role == "Employee")
                         {
+                            var employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
                             var fullName = $"{employee?.FirstName} {employee?.LastName}";
                             authClaims.AddRange(new List<Claim>
                             {
@@ -130,35 +133,8 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        if(role == "Employee")
-                        {
-                            var responseModel = new RepositoryResponseWithModel<EmployeeTokenVM>();
-                            var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
-                            userDetail.Id = user.Id;// Temporary For TOT LOG
-
-                            responseModel.ReturnModel = new EmployeeTokenVM
-                            {
-                                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                                Expiry = token.ValidTo,
-                                UserDetail = userDetail
-                            };
-                            return ReturnProcessedResponse<EmployeeTokenVM>(responseModel);
-                        }
-                        else
-                        {
-                            var responseModel = new RepositoryResponseWithModel<ApproverTokenVM>();
-                            var response = await _approverService.GetById(user.Id);
-                            var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
-                            var userDetail = parsedResponse?.ReturnModel ?? new();
-                            responseModel.ReturnModel = new ApproverTokenVM
-                            {
-                                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                                Expiry = token.ValidTo,
-                                UserDetail = userDetail
-                            };
-                            return ReturnProcessedResponse<ApproverTokenVM>(responseModel);
-                        }
-                      
+                        RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>> responseModel = await GetResponseWithUserDetailForPin(user, role, employee, token);
+                        return ReturnProcessedResponse<ApproverTokenVM>(responseModel);
                     }
 
                     else
@@ -179,6 +155,32 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse(result);
         }
 
+        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetResponseWithUserDetailForPin(ToranceUser? user, string role, Employee? employee, JwtSecurityToken token)
+        {
+            var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
+            responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiry = token.ValidTo
+            };
+            if (role == "Employee")
+            {
+                var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
+                userDetail.Id = user.Id;// Temporary For TOT LOG
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+            else
+            {
+                var response = await _approverService.GetById(user.Id);
+                var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                var userDetail = parsedResponse?.ReturnModel ?? new();
+                userDetail.Role = role;
+                responseModel.ReturnModel.UserDetail = userDetail;
+            }
+
+            return responseModel;
+        }
 
         [HttpPost]
         [Route("/api/Account/Login")]
@@ -237,9 +239,7 @@ namespace TorranceApi.Controllers
                             }
                         }
 
-
                         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
 
                         var token = new JwtSecurityToken
                             (
@@ -249,20 +249,32 @@ namespace TorranceApi.Controllers
                                 claims: authClaims,
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
-
-                        var userDetail = _mapper.Map<UserDetailViewModel>(user);
-                        userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
-                        userDetail.Role = role;
-                        //  userDetail.Roles = string.Join(',', userRoles);
-
-                        var responseModel = new RepositoryResponseWithModel<UserTokenVM>();
-                        responseModel.ReturnModel = new UserTokenVM
+                        var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
+                        responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
                         {
                             Token = new JwtSecurityTokenHandler().WriteToken(token),
-                            Expiry = token.ValidTo,
-                            UserDetail = userDetail
+                            Expiry = token.ValidTo
                         };
-                        return ReturnProcessedResponse<UserTokenVM>(responseModel);
+
+                        if (role == "Approver")
+                        {
+                            var approverResponse = await _approverService.GetById(user.Id);
+                            var parsedResponse = approverResponse as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                            var userDetail = parsedResponse?.ReturnModel ?? new();
+
+                            userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
+                            userDetail.Role = role;
+                            responseModel.ReturnModel.UserDetail = userDetail;
+                        }
+                        else
+                        {
+                            var userDetail = _mapper.Map<UserDetailViewModel>(user);
+                            userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
+                            userDetail.Role = role;
+                            responseModel.ReturnModel.UserDetail = userDetail;
+                        }
+
+                        return ReturnProcessedResponse<TokenVM>(responseModel);
                     }
                     else
                     {

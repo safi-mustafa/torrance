@@ -19,8 +19,8 @@ namespace ViewModels.Authentication
     {
         public ApproverDetailViewModel UserDetail { get; set; }
     }
-    public class UserTokenVM : TokenVM
+    public class UserTokenVM<T> : TokenVM
     {
-        public UserDetailViewModel UserDetail { get; set; }
+        public T UserDetail { get; set; }
     }
 }

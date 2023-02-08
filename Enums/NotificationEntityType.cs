@@ -3,7 +3,8 @@ namespace Enums
 {
     public enum NotificationEntityType
     {
-        Logs
+        TOTLog,
+        OverrideLog
     }
 }
 

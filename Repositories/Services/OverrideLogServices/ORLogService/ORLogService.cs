@@ -54,6 +54,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var employeeCheck = loggedInUserRole == "Employee";
             var parsedLoggedInId = long.Parse(loggedInUserId);
+            searchFilters.StatusNot = loggedInUserRole == "Approver" ? Status.Pending : searchFilters.StatusNot;
 
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
@@ -169,7 +170,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -197,7 +198,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         {
                             if (record.ApproverId != updateModel.Approver.Id)
                             {
-                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push));
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;

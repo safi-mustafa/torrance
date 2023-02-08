@@ -34,6 +34,7 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Email",data = "Email"},
                 new DataTableViewModel{title = "Phone #",data = "PhoneNumber"},
+                new DataTableViewModel{title = "Passcode",data = "FormattedAccessCode"},
                 new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
@@ -65,7 +66,7 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Update(ApproverModifyViewModel model)
         {
-            if(model.AccessCode != null)
+            if (model.AccessCode != null)
             {
                 bool isUnique = await _approverService.IsAccessCodeUnique(model.Id, model.AccessCode);
                 if (!isUnique)
@@ -73,7 +74,7 @@ namespace Web.Controllers
                     ModelState.AddModelError("AccessCode", "Access Code already in use.");
                 }
             }
-            
+
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
             ModelState.Remove("AccessCode");

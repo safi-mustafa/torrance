@@ -11,7 +11,7 @@ namespace Models
         public long ResendCount { get; set; }
         public bool IsSent { get; set; }
         public NotificationType Type { get; set; }
-        public long? Entity { get; set; }
+        public long? EntityId { get; set; }
         public NotificationEntityType? EntityType { get; set; }
     }
 }
