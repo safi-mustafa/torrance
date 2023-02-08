@@ -9,6 +9,7 @@ namespace ViewModels.OverrideLogs
     {
         [Required]
         [DisplayName("Rate")]
+        [Range(1, float.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public float Rate { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public EmployeeBriefViewModel Employee { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new();
-        public ApproverBriefViewModel Approver { get; set; } = new();
+        public ApproverBriefViewModel Approver { get; set; } = new(true);
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }
