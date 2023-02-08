@@ -60,7 +60,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (search.Type == null || search.Type == LogType.TimeOnTools)
                          &&
-                         (search.Status == null || search.Status == x.Status)
+                         (search.Status == x.Status)
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      )
@@ -116,7 +116,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
-                         x.IsDeleted==false
+                         x.IsDeleted == false
                          &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&

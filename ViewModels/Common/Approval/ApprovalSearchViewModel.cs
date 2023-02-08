@@ -11,7 +11,7 @@ namespace ViewModels.Common
         {
         }
         public LogType? Type { get; set; }
-        public Status? Status { get; set; }
+        public Status Status { get; set; } = Status.Pending;
         public EmployeeBriefViewModel Employee { get; set; } = new();
     }
 }
