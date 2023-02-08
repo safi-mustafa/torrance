@@ -8,6 +8,7 @@ using Select2.Model;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
 using ViewModels.DataTable;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace Web.Controllers
 {
@@ -33,17 +34,39 @@ namespace Web.Controllers
 
             };
         }
+
+
+
+        public override async Task<ActionResult> Create(ApproverModifyViewModel model)
+        {
+            bool isUnique = await _approverService.IsAccessCodeUnique(model.Id, model.AccessCode);
+            if (!isUnique)
+            {
+                ModelState.AddModelError("AccessCode", "Access Code already in use.");
+            }
+            return await base.Create(model);
+        }
         public override async Task<ActionResult> Update(ApproverModifyViewModel model)
         {
+            bool isUnique = await _approverService.IsAccessCodeUnique(model.Id, model.AccessCode);
+            if (!isUnique)
+            {
+                ModelState.AddModelError("AccessCode", "Access Code already in use.");
+            }
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("AccessCode");
+            ModelState.Remove("ConfirmAccessCode");
             return await base.Update(model);
         }
-        public async Task<IActionResult> ValidateApproverEmail(int id, string email)
+        public async Task<IActionResult> ValidateApproverEmail(long id, string email)
         {
             return Json(await _approverService.IsApproverEmailUnique(id, email));
         }
-
+        public async Task<IActionResult> ValidateAccessCode(long id, string accessCode)
+        {
+            return Json(await _approverService.IsAccessCodeUnique(id, accessCode));
+        }
         protected override ApproverSearchViewModel SetSelect2CustomParams(string customParams)
         {
             var svm = JsonConvert.DeserializeObject<ApproverSearchViewModel>(customParams);

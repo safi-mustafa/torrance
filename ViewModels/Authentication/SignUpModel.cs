@@ -31,6 +31,7 @@ namespace ViewModels.Authentication
         [Display(Name = "Confirm Password is Required")]
         [Compare("Password", ErrorMessage = "Confirm Password Does not Match with password")]
         public string ConfirmPassword { get; set; }
+        public string AccessCode { get; set; }
 
         [Required]
         public string UserName { get; set; }

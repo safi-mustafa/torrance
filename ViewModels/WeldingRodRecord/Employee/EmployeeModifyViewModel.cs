@@ -66,7 +66,14 @@ namespace ViewModels.WeldingRodRecord.Employee
                     _terminationDate = value;
             }
         }
-
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "Confirm Password Does not Match with password")]
+        public string ConfirmPassword { get; set; }
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 

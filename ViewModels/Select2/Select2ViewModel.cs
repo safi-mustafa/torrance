@@ -12,8 +12,8 @@ namespace Select2.Model
     }
     public class Select2ViewModel
     {
-        [Required(ErrorMessage = "Required")]
-        public string id { get; set; }
+       // [Required(ErrorMessage = "Required")]
+        public string? id { get; set; }
         public string? text { get; set; }
     }
 
