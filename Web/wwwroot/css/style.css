@@ -679,7 +679,7 @@ header {
     }
 
 .doc-body .doc-icon {
-    width: 90px;
+    /*width: 90px;*/
     opacity: .7;
     margin-bottom: 5px;
 }
