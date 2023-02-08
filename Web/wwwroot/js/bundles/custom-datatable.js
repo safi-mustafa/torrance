@@ -213,8 +213,14 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 "targets": columnsIndexExcludingAction,
                 "render": function (data, type, row, meta) {
                     if (dtColumns[meta.col].title !== 'Action') {
+
                         if (dtColumns[meta.col].format === 'html') {
-                            return RenderHtml(data, dtColumns, meta);
+                            if (type === 'export' && dtColumns[meta.col].exportColumn != null && dtColumns[meta.col].exportColumn != "") {
+                                return row[dtColumns[meta.col].exportColumn];
+                            }
+                            else {
+                                return RenderHtml(data, dtColumns, meta);
+                            }
                         }
                         else if (dtColumns[meta.col].format === 'numeric') {
                             return RenderNumericValue(data, dtColumns, meta);
@@ -260,21 +266,24 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     extend: 'copy',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
                     extend: 'excel',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
@@ -282,6 +291,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     exportOptions: {
                         columns: getColumnsToExport,
                         page: 'current',
+                        orthogonal: "export"
                     },
                     customize: customizePdfExport
                 },
@@ -289,7 +299,8 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     extend: 'print',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 'colvis'
