@@ -94,8 +94,25 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
+                        string type = "";
+                        string identifier = "";
+                        string identifierKey = "";
+                        if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
+                        {
+                            type = "TOT";
+                            identifierKey = "Twr";
+                            identifier = (logRecord as TOTLog).Twr;
+                        }
+                        else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
+                        {
+                            type = "Override";
+                            identifierKey = "PO";
+                            identifier = (logRecord as OverrideLog).PoNumber.ToString();
+                        }
+                        string notificationTitle = $"{type} Log {status}";
+                        string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                         var userId = await _db.Employees.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.UserId).FirstOrDefaultAsync();
-                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push));
+                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                         await transaction.CommitAsync();
                         return _response;
                     }
