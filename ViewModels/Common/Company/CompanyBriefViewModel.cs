@@ -9,6 +9,10 @@ namespace ViewModels.Common.Company
         {
 
         }
+        public CompanyBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Company field is required.")
+        {
+
+        }
         [DisplayName("Company")]
         public override string? Name { get; set; }
     }

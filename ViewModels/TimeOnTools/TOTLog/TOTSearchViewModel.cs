@@ -17,12 +17,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
 
-        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
-        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
-        public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
-        public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
+        public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(false);
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false);
+        public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel(false);
+        public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
     }
 
     public class TOTLogAPISearchViewModel : BaseSearchModel

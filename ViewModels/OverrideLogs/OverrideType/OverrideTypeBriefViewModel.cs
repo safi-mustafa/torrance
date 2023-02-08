@@ -9,6 +9,10 @@ namespace ViewModels.OverrideLogs
         {
 
         }
+        public OverrideTypeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Override Type field is required.")
+        {
+
+        }
         [DisplayName("Override Type")]
         public override string Name { get; set; }
     }

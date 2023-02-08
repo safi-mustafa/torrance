@@ -47,6 +47,15 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
     $(document).on('click', '.clear-form-btn', function () {
         ClearDatatableSearch(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
     });
+    $(document).off('keypress', '#filter-form input[type=search],#filter-form input[type=text]');
+    $(document).on('keypress', '#filter-form input[type=search],#filter-form input[type=text]', function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            event.preventDefault();
+            SearchDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
+
+        }
+    });
     $(document).off('click', '.badge-datatable-clear');
     $(document).on('click', '.badge-datatable-clear', function () {
         ClearDatatableSearch(dataAjaxUrl, tableId, formId, actionsList, dtColumns);

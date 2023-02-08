@@ -9,6 +9,11 @@ namespace ViewModels.TimeOnTools.PermitType
         {
 
         }
+
+        public PermitTypeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Permit Type field is required.")
+        {
+
+        }
         [DisplayName("PermitType")]
         public override string Name { get; set; }
     }

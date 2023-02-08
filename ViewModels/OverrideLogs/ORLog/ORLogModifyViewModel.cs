@@ -16,11 +16,11 @@ namespace ViewModels.OverrideLogs.ORLog
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Override Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Override Hours must be greater than zero.")]
         public int OverrideHours { get; set; }
 
+        [Required(ErrorMessage ="The PO Number field is required.")]
         [Display(Name = "PO Number")]
-
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PONumber { get; set; }
         [Required]
