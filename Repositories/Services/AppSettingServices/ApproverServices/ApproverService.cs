@@ -138,7 +138,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             return (await _db.Users.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
         }
 
-      
+
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
 
@@ -200,6 +200,8 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                   })
                   .ToListAsync();
 
+                var approverUnits = await _db.ApproverUnits.Include(x => x.Unit).Where(x => filteredUserIds.Contains(x.ApproverId)).ToListAsync();
+
                 users.Items.ForEach(x =>
                 {
                     x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
@@ -207,6 +209,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                     x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
+                    x.Units = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
                 var mappedUserList = _mapper.Map<List<M>>(users.Items);
                 var paginatedModel = new PaginatedResultModel<M> { Items = mappedUserList, _links = users._links, _meta = users._meta };
