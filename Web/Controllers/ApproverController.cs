@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Pagination;
 using Repositories.Services.WeldRodRecordServices.ApproverService;
+using Repositories.Services.WeldRodRecordServices.EmployeeService;
 using Select2.Model;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
@@ -16,11 +18,13 @@ namespace Web.Controllers
     public class ApproverController : CrudBaseController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, ApproverSearchViewModel>
     {
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
+        private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly ILogger<ApproverController> _logger;
 
-        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> employeeService, ILogger<ApproverController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Approver", "Approvers")
+        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService, IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, ILogger<ApproverController> logger, IMapper mapper) : base(approverService, logger, mapper, "Approver", "Approvers")
         {
-            _approverService = employeeService;
+            _approverService = approverService;
+            _employeeService = employeeService;
             _logger = logger;
         }
 
@@ -34,7 +38,21 @@ namespace Web.Controllers
 
             };
         }
+        protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
+        {
+            //if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
+            //{
+                result.ActionsList = new List<DataTableActionViewModel>()
+                {
+                    new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/Approver/ResetPassword/Id"},
+                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Approver/Detail/Id"},
+                    new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Approver/Update/Id"},
+                    new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approver/Delete/Id"},
+                };
+         //   }
+         
 
+        }
 
 
         public override async Task<ActionResult> Create(ApproverModifyViewModel model)
@@ -67,6 +85,39 @@ namespace Web.Controllers
         {
             return Json(await _approverService.IsAccessCodeUnique(id, accessCode));
         }
+
+        public async Task<ActionResult> ResetPassword(int id)
+        {
+            try
+            {
+                var response = await _approverService.GetById(id);
+                if (response.Status == System.Net.HttpStatusCode.OK)
+                {
+                    var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                    var model = parsedResponse?.ReturnModel ?? new();
+                    ChangeAccessCodeVM viewModel = new ChangeAccessCodeVM
+                    {
+                        Id = model.Id,
+                        UserId = model.Id,
+                        CurrentAccessCode = model.AccessCode
+                    };
+                    return View(viewModel);
+                }
+                else
+                {
+                    _logger.LogInformation($"Record with id " + id + "not found");
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex) { _logger.LogError($"Account ResetPassword method threw an exception, Message: {ex.Message}"); return RedirectToAction("Index"); }
+        }
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
+        {
+            var response = await _employeeService.ResetAccessCode(model);
+            return RedirectToAction("Index");
+        }
+
         protected override ApproverSearchViewModel SetSelect2CustomParams(string customParams)
         {
             var svm = JsonConvert.DeserializeObject<ApproverSearchViewModel>(customParams);

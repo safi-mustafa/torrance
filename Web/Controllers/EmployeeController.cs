@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Repositories.Services.WeldRodRecordServices.ApproverService;
 using Repositories.Services.WeldRodRecordServices.EmployeeService;
 using System;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.Employee;
 using Web.Helpers;
@@ -18,11 +20,13 @@ namespace Web.Controllers
     public class EmployeeController : CrudBaseController<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel, EmployeeDetailViewModel, EmployeeSearchViewModel>
     {
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
+        private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, ILogger<EmployeeController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Employee", "Accounts")
+        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService, ILogger<EmployeeController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Employee", "Accounts")
         {
             _employeeService = employeeService;
+            _approverService = approverService;
             _logger = logger;
         }
 
@@ -110,7 +114,7 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Create(EmployeeModifyViewModel model)
         {
-            bool isUnique = await _employeeService.IsEmployeeIdUnique(model.Id, model.EmployeeId);
+            bool isUnique = await _approverService.IsAccessCodeUnique(model.UserId, model.EmployeeId);
             if (!isUnique)
             {
                 ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
@@ -119,7 +123,7 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Update(EmployeeModifyViewModel model)
         {
-            bool isUnique = await _employeeService.IsEmployeeIdUnique(model.Id, model.EmployeeId);
+            bool isUnique = await _approverService.IsAccessCodeUnique(model.UserId, model.EmployeeId);
             if (!isUnique)
             {
                 ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
@@ -130,7 +134,7 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> ValidateEmployeeId(int id, string employeeId)
         {
-            return Json(await _employeeService.IsEmployeeIdUnique(id, employeeId));
+            return Json(await _approverService.IsAccessCodeUnique(id, employeeId));
         }
         public async Task<IActionResult> ValidateEmployeeEmail(int id, string email)
         {

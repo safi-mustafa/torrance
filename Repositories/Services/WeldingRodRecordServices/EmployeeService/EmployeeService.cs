@@ -174,23 +174,26 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             try
             {
                 var user = await _userManager.FindByIdAsync(model.UserId.ToString());
-
-                var result = await _userManager.ChangePasswordAsync(user, model.CurrentAccessCode, model.EmployeeId);
-                if (result.Succeeded)
+                user.AccessCode = model.EmployeeId.EncodePasswordToBase64();
+                //   var result = await _userManager.ChangePasswordAsync(user, model.CurrentAccessCode, model.EmployeeId);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var role = userRoles.First();
+                if(role == "Employee")
                 {
                     var record = await _db.Employees.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                     if (record != null)
                     {
                         record.EmployeeId = model.EmployeeId;
-                        await _db.SaveChangesAsync();
-                        await transaction.CommitAsync();
-                        var response = new RepositoryResponseWithModel<bool> { ReturnModel = true };
-                        return response;
                     }
-
                 }
-                await transaction.RollbackAsync();
-                return Response.BadRequestResponse(_response);
+              
+                await _db.SaveChangesAsync();
+                await transaction.CommitAsync();
+                var response = new RepositoryResponseWithModel<bool> { ReturnModel = true };
+                return response;
+
+                //await transaction.RollbackAsync();
+                //return Response.BadRequestResponse(_response);
             }
             catch (Exception ex)
             {
