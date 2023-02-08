@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Models;
+using DataLibrary;
+using Helpers.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -22,12 +25,14 @@ namespace Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ToranceUser> _signInManager;
         private readonly UserManager<ToranceUser> _userManager;
+        private readonly ToranceContext _db;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ToranceUser> signInManager, UserManager<ToranceUser> userManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ToranceUser> signInManager, UserManager<ToranceUser> userManager, ToranceContext db, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _db = db;
             _logger = logger;
         }
 
@@ -114,20 +119,11 @@ namespace Web.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var test = await _userManager.FindByNameAsync(Input.Email);
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    var role = userRoles.First();
-
-                    if (role == "Approver")
-                    {
-                        return LocalRedirect("/Approval");
-                    }
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return await GetReturnUrl(returnUrl, user);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -140,13 +136,36 @@ namespace Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    var encodedAccessCode = Input.Password.EncodePasswordToBase64();
+                    var user = await _db.Users.Where(x => x.Email == Input.Email && x.AccessCode == encodedAccessCode).FirstOrDefaultAsync();
+                    if (user != null)
+                    {
+                        await _signInManager.SignInAsync(user, true);
+                        return await GetReturnUrl(returnUrl, user);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task<IActionResult> GetReturnUrl(string returnUrl, ToranceUser user)
+        {
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var role = userRoles.First();
+
+            if (role == "Approver")
+            {
+                return LocalRedirect("/Approval");
+            }
+            _logger.LogInformation("User logged in.");
+            return LocalRedirect(returnUrl);
         }
     }
 }
