@@ -34,6 +34,7 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Email",data = "Email"},
                 new DataTableViewModel{title = "Phone #",data = "PhoneNumber"},
+                new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
@@ -42,16 +43,14 @@ namespace Web.Controllers
         {
             //if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
             //{
-                result.ActionsList = new List<DataTableActionViewModel>()
+            result.ActionsList = new List<DataTableActionViewModel>()
                 {
                     new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/Approver/ResetPassword/Id"},
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Approver/Detail/Id"},
                     new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Approver/Update/Id"},
                     new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approver/Delete/Id"},
                 };
-         //   }
-         
-
+            //   }
         }
 
 

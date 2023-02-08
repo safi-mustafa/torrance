@@ -52,7 +52,7 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse<DetailViewModel>(result);
         }
 
-        [HttpGet("{id}/{status}")]
+        [HttpPut("{id}/{status}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
