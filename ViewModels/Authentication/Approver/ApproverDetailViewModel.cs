@@ -14,6 +14,6 @@ namespace ViewModels.Authentication.Approver
             }
         }
         public string AccessCode { get; set; }
-        public string FormattedAccessCode { get => AccessCode.DecodeFrom64(); }
+        public string FormattedAccessCode { get => AccessCode?.DecodeFrom64(); }
     }
 }
