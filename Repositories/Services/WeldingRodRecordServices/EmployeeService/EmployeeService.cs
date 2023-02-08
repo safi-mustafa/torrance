@@ -15,7 +15,7 @@ using Models.Common.Interfaces;
 using ViewModels.Shared;
 using Microsoft.AspNetCore.Identity;
 using Models;
-
+using Helpers.Extensions;
 
 namespace Repositories.Services.WeldRodRecordServices.EmployeeService
 {
@@ -63,7 +63,9 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
+                var viewModel = model as EmployeeModifyViewModel;
                 var user = _mapper.Map<SignUpModel>(model);
+                user.AccessCode = viewModel.EmployeeId.EncodePasswordToBase64();
                 var userId = await _identity.CreateUser(user, transaction);
                 if (userId > 0)
                 {
@@ -96,12 +98,14 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
+                var viewModel = model as EmployeeModifyViewModel;
                 if (model != null)
                 {
                     var record = await _db.Employees.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                     if (record != null)
                     {
                         var user = _mapper.Map<SignUpModel>(model);
+                        user.AccessCode = viewModel.EmployeeId.EncodePasswordToBase64();
                         var result = await _identity.UpdateUser(user, transaction);
                         if (result)
                         {

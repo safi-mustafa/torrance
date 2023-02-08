@@ -9,6 +9,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
+        Task<bool> IsAccessCodeUnique(long id, string accessCode);
         Task<bool> IsApproverEmailUnique(long id, string email);
     }
 }

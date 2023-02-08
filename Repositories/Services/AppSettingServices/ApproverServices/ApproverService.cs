@@ -49,6 +49,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 var viewModel = model as ApproverModifyViewModel;
                 var user = _mapper.Map<SignUpModel>(model);
                 user.Role = "Approver";
+                user.AccessCode = user.AccessCode.EncodePasswordToBase64();
                 var userId = await _identity.CreateUser(user, transaction);
                 if (userId > 0)
                 {
@@ -135,6 +136,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             return (await _db.Users.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
         }
 
+      
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
 
@@ -296,6 +298,12 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 _logger.LogError($"ApproverService GetApproverUnits method threw an exception, Message: {ex.Message}");
                 return null;
             }
+        }
+
+        public async Task<bool> IsAccessCodeUnique(long id, string accessCode)
+        {
+            var encodedAccessCode = accessCode.EncodePasswordToBase64();
+            return (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id).CountAsync()) < 1;
         }
     }
 }

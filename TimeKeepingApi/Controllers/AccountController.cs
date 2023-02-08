@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Helpers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,10 @@ namespace TorranceApi.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model State is valid", "login method 2");
-                    var user = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
+                    var encodedPinCode = model.Pincode.EncodePasswordToBase64();
+
+                    var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode).FirstOrDefaultAsync();
+
                     if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
                     {
                         ModelState.AddModelError("pincode", "Approval for this account is still pending.");
@@ -82,28 +86,34 @@ namespace TorranceApi.Controllers
 
                     if (user != null)
                     {
-                        var aspNetUser = await _db.Users.Where(x => x.Id == user.UserId).FirstOrDefaultAsync();
-                        if (aspNetUser != null)
-                        {
-                            aspNetUser.DeviceId = model.DeviceId;
-                            await _db.SaveChangesAsync();
-                        }
+
+                        user.DeviceId = model.DeviceId;
+                        await _db.SaveChangesAsync();
                         var name = User?.Identity?.Name;
                         _logger.LogInformation("User logged in.", "login method 4");
 
-                        var fullName = $"{user?.FirstName} {user?.LastName}";
-                        var userRoles = await _userManager.GetRolesAsync(aspNetUser);
+                        var userRoles = await _userManager.GetRolesAsync(user);
                         var role = userRoles.First();
 
                         var authClaims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.NameIdentifier, aspNetUser.Id.ToString()),
-                            new Claim(ClaimTypes.Name, user.FirstName),
-                            new Claim("FullName", fullName),
-                            new Claim("EmployeeId", user.Id.ToString()),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Role, role),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                            
                         };
+
+                        var employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
+                        if(role == "Employee")
+                        {
+                            var fullName = $"{employee?.FirstName} {employee?.LastName}";
+                            authClaims.AddRange(new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, employee.FirstName),
+                                new Claim("FullName", fullName),
+                                new Claim("EmployeeId", employee.Id.ToString()),
+                            });
+                        }
 
                         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                         var token = new JwtSecurityToken
@@ -115,17 +125,35 @@ namespace TorranceApi.Controllers
                                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                            );
 
-                        var userDetail = _mapper.Map<EmployeeDetailViewModel>(user);
-                        userDetail.Id = user.UserId;// Temporary For TOT LOG
-
-                        var responseModel = new RepositoryResponseWithModel<EmployeeTokenVM>();
-                        responseModel.ReturnModel = new EmployeeTokenVM
+                        if(role == "Employee")
                         {
-                            Token = new JwtSecurityTokenHandler().WriteToken(token),
-                            Expiry = token.ValidTo,
-                            UserDetail = userDetail
-                        };
-                        return ReturnProcessedResponse<EmployeeTokenVM>(responseModel);
+                            var responseModel = new RepositoryResponseWithModel<EmployeeTokenVM>();
+                            var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
+                            userDetail.Id = user.Id;// Temporary For TOT LOG
+
+                            responseModel.ReturnModel = new EmployeeTokenVM
+                            {
+                                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                                Expiry = token.ValidTo,
+                                UserDetail = userDetail
+                            };
+                            return ReturnProcessedResponse<EmployeeTokenVM>(responseModel);
+                        }
+                        else
+                        {
+                            var responseModel = new RepositoryResponseWithModel<UserTokenVM>();
+                            var userDetail = _mapper.Map<UserDetailViewModel>(user);
+                            userDetail.Id = user.Id;// Temporary For TOT LOG
+
+                            responseModel.ReturnModel = new UserTokenVM
+                            {
+                                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                                Expiry = token.ValidTo,
+                                UserDetail = userDetail
+                            };
+                            return ReturnProcessedResponse<UserTokenVM>(responseModel);
+                        }
+                      
                     }
 
                     else
@@ -161,7 +189,7 @@ namespace TorranceApi.Controllers
                     _logger.LogInformation("Model State is valid", "login method 2");
 
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    if(user == null)
+                    if (user == null)
                     {
                         ModelState.AddModelError("Email", "Invalid login attempt. The Email is incorrect.");
                         return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
@@ -255,7 +283,7 @@ namespace TorranceApi.Controllers
         public async Task Logout(string deviceId)
         {
             var loggedInUserId = long.Parse(_userInfoService.LoggedInUserId());
-            var user = await _db.Users.Where(x => (deviceId != null && x.DeviceId == deviceId) ||  (x.Id == loggedInUserId)).FirstOrDefaultAsync();
+            var user = await _db.Users.Where(x => (deviceId != null && x.DeviceId == deviceId) || (x.Id == loggedInUserId)).FirstOrDefaultAsync();
             if (user != null)
             {
                 user.DeviceId = null;

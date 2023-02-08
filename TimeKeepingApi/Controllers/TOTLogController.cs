@@ -6,7 +6,6 @@ using AutoMapper;
 using Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
-using ViewModels.OverrideLogs.ORLog;
 using ViewModels.WeldingRodRecord;
 using Select2.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -53,6 +52,7 @@ namespace API.Controllers
 
         public override Task<IActionResult> Post([FromBody] TOTLogCreateViewModel model)
         {
+
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
@@ -90,8 +90,7 @@ namespace API.Controllers
                 modelState.AddModelError("AlphabeticPart", "Required");
             if (model.NumericPart == null || string.IsNullOrEmpty(model.NumericPart.id) || model.NumericPart.id == "0")
                 modelState.AddModelError("NumericPart", "Required");
-            if (string.IsNullOrEmpty(model.Text))
-                modelState.AddModelError("TWRModel.Text", "Required");
+            
         }
     }
 }

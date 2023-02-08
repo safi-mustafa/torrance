@@ -52,6 +52,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Services.CommonServices.ApprovalService;
 using Repositories.Shared.NotificationServices;
+using System.Text.Json;
 
 namespace Web.Extensions
 {
@@ -138,6 +139,7 @@ namespace Web.Extensions
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+               // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
             services.AddSwaggerGen(c =>

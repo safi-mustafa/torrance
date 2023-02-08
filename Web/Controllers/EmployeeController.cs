@@ -124,6 +124,8 @@ namespace Web.Controllers
             {
                 ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
             }
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmPassword");
             return await base.Update(model);
         }
         public async Task<IActionResult> ValidateEmployeeId(int id, string employeeId)
