@@ -12,5 +12,6 @@ namespace ViewModels.Authentication.Approver
                 return Units != null && Units.Count() > 0 ? string.Join(", ", Units.Select(m => m.Name).ToList()) : "";
             }
         }
+        public string AccessCode { get; set; }
     }
 }

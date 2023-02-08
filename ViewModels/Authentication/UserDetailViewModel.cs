@@ -12,6 +12,7 @@ namespace ViewModels.Authentication
         public string UserName { get; set; }
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+        
         public List<UserRolesVM> Roles { get; set; } = new List<UserRolesVM>();
         public string Role { get; set; }
         public bool IsApproved { get; set; }

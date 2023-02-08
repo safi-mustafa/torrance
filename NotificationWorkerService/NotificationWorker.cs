@@ -42,7 +42,7 @@ public class NotificationWorker : BackgroundService
         try
         {
             var currentDate = DateTime.Now;
-            var notifications = await _db.Notifications.Where(x => x.ResendCount < 3 && x.SendTo != null && (x.CreatedOn.Date <= currentDate.Date && !x.IsSent)).ToListAsync();
+            var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && (x.CreatedOn.Date <= currentDate.Date && !x.IsSent)).ToListAsync();
             var emails = notifications.Where(x => x.Type == NotificationType.Email).ToList();
             var smss = notifications.Where(x => x.Type == NotificationType.Sms).ToList();
             var pushNotifications = notifications.Where(x => x.Type == NotificationType.Push).ToList();
@@ -57,7 +57,7 @@ public class NotificationWorker : BackgroundService
                 else
                 {
                     email.IsSent = false;
-                    // email.ResendCount += 1;
+                    email.ResendCount += 1;
                 }
             }
             foreach (var sms in smss)
@@ -68,7 +68,7 @@ public class NotificationWorker : BackgroundService
                 else
                 {
                     sms.IsSent = false;
-                    //   sms.ResendCount += 1;
+                    sms.ResendCount += 1;
                 }
             }
             if (pushNotifications.Count > 0)
@@ -79,13 +79,16 @@ public class NotificationWorker : BackgroundService
                 foreach (var notification in pushNotifications)
                 {
                     var deviceId = deviceIds.Where(x => x.UserId == notification.SendTo).Select(x => x.DeviceId).FirstOrDefault();
-                    var pushNotificationResult = await _pushNotification.SendPushNotification(notification, deviceId);
-                    if (pushNotificationResult)
-                        notification.IsSent = true;
-                    else
+                    if (deviceId != null)
                     {
-                        notification.IsSent = false;
-                        //   sms.ResendCount += 1;
+                        var pushNotificationResult = await _pushNotification.SendPushNotification(notification, deviceId);
+                        if (pushNotificationResult)
+                            notification.IsSent = true;
+                        else
+                        {
+                            notification.IsSent = false;
+                            notification.ResendCount += 1;
+                        }
                     }
                 }
             }
