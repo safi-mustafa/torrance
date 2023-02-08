@@ -9,8 +9,13 @@ namespace ViewModels.TimeOnTools
         {
 
         }
+
+        public DelayTypeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Delay Type field is required.")
+        {
+
+        }
         [DisplayName("DelayType")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

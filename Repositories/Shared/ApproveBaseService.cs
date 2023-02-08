@@ -30,9 +30,9 @@ namespace Repositories.Shared
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
-        private readonly INotificationService _notificationService;
+        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
 
-        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, INotificationService notificationService) : base(db, logger, mapper, response)
+        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
@@ -93,7 +93,7 @@ namespace Repositories.Shared
                     {
                         logRecord.Status = status;
                         await _db.SaveChangesAsync();
-                        await _notificationService.AddNotificationAsync(new NotificationViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push, NotificationEntityType.Logs));
+                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), logRecord.EmployeeId?.ToString() ?? "", "Log Status Updated", $"Log for {logRecord.CreatedOn.ToString("U")} has been {status}", NotificationType.Push, NotificationEntityType.Logs));
                         await transaction.CommitAsync();
                         return _response;
                     }

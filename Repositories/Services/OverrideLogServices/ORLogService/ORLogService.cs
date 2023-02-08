@@ -33,9 +33,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService _notificationService;
+        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, notificationService)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -169,7 +169,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     await _db.SaveChangesAsync();
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "Override Log Created", "A new Override Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -197,7 +197,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         {
                             if (record.ApproverId != updateModel.Approver.Id)
                             {
-                                await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", "Override Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;

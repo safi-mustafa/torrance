@@ -10,11 +10,11 @@ namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogSearchViewModel : BaseSearchModel
     {
-        public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
-        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
-        public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
-        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+        public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
+        public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel(false);
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false);
 
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]

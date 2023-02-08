@@ -378,7 +378,7 @@ namespace Models.Mapper
             CreateMap<BaseBriefVM, ORLogBriefViewModel>().ReverseMap();
 
 
-            CreateMap<Notification, NotificationViewModel>().ReverseMap();
+            CreateMap<Notification, NotificationModifyViewModel>().ReverseMap();
         }
     }
 }

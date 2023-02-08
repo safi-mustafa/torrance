@@ -9,11 +9,7 @@
             <input asp-for="EquipmentNo" type="search" class="form-control" placeholder="Search Equipment No" />
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
-        </div>
-    </div>
+  
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
@@ -27,6 +23,11 @@
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
         </div>
     </div>
     <div class="col-lg-4">

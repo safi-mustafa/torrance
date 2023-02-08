@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using NotificationWorkerService.Context;
 using NotificationWorkerService.Interface;
 
@@ -72,9 +73,13 @@ public class NotificationWorker : BackgroundService
             }
             if (pushNotifications.Count > 0)
             {
+                var userIds = pushNotifications.Select(x => long.Parse(x.SendTo)).ToList();
+                var deviceIds = await _db.Users.Where(x => userIds.Contains(x.Id) && x.IsDeleted == false).Select(x => new { DeviceId = x.DeviceId, UserId = x.Id.ToString() }).ToListAsync();
+
                 foreach (var notification in pushNotifications)
                 {
-                    var pushNotificationResult = await _pushNotification.SendPushNotification(notification);
+                    var deviceId = deviceIds.Where(x => x.UserId == notification.SendTo).Select(x => x.DeviceId).FirstOrDefault();
+                    var pushNotificationResult = await _pushNotification.SendPushNotification(notification, deviceId);
                     if (pushNotificationResult)
                         notification.IsSent = true;
                     else

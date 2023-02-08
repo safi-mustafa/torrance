@@ -26,7 +26,7 @@ namespace Repositories.Shared.AuthenticationService
         private readonly IMapper _mapper;
         private readonly ToranceContext _db;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService _notificationService;
+        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
         private readonly IActionContextAccessor _actionContext;
 
         public IdentityService(
@@ -37,7 +37,7 @@ namespace Repositories.Shared.AuthenticationService
             IMapper mapper,
             ToranceContext db,
             IUserInfoService userInfoService,
-            INotificationService notificationService,
+            INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService,
             IActionContextAccessor actionContext
             )
         {
@@ -229,7 +229,7 @@ namespace Repositories.Shared.AuthenticationService
         {
             try
             {
-                NotificationViewModel viewModel = new()
+                NotificationModifyViewModel viewModel = new()
                 {
                     Message = mailRequest.Body,
                     SendTo = mailRequest.SendTo,
@@ -237,7 +237,7 @@ namespace Repositories.Shared.AuthenticationService
                     Subject = mailRequest.Subject
                 };
 
-                return await _notificationService.AddNotificationAsync(viewModel);
+                return (await _notificationService.Create(viewModel)).Status == System.Net.HttpStatusCode.OK;
 
             }
             catch (Exception ex)

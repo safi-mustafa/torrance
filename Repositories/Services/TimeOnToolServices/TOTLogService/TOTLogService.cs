@@ -36,9 +36,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService _notificationService;
+        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -114,7 +114,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
 
-                    
+
 
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
@@ -174,7 +174,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.AddNotificationAsync(new NotificationViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "TOT Log Created", "A new TOT Log has been created", NotificationType.Push, NotificationEntityType.Logs));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", "TOT Log Created", "A new TOT Log has been created", NotificationType.Push, NotificationEntityType.Logs));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -200,7 +200,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     {
                         if (record.ApproverId != updateModel.Approver.Id)
                         {
-                            await _notificationService.AddNotificationAsync(new NotificationViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", "TOT Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
+                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", "TOT Log updated", "You have a new log to approve.", NotificationType.Push, NotificationEntityType.Logs));
                         }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
