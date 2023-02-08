@@ -4,16 +4,18 @@ using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Newtonsoft.Json;
+using Select2.Model;
+using ViewModels.Shared;
 
 namespace ViewModels.Notification
 {
-    public class NotificationViewModel
+    public class NotificationModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
-        public NotificationViewModel()
+        public NotificationModifyViewModel()
         {
 
         }
-        public NotificationViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEntityType entityType)
+        public NotificationModifyViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEntityType entityType)
         {
             var pushNotification = new PushNotificationViewModel
             {

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using NotificationWorkerService;
 using NotificationWorkerService.Context;
+using NotificationWorkerService.Interface;
+using NotificationWorkerService.Repository;
 using Repository;
 using Serilog;
 
@@ -37,7 +39,7 @@ namespace NotificationWService
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //.UseWindowsService()
+                .UseWindowsService()
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
@@ -51,6 +53,7 @@ namespace NotificationWService
                     services.AddDbContext<NotificationDbContext>();
                     services.AddSingleton<IEmail, EmailService>();
                     services.AddSingleton<ISms, SmsService>();
+                    services.AddSingleton<IPushNotification, PushNotificationService>();
                 })
                 .UseSerilog();
     }

@@ -14,6 +14,7 @@ using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Data.Common;
 using System.Linq.Expressions;
+using ViewModels.Notification;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WRRLog;
 
@@ -30,7 +31,14 @@ namespace Repositories.Services.WeldRodRecordServices.WRRLogService
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
 
-        public WRRLogService(ToranceContext db, ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, notificationService)
+        public WRRLogService(
+                ToranceContext db,
+                ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger,
+                IMapper mapper,
+                IRepositoryResponse response,
+                IUserInfoService userInfoService,
+                INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService
+            ) : base(db, logger, mapper, response, notificationService)
         {
             _db = db;
             _logger = logger;

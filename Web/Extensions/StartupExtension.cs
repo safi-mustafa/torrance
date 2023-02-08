@@ -138,11 +138,11 @@ namespace Web.Extensions
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
+            services.AddScoped(typeof(INotificationService<,,>), typeof(NotificationService<,,>));
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
-            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

@@ -185,8 +185,8 @@ namespace Web.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
-            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
+            services.AddScoped(typeof(INotificationService<,,>), typeof(NotificationService<,,>));
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
             services.AddScoped(typeof(ICompanyService<,,>), typeof(CompanyService<,,>));
@@ -219,7 +219,6 @@ namespace Web.Extensions
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }
