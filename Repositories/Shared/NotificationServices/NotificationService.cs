@@ -9,6 +9,7 @@ using Models.Common;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.Notification;
 using ViewModels.Shared;
 
@@ -21,13 +22,15 @@ namespace Repositories.Shared.NotificationServices
     {
         private readonly ToranceContext _db;
         private readonly ILogger<NotificationService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
+        private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
 
-        public NotificationService(ToranceContext db, ILogger<NotificationService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public NotificationService(ToranceContext db, ILogger<NotificationService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IUserInfoService userInfoService, IMapper mapper, IRepositoryResponse response) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
+            _userInfoService = userInfoService;
             _mapper = mapper;
             _response = response;
         }
@@ -35,13 +38,16 @@ namespace Repositories.Shared.NotificationServices
         public override Expression<Func<Notification, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as NotificationSearchViewModel;
-
+            var loggedInUserId = _userInfoService.LoggedInUserId();
+            var loggedInUserRole = _userInfoService.LoggedInUserRole();
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Type.ToString().ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (searchFilters.Type == null || x.Type == searchFilters.Type)
                             &&
                             (searchFilters.IsSent == null || x.IsSent == searchFilters.IsSent)
+                            &&
+                            (loggedInUserRole == "SuperAdmin" || x.SendTo == loggedInUserId)
                         ;
         }
     }

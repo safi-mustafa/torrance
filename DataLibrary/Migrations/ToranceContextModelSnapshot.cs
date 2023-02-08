@@ -73,7 +73,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachments", (string)null);
                 });
 
             modelBuilder.Entity("Helpers.Models.Shared.Folder", b =>
@@ -111,7 +111,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Folders");
+                    b.ToTable("Folders", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -253,7 +253,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dropboxes");
+                    b.ToTable("Dropboxes", (string)null);
                 });
 
             modelBuilder.Entity("Models.AppSettings.Map", b =>
@@ -292,7 +292,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Maps");
+                    b.ToTable("Maps", (string)null);
                 });
 
             modelBuilder.Entity("Models.Common.ApproverUnit", b =>
@@ -333,7 +333,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("ApproverUnits");
+                    b.ToTable("ApproverUnits", (string)null);
                 });
 
             modelBuilder.Entity("Models.Common.Company", b =>
@@ -368,7 +368,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Models.Common.Contractor", b =>
@@ -406,7 +406,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contractors");
+                    b.ToTable("Contractors", (string)null);
                 });
 
             modelBuilder.Entity("Models.Common.Department", b =>
@@ -444,7 +444,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Models.Common.Unit", b =>
@@ -486,7 +486,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units");
+                    b.ToTable("Units", (string)null);
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
@@ -543,7 +543,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.CraftRate", b =>
@@ -577,7 +577,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CraftRates");
+                    b.ToTable("CraftRates", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.CraftSkill", b =>
@@ -612,7 +612,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CraftSkills");
+                    b.ToTable("CraftSkills", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.LeadPlanner", b =>
@@ -647,7 +647,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LeadPlanners");
+                    b.ToTable("LeadPlanners", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.OverrideLog", b =>
@@ -698,7 +698,7 @@ namespace DataLibrary.Migrations
                     b.Property<long>("OverrideTypeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PONumber")
+                    b.Property<long>("PoNumber")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ReasonForRequestId")
@@ -747,7 +747,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("OverrideLogs");
+                    b.ToTable("OverrideLogs", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.OverrideType", b =>
@@ -782,7 +782,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OverrideTypes");
+                    b.ToTable("OverrideTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.ReasonForRequest", b =>
@@ -817,7 +817,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReasonForRequests");
+                    b.ToTable("ReasonForRequests", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.DelayType", b =>
@@ -852,7 +852,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DelayTypes");
+                    b.ToTable("DelayTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.PermitType", b =>
@@ -887,7 +887,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermitTypes");
+                    b.ToTable("PermitTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.PermittingIssue", b =>
@@ -922,7 +922,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermittingIssues");
+                    b.ToTable("PermittingIssues", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.ReworkDelay", b =>
@@ -957,7 +957,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReworkDelays");
+                    b.ToTable("ReworkDelays", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.Shift", b =>
@@ -992,7 +992,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shifts");
+                    b.ToTable("Shifts", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.ShiftDelay", b =>
@@ -1027,7 +1027,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShiftDelays");
+                    b.ToTable("ShiftDelays", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.StatementOfWork", b =>
@@ -1062,7 +1062,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatementOfWorks");
+                    b.ToTable("StatementOfWorks", (string)null);
                 });
 
             modelBuilder.Entity("Models.TimeOnTools.TOTLog", b =>
@@ -1201,7 +1201,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("TOTLogs");
+                    b.ToTable("TOTLogs", (string)null);
                 });
 
             modelBuilder.Entity("Models.ToranceRole", b =>
@@ -1437,7 +1437,7 @@ namespace DataLibrary.Migrations
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.Location", b =>
@@ -1472,7 +1472,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.RodType", b =>
@@ -1507,7 +1507,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RodTypes");
+                    b.ToTable("RodTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.WRRLog", b =>
@@ -1606,7 +1606,7 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("WeldMethodId");
 
-                    b.ToTable("WRRLogs");
+                    b.ToTable("WRRLogs", (string)null);
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.WeldMethod", b =>
@@ -1641,7 +1641,7 @@ namespace DataLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WeldMethods");
+                    b.ToTable("WeldMethods", (string)null);
                 });
 
             modelBuilder.Entity("Helpers.Models.Shared.Attachment", b =>

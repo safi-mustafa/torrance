@@ -118,6 +118,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 {
                     var result = _mapper.Map<ApproverDetailViewModel>(dbModel);
                     result.Units = await GetApproverUnits(id);
+                    result.AccessCode = result.AccessCode != null ? dbModel.AccessCode.DecodeFrom64() : "0";
                     var response = new RepositoryResponseWithModel<ApproverDetailViewModel> { ReturnModel = result };
                     return response;
                 }

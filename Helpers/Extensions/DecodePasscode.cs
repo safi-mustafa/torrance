@@ -2,7 +2,7 @@
 {
     public static class DecodePasscode
     {
-        public static string DecodeFrom64(string encodedData)
+        public static string DecodeFrom64(this string? encodedData)
         {
             System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
             System.Text.Decoder utf8Decode = encoder.GetDecoder();

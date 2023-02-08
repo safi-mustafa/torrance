@@ -43,7 +43,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Override Type",data = "OverrideType.Name", orderable=true},
                 new DataTableViewModel{title = "Craft",data = "FormattedCraft" },
                 new DataTableViewModel{title = "Override Hours",data = "OverrideHours", orderable=true},
-                new DataTableViewModel{title = "PO Number",data = "PONumber", orderable=true},
+                new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
                 new DataTableViewModel{title = "Work Completed Date",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             }); ;

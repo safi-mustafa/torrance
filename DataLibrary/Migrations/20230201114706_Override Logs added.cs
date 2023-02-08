@@ -24,7 +24,7 @@ namespace DataLibrary.Migrations
                     DateOfWorkCompleted = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WorkScope = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OverrideHours = table.Column<int>(type: "int", nullable: false),
-                    PONumber = table.Column<long>(type: "bigint", nullable: false),
+                    PoNumber = table.Column<long>(type: "bigint", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ShiftId = table.Column<long>(type: "bigint", nullable: false),
                     ReasonForRequestId = table.Column<long>(type: "bigint", nullable: false),

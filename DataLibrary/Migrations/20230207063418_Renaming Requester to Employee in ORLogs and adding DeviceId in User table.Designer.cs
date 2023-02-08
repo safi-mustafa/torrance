@@ -702,7 +702,7 @@ namespace DataLibrary.Migrations
                     b.Property<long>("OverrideTypeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PONumber")
+                    b.Property<long>("PoNumber")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ReasonForRequestId")

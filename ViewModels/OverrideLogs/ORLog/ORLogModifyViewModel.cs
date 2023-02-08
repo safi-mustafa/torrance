@@ -22,7 +22,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required(ErrorMessage ="The PO Number field is required.")]
         [Display(Name = "PO Number")]
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
-        public long PONumber { get; set; }
+        public long PoNumber { get; set; }
         [Required]
         public string Description { get; set; }
 

@@ -14,7 +14,7 @@ namespace Models.OverrideLogs
         public string? WorkScope { get; set; }
         public string Description { get; set; }
         public int OverrideHours { get; set; }
-        public long PONumber { get; set; }
+        public long PoNumber { get; set; }
         public Status Status { get; set; }
 
         [ForeignKey("Shift")]

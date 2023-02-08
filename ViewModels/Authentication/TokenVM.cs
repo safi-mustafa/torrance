@@ -1,4 +1,5 @@
-﻿using ViewModels.WeldingRodRecord.Employee;
+﻿using ViewModels.Authentication.Approver;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace ViewModels.Authentication
 {
@@ -14,6 +15,10 @@ namespace ViewModels.Authentication
         public EmployeeDetailViewModel UserDetail { get; set; }
     }
 
+    public class ApproverTokenVM : TokenVM
+    {
+        public ApproverDetailViewModel UserDetail { get; set; }
+    }
     public class UserTokenVM : TokenVM
     {
         public UserDetailViewModel UserDetail { get; set; }

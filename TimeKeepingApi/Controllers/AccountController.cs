@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Pagination;
+using Repositories.Services.WeldRodRecordServices.ApproverService;
 using Repositories.Shared.AuthenticationService;
 using Repositories.Shared.UserInfoServices;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,6 +17,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Authentication;
+using ViewModels.Authentication.Approver;
 using ViewModels.WeldingRodRecord.Employee;
 
 namespace TorranceApi.Controllers
@@ -33,6 +35,7 @@ namespace TorranceApi.Controllers
         private readonly UserManager<ToranceUser> _userManager;
         private readonly SignInManager<ToranceUser> _signInManager;
         private readonly IUserInfoService _userInfoService;
+        private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
 
         public AccountController
             (
@@ -44,7 +47,8 @@ namespace TorranceApi.Controllers
                 IIdentityService identity,
                 UserManager<ToranceUser> userManager,
                 SignInManager<ToranceUser> signInManager,
-                IUserInfoService userInfoService
+                IUserInfoService userInfoService,
+                IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService
             )
         {
             _configuration = configuration;
@@ -56,6 +60,7 @@ namespace TorranceApi.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _userInfoService = userInfoService;
+            _approverService = approverService;
         }
 
         [HttpPost]
@@ -141,17 +146,17 @@ namespace TorranceApi.Controllers
                         }
                         else
                         {
-                            var responseModel = new RepositoryResponseWithModel<UserTokenVM>();
-                            var userDetail = _mapper.Map<UserDetailViewModel>(user);
-                            userDetail.Id = user.Id;// Temporary For TOT LOG
-
-                            responseModel.ReturnModel = new UserTokenVM
+                            var responseModel = new RepositoryResponseWithModel<ApproverTokenVM>();
+                            var response = await _approverService.GetById(user.Id);
+                            var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
+                            var userDetail = parsedResponse?.ReturnModel ?? new();
+                            responseModel.ReturnModel = new ApproverTokenVM
                             {
                                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                                 Expiry = token.ValidTo,
                                 UserDetail = userDetail
                             };
-                            return ReturnProcessedResponse<UserTokenVM>(responseModel);
+                            return ReturnProcessedResponse<ApproverTokenVM>(responseModel);
                         }
                       
                     }
