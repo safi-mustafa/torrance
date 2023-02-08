@@ -185,6 +185,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                         Email = x.Email,
                         UserName = x.UserName,
                         PhoneNumber = x.PhoneNumber,
+                        AccessCode = x.AccessCode
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -208,6 +209,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                     x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
                     x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
+                    x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     x.Units = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
