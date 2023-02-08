@@ -174,7 +174,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
             try
             {
                 var user = await _userManager.FindByIdAsync(model.UserId.ToString());
-                user.AccessCode = model.EmployeeId.EncodePasswordToBase64();
+                user.AccessCode = model.AccessCode.EncodePasswordToBase64();
                 //   var result = await _userManager.ChangePasswordAsync(user, model.CurrentAccessCode, model.EmployeeId);
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var role = userRoles.First();
@@ -183,7 +183,7 @@ namespace Repositories.Services.WeldRodRecordServices.EmployeeService
                     var record = await _db.Employees.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                     if (record != null)
                     {
-                        record.EmployeeId = model.EmployeeId;
+                        record.EmployeeId = model.AccessCode;
                     }
                 }
               

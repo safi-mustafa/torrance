@@ -65,11 +65,15 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Update(ApproverModifyViewModel model)
         {
-            bool isUnique = await _approverService.IsAccessCodeUnique(model.Id, model.AccessCode);
-            if (!isUnique)
+            if(model.AccessCode != null)
             {
-                ModelState.AddModelError("AccessCode", "Access Code already in use.");
+                bool isUnique = await _approverService.IsAccessCodeUnique(model.Id, model.AccessCode);
+                if (!isUnique)
+                {
+                    ModelState.AddModelError("AccessCode", "Access Code already in use.");
+                }
             }
+            
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
             ModelState.Remove("AccessCode");
@@ -113,7 +117,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
         {
-            var response = await _employeeService.ResetAccessCode(model);
+            await _employeeService.ResetAccessCode(model);
             return RedirectToAction("Index");
         }
 

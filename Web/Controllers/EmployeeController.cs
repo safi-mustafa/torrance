@@ -79,25 +79,8 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
         {
-            var response = await _employeeService.ResetAccessCode(model);
+            await _employeeService.ResetAccessCode(model);
             return RedirectToAction("Index");
-            //if (response.Status==System.Net.HttpStatusCode.OK)
-            //{
-            //    return RedirectToAction("Index");
-            //}
-            //ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
-            ////if (Request.IsAjaxRequest())
-            ////{
-            //var errors = ModelState.Keys.SelectMany(k => ModelState[k].Errors)
-            //                   .Select(m => m.ErrorMessage).ToList();
-
-            //return Json(new JsonResultViewModel
-            //{
-            //    Success = false,
-            //    Errors = errors
-            //});
-            ////}
-
         }
         public override List<DataTableViewModel> GetColumns()
         {
@@ -117,7 +100,7 @@ namespace Web.Controllers
             bool isUnique = await _approverService.IsAccessCodeUnique(model.UserId, model.EmployeeId);
             if (!isUnique)
             {
-                ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
+                ModelState.AddModelError("EmployeeId", "Access Code already in use.");
             }
             return await base.Create(model);
         }
@@ -126,7 +109,7 @@ namespace Web.Controllers
             bool isUnique = await _approverService.IsAccessCodeUnique(model.UserId, model.EmployeeId);
             if (!isUnique)
             {
-                ModelState.AddModelError("EmployeeId", "Employee Id already in use.");
+                ModelState.AddModelError("EmployeeId", "Access Code already in use.");
             }
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
