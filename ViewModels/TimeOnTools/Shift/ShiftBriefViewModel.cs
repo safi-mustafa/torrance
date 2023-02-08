@@ -9,8 +9,13 @@ namespace ViewModels.TimeOnTools.Shift
         {
 
         }
+
+        public ShiftBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Shift field is required.")
+        {
+
+        }
         [DisplayName("Shift")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

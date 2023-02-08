@@ -1,4 +1,4 @@
-﻿var datatable;
+﻿var dataTable;
 var actionIcons = {};
 var showSelectedFilters = true;
 var isAjaxBasedCrud = true;
@@ -45,6 +45,15 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
     $(document).off('click', '.clear-form-btn');
     $(document).on('click', '.clear-form-btn', function () {
         ClearDatatableSearch(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
+    });
+    $(document).off('keypress', '#filter-form input[type=search],#filter-form input[type=text]');
+    $(document).on('keypress', '#filter-form input[type=search],#filter-form input[type=text]', function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            event.preventDefault();
+            SearchDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
+
+        }
     });
     $(document).off('click', '.badge-datatable-clear');
     $(document).on('click', '.badge-datatable-clear', function () {
@@ -126,7 +135,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
     for (var i = 0; i <= (dtColumns.length - 1); i++) {
         columnsIndexExcludingAction.push(i);
     }
-    datatable = $('#' + tableId).dataTable({
+    dataTable = $('#' + tableId).DataTable({
         "serverSide": true,
         "proccessing": true,
         "searching": true,
@@ -204,7 +213,12 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 "render": function (data, type, row, meta) {
                     if (dtColumns[meta.col].title !== 'Action') {
                         if (dtColumns[meta.col].format === 'html') {
-                            return RenderHtml(data, dtColumns, meta);
+                            if (type === 'export' && dtColumns[meta.col].exportColumn != null && dtColumns[meta.col].exportColumn != "") {
+                                return row[dtColumns[meta.col].exportColumn];
+                            }
+                            else {
+                                return RenderHtml(data, dtColumns, meta);
+                            }
                         }
                         else if (dtColumns[meta.col].format === 'numeric') {
                             return RenderNumericValue(data, dtColumns, meta);
@@ -250,21 +264,24 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     extend: 'copy',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
                     extend: 'excel',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 {
@@ -272,6 +289,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     exportOptions: {
                         columns: getColumnsToExport,
                         page: 'current',
+                        orthogonal: "export"
                     },
                     customize: customizePdfExport
                 },
@@ -279,7 +297,8 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     extend: 'print',
                     exportOptions: {
                         columns: getColumnsToExport,
-                        page: 'current'
+                        page: 'current',
+                        orthogonal: "export"
                     }
                 },
                 'colvis'
@@ -565,7 +584,7 @@ function shouldBeIgnoredInPdfExport(element) {
 }
 function customizePdfExport(doc) {
     var colCount = new Array();
-    $(datatable).find('tbody tr:first-child td').each(function () {
+    $(dataTable).find('tbody tr:first-child td').each(function () {
         if (!shouldBeIgnoredInPdfExport($(this))) {
             if ($(this).attr('colspan')) {
                 for (var i = 1; i <= $(this).attr('colspan'); $i++) {
@@ -579,7 +598,7 @@ function customizePdfExport(doc) {
     });
     if (colCount.length < 8)// Cuts columns for table with more than 8 columns
         doc.content[1].table.widths = colCount;
-    var rowCount = datatable[0].rows.length;
+    var rowCount = dataTable[0].rows.length;
     for (i = 0; i < rowCount; i++) {
         for (j = 0; j < colCount.length; j++) {
             doc.content[1].table.body[i][j].alignment = 'center';
@@ -588,30 +607,10 @@ function customizePdfExport(doc) {
     };
 }
 
-//datatable.on("click", "th.select-checkbox", function () {
-//    if ($("th.select-checkbox").hasClass("selected")) {
-//        example.rows().deselect();
-//        $("th.select-checkbox").removeClass("selected");
-//    } else {
-//        example.rows().select();
-//        $("th.select-checkbox").addClass("selected");
-//    }
-//}).on("select deselect", function () {
-//    ("Some selection or deselection going on")
-//    if (example.rows({
-//        selected: true
-//    }).count() !== example.rows().count()) {
-//        $("th.select-checkbox").removeClass("selected");
-//    } else {
-//        $("th.select-checkbox").addClass("selected");
-//    }
-//});
-
-$("th.select-checkbox").on("click", function (e) {
-    debugger;
-    if ($(this).is(":checked")) {
-        datatable.rows().select();
-    } else {
-        datatable.rows().deselect();
-    }
-});
+function selectAllCheckBoxChanged(element) {
+    if ($(element).is(":checked")) {
+        dataTable.rows().select();
+        } else {
+        dataTable.rows().deselect();
+        }
+}

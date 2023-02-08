@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Web/wwwroot/js/bundles/custom-datatable.js
+/Web/wwwroot/js/bundles/custom-datatable.min.js

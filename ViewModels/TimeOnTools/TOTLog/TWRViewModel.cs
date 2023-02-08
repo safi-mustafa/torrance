@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Helpers.Extensions;
 using Select2.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -18,7 +19,7 @@ namespace ViewModels.TimeOnTools.TOTLog
                 NumericPart = twrSplitted.Count() > 2 ? new Select2ViewModel
                 {
                     id = twrSplitted[1],
-                    text =twrSplitted[1]
+                    text = twrSplitted[1]
                 } : new Select2ViewModel();
                 var alphabeticPartId = twrSplitted[2];
                 var twrList = GetTWRAlphabeticList();
@@ -34,6 +35,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string Name { get; set; } = "TWR";
         public Select2ViewModel NumericPart { get; set; } = new Select2ViewModel();
         public Select2ViewModel AlphabeticPart { get; set; } = new Select2ViewModel();
+        [Required(ErrorMessage = "Required")]
         public string Text { get; set; }
 
         public List<Select2ViewModel> GetTWRNumericList() => new List<Select2ViewModel>()

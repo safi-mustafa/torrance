@@ -10,6 +10,11 @@ namespace ViewModels.WeldingRodRecord
         {
 
         }
+
+        public EmployeeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Employee field is required.")
+        {
+
+        }
         [DisplayName("Employee")]
         public override string? Name { get; set; }
 

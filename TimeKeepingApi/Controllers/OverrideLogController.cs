@@ -44,7 +44,7 @@ namespace API.Controllers
             {
                 ModelState.Remove("Requester.Id");
                 ModelState.Remove("Requester.Name");
-                ModelState.Remove("Approver.Name");
+                // ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
             return base.Post(model);
@@ -55,7 +55,7 @@ namespace API.Controllers
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
-                ModelState.Remove("Approver.Name");
+               // ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
             return base.Put(model);

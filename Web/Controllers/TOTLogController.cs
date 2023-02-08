@@ -57,7 +57,8 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-form-export", data = ""},//
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Company",data = "Company.Name", orderable=true},
@@ -117,6 +118,7 @@ namespace Web.Controllers
                 svm.PerPage = pageSize;
                 svm.CalculateTotal = true;
                 svm.CurrentPage = pageNumber;
+                svm.DisablePagination = true;
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _TOTLogService.GetTWRNumericValues<Select2ViewModel>(svm);
                 PaginatedResultModel<Select2ViewModel> items = new();
@@ -124,6 +126,10 @@ namespace Web.Controllers
                 {
                     var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>>;
                     items = parsedResponse?.ReturnModel ?? new();
+                }
+                if (svm.DisablePagination)
+                {
+                    pageSize=items.Items.Count;
                 }
                 return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, items.Items.ToList()));
             }
@@ -144,6 +150,7 @@ namespace Web.Controllers
                 svm.PerPage = pageSize;
                 svm.CalculateTotal = true;
                 svm.CurrentPage = pageNumber;
+                svm.DisablePagination= true;
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _TOTLogService.GetTWRAphabeticValues<Select2ViewModel>(svm);
                 PaginatedResultModel<Select2ViewModel> items = new();
@@ -151,6 +158,10 @@ namespace Web.Controllers
                 {
                     var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>>;
                     items = parsedResponse?.ReturnModel ?? new();
+                }
+                if (svm.DisablePagination)
+                {
+                    pageSize = items.Items.Count;
                 }
                 return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, items.Items.ToList()));
             }

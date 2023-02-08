@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using ViewModels.Shared
+﻿@using ViewModels.Shared
 @model List<AttachmentResponseVM>
 @{
     Layout = null;
@@ -19,7 +16,7 @@
                     <i class="fa-solid fa-trash ml-2 mt-2 attachment-delete delete" href='@("/Attachment/Delete/"+item.Id)' attr-id="@item.Id"></i>
                 </div>
                 <a href="@item.Url" class="doc-body" target="_blank">
-                    <img src="~/img/file.png" class="doc-icon attachment-create" alt="file" attr-id="@item.Id" />
+                    <file-image file-type="@item.Type" size="50" class="doc-icon attachment-create" alt="file" attr-id="@item.Id" />
                     <h4 class="doc-title">@item.Name</h4>
                 </a>
             </div>

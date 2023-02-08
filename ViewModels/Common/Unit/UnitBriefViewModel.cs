@@ -9,8 +9,12 @@ namespace ViewModels.Common.Unit
         {
 
         }
+        public UnitBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Unit field is required.")
+        {
+
+        }
         [DisplayName("Unit")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }
