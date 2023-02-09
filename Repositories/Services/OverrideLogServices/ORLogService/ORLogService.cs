@@ -101,8 +101,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     //.Include(x => x.CraftRate)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
+                    .Include(x => x.Approver)
                     .Where(filters).IgnoreQueryFilters();
-                var query = resultQuery.ToQueryString();
+                //var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {

@@ -148,7 +148,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
 
                 var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable)).OrderByDescending(x => x.Date).AsQueryable();
-                var check = logsQueryable.ToQueryString();
+                //var check = logsQueryable.ToQueryString();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)
                 {

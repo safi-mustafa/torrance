@@ -64,14 +64,14 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
-                new DataTableViewModel{title = "Twr",data = "Twr", orderable=true},
-                new DataTableViewModel{title = "Equipment No",data = "EquipmentNo", orderable=true},
-                new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
+                new DataTableViewModel{title = "TWR",data = "Twr", orderable=true},
+                new DataTableViewModel{title = "Equip.",data = "EquipmentNo", orderable=true},
+                //new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
                 new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
-                new DataTableViewModel{title = "Permit Type",data = "PermitType.Name", orderable=true},
-                new DataTableViewModel{title = "Start Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
-                new DataTableViewModel{title = "Total Head Count",data = "ManPowerAffected", orderable=true},
-                new DataTableViewModel{title = "Total Manhours",data = "ManHours", orderable=true},
+                new DataTableViewModel{title = "Permit",data = "PermitType.Name", orderable=true},
+                new DataTableViewModel{title = "Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
+                new DataTableViewModel{title = "HC",data = "ManPowerAffected", orderable=true},
+                new DataTableViewModel{title = "MH",data = "ManHours", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });
             return dataColumns;
@@ -129,7 +129,7 @@ namespace Web.Controllers
                 }
                 if (svm.DisablePagination)
                 {
-                    pageSize=items.Items.Count;
+                    pageSize = items.Items.Count;
                 }
                 return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, items.Items.ToList()));
             }
@@ -150,7 +150,7 @@ namespace Web.Controllers
                 svm.PerPage = pageSize;
                 svm.CalculateTotal = true;
                 svm.CurrentPage = pageNumber;
-                svm.DisablePagination= true;
+                svm.DisablePagination = true;
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _TOTLogService.GetTWRAphabeticValues<Select2ViewModel>(svm);
                 PaginatedResultModel<Select2ViewModel> items = new();

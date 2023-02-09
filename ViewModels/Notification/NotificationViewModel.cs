@@ -42,7 +42,7 @@ namespace ViewModels.Notification
 
         private LogType GetLogType(Type entity)
         {
-            return entity == typeof(TOTLog) ? LogType.TimeOnTools : entity is OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
+            return entity == typeof(TOTLog) ? LogType.TimeOnTools : entity == typeof(OverrideLog) ? LogType.Override : LogType.WeldingRodRecord;
         }
         private NotificationEntityType GetNotificationEntityType(LogType logType)
         {

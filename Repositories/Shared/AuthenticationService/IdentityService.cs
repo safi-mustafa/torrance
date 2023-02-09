@@ -178,7 +178,7 @@ namespace Repositories.Shared.AuthenticationService
                             .Select(x => new UserDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
 
-                var queryString = userQueryable.ToQueryString();
+                //var queryString = userQueryable.ToQueryString();
 
                 var users = await userQueryable.Paginate(searchFilter);
                 var filteredUserIds = users.Items.Select(x => x.Id);

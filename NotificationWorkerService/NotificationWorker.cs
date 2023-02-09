@@ -33,7 +33,7 @@ public class NotificationWorker : BackgroundService
             _logger.LogInformation("Notification Worker running at: {time}", DateTimeOffset.Now);
 
             await SendNotifications();
-            await Task.Delay(5000, stoppingToken);
+            await Task.Delay(7000, stoppingToken);
         }
     }
 
@@ -59,7 +59,6 @@ public class NotificationWorker : BackgroundService
                     email.IsSent = false;
                     email.ResendCount += 1;
                 }
-                await _db.SaveChangesAsync();
             }
             foreach (var sms in smss)
             {
@@ -71,7 +70,6 @@ public class NotificationWorker : BackgroundService
                     sms.IsSent = false;
                     sms.ResendCount += 1;
                 }
-                await _db.SaveChangesAsync();
             }
             if (pushNotifications.Count > 0)
             {
@@ -91,10 +89,11 @@ public class NotificationWorker : BackgroundService
                             notification.IsSent = false;
                             notification.ResendCount += 1;
                         }
-                        await _db.SaveChangesAsync();
+                        
                     }
                 }
             }
+            await _db.SaveChangesAsync();
 
 
             return true;

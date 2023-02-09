@@ -15,6 +15,13 @@ namespace API.Controllers
         public NotificationController(INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> permitTypeService) : base(permitTypeService)
         {
         }
+
+        public override Task<IActionResult> GetAll([FromQuery] NotificationSearchViewModel search)
+        {
+            search.OrderByColumn = "CreatedOn";
+            search.OrderDir = Pagination.PaginationOrderCatalog.Desc;
+            return base.GetAll(search);
+        }
     }
 }
 

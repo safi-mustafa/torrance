@@ -143,8 +143,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
                     .Include(x => x.ReasonForRequest)
+                    .Include(x => x.Approver)
                     .Where(filters).IgnoreQueryFilters();
-                var query = resultQuery.ToQueryString();
+                //var query = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
