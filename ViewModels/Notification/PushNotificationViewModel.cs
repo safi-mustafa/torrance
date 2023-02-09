@@ -14,9 +14,13 @@ namespace ViewModels.Notification
         {
         }
         public long LogId { get; set; }
+
+        public long EntityId { get; set; }
         public LogType LogType { get; set; }
         public string Message { get; set; }
         public string Title { get; set; }
+
+        public NotificationEntityType? EntityType { get; set; }
     }
 }
 

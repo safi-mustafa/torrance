@@ -20,16 +20,19 @@ namespace ViewModels.Notification
             var pushNotification = new PushNotificationViewModel
             {
                 LogId = logId,
+                EntityId = logId,
                 LogType = GetLogType(logType),
                 Message = message,
                 Title = title
             };
 
             EntityId = logId;
+            EntityType = GetNotificationEntityType(pushNotification.LogType);
+            pushNotification.EntityType = EntityType;
             Message = JsonConvert.SerializeObject(pushNotification);
             SendTo = sendTo;
             Type = type;
-            EntityType = GetNotificationEntityType(pushNotification.LogType);
+
         }
         public long EntityId { get; set; }
         public string Message { get; set; }
