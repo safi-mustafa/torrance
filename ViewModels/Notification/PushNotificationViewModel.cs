@@ -20,7 +20,7 @@ namespace ViewModels.Notification
         public string Message { get; set; }
         public string Title { get; set; }
 
-        public NotificationEntityType? EntityType { get; set; }
+        public string EntityType { get; set; }
     }
 }
 

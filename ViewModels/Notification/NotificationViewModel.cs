@@ -28,7 +28,7 @@ namespace ViewModels.Notification
 
             EntityId = logId;
             EntityType = GetNotificationEntityType(pushNotification.LogType);
-            pushNotification.EntityType = EntityType;
+            pushNotification.EntityType = EntityType.ToString();
             Message = JsonConvert.SerializeObject(pushNotification);
             SendTo = sendTo;
             Type = type;
