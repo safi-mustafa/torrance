@@ -31,7 +31,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
 
-        public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
+        //public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
 
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
