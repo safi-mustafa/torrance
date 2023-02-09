@@ -12,7 +12,7 @@ namespace ViewModels.TimeOnTools.TOTLog
     public class TOTLogSearchViewModel : BaseSearchModel
     {
         [Display(Name = "Equipment No")]
-        public long? EquipmentNo { get; set; }
+        public string? EquipmentNo { get; set; }
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;

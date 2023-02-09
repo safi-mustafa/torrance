@@ -1,6 +1,7 @@
 ﻿using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using ViewModels.Shared;
 
 namespace ViewModels.OverrideLogs
@@ -13,5 +14,15 @@ namespace ViewModels.OverrideLogs
 
         [DisplayName("Rate")]
         public double Rate { get; set; }
+
+
+        [DisplayName("Rate")]
+        public string FormattedRate
+        {
+            get
+            {
+                return $"${Rate.ToString("N", new CultureInfo("en-US"))}";
+            }
+        }
     }
 }

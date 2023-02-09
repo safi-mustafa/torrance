@@ -84,7 +84,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No")]
-        public long EquipmentNo { get; set; }
+        public string EquipmentNo { get; set; }
+
         [Display(Name = "Hours Delayed")]
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }

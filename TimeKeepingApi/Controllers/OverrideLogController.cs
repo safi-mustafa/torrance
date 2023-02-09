@@ -33,6 +33,8 @@ namespace API.Controllers
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
         {
+            search.OrderByColumn = "CreatedOn";
+            search.OrderDir = PaginationOrderCatalog.Desc;
             var mappedSearchModel = _mapper.Map<ORLogSearchViewModel>(search);
             var result = await _oRLogService.GetAll<ORLogDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<ORLogDetailViewModel>>(result);

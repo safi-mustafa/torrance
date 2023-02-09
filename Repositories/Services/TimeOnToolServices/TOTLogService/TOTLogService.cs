@@ -59,9 +59,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             searchFilters.StatusNot = loggedInUserRole == "Approver" ? Status.Pending : searchFilters.StatusNot;
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.ToString().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (searchFilters.EquipmentNo == null || x.EquipmentNo == searchFilters.EquipmentNo)
+                            (string.IsNullOrEmpty(searchFilters.EquipmentNo) || x.EquipmentNo.ToLower().Contains(searchFilters.EquipmentNo.ToLower()))
                             &&
                             (searchFilters.Shift.Id == null || searchFilters.Shift.Id == 0 || x.Shift.Id == searchFilters.Shift.Id)
                             &&
@@ -178,7 +178,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "TOT Log Created";
                     string notificationMessage = $"A new TOT Log with TWR# ({mappedModel.Twr}) has been created";
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(TOTLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

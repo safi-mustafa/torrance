@@ -30,6 +30,8 @@ namespace API.Controllers
 
         public override async Task<IActionResult> GetAll([FromQuery] TOTLogAPISearchViewModel search)
         {
+            search.OrderByColumn = "CreatedOn";
+            search.OrderDir = PaginationOrderCatalog.Desc;
             var mappedSearchModel = _mapper.Map<TOTLogSearchViewModel>(search);
             var result = await _tOTLogService.GetAll<TOTLogDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<TOTLogDetailViewModel>>(result);

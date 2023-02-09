@@ -53,8 +53,9 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
-        [Range(1, long.MaxValue, ErrorMessage = "The Equipment No must be greater than zero.")]
-        public long EquipmentNo { get; set; }
+        [Display(Name = "Equipment No")]
+        [Required(ErrorMessage ="The field Equipment No is required.")]
+        public string EquipmentNo { get; set; }
 
         //[Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double? HoursDelayed { get; set; }

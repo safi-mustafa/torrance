@@ -24,7 +24,7 @@ namespace Models.TimeOnTools
         public string JobDescription { get; set; }
         public string? Comment { get; set; }
         public long ManPowerAffected { get; set; }
-        public long EquipmentNo { get; set; }
+        public string EquipmentNo { get; set; }
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }
 

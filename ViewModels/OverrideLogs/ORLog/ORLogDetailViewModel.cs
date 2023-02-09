@@ -7,6 +7,7 @@ using ViewModels.TimeOnTools.Shift;
 using ViewModels.Authentication;
 using Enums;
 using Helpers.Extensions;
+using System.Globalization;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -40,15 +41,16 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Hours")]
         public int OverrideHours { get; set; }
 
-        public double FormattedCraft
+        public string FormattedCraft
         {
             get
             {
+                double rate = 0;
                 if (CraftSkill != null)
                 {
-                    return (CraftSkill.Rate ?? 0) * OverrideHours;
+                    rate = (CraftSkill.Rate ?? 0) * OverrideHours;
                 }
-                return 0;
+                return $"{CraftSkill.Name} (${rate.ToString("N", new CultureInfo("en-US"))})";
             }
         }
 

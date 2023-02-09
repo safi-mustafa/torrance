@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-  <AssemblyName>TimeKeepingApi</AssemblyName>
+  <AssemblyName>TorranceAPI</AssemblyName>
   </PropertyGroup>
 
 
