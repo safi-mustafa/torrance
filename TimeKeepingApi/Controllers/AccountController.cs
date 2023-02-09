@@ -79,7 +79,7 @@ namespace TorranceApi.Controllers
                     _logger.LogInformation("Model State is valid", "login method 2");
                     var encodedPinCode = model.Pincode.EncodePasswordToBase64();
 
-                    var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode).FirstOrDefaultAsync();
+                    var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode && x.IsDeleted == false).FirstOrDefaultAsync();
 
                     if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
                     {
@@ -112,14 +112,25 @@ namespace TorranceApi.Controllers
                         var employee = new Employee();
                         if (role == "Employee")
                         {
-                            employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode).FirstOrDefaultAsync();
-                            var fullName = $"{employee?.FirstName} {employee?.LastName}";
-                            authClaims.AddRange(new List<Claim>
+                            employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode && x.IsDeleted == false).FirstOrDefaultAsync();
+                            if (employee != null)
                             {
-                                new Claim(ClaimTypes.Name, employee.FirstName),
-                                new Claim("FullName", fullName),
-                                new Claim("EmployeeId", employee.Id.ToString()),
-                            });
+                                var fullName = $"{employee?.FirstName} {employee?.LastName}";
+                                authClaims.AddRange(new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.Name, employee.FirstName),
+                                    new Claim("FullName", fullName),
+                                    new Claim("EmployeeId", employee.Id.ToString()),
+                                });
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
+                                _logger.LogError("Invalid login attempt");
+                                result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                                return ReturnProcessedResponse(result);
+                            }
+
                         }
                         return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetResponseWithUserDetailForPin(user, role, employee, authClaims));
                     }
