@@ -98,7 +98,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
                     .Include(x => x.CraftSkill)
-                    .Include(x => x.CraftRate)
+                    //.Include(x => x.CraftRate)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
                     .Where(filters).IgnoreQueryFilters();
@@ -129,7 +129,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 var dbModel = await _db.OverrideLogs
                     .Include(x => x.CraftSkill)
-                    .Include(x => x.CraftRate)
+                    //.Include(x => x.CraftRate)
                     .Include(x => x.Contractor)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.OverrideType)

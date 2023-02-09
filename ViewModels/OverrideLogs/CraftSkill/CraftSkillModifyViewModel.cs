@@ -11,5 +11,9 @@ namespace ViewModels.OverrideLogs
         [MaxLength(200)]
         [DisplayName("Skill")]
         public string Name { get; set; }
+
+        [Required]
+        [DisplayName("Rate")]
+        public double Rate { get; set; }
     }
 }

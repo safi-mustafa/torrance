@@ -7,10 +7,16 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label fw-600"></label>
                     <div>@(string.IsNullOrEmpty(Model.Name) ? "-" : Model.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="Rate" class="form-label fw-600"></label>
+                    <div>@Model.Rate</div>
                 </div>
             </div>
         </div>

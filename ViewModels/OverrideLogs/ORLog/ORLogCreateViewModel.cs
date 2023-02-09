@@ -11,11 +11,11 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
     {
 
-        [Display(Name = "Work Completed Date")]
+        [Display(Name = "Completed")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
-        [Display(Name = "Override Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        [Display(Name = "Hours")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
         public int OverrideHours { get; set; }
 
         [Display(Name = "PO Number")]

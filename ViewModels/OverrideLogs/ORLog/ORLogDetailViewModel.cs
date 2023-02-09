@@ -25,7 +25,7 @@ namespace ViewModels.OverrideLogs.ORLog
         }
 
 
-        [Display(Name = "Work Completed Date")]
+        [Display(Name = "Completed")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
         public string FormattedDateOfWorkCompleted
         {
@@ -37,16 +37,16 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public string Description { get; set; }
 
-        [Display(Name = "Override Hours")]
+        [Display(Name = "Hours")]
         public int OverrideHours { get; set; }
 
-        public float FormattedCraft
+        public double FormattedCraft
         {
             get
             {
-                if (CraftRate != null)
+                if (CraftSkill != null)
                 {
-                    return CraftRate.Rate * OverrideHours;
+                    return (CraftSkill.Rate ?? 0) * OverrideHours;
                 }
                 return 0;
             }

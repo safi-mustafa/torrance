@@ -358,14 +358,14 @@ namespace TorranceApi.Mapper
             CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
 
             //CraftRate
-            CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
-            CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
-            CreateMap<CraftRateBriefViewModel, CraftRateBriefViewModel>()
-                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Name))
-                .ReverseMap();
-            CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
-            CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
-            CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
+            //CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
+            //CreateMap<BaseBriefVM, CraftRateBriefViewModel>().ReverseMap();
+            //CreateMap<CraftRateBriefViewModel, CraftRateBriefViewModel>()
+            //    .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Name))
+            //    .ReverseMap();
+            //CreateMap<CraftRateModifyViewModel, CraftRate>().ReverseMap();
+            //CreateMap<CraftRate, CraftRateDetailViewModel>().ReverseMap();
+            //CreateMap<CraftRateModifyViewModel, CraftRateDetailViewModel>().ReverseMap();
 
             //CraftSkill
             CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
@@ -402,8 +402,8 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Company, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
-                .ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
-                .ForMember(x => x.CraftRate, opt => opt.Ignore())
+                //.ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
+                //.ForMember(x => x.CraftRate, opt => opt.Ignore())
                 .ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
                 .ForMember(x => x.CraftSkill, opt => opt.Ignore())
                 .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))

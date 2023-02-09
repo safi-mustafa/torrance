@@ -36,15 +36,15 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn="CreatedOn", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
-                new DataTableViewModel{title = "Company",data = "Company.Name", orderable=true},
+                new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
                 new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
                 new DataTableViewModel{title = "Override Type",data = "OverrideType.Name", orderable=true},
                 new DataTableViewModel{title = "Craft",data = "FormattedCraft" },
-                new DataTableViewModel{title = "Override Hours",data = "OverrideHours", orderable=true},
+                new DataTableViewModel{title = "Hours",data = "OverrideHours", orderable=true},
                 new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
-                new DataTableViewModel{title = "Work Completed Date",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
+                new DataTableViewModel{title = "Completed",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             }); ;
             return dataColumns;

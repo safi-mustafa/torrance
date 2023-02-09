@@ -62,18 +62,18 @@
 
     <div class="col-lg-6">
         <div class="mb-3">
-            <label asp-for="CraftSkill" class="form-label fw-600"></label>
+            <label asp-for="CraftSkill" class="form-label fw-600">Craft Skill</label>
             <div>@(string.IsNullOrEmpty(Model.CraftSkill?.Name) ? "-" : Model.CraftSkill.Name)</div>
         </div>
     </div>
 
 
-    <div class="col-lg-6">
+   @* <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="CraftRate" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.CraftRate?.Name) ? "-" : Model.CraftRate.Name)</div>
         </div>
-    </div>
+    </div>*@
     <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="OverrideHours" class="form-label fw-600"></label>

@@ -45,7 +45,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<Map> Maps { get; set; }
     public DbSet<Dropbox> Dropboxes { get; set; }
     public DbSet<PermittingIssue> PermittingIssues { get; set; }
-    public DbSet<CraftRate> CraftRates { get; set; }
+    //public DbSet<CraftRate> CraftRates { get; set; }
     public DbSet<CraftSkill> CraftSkills { get; set; }
     public DbSet<LeadPlanner> LeadPlanners { get; set; }
     public DbSet<OverrideType> OverrideTypes { get; set; }

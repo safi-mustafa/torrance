@@ -61,7 +61,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
-                new DataTableViewModel{title = "Company",data = "Company.Name", orderable=true},
+                new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
                 new DataTableViewModel{title = "Twr",data = "Twr", orderable=true},

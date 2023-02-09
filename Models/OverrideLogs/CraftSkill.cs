@@ -10,5 +10,7 @@ namespace Models.OverrideLogs
     public class CraftSkill : BaseDBModel
     {
         public string Name { get; set; }
+
+        public double Rate { get; set; }
     }
 }

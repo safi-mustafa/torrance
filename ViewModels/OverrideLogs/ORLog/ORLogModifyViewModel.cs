@@ -12,14 +12,14 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
 
-        [Display(Name = "Work Completed Date")]
+        [Display(Name = "Completed")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
-        [Display(Name = "Override Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Override Hours must be greater than zero.")]
+        [Display(Name = "Hours")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
         public int OverrideHours { get; set; }
 
-        [Required(ErrorMessage ="The PO Number field is required.")]
+        [Required(ErrorMessage = "The PO Number field is required.")]
         [Display(Name = "PO Number")]
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PoNumber { get; set; }

@@ -37,9 +37,9 @@ namespace Models.OverrideLogs
         public long? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
-        [ForeignKey("CraftRate")]
-        public long CraftRateId { get; set; }
-        public CraftRate CraftRate { get; set; }
+        //[ForeignKey("CraftRate")]
+        //public long CraftRateId { get; set; }
+        //public CraftRate CraftRate { get; set; }
 
         [ForeignKey("CraftSkill")]
         public long CraftSkillId { get; set; }

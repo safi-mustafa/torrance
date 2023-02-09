@@ -22,7 +22,7 @@ using Repositories.Services.CommonServices.DepartmentService;
 using Repositories.Services.CommonServices.UnitService;
 using Repositories.Services.DashboardService;
 using Repositories.Services.FolderService;
-using Repositories.Services.OverrideLogServices.CraftRateService;
+//using Repositories.Services.OverrideLogServices.CraftRateService;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
 using Repositories.Services.OverrideLogServices.LeadPlannerService;
 using Repositories.Services.OverrideLogServices.ORLogService;
@@ -132,7 +132,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
             services.AddScoped(typeof(IApprovalService), typeof(ApprovalService));
-            services.AddScoped(typeof(ICraftRateService<,,>), typeof(CraftRateService<,,>));
+            //services.AddScoped(typeof(ICraftRateService<,,>), typeof(CraftRateService<,,>));
             services.AddScoped(typeof(ICraftSkillService<,,>), typeof(CraftSkillService<,,>));
             services.AddScoped(typeof(ILeadPlannerService<,,>), typeof(LeadPlannerService<,,>));
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
