@@ -3,7 +3,7 @@ using Repositories.Interfaces;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WeldMethod;
 
-namespace Repositories.Services.WeldRodRecordServices.WeldMethodService
+namespace Repositories.Services.AppSettingServices.WeldMethodService
 {
     public interface IWeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

@@ -6,6 +6,7 @@
         Admin,
         Employee,
         Approver,
-        Foreman
+        Foreman,
+        CompanyManager
     }
 }

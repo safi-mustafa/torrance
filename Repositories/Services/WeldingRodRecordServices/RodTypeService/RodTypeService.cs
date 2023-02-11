@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.RodType;
 
-namespace Repositories.Services.WeldRodRecordServices.RodTypeService
+namespace Repositories.Services.AppSettingServices.RodTypeService
 {
     public class RodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<RodType, CreateViewModel, UpdateViewModel, DetailViewModel>, IRodTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

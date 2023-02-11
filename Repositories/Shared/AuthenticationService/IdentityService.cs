@@ -12,6 +12,7 @@ using Pagination;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 using ViewModels.Notification;
 
 namespace Repositories.Shared.AuthenticationService
@@ -59,7 +60,8 @@ namespace Repositories.Shared.AuthenticationService
                 var user = _mapper.Map<ToranceUser>(model);
                 try
                 {
-                   // var password = model.Role == "Employee" ? model.EmployeeId : model.Password;
+                    user.UserName = user.Email;
+                    // var password = model.Role == "Employee" ? model.EmployeeId : model.Password;
                     var result = await _userManager.CreateAsync(user, model.Password);
                     var role = model.Role != null ? model.Role : "SuperAdmin";
                     if (result.Succeeded)
@@ -95,14 +97,15 @@ namespace Repositories.Shared.AuthenticationService
             string errorMsg = "There was some problem in updating data. Please try again later.";
             try
             {
-                var id = model.Role == "Approver" ? model.Id.ToString() : model.UserId.ToString();
+                var id = model.Id.ToString();
                 var user = await _userManager.FindByIdAsync(id);
                 if (user != null)
                 {
-                    user.UserName = model.UserName;
-                    user.Email = model.Email;
-                    user.PhoneNumber = model.PhoneNumber;
-                    user.AccessCode = model.AccessCode;
+                    //user.UserName = model.UserName;
+                    //user.Email = model.Email;
+                    //user.AccessCode = model.AccessCode;
+                    user.FullName = model.FullName;
+                    user.CompanyId = model.Company?.Id;
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
@@ -190,7 +193,6 @@ namespace Repositories.Shared.AuthenticationService
                         Id = x.Id,
                         Email = x.Email,
                         UserName = x.UserName,
-                        PhoneNumber = x.PhoneNumber,
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -210,7 +212,6 @@ namespace Repositories.Shared.AuthenticationService
                 {
                     x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
                     x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
-                    x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                 });

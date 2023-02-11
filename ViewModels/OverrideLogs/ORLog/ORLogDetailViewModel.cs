@@ -8,6 +8,7 @@ using ViewModels.Authentication;
 using Enums;
 using Helpers.Extensions;
 using System.Globalization;
+using ViewModels.Authentication.User;
 
 namespace ViewModels.OverrideLogs.ORLog
 {

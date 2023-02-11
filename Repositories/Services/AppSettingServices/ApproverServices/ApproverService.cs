@@ -3,25 +3,24 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pagination;
-using Repositories.Common;
-using System.Linq.Expressions;
 using ViewModels.Authentication;
 using Repositories.Shared.AuthenticationService;
 using Centangle.Common.ResponseHelpers.Models;
 using Centangle.Common.ResponseHelpers;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
-using Models;
-using ViewModels;
 using Models.Common;
 using ViewModels.Common.Unit;
 using ViewModels.Authentication.Approver;
 using Helpers.Extensions;
-using System.Net;
+using Repositories.Services.CommonServices.UserService;
+using Microsoft.AspNetCore.Identity;
+using Models;
+using Repositories.Services.CommonServices.ApprovalService.Interface;
 
-namespace Repositories.Services.WeldRodRecordServices.ApproverService
+namespace Repositories.Services.AppSettingServices.ApproverService
 {
-    public class ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel> : IApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel> : UserService<CreateViewModel, UpdateViewModel, DetailViewModel>, IApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
@@ -32,7 +31,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public ApproverService(ToranceContext db, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response)
+        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response)
         {
             _db = db;
             _logger = logger;
@@ -40,72 +39,14 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             _identity = identity;
             _response = response;
         }
-
-        public async Task<IRepositoryResponse> Create(CreateViewModel model)
+        protected override async Task<bool> CreateUserAdditionalMappings(CreateViewModel viewModel, SignUpModel model)
         {
-            var transaction = await _db.Database.BeginTransactionAsync();
-            try
-            {
-                var viewModel = model as ApproverModifyViewModel;
-                var user = _mapper.Map<SignUpModel>(model);
-                user.Role = "Approver";
-                user.AccessCode = user.AccessCode.EncodePasswordToBase64();
-                var userId = await _identity.CreateUser(user, transaction);
-                if (userId > 0)
-                {
-                    await SetApproverUnits(viewModel.UnitIds, userId);
-                    await transaction.CommitAsync();
-                    var response = new RepositoryResponseWithModel<long> { ReturnModel = userId };
-                    return response;
-                }
-                _logger.LogWarning($"No user for Id:{user.Id} found in Create() Approver");
-                return Response.NotFoundResponse(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Exception thrown in Create method of Approver ");
-                await transaction.RollbackAsync();
-                return Response.BadRequestResponse(_response);
-            }
+            return await SetApproverUnits((viewModel as ApproverModifyViewModel).UnitIds, model.Id);
         }
-
-        public async Task<IRepositoryResponse> Update(UpdateViewModel model)
+        protected override async Task<bool> UpdateUserAdditionalMappings(UpdateViewModel viewModel, SignUpModel model)
         {
-
-            var transaction = await _db.Database.BeginTransactionAsync();
-            try
-            {
-                var viewModel = model as ApproverModifyViewModel;
-                if (model != null)
-                {
-                    var record = await _db.Users.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                    if (record != null)
-                    {
-                        viewModel.AccessCode = record.AccessCode;
-                        var user = _mapper.Map<SignUpModel>(model);
-                        user.Role = "Approver";
-                        var result = await _identity.UpdateUser(user, transaction);
-                        if (result)
-                        {
-                            await SetApproverUnits(viewModel.UnitIds, model.Id);
-                            await transaction.CommitAsync();
-                            var response = new RepositoryResponseWithModel<long> { ReturnModel = user.Id };
-                            return response;
-                        }
-                    }
-                    _logger.LogWarning($"Record for id: {model?.Id} not found in Approver");
-                    await transaction.RollbackAsync();
-                    return Response.NotFoundResponse(_response);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Update() for Approver threw the following exception");
-                await transaction.RollbackAsync();
-            }
-            return Response.BadRequestResponse(_response);
+            return await SetApproverUnits((viewModel as ApproverModifyViewModel).UnitIds, model.Id);
         }
-
         public async Task<IRepositoryResponse> GetById(long id)
         {
             try
@@ -133,10 +74,7 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             }
         }
 
-        public async Task<bool> IsApproverEmailUnique(long id, string email)
-        {
-            return (await _db.Users.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
-        }
+
 
 
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
@@ -183,8 +121,8 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                     {
                         Id = x.Id,
                         Email = x.Email,
+                        FullName = x.FullName,
                         UserName = x.UserName,
-                        PhoneNumber = x.PhoneNumber,
                         AccessCode = x.AccessCode
                     }).ToListAsync();
                 var roles = await _db.UserRoles
@@ -207,8 +145,8 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 {
                     x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
                     x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
-                    x.PhoneNumber = userList.Where(a => a.Id == x.Id).Select(x => x.PhoneNumber).FirstOrDefault();
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
+                    x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
                     x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     x.Units = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
@@ -227,27 +165,6 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
             }
         }
 
-        public async Task<IRepositoryResponse> Delete(long id)
-        {
-            try
-            {
-                var dbModel = await _db.Users.FindAsync(id);
-                if (dbModel != null)
-                {
-                    dbModel.IsDeleted = true;
-                    await _db.SaveChangesAsync();
-                    return _response;
-                }
-                _logger.LogWarning($"No record found for id:{id} for Approver in Delete()");
-
-                return Response.NotFoundResponse(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Delete() for Approver threw the following exception");
-                return Response.BadRequestResponse(_response);
-            }
-        }
 
         public async Task<bool> SetApproverUnits(List<long> unitIds, long approverId)
         {
@@ -305,12 +222,6 @@ namespace Repositories.Services.WeldRodRecordServices.ApproverService
                 _logger.LogError($"ApproverService GetApproverUnits method threw an exception, Message: {ex.Message}");
                 return null;
             }
-        }
-
-        public async Task<bool> IsAccessCodeUnique(long id, string accessCode)
-        {
-            var encodedAccessCode = accessCode.EncodePasswordToBase64();
-            return (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id).CountAsync()) < 1;
         }
     }
 }

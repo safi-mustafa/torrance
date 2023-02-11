@@ -6,6 +6,7 @@ using ViewModels.Common.Unit;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 
 namespace ViewModels.OverrideLogs.ORLog
 {

@@ -1216,6 +1216,9 @@ namespace DataLibrary.Migrations
                     b.Property<int>("ActiveStatus")
                         .HasColumnType("int");
 
+                    b.Property<long?>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -1235,6 +1238,11 @@ namespace DataLibrary.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1283,6 +1291,8 @@ namespace DataLibrary.Migrations
                     b.HasIndex("AccessCode")
                         .IsUnique()
                         .HasFilter("[AccessCode] IS NOT NULL");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1852,6 +1862,15 @@ namespace DataLibrary.Migrations
                     b.Navigation("ShiftDelay");
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Models.ToranceUser", b =>
+                {
+                    b.HasOne("Models.Common.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Models.WeldingRodRecord.Employee", b =>

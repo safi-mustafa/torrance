@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;

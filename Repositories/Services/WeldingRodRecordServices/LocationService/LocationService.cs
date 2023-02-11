@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.Location;
 
-namespace Repositories.Services.WeldRodRecordServices.LocationService
+namespace Repositories.Services.AppSettingServices.LocationService
 {
     public class LocationService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Location, CreateViewModel, UpdateViewModel, DetailViewModel>, ILocationService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

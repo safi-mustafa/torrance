@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
-using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
 using ViewModels.CRUD;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Repositories.Services.WeldRodRecordServices.LocationService;
+using Repositories.Services.AppSettingServices.LocationService;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.Location;
 

@@ -5,6 +5,7 @@ using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;

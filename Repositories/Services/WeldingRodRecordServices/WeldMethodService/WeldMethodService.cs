@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WeldMethod;
 
-namespace Repositories.Services.WeldRodRecordServices.WeldMethodService
+namespace Repositories.Services.AppSettingServices.WeldMethodService
 {
     public class WeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<WeldMethod, CreateViewModel, UpdateViewModel, DetailViewModel>, IWeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

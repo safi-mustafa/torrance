@@ -13,7 +13,6 @@ namespace ViewModels.Authentication
         [Remote(action: "ValidateAccessCode", controller: "Approver", AdditionalFields = "Id,AccessCode", ErrorMessage = "Access Code already in use.")]
         public string AccessCode { get; set; }
         public long Id { get; set; }
-        public long UserId { get; set; }
         public string CurrentAccessCode { get; set; }
 
 
@@ -21,5 +20,6 @@ namespace ViewModels.Authentication
         [DisplayName("Confirm Access Code")]
         [Compare("AccessCode", ErrorMessage = "Confirm Access Code Does not Match.")]
         public string ConfirmAccessCode { get; set; }
+
     }
 }

@@ -13,6 +13,7 @@ using Models.Mapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Repositories.Services.AppSettingServices.DropboxServices;
+using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.MappService;
 using Repositories.Services.CommonServices.ApprovalService;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
@@ -36,17 +37,17 @@ using Repositories.Services.TimeOnToolServices.ShiftDelayService;
 using Repositories.Services.TimeOnToolServices.ShiftService;
 using Repositories.Services.TimeOnToolServices.SOWService;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
-using Repositories.Services.TimeOnToolServices.UserService;
-using Repositories.Services.WeldRodRecordServices.ApproverService;
-using Repositories.Services.WeldRodRecordServices.EmployeeService;
-using Repositories.Services.WeldRodRecordServices.LocationService;
-using Repositories.Services.WeldRodRecordServices.RodTypeService;
-using Repositories.Services.WeldRodRecordServices.WeldMethodService;
-using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using Repositories.Services.AppSettingServices.ApproverService;
+using Repositories.Services.AppSettingServices.LocationService;
+using Repositories.Services.AppSettingServices.RodTypeService;
+using Repositories.Services.AppSettingServices.WeldMethodService;
+using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Shared.AttachmentService;
 using Repositories.Shared.AuthenticationService;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
+using Repositories.Services.CommonServices.UserService;
+using Repositories.Services.AppSettingServices.CompanyManagerService;
 
 namespace Web.Extensions
 {
@@ -123,6 +124,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IWeldMethodService<,,>), typeof(WeldMethodService<,,>));
             services.AddScoped(typeof(IRodTypeService<,,>), typeof(RodTypeService<,,>));
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
+            services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(CompanyManagerService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
@@ -140,7 +142,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(INotificationService<,,>), typeof(NotificationService<,,>));
             services.AddScoped<IDashboardService, DashboardService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
+            //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
         }

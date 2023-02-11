@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ViewModels.AppSettings.Map;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;

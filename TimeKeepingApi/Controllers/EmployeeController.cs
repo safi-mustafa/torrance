@@ -1,11 +1,11 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Services.WeldRodRecordServices.EmployeeService;
 using ViewModels.WeldingRodRecord.Employee;
 using Pagination;
 using ViewModels.WeldingRodRecord.WRRLog;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Repositories.Services.AppSettingServices.EmployeeService;
 
 namespace API.Controllers
 {

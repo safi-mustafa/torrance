@@ -18,7 +18,7 @@ using ViewModels.Notification;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WRRLog;
 
-namespace Repositories.Services.WeldRodRecordServices.WRRLogService
+namespace Repositories.Services.AppSettingServices.WRRLogService
 {
     public class WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<WRRLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IWRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

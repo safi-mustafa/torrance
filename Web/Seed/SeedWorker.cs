@@ -58,6 +58,12 @@ namespace IdentityProvider.Seed
                         Name = "Employee",
                         NormalizedName = "EMPLOYEE",
                         ConcurrencyStamp = "5acd8273-22f2-487b-8971-f0208a532051",
+                    },
+                    new ToranceRole
+                    {
+                        Name = "CompanyManager",
+                        NormalizedName = "COMPANYMANAGER",
+                        ConcurrencyStamp = "5acd8273-22f2-487b-8971-f0208a532051",
                     }
                 };
 

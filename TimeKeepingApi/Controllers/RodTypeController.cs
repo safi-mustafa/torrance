@@ -1,7 +1,7 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.RodType;
-using Repositories.Services.WeldRodRecordServices.RodTypeService;
+using Repositories.Services.AppSettingServices.RodTypeService;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers

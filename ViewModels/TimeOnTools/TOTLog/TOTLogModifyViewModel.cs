@@ -17,6 +17,7 @@ using ViewModels.WeldingRodRecord;
 using ViewModels.OverrideLogs;
 using Helpers.Extensions;
 using ViewModels.Common.Company;
+using ViewModels.Authentication.User;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {

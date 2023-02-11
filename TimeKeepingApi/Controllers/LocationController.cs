@@ -1,7 +1,7 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.Location;
-using Repositories.Services.WeldRodRecordServices.LocationService;
+using Repositories.Services.AppSettingServices.LocationService;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers

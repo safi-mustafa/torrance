@@ -1,9 +1,12 @@
 ﻿using Enums;
+using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models.Common;
 using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
@@ -18,8 +21,16 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     public DateTime UpdatedOn { get; set; }
     public long UpdatedBy { get; set; }
     public string? DeviceId { get; set; }
-  //  [Required]
-  //  [StringLength(4, ErrorMessage = "AccessCode must be of 4-digits.", MinimumLength = 4)]
+    //  [Required]
+    //  [StringLength(4, ErrorMessage = "AccessCode must be of 4-digits.", MinimumLength = 4)]
     public string? AccessCode { get; set; }
+
+
+    [Required]
+    [MaxLength(300, ErrorMessage = "Full Name cannot be greater than 300 characters.")]
+    public string FullName { get; set; }
+    [ForeignKey("Company")]
+    public long? CompanyId { get; set; }
+    public Company? Company { get; set; }
 }
 

@@ -6,10 +6,12 @@ using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.AppSettings.CompanyManager;
 using ViewModels.AppSettings.Map;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
 using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
@@ -143,8 +145,8 @@ namespace Models.Mapper
             CreateMap<EmployeeModifyViewModel, Employee>()
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
-                //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
-                //.ForMember(x => x.Company, opt => opt.Ignore())
+                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
@@ -158,6 +160,10 @@ namespace Models.Mapper
             CreateMap<EmployeeModifyViewModel, SignUpModel>()
                 .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
+
+            
+            CreateMap<ToranceUser, CompanyManagerDetailViewModel>().ReverseMap();
+          
 
 
 
@@ -236,11 +242,13 @@ namespace Models.Mapper
                 .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
                 .ReverseMap();
-
+            CreateMap<ToranceUser, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<ApproverBriefViewModel, ToranceUser>()
              .ForMember(src => src.Email, opt => opt.MapFrom(dest => dest.Name))
              .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
+                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<UserUpdateViewModel, ToranceUser>()
               .ReverseMap();

@@ -1,7 +1,7 @@
 ﻿using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.WRRLog;
-using Repositories.Services.WeldRodRecordServices.WRRLogService;
+using Repositories.Services.AppSettingServices.WRRLogService;
 using AutoMapper;
 using Pagination;
 using Microsoft.AspNetCore.Authorization;

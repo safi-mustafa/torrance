@@ -1,4 +1,5 @@
 ﻿using Helpers.Extensions;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Unit;
 
 namespace ViewModels.Authentication.Approver
@@ -13,7 +14,5 @@ namespace ViewModels.Authentication.Approver
                 return Units != null && Units.Count() > 0 ? string.Join(", ", Units.Select(m => m.Name).ToList()) : "";
             }
         }
-        public string AccessCode { get; set; }
-        public string FormattedAccessCode { get => AccessCode?.DecodeFrom64(); }
     }
 }

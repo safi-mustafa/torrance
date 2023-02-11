@@ -1,20 +1,15 @@
 ﻿using Enums;
 using Pagination;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
-    public class EmployeeSearchViewModel : BaseSearchModel
+    public class EmployeeSearchViewModel : UserSearchViewModel
     {
-    //    public ActiveStatus? Status { get; set; }
-        public string? FirstName { get; set; }
-        public string? Email { get; set; }
     }
 
-    public class EmployeeAPISearchViewModel : BaseSearchModel
+    public class EmployeeAPISearchViewModel : UserSearchViewModel
     {
-      //  public ActiveStatus? Status { get; set; }
-        public string? FirstName { get; set; }
-        public string? Email { get; set; }
     }
 }

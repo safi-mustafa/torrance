@@ -1,4 +1,5 @@
-﻿using ViewModels.Common.Unit;
+﻿using ViewModels.Authentication.User;
+using ViewModels.Common.Unit;
 
 namespace ViewModels.Authentication.Approver
 {

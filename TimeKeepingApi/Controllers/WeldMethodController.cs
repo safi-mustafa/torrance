@@ -1,7 +1,7 @@
 ﻿using System;
 using TorranceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Services.WeldRodRecordServices.WeldMethodService;
+using Repositories.Services.AppSettingServices.WeldMethodService;
 using ViewModels.WeldingRodRecord.WeldMethod;
 using Microsoft.AspNetCore.Authorization;
 

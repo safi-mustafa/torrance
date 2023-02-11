@@ -7,15 +7,16 @@ using Repositories.Shared.UserInfoServices;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.WeldingRodRecord;
 using ViewModels.Authentication.Approver;
-using Repositories.Services.WeldRodRecordServices.ApproverService;
+using Repositories.Services.AppSettingServices.ApproverService;
 using System.Net;
+using ViewModels.Authentication.User;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ApproverController : CrudBaseController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, ApproverSearchViewModel>
+    public class ApproverController : CrudBaseController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, UserSearchViewModel>
     {
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly IMapper _mapper;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Repositories.Services.WeldRodRecordServices.WeldMethodService;
+using Repositories.Services.AppSettingServices.WeldMethodService;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.WeldMethod;
 

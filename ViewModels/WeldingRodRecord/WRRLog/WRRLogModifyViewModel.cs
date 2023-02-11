@@ -12,6 +12,7 @@ using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.Common.Contractor;
 using Enums;
 using ViewModels.Authentication;
+using ViewModels.Authentication.User;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Repositories.Common
 {
     public abstract class BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where TEntity : BaseDBModel
+        where TEntity : class, IBaseModel
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

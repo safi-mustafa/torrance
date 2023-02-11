@@ -33,6 +33,7 @@ using ViewModels.Common.Company;
 using ViewModels.TimeOnTools;
 using ViewModels.Authentication.Approver;
 using ViewModels.Notification;
+using ViewModels.Authentication.User;
 
 namespace TorranceApi.Mapper
 {

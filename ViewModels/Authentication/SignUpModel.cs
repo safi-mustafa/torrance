@@ -16,12 +16,9 @@ namespace ViewModels.Authentication
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
-        [Display(Name = "First Name is Required")]
-        public string FirstName { get; set; }
-        [Required]
-        [Display(Name = "Last Name is Required")]
-        public string LastName { get; set; }
-        public string Name { get { return $"{FirstName} {LastName}"; } }
+        [Display(Name = "Full Name is Required")]
+        public string FullName { get; set; }
+        public string Name { get { return $"{FullName}"; } }
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password is Required")]
@@ -35,15 +32,12 @@ namespace ViewModels.Authentication
 
         [Required]
         public string UserName { get; set; }
-        [Required]
-        [DataType(DataType.PhoneNumber)]
-        [CustomMobileNumberValidator(ErrorMessage = "Phone no. must be a valid number")]
-        public string PhoneNumber { get; set; }
+
         public string Action { get; set; }
         public string Role { get; set; }
         public string? ImageUrl { get; set; }
         public IFormFile? File { get; set; }
-        public bool IsApproved { get; set; } = true;
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public string GetBaseFolder()
         {
             var ext = Path.GetExtension(File.FileName);

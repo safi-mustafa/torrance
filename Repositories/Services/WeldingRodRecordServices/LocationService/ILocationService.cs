@@ -2,7 +2,7 @@
 using Repositories.Interfaces;
 using ViewModels.Shared;
 
-namespace Repositories.Services.WeldRodRecordServices.LocationService
+namespace Repositories.Services.AppSettingServices.LocationService
 {
     public interface ILocationService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

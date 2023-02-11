@@ -140,7 +140,6 @@
 
   <ItemGroup>
     <None Include="Views\Employee\Modify.cshtml" />
-    <None Include="Views\Employee\_Create.cshtml" />
     <None Include="Views\Employee\_Detail.cshtml" />
     <None Include="Views\Employee\_Search.cshtml" />
     <None Include="Views\Employee\_Update.cshtml" />
