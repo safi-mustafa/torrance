@@ -14,5 +14,9 @@ namespace Helpers.Models.Shared
         [ForeignKey("Folder")]
         public long? FolderId { get; set; }
         public Folder? Folder { get; set; }
+
+        public AttachmentTypeCatalog AttachmentType { get; set; }
+
+
     }
 }

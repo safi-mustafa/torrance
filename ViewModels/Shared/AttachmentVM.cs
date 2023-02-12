@@ -18,6 +18,8 @@ namespace ViewModels.Shared
         public string Type { get => string.IsNullOrEmpty(_type) ? Path.GetExtension(File.FileName) : _type; set => _type = value; }
         public string Name { get; set; }
         public AttachmentEntityType FileType { get; set; }
+
+        public AttachmentTypeCatalog AttachmentType { get; set; }
         public DateTime UploadDate { get; set; }
         public DateTime CreatedOn { get; set; }
         public FolderBriefViewModel? Folder { get; set; } = new();
@@ -53,6 +55,7 @@ namespace ViewModels.Shared
         public string Type { get => string.IsNullOrEmpty(_type) ? Path.GetExtension(File?.FileName) ?? "" : _type; set => _type = value; }
         public string Name { get; set; }
         public AttachmentEntityType FileType { get; set; }
+        public AttachmentTypeCatalog AttachmentType { get; set; }
         public DateTime UploadDate { get; set; }
         public FolderBriefViewModel? Folder { get; set; } = new();
         public ActiveStatus ActiveStatus { get; set; }
@@ -84,6 +87,8 @@ namespace ViewModels.Shared
         public string Url { get; set; }
         public string Type { get; set; }
         public DateTime CreatedOn { get; set; }
+
+        public AttachmentTypeCatalog AttachmentType { get; set; }
         public FolderBriefViewModel? Folder { get; set; } = new();
     }
 }

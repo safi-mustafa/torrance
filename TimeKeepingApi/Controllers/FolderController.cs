@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [AllowAnonymous]
     public class FolderController : CrudBaseBriefController<FolderDetailViewModel, FolderSearchViewModel>
     {
         private readonly IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;

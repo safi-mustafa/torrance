@@ -16,17 +16,17 @@ namespace Web.Controllers
 {
     [Authorize]
 
-    public class AttachmentController : CrudBaseController<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentSearchViewModel>
+    public class AttachmentController : CrudBaseController<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentSearchViewModel>
     {
         private readonly ILogger<AttachmentController> _logger;
         private readonly IMapper _mapper;
-        private readonly IAttachmentService<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel> _attachmentService;
+        private readonly IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> _attachmentService;
 
         public AttachmentController
             (
                 ILogger<AttachmentController> logger,
                 IMapper mapper,
-                IAttachmentService<AttachmentVM, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
+                IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
             ) : base(attachmentService, logger, mapper, "Attachment", "Attachments", false, false)
         {
             _logger = logger;
@@ -55,7 +55,7 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(long id)
         {
-            return UpdateView(GetUpdateViewModel("Create", new AttachmentVM { Folder = new FolderBriefViewModel { Id = id } }));
+            return UpdateView(GetUpdateViewModel("Create", new AttachmentModifyViewModel { Folder = new FolderBriefViewModel { Id = id } }));
         }
 
         [NonAction]
@@ -67,6 +67,18 @@ namespace Web.Controllers
         public override ActionResult Index()
         {
             return View();
+        }
+
+        public override Task<ActionResult> Create(AttachmentModifyViewModel model)
+        {
+            ValidateAttachmentViewModel(model);
+            return base.Create(model);
+        }
+
+        public override Task<ActionResult> Update(AttachmentModifyViewModel model)
+        {
+            ValidateAttachmentViewModel(model);
+            return base.Update(model);
         }
 
         public async Task<List<AttachmentResponseVM>> SearchAttachments(AttachmentSearchViewModel search)
@@ -89,6 +101,28 @@ namespace Web.Controllers
             {
 
             };
+        }
+
+
+        private void ValidateAttachmentViewModel(AttachmentModifyViewModel model)
+        {
+            if (model.AttachmentType == Enums.AttachmentTypeCatalog.File)
+            {
+                model.Url = null;
+            }
+            else
+            {
+                model.File = null;
+                model.Type = "link";
+            }
+            if (model.AttachmentType == Enums.AttachmentTypeCatalog.File && model.Id < 1 && model.File == null)
+            {
+                ModelState.AddModelError("File", "The field File is required.");
+            }
+            else if (model.AttachmentType == Enums.AttachmentTypeCatalog.Link && string.IsNullOrEmpty(model.Url))
+            {
+                ModelState.AddModelError("Url", "The field Link is required.");
+            }
         }
     }
 }
