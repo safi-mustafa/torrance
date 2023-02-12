@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class DropboxController : CrudBaseBriefController<DropboxDetailViewModel, DropboxSearchViewModel>
     {
         public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService) : base(dropboxService)
