@@ -21,6 +21,11 @@ using ViewModels.Authentication;
 using ViewModels.Authentication.Approver;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.Employee;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Enums;
+using Repositories.Services.AppSettingServices.EmployeeService;
+using Repositories.Services.AppSettingServices.CompanyManagerService;
+using ViewModels.AppSettings.CompanyManager;
 
 namespace TorranceApi.Controllers
 {
@@ -38,6 +43,8 @@ namespace TorranceApi.Controllers
         private readonly SignInManager<ToranceUser> _signInManager;
         private readonly IUserInfoService _userInfoService;
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
+        private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
+        private readonly ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _companyManagerService;
 
         public AccountController
             (
@@ -50,7 +57,9 @@ namespace TorranceApi.Controllers
                 UserManager<ToranceUser> userManager,
                 SignInManager<ToranceUser> signInManager,
                 IUserInfoService userInfoService,
-                IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService
+                IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
+                IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
+                ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService
             )
         {
             _configuration = configuration;
@@ -63,6 +72,8 @@ namespace TorranceApi.Controllers
             _signInManager = signInManager;
             _userInfoService = userInfoService;
             _approverService = approverService;
+            _employeeService = employeeService;
+            _companyManagerService = companyManagerService;
         }
 
         [HttpPost]
@@ -78,70 +89,8 @@ namespace TorranceApi.Controllers
                 {
                     _logger.LogInformation("Model State is valid", "login method 2");
                     var encodedPinCode = model.Pincode.EncodePasswordToBase64();
-
                     var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode && x.IsDeleted == false).FirstOrDefaultAsync();
-
-                    if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
-                    {
-                        ModelState.AddModelError("pincode", "Approval for this account is still pending.");
-                        _logger.LogError("Approval for this account is still pending.");
-
-                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-                        var check = ReturnProcessedResponse(result);
-                        return check;
-                    }
-
-                    if (user != null)
-                    {
-                        user.DeviceId = model.DeviceId;
-                        await _db.SaveChangesAsync();
-                        var name = User?.Identity?.Name;
-                        _logger.LogInformation("User logged in.", "login method 4");
-
-                        var userRoles = await _userManager.GetRolesAsync(user);
-                        var role = userRoles.First();
-
-                        var authClaims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                            new Claim(ClaimTypes.Role, role),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
-                        };
-
-                        var employee = new Employee();
-                        if (role == "Employee")
-                        {
-                            employee = await _db.Employees.Include(x => x.Company).Where(x => x.EmployeeId == model.Pincode && x.IsDeleted == false).FirstOrDefaultAsync();
-                            if (employee != null)
-                            {
-                                var fullName = $"{employee?.FirstName} {employee?.LastName}";
-                                authClaims.AddRange(new List<Claim>
-                                {
-                                    new Claim(ClaimTypes.Name, employee.FirstName),
-                                    new Claim("FullName", fullName),
-                                    new Claim("EmployeeId", employee.Id.ToString()),
-                                });
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
-                                _logger.LogError("Invalid login attempt");
-                                result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-                                return ReturnProcessedResponse(result);
-                            }
-
-                        }
-                        return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetResponseWithUserDetailForPin(user, role, employee, authClaims));
-                    }
-
-                    else
-                    {
-                        ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
-                        _logger.LogError("Invalid login attempt");
-                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
-                        return ReturnProcessedResponse(result);
-                    }
+                    return await SetClaimns(model.DeviceId, user);
                 }
             }
             catch (Exception ex)
@@ -176,32 +125,7 @@ namespace TorranceApi.Controllers
                     var response = await _userManager.CheckPasswordAsync(user, model.Password);
                     if (user != null && response)
                     {
-                        user.DeviceId = model.DeviceId;
-                        await _db.SaveChangesAsync();
-                        var name = User?.Identity?.Name;
-                        _logger.LogInformation("User logged in.", "login method 4");
-                        var userRoles = await _userManager.GetRolesAsync(user);
-                        var role = userRoles.First();
-                        var authClaims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                            new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim("Role", role),
-                            new Claim(ClaimTypes.Email, user.Email),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                        };
-                        if (userRoles.Contains("Admin"))
-                        {
-                            authClaims.Add(new Claim(ClaimTypes.Role, "Admin"));
-                        }
-                        else
-                        {
-                            foreach (var userRole in userRoles)
-                            {
-                                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                            }
-                        }
-                        return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetUserDetailForLoginWithPassword(user, userRoles, role, authClaims));
+                        return await SetClaimns(model.DeviceId, user);
                     }
                     else
                     {
@@ -248,9 +172,51 @@ namespace TorranceApi.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<UserDetailViewModel>>(responseModel);
         }
 
+        private async Task<IActionResult> SetClaimns(string deviceId, ToranceUser user)
+        {
+            IRepositoryResponse result;
+            if (user?.ActiveStatus == Enums.ActiveStatus.Inactive)
+            {
+                ModelState.AddModelError("pincode", "Approval for this account is still pending.");
+                _logger.LogError("Approval for this account is still pending.");
+
+                result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                return ReturnProcessedResponse(result);
+            }
+
+            if (user != null)
+            {
+                user.DeviceId = deviceId;
+                await _db.SaveChangesAsync();
+                var name = User?.Identity?.Name;
+                _logger.LogInformation("User logged in.", "login method 4");
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var role = userRoles.First();
+
+                var authClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.Role, role),
+                            new Claim("FullName", user.FullName),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+                        };
+                return ReturnProcessedResponse<UserTokenVM<BaseCrudViewModel>>(await GetResponseWithUserDetail(user, role, authClaims));
+            }
+
+            else
+            {
+                ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
+                _logger.LogError("Invalid login attempt");
+                result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                return ReturnProcessedResponse(result);
+            }
+        }
+
         #region Helping Methods
 
-        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetResponseWithUserDetailForPin(ToranceUser? user, string role, Employee? employee, List<Claim> claims)
+        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetResponseWithUserDetail(ToranceUser? user, string role, List<Claim> claims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken
@@ -268,64 +234,34 @@ namespace TorranceApi.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiry = token.ValidTo
             };
-            if (role == "Employee")
+            UserDetailViewModel userDetail;
+            IRepositoryResponse response;
+            if (role == RolesCatalog.Employee.ToString())
             {
-                var userDetail = _mapper.Map<EmployeeDetailViewModel>(employee);
-                userDetail.Id = user.Id;// Temporary For TOT LOG
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
+                response = await _employeeService.GetById(user.Id);
+                var parsedResponse = response as RepositoryResponseWithModel<EmployeeDetailViewModel>;
+                userDetail = parsedResponse?.ReturnModel ?? new();
+
+            }
+            else if (role == RolesCatalog.CompanyManager.ToString())
+            {
+                response = await _companyManagerService.GetById(user.Id);
+                var parsedResponse = response as RepositoryResponseWithModel<CompanyManagerDetailViewModel>;
+                userDetail = parsedResponse?.ReturnModel ?? new();
             }
             else
             {
-                var response = await _approverService.GetById(user.Id);
+                response = await _approverService.GetById(user.Id);
                 var parsedResponse = response as RepositoryResponseWithModel<ApproverDetailViewModel>;
-                var userDetail = parsedResponse?.ReturnModel ?? new();
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
+                userDetail = parsedResponse?.ReturnModel ?? new();
             }
 
+            responseModel.ReturnModel.UserDetail = userDetail;
+            userDetail.Id = user.Id;
+            userDetail.Role = role;
             return responseModel;
         }
 
-        private async Task<RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>> GetUserDetailForLoginWithPassword(ToranceUser? user, IList<string> userRoles, string role, List<Claim> authClaims)
-        {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var token = new JwtSecurityToken
-                (
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(12),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-               );
-            var responseModel = new RepositoryResponseWithModel<UserTokenVM<BaseCrudViewModel>>();
-            responseModel.ReturnModel = new UserTokenVM<BaseCrudViewModel>
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiry = token.ValidTo
-            };
-
-            if (role == "Approver")
-            {
-                var approverResponse = await _approverService.GetById(user.Id);
-                var parsedResponse = approverResponse as RepositoryResponseWithModel<ApproverDetailViewModel>;
-                var userDetail = parsedResponse?.ReturnModel ?? new();
-
-                userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
-            }
-            else
-            {
-                var userDetail = _mapper.Map<UserDetailViewModel>(user);
-                userDetail.Roles = userRoles.Select(x => new UserRolesVM { Name = x }).ToList();
-                userDetail.Role = role;
-                responseModel.ReturnModel.UserDetail = userDetail;
-            }
-
-            return responseModel;
-        }
 
         #endregion
     }

@@ -48,6 +48,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Services.CommonServices.ApprovalService;
 using Repositories.Services.AppSettingServices.EmployeeService;
+using Repositories.Services.AppSettingServices.CompanyManagerService;
+using Repositories.Services.CommonServices.UserService;
 
 namespace Web.Extensions
 {
@@ -198,7 +200,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(ILocationService<,,>), typeof(LocationService<,,>));
             services.AddScoped(typeof(IWeldMethodService<,,>), typeof(WeldMethodService<,,>));
             services.AddScoped(typeof(IRodTypeService<,,>), typeof(RodTypeService<,,>));
-            services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(EmployeeService<,,>));
+            services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
+            services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(CompanyManagerService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
@@ -212,7 +215,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
             services.AddScoped<IApprovalService, ApprovalService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();

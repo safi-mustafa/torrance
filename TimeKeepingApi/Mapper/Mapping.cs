@@ -34,6 +34,7 @@ using ViewModels.TimeOnTools;
 using ViewModels.Authentication.Approver;
 using ViewModels.Notification;
 using ViewModels.Authentication.User;
+using ViewModels.AppSettings.CompanyManager;
 
 namespace TorranceApi.Mapper
 {
@@ -156,13 +157,17 @@ namespace TorranceApi.Mapper
             CreateMap<BaseBriefVM, DelayTypeBriefViewModel>().ReverseMap();
 
             //Employee
-            CreateMap<EmployeeModifyViewModel, Employee>().ReverseMap();
-            CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
+            CreateMap<EmployeeModifyViewModel, ToranceUser>().ReverseMap();
+            CreateMap<ToranceUser, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
-            CreateMap<Employee, EmployeeBriefViewModel>()
-                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
+            CreateMap<ToranceUser, EmployeeBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                 .ReverseMap();
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
+
+
+            //Company Manager
+            CreateMap<ToranceUser, CompanyManagerDetailViewModel>().ReverseMap();
 
 
             //WRRLog

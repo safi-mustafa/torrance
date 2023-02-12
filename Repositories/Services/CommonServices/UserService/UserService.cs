@@ -121,8 +121,8 @@ namespace Repositories.Services.CommonServices.UserService
                     .Where(x => x.Id == id).FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
-                    var result = _mapper.Map<EmployeeDetailViewModel>(dbModel);
-                    var response = new RepositoryResponseWithModel<EmployeeDetailViewModel> { ReturnModel = result };
+                    var result = _mapper.Map<DetailViewModel>(dbModel);
+                    var response = new RepositoryResponseWithModel<DetailViewModel> { ReturnModel = result };
                     return response;
                     //return await base.GetById(id);
                 }
