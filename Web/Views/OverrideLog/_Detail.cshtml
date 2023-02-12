@@ -31,7 +31,12 @@
             <div>@Model.Company.Name</div>
         </div>
     </div>
-
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Department" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Department?.Name) ? "-" : Model.Department.Name)</div>
+        </div>
+    </div>
     <div class="col-lg-6">
         <div class="mb-3">
             <label asp-for="Shift" class="form-label fw-600"></label>

@@ -25,6 +25,11 @@
             }
             <div class="col-lg-6">
                 <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
@@ -44,10 +49,10 @@
 
                 <div class="mb-3 d-flex justify-content-start">
                     @* <label asp-for="Twr" class="form-label fw-600"></label>
-                        <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
-                        <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
+                    <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
+                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
                     <div class="col-2">
-                            <input type="text" value="TWR" class="form-control" readonly />
+                        <input type="text" value="TWR" class="form-control" readonly />
                     </div>
 
                     <div class="col-3">
@@ -139,58 +144,58 @@
                 <input asp-for="Approver.Id" type="hidden" />
             }
             @*  <div class="col-lg-6">
-                <div class="mb-3">
-                <label asp-for="HoursDelayed" class="form-label fw-600"></label>
-                <input asp-for="HoursDelayed" type="number" class="form-control" />
-                <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="HoursDelayed" class="form-label fw-600"></label>
+            <input asp-for="HoursDelayed" type="number" class="form-control" />
+            <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             @*          <div class="col-lg-6">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
-                </div>
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
+            </div>
+            </div>
             *@
 
 
             @*   <div class="col-lg-6">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-                </div>
-                </div>
-                <div class="col-lg-6">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+            </div>
+            </div>
+            <div class="col-lg-6">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+            </div>
+            </div>*@
             @*<div class="col-lg-6">
-                <div class="mb-3">
-                <label asp-for="Date" class="form-label fw-600"></label>
-                <input asp-for="Date" type="date" class="form-control" />
-                <span asp-validation-for="Date" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="Date" class="form-label fw-600"></label>
+            <input asp-for="Date" type="date" class="form-control" />
+            <span asp-validation-for="Date" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
             @* <div class="col-lg-6">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-                </div>
-                </div>
-                <div class="col-lg-6">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+            </div>
+            </div>
+            <div class="col-lg-6">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+            </div>
+            </div>*@
             @*<div class="col-lg-6">
-                <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
-                <input asp-for="TimeSigned" type="time" class="form-control" />
-                <span asp-validation-for="TimeSigned" class="text-danger"></span>
-                </div>
-                <div class="col-lg-6">
-                <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
-                <input asp-for="TimeRequested" type="time" class="form-control" />
-                <span asp-validation-for="TimeRequested" class="text-danger"></span>
-                </div>*@
+            <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
+            <input asp-for="TimeSigned" type="time" class="form-control" />
+            <span asp-validation-for="TimeSigned" class="text-danger"></span>
+            </div>
+            <div class="col-lg-6">
+            <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
+            <input asp-for="TimeRequested" type="time" class="form-control" />
+            <span asp-validation-for="TimeRequested" class="text-danger"></span>
+            </div>*@
         </div>
     </div>
 </div>
@@ -199,7 +204,8 @@
 <input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
-<script>$(function () {
+<script>
+    $(function () {
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");

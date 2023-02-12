@@ -409,6 +409,8 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Company, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(x => x.Department, opt => opt.Ignore())
                 //.ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
                 //.ForMember(x => x.CraftRate, opt => opt.Ignore())
                 //.ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))

@@ -8,6 +8,7 @@ using ViewModels.TimeOnTools.Shift;
 using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using Models.Common;
+using ViewModels.Common.Department;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -33,6 +34,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }

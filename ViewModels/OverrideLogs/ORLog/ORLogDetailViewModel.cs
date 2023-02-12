@@ -9,6 +9,7 @@ using Enums;
 using Helpers.Extensions;
 using System.Globalization;
 using ViewModels.Authentication.User;
+using ViewModels.Common.Department;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -64,5 +65,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
+
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
     }
 }

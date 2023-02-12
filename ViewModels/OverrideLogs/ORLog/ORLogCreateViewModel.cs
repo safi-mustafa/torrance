@@ -2,6 +2,7 @@
 using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
+using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.Shift;
@@ -32,6 +33,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public CompanyBriefViewModel Company { get; set; } = new();
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
