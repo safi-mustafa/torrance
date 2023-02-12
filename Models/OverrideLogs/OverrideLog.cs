@@ -35,19 +35,7 @@ namespace Models.OverrideLogs
 
         [ForeignKey("Employee")]
         public long? EmployeeId { get; set; }
-        public Employee? Employee { get; set; }
-
-        //[ForeignKey("CraftRate")]
-        //public long CraftRateId { get; set; }
-        //public CraftRate CraftRate { get; set; }
-
-        [ForeignKey("CraftSkill")]
-        public long CraftSkillId { get; set; }
-        public CraftSkill CraftSkill { get; set; }
-
-        [ForeignKey("OverrideType")]
-        public long OverrideTypeId { get; set; }
-        public OverrideType OverrideType { get; set; }
+        public ToranceUser? Employee { get; set; }
 
         [ForeignKey("Contractor")]
         public long? ContractorId { get; set; }
@@ -56,5 +44,7 @@ namespace Models.OverrideLogs
         [ForeignKey("Approver")]
         public long? ApproverId { get; set; }
         public ToranceUser? Approver { get; set; }
+
+        public double TotalCost { get; set; }
     }
 }

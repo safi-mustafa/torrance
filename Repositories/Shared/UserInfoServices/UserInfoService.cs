@@ -18,7 +18,7 @@ namespace Repositories.Shared.UserInfoServices
         }
         public string LoggedInEmployeeId()
         {
-            var empId = _httpContextAccessor?.HttpContext.User.FindFirstValue("EmployeeId");
+            var empId = _httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return empId;
         }
         public string LoggedInUserImageUrl()

@@ -40,31 +40,7 @@
                     <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
-                </div>
-            </div>
 
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" for="CraftSkill" />
-                </div>
-            </div>
-          @*  <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_CraftRate.cshtml" for="CraftRate" />
-                </div>
-            </div>*@
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="OverrideHours" class="form-label fw-600"></label>
-                    <input asp-for="OverrideHours" type="number" class="form-control" />
-                    <span asp-validation-for="OverrideHours" class="validation-invalid-label"></span>
-                </div>
-            </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="PoNumber" class="form-label fw-600"></label>
@@ -106,13 +82,56 @@
             {
                 <input asp-for="Approver.Id" type="hidden" />
             }
+
+            <div class="col-md-12 mt-3">
+                <div class="form-group costs-inputs-container row">
+                    <h4 class="col-md-12">Costs</h4>
+                    <span class="cost-override-type-td col-md-3">
+                        <label class="form-label fw-600">Override Type</label>
+                        <select asp-items="Html.GetEnumSelectList(typeof (OverrideTypeCatalog))" id="cost-override-type" class="cost-type form-control simple-dd"></select>
+                    </span>
+                    <span class="cost-hours-td col-md-3">
+                        <label class="form-label fw-600">Hours</label>
+                        <input type="text" name="cost-hours" value="" id="cost-hours" class="form-control cost-hours cost" placeholder="Hours" />
+                    </span>
+                    <span class="cost-father-name-td col-md-3">
+                        <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" model='@(new ViewModels.OverrideLogs.CraftSkillBriefViewModel())' id="cost-craft" class="cost-craft cost" />
+                    </span>
+
+                    <span class="text-center col-md-3">
+                        <button type="button" class="add-cost btn-circle btn-sm"><i class="icon-plus2"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="table-responsive my-3" id="cost-table">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Override Type</th>
+                            <th>Craft</th>
+                            <th>Hours</th>
+                            <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody class="cost-tbody">
+                        @for (var i = 0; i < Model.Costs.Count(); i++)
+                        {
+                            @await Html.PartialAsync("~/Views/OverrideLog/_CostRow.cshtml", Model.Costs[i], new ViewDataDictionary(ViewData) { { "RowNumber", i } })
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
-<script>$(function () {
+<input asp-for="Employee.Id" type="hidden" />
+
+<script>
+    $(function () {
+        $('#requester-id').off('change.select2');
         $('#requester-id').on('change.select2', function (e) {
+            debugger;
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");
             }
@@ -120,5 +139,92 @@
                 $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
             }
         });
-    });</script>
+        $(document).off("click", ".add-cost");
+        $(document).on("click", ".add-cost", function () {
+            AddCost(this);
+        });
+        $(document).off("click", ".remove-cost");
+        $(document).on("click", ".remove-cost", function () {
+            $(this).closest("tr").remove();
+            RefreshInputIndexes();
+        });
+    });
+    function AddCost(element) {
+        var thisElement = $(element);
+        var overrideType = $("#cost-override-type").val();
+        var costHours = $("#cost-hours").val();
+        var costCraftId = $("#craft-skill-id").val();
+        var costCraftName = $("#craft-skill-id").text();
+        costCraftName = costCraftName.replace(/(\r\n|\n|\r)/gm, "");
+        if (overrideType !== null && overrideType !== "" && costHours != null && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
+            var rowNumber = $(".cost-row").length;
+            var obj = {
+                'OverrideType': overrideType,
+                'CraftSkill': {
+                    'Id': costCraftId,
+                    'Name': costCraftName
+                },
+                'OverrideHours': costHours
+            }
+            console.log(obj, rowNumber);
+            AddCosttRow(obj, rowNumber);
+            ResetCostInputs();
+        }
+        else {
+            swal.fire({
+                title: 'Validation Error',
+                text: "OverrideType, Craft and Hours are required fields.",
+                type: 'error',
+                showCancelButton: true,
+                confirmButtonText: "Okay",
+                cancelButtonText: "Cancel",
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            });
+        }
+    }
+    function ResetCostInputs() {
+        $('.cost-inputs-container').find(':input').val(null);
+    }
+
+    function AddCosttRow(obj, rowNumber) {
+        $.ajax({
+            url: "/OverrideLog/_CostRow",
+            type: "post",
+            data: { model: obj, 'rowNumber': rowNumber },
+            dataType: "html",
+            success: function (response) {
+                console.log(response);
+                $('#cost-table tbody').append(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function RefreshInputIndexes() {
+        var rowIndex = 0;
+        $.each($("#cost-table tr"), function () {
+
+            if ($(this).find('input').length > 1) {
+                var id = $(this).attr("id");
+                if (id != null && id != "") {
+                    $(this).attr("id", "cost-row-" + rowIndex);
+                }
+                $.each($(this).find('input'), function () {
+                    if ($(this).attr('name').split(".").length > 2) {
+
+                        $(this).attr("name", "Costs[" + rowIndex + "]." + $(this).attr('name').split(".")[1] + "." + $(this).attr('name').split(".")[2]);
+                    }
+                    else {
+                        $(this).attr("name", "Costs[" + rowIndex + "]." + $(this).attr('name').split(".")[1]);
+                    }
+                });
+                rowIndex++;
+            }
+        });
+    }
+</script>
 

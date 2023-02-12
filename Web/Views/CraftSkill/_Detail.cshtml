@@ -15,8 +15,20 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="Rate" class="form-label fw-600"></label>
-                    <div>@Model.FormattedRate</div>
+                    <label asp-for="STRate" class="form-label fw-600"></label>
+                    <div class="input-currency">@Model.STRate</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="OTRate" class="form-label fw-600"></label>
+                    <div class="input-currency">@Model.OTRate</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DTRate" class="form-label fw-600"></label>
+                    <div class="input-currency">@Model.DTRate</div>
                 </div>
             </div>
         </div>

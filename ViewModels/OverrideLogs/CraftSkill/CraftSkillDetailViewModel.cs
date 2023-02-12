@@ -12,17 +12,13 @@ namespace ViewModels.OverrideLogs
         [DisplayName("Skill")]
         public string Name { get; set; }
 
-        [DisplayName("Rate")]
-        public double Rate { get; set; }
+        [DisplayName("ST Rate")]
+        public double STRate { get; set; }
 
+        [DisplayName("OT Rate")]
+        public double OTRate { get; set; }
 
-        [DisplayName("Rate")]
-        public string FormattedRate
-        {
-            get
-            {
-                return $"${Rate.ToString("N", new CultureInfo("en-US"))}";
-            }
-        }
+        [DisplayName("DT Rate")]
+        public double DTRate { get; set; }
     }
 }

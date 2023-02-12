@@ -6,6 +6,7 @@ using Enums;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models.Common;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Pagination;
@@ -13,6 +14,7 @@ using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using ViewModels;
 using ViewModels.Notification;
 using ViewModels.OverrideLogs;
@@ -57,15 +59,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             searchFilters.StatusNot = loggedInUserRole == "Approver" ? Status.Pending : searchFilters.StatusNot;
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FirstName.ToString().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (searchFilters.Requester.Id == null || searchFilters.Requester.Id == 0 || x.Employee.Id == searchFilters.Requester.Id)
                             &&
                             (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
-                            &&
-                            (searchFilters.OverrideType.Id == null || searchFilters.OverrideType.Id == 0 || x.OverrideType.Id == searchFilters.OverrideType.Id)
+                            //&&
+                            //(searchFilters.OverrideType == null  || x.OverrideType == searchFilters.OverrideType)
                             &&
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
@@ -94,10 +96,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
                     .Include(x => x.Unit)
-                    .Include(x => x.OverrideType)
+                    //.Include(x => x.OverrideType)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
-                    .Include(x => x.CraftSkill)
+                    //.Include(x => x.CraftSkill)
                     //.Include(x => x.CraftRate)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
@@ -129,11 +131,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             try
             {
                 var dbModel = await _db.OverrideLogs
-                    .Include(x => x.CraftSkill)
+                    //.Include(x => x.CraftSkill)
                     //.Include(x => x.CraftRate)
                     .Include(x => x.Contractor)
                     .Include(x => x.ReasonForRequest)
-                    .Include(x => x.OverrideType)
+                    //.Include(x => x.OverrideType)
                     .Include(x => x.Shift)
                     .Include(x => x.Unit)
                     .Include(x => x.Approver)
@@ -145,7 +147,20 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
-
+                    mappedModel.Costs = await (from olc in _db.OverrideLogCost
+                                               join cs in _db.CraftSkills on olc.CraftSkillId equals cs.Id
+                                               where olc.OverrideLogId == dbModel.Id
+                                               select new ORLogCostViewModel
+                                               {
+                                                   Id = olc.Id,
+                                                   OverrideHours = olc.OverrideHours,
+                                                   CraftSkill = new CraftSkillBriefViewModel()
+                                                   {
+                                                       Id = cs.Id,
+                                                       Name = cs.Name
+                                                   },
+                                                   OverrideType = olc.OverrideType
+                                               }).ToListAsync();
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -165,12 +180,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 try
                 {
-
+                    var costs = model as IORLogCost;
                     var mappedModel = _mapper.Map<OverrideLog>(model);
                     mappedModel.Approver = null;
+                    mappedModel.Id = 0;
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
+                    mappedModel.TotalCost = await CalculateTotalCost(costs);
                     await _db.SaveChangesAsync();
+                    await SetORLogCosts(costs, mappedModel.Id);
                     string notificationTitle = "Override Log Created";
                     string notificationMessage = $"A new Override Log with PO# ({mappedModel.PoNumber}) has been created";
                     await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
@@ -193,6 +211,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 try
                 {
+                    var costs = model as IORLogCost;
                     var updateModel = model as ORLogModifyViewModel;
                     if (updateModel != null)
                     {
@@ -207,9 +226,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
+                            dbModel.TotalCost = await CalculateTotalCost(costs);
                             await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
-
+                            await SetORLogCosts(costs, dbModel.Id);
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                             return response;
@@ -232,9 +252,75 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var role = _userInfoService.LoggedInUserRole();
             if (role == "Employee")
             {
-                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInEmployeeId());
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
             }
-            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+            mappedModel.CompanyId = (await _db.Users.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync()) ?? 0;
+        }
+
+        public async Task<bool> SetORLogCosts(IORLogCost overrideLogCost, long id)
+        {
+            try
+            {
+                var oldCosts = await _db.OverrideLogCost.Where(x => x.OverrideLogId == id).ToListAsync();
+                _db.OverrideLogCost.RemoveRange(oldCosts);
+                if (overrideLogCost.Costs.Count() > 0)
+                {
+                    List<OverrideLogCost> list = new List<OverrideLogCost>();
+                    foreach (var cost in overrideLogCost.Costs)
+                    {
+                        OverrideLogCost dbCost = new OverrideLogCost();
+                        dbCost.OverrideHours = cost.OverrideHours;
+                        dbCost.CraftSkillId = cost.CraftSkill.Id ?? 0;
+                        dbCost.OverrideType = cost.OverrideType;
+                        dbCost.OverrideLogId = id;
+                        list.Add(dbCost);
+                    }
+                    await _db.AddRangeAsync(list);
+                    await _db.SaveChangesAsync();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"ORLogService SetORLogCosts method threw an exception, Message: {ex.Message}");
+                throw ex;
+            }
+        }
+
+        private async Task<double> CalculateTotalCost(IORLogCost overrideLogCost)
+        {
+            if (overrideLogCost.Costs == null || overrideLogCost.Costs.Count < 1)
+            {
+                return 0;
+            }
+            var crafts = await _db.CraftSkills.Where(x => x.IsDeleted == false).ToListAsync();
+            double totalCost = 0;
+            foreach (var cost in overrideLogCost.Costs)
+            {
+                double craftCost = 0;
+                var selectedCraft = crafts.Where(x => x.Id == cost.CraftSkill.Id).FirstOrDefault();
+                if (selectedCraft != null)
+                {
+                    if (cost.OverrideType == OverrideTypeCatalog.ST)
+                    {
+                        craftCost = selectedCraft.STRate;
+                    }
+                    else if (cost.OverrideType == OverrideTypeCatalog.OT)
+                    {
+                        craftCost = selectedCraft.OTRate;
+                    }
+                    else
+                    {
+                        craftCost = selectedCraft.DTRate;
+                    }
+                }
+
+                totalCost += cost.OverrideHours * craftCost;
+            }
+            return totalCost;
+
         }
     }
 }

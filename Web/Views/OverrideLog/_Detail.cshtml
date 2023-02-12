@@ -52,34 +52,7 @@
             <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="OverrideType" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.OverrideType?.Name) ? "-" : Model.OverrideType.Name)</div>
-        </div>
-    </div>
 
-
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="CraftSkill" class="form-label fw-600">Craft Skill</label>
-            <div>@(string.IsNullOrEmpty(Model.CraftSkill?.Name) ? "-" : Model.CraftSkill.Name)</div>
-        </div>
-    </div>
-
-
-   @* <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="CraftRate" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.CraftRate?.Name) ? "-" : Model.CraftRate.Name)</div>
-        </div>
-    </div>*@
-    <div class="col-lg-6">
-        <div class="mb-3">
-            <label asp-for="OverrideHours" class="form-label fw-600"></label>
-            <div>@Model.OverrideHours</div>
-        </div>
-    </div>
 
 
     <div class="col-lg-6">
@@ -110,14 +83,27 @@
             <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? "-" : Model.Approver.Name)</div>
         </div>
     </div>
+    <div class="col-md-12 mt-3">
+        <h4 class="col-md-12">Costs</h4>
 
-
-
-
-
-
-
-
+        <div class="table-responsive my-3" id="cost-table">
+            <table class="table text-nowrap">
+                <thead>
+                    <tr>
+                        <th>Override Type</th>
+                        <th>Craft</th>
+                        <th>Hours</th>
+                    </tr>
+                </thead>
+                <tbody class="cost-tbody">
+                    @for (var i = 0; i < Model.Costs.Count(); i++)
+                    {
+                        @await Html.PartialAsync("~/Views/OverrideLog/_CostRow.cshtml", Model.Costs[i], new ViewDataDictionary(ViewData) { { "RowNumber", i },{"IsDetailPage",true} })
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <input type="hidden" id="log-id" asp-for="Id" />

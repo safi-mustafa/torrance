@@ -23,7 +23,9 @@ namespace Web.Controllers
             return new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "Name",data = "Name"},
-                new DataTableViewModel{title = "Rate",data = "FormattedRate"},
+                new DataTableViewModel{title = "ST Rate",data = "STRate", className="dt-currency"},
+                new DataTableViewModel{title = "OT Rate",data = "OTRate", className="dt-currency"},
+                new DataTableViewModel{title = "DT Rate",data = "DTRate", className="dt-currency"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

@@ -29,7 +29,7 @@ namespace Models.WeldingRodRecord
 
         [ForeignKey("Employee")]
         public long? EmployeeId { get; set; }
-        public Employee? Employee { get; set; }
+        public ToranceUser? Employee { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }

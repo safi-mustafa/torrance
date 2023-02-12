@@ -13,7 +13,18 @@ namespace ViewModels.OverrideLogs
         public string Name { get; set; }
 
         [Required]
-        [DisplayName("Rate")]
-        public double Rate { get; set; }
+        [DisplayName("ST Rate")]
+        [Range(1, double.MaxValue, ErrorMessage = "The ST Rate must be greater than zero.")]
+        public double STRate { get; set; }
+
+        [Required]
+        [DisplayName("OT Rate")]
+        [Range(1, double.MaxValue, ErrorMessage = "The OT Rate must be greater than zero.")]
+        public double OTRate { get; set; }
+
+        [Required]
+        [DisplayName("DT Rate")]
+        [Range(1, double.MaxValue, ErrorMessage = "The DT Rate must be greater than zero.")]
+        public double DTRate { get; set; }
     }
 }

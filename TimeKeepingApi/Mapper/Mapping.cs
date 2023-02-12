@@ -304,6 +304,7 @@ namespace TorranceApi.Mapper
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
+            CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<Employee, EmployeeBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
@@ -344,7 +345,7 @@ namespace TorranceApi.Mapper
 
             CreateMap<ORLogSearchViewModel, ORLogAPISearchViewModel>()
                 .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
-                .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
+                //.ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
@@ -410,12 +411,12 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 //.ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
                 //.ForMember(x => x.CraftRate, opt => opt.Ignore())
-                .ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
-                .ForMember(x => x.CraftSkill, opt => opt.Ignore())
+                //.ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
+                //.ForMember(x => x.CraftSkill, opt => opt.Ignore())
                 .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
                 .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
-                .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
-                .ForMember(x => x.OverrideType, opt => opt.Ignore())
+                //.ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
+                //.ForMember(x => x.OverrideType, opt => opt.Ignore())
                 .ForMember(src => src.Employee, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))

@@ -14,7 +14,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public EmployeeBriefViewModel Requester { get; set; } = new EmployeeBriefViewModel(false);
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
-        public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel(false);
+        public OverrideTypeCatalog? OverrideType { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false);
 
         public StatusSearchEnum? Status { get; set; } = null;

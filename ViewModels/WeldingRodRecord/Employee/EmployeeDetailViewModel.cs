@@ -11,17 +11,9 @@ using ViewModels.Authentication.User;
 
 namespace ViewModels.WeldingRodRecord.Employee
 {
-    public class EmployeeDetailViewModel : UserDetailViewModel, ISelect2Data
+    public class EmployeeDetailViewModel : UserDetailViewModel
     {
-        public long? Id { get; set; }
-        public string Name
-        {
-            get
-            {
-                return FullName;
-            }
-            set { }
-        }
+        
         
     }
 

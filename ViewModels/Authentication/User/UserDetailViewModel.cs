@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Helpers.Extensions;
+using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Common.Company;
@@ -8,9 +9,17 @@ using ViewModels.Shared;
 
 namespace ViewModels.Authentication.User
 {
-    public class UserDetailViewModel : BaseCrudViewModel
+    public class UserDetailViewModel : BaseCrudViewModel, ISelect2Data
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
+        public string Name
+        {
+            get
+            {
+                return FullName;
+            }
+            set { }
+        }
         public string Email { get; set; }
         [Display(Name = "Username")]
         public string UserName { get; set; }

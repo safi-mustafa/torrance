@@ -39,22 +39,6 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public string Description { get; set; }
 
-        [Display(Name = "Hours")]
-        public int OverrideHours { get; set; }
-
-        public string FormattedCraft
-        {
-            get
-            {
-                double rate = 0;
-                if (CraftSkill != null)
-                {
-                    rate = (CraftSkill.Rate ?? 0) * OverrideHours;
-                }
-                return $"{CraftSkill.Name} (${rate.ToString("N", new CultureInfo("en-US"))})";
-            }
-        }
-
         [Display(Name = "PO Number")]
 
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
@@ -72,13 +56,13 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
 
-        public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
-
-        public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
+       
 
         public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+
+        public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
     }
 }

@@ -228,7 +228,6 @@
     <Folder Include="Views\Attachment\" />
     <Folder Include="Controllers\SharedControllers\" />
     <Folder Include="Views\Approval\" />
-    <Folder Include="Views\OverrideLog\" />
     <Folder Include="Views\DelayType\" />
   </ItemGroup>
 

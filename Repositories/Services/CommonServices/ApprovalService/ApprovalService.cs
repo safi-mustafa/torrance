@@ -62,7 +62,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (search.Status == x.Status)
                          &&
-                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -128,7 +128,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (search.Status == null || search.Status == x.Status)
                          &&
-                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel

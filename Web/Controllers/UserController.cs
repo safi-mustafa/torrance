@@ -18,11 +18,11 @@ namespace Web.Controllers
 {
     [Authorize]
     public abstract class UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel> : CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where DetailViewModel : UserDetailViewModel, IBaseCrudViewModel, new()
         where PaginatedViewModel : class, new()
         where CreateViewModel : UserUpdateViewModel, IBaseCrudViewModel, new()
         where UpdateViewModel : UserUpdateViewModel, IBaseCrudViewModel, IIdentitifier, new()
-        where SearchViewModel : IBaseSearchModel, new()
+        where SearchViewModel : class, IBaseSearchModel, new()
     {
         private readonly IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> _service;
         private readonly ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> _logger;
@@ -69,12 +69,14 @@ namespace Web.Controllers
 
             };
         }
-        protected UserSearchViewModel SetSelect2CustomParams(string customParams)
+        protected SearchViewModel SetSelect2CustomParams(string customParams)
         {
-            var svm = JsonConvert.DeserializeObject<UserSearchViewModel>(customParams);
+            if (customParams == null)
+                return new SearchViewModel();
+            var svm = JsonConvert.DeserializeObject<SearchViewModel>(customParams);
             return svm;
         }
-        public async Task<JsonResult> Select2(string prefix, int pageSize, int pageNumber, string customParams)
+        public override async Task<JsonResult> Select2(string prefix, int pageSize, int pageNumber, string customParams)
         {
             try
             {
@@ -84,7 +86,7 @@ namespace Web.Controllers
                 svm.CurrentPage = pageNumber;
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _service.GetAll<PaginatedViewModel>(svm);
-                var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<UserDetailViewModel>>;
+                var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<PaginatedViewModel>>;
                 var select2List = GetSelect2List(parsedResponse.ReturnModel);
                 return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, select2List));
             }
@@ -94,22 +96,21 @@ namespace Web.Controllers
                 return null;
             }
         }
-
-        public virtual List<Select2OptionModel<ISelect2Data>> GetSelect2List(PaginatedResultModel<UserDetailViewModel> paginatedResult)
+        public override List<Select2OptionModel<ISelect2Data>> GetSelect2List(PaginatedResultModel<PaginatedViewModel> paginatedResult)
         {
             List<Select2OptionModel<ISelect2Data>> response = new List<Select2OptionModel<ISelect2Data>>();
-            foreach (var item in paginatedResult.Items)
+            var paginatedItems = (paginatedResult as PaginatedResultModel<DetailViewModel>);
+            foreach (var item in paginatedItems.Items)
             {
                 response.Add(new Select2OptionModel<ISelect2Data>
                 {
                     id = item.Id.ToString(),
-                    text = item.FullName
+                    text = item.Name,
+                    additionalAttributesModel = item
                 });
             }
-
             return response.OrderBy(m => m.id).ToList();
         }
-
         public override async Task<ActionResult> Create(CreateViewModel model)
         {
             bool isUnique = await _service.IsAccessCodeUnique(model.Id, model.AccessCode);
@@ -148,7 +149,7 @@ namespace Web.Controllers
                     var model = parsedResponse?.ReturnModel ?? new();
                     ChangeAccessCodeVM viewModel = new ChangeAccessCodeVM
                     {
-                        Id = model.Id,
+                        Id = model.Id ?? 0,
                         CurrentAccessCode = model.AccessCode
                     };
                     return View(viewModel);

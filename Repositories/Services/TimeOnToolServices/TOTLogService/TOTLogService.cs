@@ -230,9 +230,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             var role = _userInfoService.LoggedInUserRole();
             if (role == "Employee")
             {
-                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInEmployeeId());
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
             }
-            mappedModel.CompanyId = await _db.Employees.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync();
+            mappedModel.CompanyId = (await _db.Users.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync()) ?? 0;
         }
 
         public async Task<IRepositoryResponse> GetTWRNumericValues<BaseBriefVM>(IBaseSearchModel search)

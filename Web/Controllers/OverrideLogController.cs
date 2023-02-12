@@ -111,6 +111,12 @@ namespace Web.Controllers
             vm.IsResponsiveDatatable = false;
             return vm;
         }
+
+        public IActionResult _CostRow(ORLogCostViewModel model, int rowNumber)//
+        {
+            ViewData["RowNumber"] = rowNumber;
+            return PartialView("_CostRow", model);
+        }
     }
 
 }

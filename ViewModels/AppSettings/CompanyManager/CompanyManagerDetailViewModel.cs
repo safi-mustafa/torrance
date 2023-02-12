@@ -11,17 +11,9 @@ using ViewModels.Authentication.User;
 
 namespace ViewModels.AppSettings.CompanyManager
 {
-    public class CompanyManagerDetailViewModel : UserDetailViewModel, ISelect2Data
+    public class CompanyManagerDetailViewModel : UserDetailViewModel
     {
-        public long? Id { get; set; }
-        public string Name
-        {
-            get
-            {
-                return FullName;
-            }
-            set { }
-        }
+        
         
     }
 

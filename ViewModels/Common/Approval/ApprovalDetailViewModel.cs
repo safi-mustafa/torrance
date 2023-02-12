@@ -1,6 +1,7 @@
 ﻿using System;
 using Enums;
 using Helpers.Extensions;
+using Models;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
@@ -21,8 +22,8 @@ namespace ViewModels.Common
         public string FormattedDate { get => Date.ToString("MM/dd/yyyy HH:mm:ss"); }
         public LogType Type { get; set; }
         public string FormattedLogType { get => Type.GetDisplayName(); }
-        public Employee? Employee { get; set; }
-        public string Requester { get => Employee != null ? $"{Employee.FirstName} {Employee.LastName}" : ""; }
+        public ToranceUser? Employee { get; set; }
+        public string Requester { get => Employee != null ? $"{Employee.FullName}" : ""; }
         public string Department { get; set; }
         public string Contractor { get; set; }
         public DelayType DelayType { get; set; }

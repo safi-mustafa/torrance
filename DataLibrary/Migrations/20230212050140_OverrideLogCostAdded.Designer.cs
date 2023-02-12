@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230212050140_OverrideLogCostAdded")]
+    partial class OverrideLogCostAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -679,9 +682,6 @@ namespace DataLibrary.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("TotalCost")
-                        .HasColumnType("float");
-
                     b.Property<long>("UnitId")
                         .HasColumnType("bigint");
 
@@ -714,35 +714,6 @@ namespace DataLibrary.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("OverrideLogs");
-                });
-
-            modelBuilder.Entity("Models.OverrideLogs.OverrideLogCost", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CraftSkillId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("OverrideHours")
-                        .HasColumnType("int");
-
-                    b.Property<long>("OverrideLogId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("OverrideType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CraftSkillId");
-
-                    b.HasIndex("OverrideLogId");
-
-                    b.ToTable("OverrideLogCost");
                 });
 
             modelBuilder.Entity("Models.OverrideLogs.OverrideType", b =>
@@ -1745,7 +1716,7 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("ContractorId");
 
-                    b.HasOne("Models.ToranceUser", "Employee")
+                    b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
@@ -1782,25 +1753,6 @@ namespace DataLibrary.Migrations
                     b.Navigation("Unit");
                 });
 
-            modelBuilder.Entity("Models.OverrideLogs.OverrideLogCost", b =>
-                {
-                    b.HasOne("Models.OverrideLogs.CraftSkill", "CraftSkill")
-                        .WithMany()
-                        .HasForeignKey("CraftSkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.OverrideLogs.OverrideLog", "OverrideLog")
-                        .WithMany()
-                        .HasForeignKey("OverrideLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CraftSkill");
-
-                    b.Navigation("OverrideLog");
-                });
-
             modelBuilder.Entity("Models.TimeOnTools.TOTLog", b =>
                 {
                     b.HasOne("Models.ToranceUser", "Approver")
@@ -1827,7 +1779,7 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("DepartmentId");
 
-                    b.HasOne("Models.ToranceUser", "Employee")
+                    b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
@@ -1942,7 +1894,7 @@ namespace DataLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.ToranceUser", "Employee")
+                    b.HasOne("Models.WeldingRodRecord.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 

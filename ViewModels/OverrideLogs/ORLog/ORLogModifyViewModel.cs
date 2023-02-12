@@ -7,18 +7,15 @@ using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.Authentication;
 using ViewModels.Authentication.User;
+using Models.Common;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
     {
 
         [Display(Name = "Completed")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
-
-        [Display(Name = "Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
-        public int OverrideHours { get; set; }
 
         [Required(ErrorMessage = "The PO Number field is required.")]
         [Display(Name = "PO Number")]
@@ -33,17 +30,13 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
 
-        //public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
-
-        public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
-
-        public OverrideTypeBriefViewModel OverrideType { get; set; } = new OverrideTypeBriefViewModel();
-
-        public EmployeeBriefViewModel Employee { get; set; } = new();
-        public CompanyBriefViewModel Company { get; set; } = new();
-        public ApproverBriefViewModel Approver { get; set; } = new(true);
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }
+
+        public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
     }
 }

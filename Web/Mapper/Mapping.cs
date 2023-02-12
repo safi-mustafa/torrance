@@ -238,6 +238,7 @@ namespace Models.Mapper
 
 
             //User
+            CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<ToranceUser, UserBriefViewModel>()
                 .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
@@ -366,12 +367,12 @@ namespace Models.Mapper
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 //.ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))
                 //.ForMember(x => x.CraftRate, opt => opt.Ignore())
-                .ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
-                .ForMember(x => x.CraftSkill, opt => opt.Ignore())
+                //.ForMember(src => src.CraftSkillId, opt => opt.MapFrom(dest => dest.CraftSkill.Id))
+                //.ForMember(x => x.CraftSkill, opt => opt.Ignore())
                 .ForMember(src => src.ReasonForRequestId, opt => opt.MapFrom(dest => dest.ReasonForRequest.Id))
                 .ForMember(x => x.ReasonForRequest, opt => opt.Ignore())
-                .ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
-                .ForMember(x => x.OverrideType, opt => opt.Ignore())
+                //.ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
+                //.ForMember(x => x.OverrideType, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
