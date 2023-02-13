@@ -22,7 +22,7 @@
             {
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
                 <div class="col-lg-6">
