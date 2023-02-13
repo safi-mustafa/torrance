@@ -91,6 +91,10 @@ public class NotificationWorker : BackgroundService
                         }
                         
                     }
+                    else
+                    {
+                        notification.ResendCount += 1;
+                    }
                 }
             }
             await _db.SaveChangesAsync();

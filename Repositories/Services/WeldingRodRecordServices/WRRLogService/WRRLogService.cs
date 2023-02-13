@@ -163,7 +163,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "WRR Log Created";
                     string notificationMessage = $"A new WRR Log with TWR# ({mappedModel.Twr}) has been created";
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(WRRLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(WRRLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push,NotificationEventTypeCatalog.Created));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -191,7 +191,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         {
                             string notificationTitle = "WRR Log Updated";
                             string notificationMessage = $"The WRR Log with TWR# ({updateModel.Twr}) has been updated";
-                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(WRRLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(WRRLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
                         }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);

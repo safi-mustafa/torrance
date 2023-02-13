@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
@@ -49,6 +51,64 @@ namespace Repositories.Shared.NotificationServices
                             &&
                             (loggedInUserRole == "SuperAdmin" || x.SendTo == loggedInUserId)
                         ;
+        }
+        public override async Task<IRepositoryResponse> Create(CreateViewModel model)
+        {
+            var viewModel = model as NotificationModifyViewModel;
+            try
+            {
+                if ((viewModel.EventType == NotificationEventTypeCatalog.Created || viewModel.EventType == NotificationEventTypeCatalog.Updated) && (string.IsNullOrEmpty(viewModel.SendTo) || viewModel.SendTo == "0"))
+                {
+                    var unitId = await GetLogUnit(viewModel);
+                    var approvers = await _db.ApproverUnits.Where(x => x.UnitId == unitId).ToListAsync();
+                    if (approvers != null && approvers.Count > 0)
+                    {
+                        List<Notification> notifications = new List<Notification>();
+                        foreach (var approver in approvers)
+                        {
+                            var notificationMappedModel = _mapper.Map<Notification>(model);
+                            notificationMappedModel.SendTo = approver.ApproverId.ToString();
+                            notifications.Add(notificationMappedModel);
+
+                        }
+                        _db.Set<Notification>().AddRange(notifications);
+                        await _db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var mappedModel = _mapper.Map<Notification>(model);
+                    await _db.Set<Notification>().AddAsync(mappedModel);
+                    await _db.SaveChangesAsync();
+                }
+
+
+                var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception thrown in Create method of {typeof(Notification).FullName}");
+                return Response.BadRequestResponse(_response);
+            }
+        }
+
+        private async Task<long> GetLogUnit(NotificationModifyViewModel viewModel)
+        {
+            long unitId = 0;
+            if (viewModel.EntityType == NotificationEntityType.TOTLog)
+            {
+                unitId = await _db.TOTLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+            }
+            else if (viewModel.EntityType == NotificationEntityType.WRRLog)
+            {
+                unitId = await _db.WRRLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+            }
+            else
+            {
+                unitId = await _db.OverrideLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+            }
+            return unitId;
         }
     }
 }

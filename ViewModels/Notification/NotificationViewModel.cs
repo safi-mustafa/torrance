@@ -15,7 +15,7 @@ namespace ViewModels.Notification
         {
 
         }
-        public NotificationModifyViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type)
+        public NotificationModifyViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEventTypeCatalog eventType)
         {
             var pushNotification = new PushNotificationViewModel
             {
@@ -28,6 +28,7 @@ namespace ViewModels.Notification
 
             EntityId = logId;
             EntityType = GetNotificationEntityType(pushNotification.LogType);
+            EventType = eventType;
             pushNotification.EntityType = EntityType.ToString();
             Message = JsonConvert.SerializeObject(pushNotification);
             SendTo = sendTo;
@@ -39,6 +40,8 @@ namespace ViewModels.Notification
         public string? Subject { get; set; }
         public string SendTo { get; set; }
         public NotificationType Type { get; set; }
+
+        public NotificationEventTypeCatalog EventType { get; set; }
         public NotificationEntityType? EntityType { get; set; }
         public DateTime CreatedOn { get; set; }
         public string FormattedCreatedOn { get => CreatedOn.ToString("U"); }

@@ -123,10 +123,11 @@ namespace Repositories.Shared
                             identifierKey = "Twr";
                             identifier = (logRecord as WRRLog).Twr.ToString();
                         }
+                        var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                         string notificationTitle = $"{type} Log {status}";
                         string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                         var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
-                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
                         await transaction.CommitAsync();
                         return _response;
                     }

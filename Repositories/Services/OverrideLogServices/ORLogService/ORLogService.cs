@@ -194,7 +194,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetORLogCosts(costs, mappedModel.Id);
                     string notificationTitle = "Override Log Created";
                     string notificationMessage = $"A new Override Log with PO# ({mappedModel.PoNumber}) has been created";
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -225,7 +225,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             {
                                 string notificationTitle = "Override Log Updated";
                                 string notificationMessage = $"The Override Log with PO# ({updateModel.PoNumber}) has been updated";
-                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push));
+                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
                             }
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
