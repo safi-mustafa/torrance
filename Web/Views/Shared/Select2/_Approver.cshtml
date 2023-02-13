@@ -24,7 +24,7 @@
     {
     @id = elementId,
     @class = "form-control disable-field",
-    data_val_required = Model.ErrorMessage,
+    data_val_required =Model.IsValidationEnabled? Model.ErrorMessage:"",
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
     <input type="hidden" name="@name" value="@Model.Name" />
@@ -46,7 +46,7 @@
                 pageNumber: params.page,
                 customParams: JSON.stringify({
                     type: "@type",
-                    Unit:{
+                    Unit: {
                         Id: $(unitId).val()
                     }
                 })
@@ -54,7 +54,7 @@
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "@label");
-         $(unitId).on("change", function (e) {
+        $(unitId).on("change", function (e) {
             if ($(id).length > 0) {
                 $(id).val(null).trigger('change');
             }
