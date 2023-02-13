@@ -9,48 +9,84 @@
     <div class="col-lg-12">
         <div class="row">
 
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="StartOfWork" class="form-label fw-600"></label>
+                    <input asp-for="StartOfWork" type="date" class="form-control" />
+                    <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="WorkScope" class="form-label fw-600"></label>
+                    <input asp-for="WorkScope" type="text" class="form-control" />
+                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
+                </div>
+            </div>
             @if (isAdmin)
             {
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="mb-3">
                         <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="mb-3">
                         <label class="form-label fw-600">Company</label>
                         <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
                     </div>
                 </div>
             }
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
-                </div>
-            </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_User.cshtml" for="Foreman" view-data='new ViewDataDictionary(ViewData) { { "Id", "forman-id" }, { "UserTitle", "Foreman" }, { "Type", "Foreman" } }' />
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentNo" type="text" class="form-control" />
+                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
                 </div>
             </div>
-
             <div class="col-lg-6">
                 <label class="form-label fw-600">TWR</label>
 
                 <div class="mb-3 d-flex justify-content-start">
-                    @* <label asp-for="Twr" class="form-label fw-600"></label>
-                    <input asp-for="Twr" type="text" class="form-control" placeholder="Add Twr" />
-                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>*@
                     <div class="col-2">
                         <input type="text" value="TWR" class="form-control" readonly />
                     </div>
@@ -70,36 +106,6 @@
 
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
-                    <input asp-for="EquipmentNo" type="text" class="form-control" />
-                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="StartOfWork" class="form-label fw-600"></label>
-                    <input asp-for="StartOfWork" type="date" class="form-control" />
-                    <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
-                </div>
-            </div>
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -117,20 +123,6 @@
                 </div>
             </div>
 
-
-
-
-
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="JobDescription" class="form-label fw-600"></label>
-                    <input asp-for="JobDescription" type="text" class="form-control" />
-                    <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
-                </div>
-            </div>
-
-
             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
                 <div class="col-lg-6">
@@ -143,7 +135,17 @@
             {
                 <input asp-for="Approver.Id" type="hidden" />
             }
-            @*  <div class="col-lg-6">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    <label asp-for="JobDescription" class="form-label fw-600"></label>
+                    <input asp-for="JobDescription" type="text" class="form-control" />
+                    <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+
+           
+            @*  <div class="col-lg-4">
             <div class="mb-3">
             <label asp-for="HoursDelayed" class="form-label fw-600"></label>
             <input asp-for="HoursDelayed" type="number" class="form-control" />
@@ -151,7 +153,7 @@
             </div>
             </div>*@
 
-            @*          <div class="col-lg-6">
+            @*          <div class="col-lg-4">
             <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
             </div>
@@ -159,39 +161,39 @@
             *@
 
 
-            @*   <div class="col-lg-6">
+            @*   <div class="col-lg-4">
             <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
             </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
             <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
             </div>
             </div>*@
-            @*<div class="col-lg-6">
+            @*<div class="col-lg-4">
             <div class="mb-3">
             <label asp-for="Date" class="form-label fw-600"></label>
             <input asp-for="Date" type="date" class="form-control" />
             <span asp-validation-for="Date" class="validation-invalid-label"></span>
             </div>
             </div>*@
-            @* <div class="col-lg-6">
+            @* <div class="col-lg-4">
             <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
             </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
             <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
             </div>
             </div>*@
-            @*<div class="col-lg-6">
+            @*<div class="col-lg-4">
             <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
             <input asp-for="TimeSigned" type="time" class="form-control" />
             <span asp-validation-for="TimeSigned" class="text-danger"></span>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
             <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
             <input asp-for="TimeRequested" type="time" class="form-control" />
             <span asp-validation-for="TimeRequested" class="text-danger"></span>

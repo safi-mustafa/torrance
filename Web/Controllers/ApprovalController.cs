@@ -78,7 +78,7 @@ namespace Web.Controllers
                 {
                     _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                     response = await _wrrService.GetById(id);
-                    return GetDetailView<TOTLogDetailViewModel>(response, id, type);
+                    return GetDetailView<WRRLogDetailViewModel>(response, id, type);
                 }
                 else
                 {

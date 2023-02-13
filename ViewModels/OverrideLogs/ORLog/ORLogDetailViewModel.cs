@@ -37,7 +37,7 @@ namespace ViewModels.OverrideLogs.ORLog
                 return WorkCompletedDate.Date.ToString("MM/dd/yyyy");
             }
         }
-
+        public double TotalCost { get; set; }
         public string Description { get; set; }
 
         [Display(Name = "Workscope")]
@@ -60,12 +60,12 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
 
-       
+
 
         public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 

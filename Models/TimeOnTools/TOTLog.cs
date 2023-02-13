@@ -13,6 +13,8 @@ namespace Models.TimeOnTools
     {
         public DateTime? Date { get; set; }
         public string Twr { get; set; }
+
+        public string? WorkScope { get; set; }
         public long? ManHours { get; set; }
         public DateTime? StartOfWork { get; set; }
         public TimeSpan? TimeRequested { get; set; }

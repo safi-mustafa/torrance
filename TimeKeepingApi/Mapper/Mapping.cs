@@ -189,6 +189,7 @@ namespace TorranceApi.Mapper
                  .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
             CreateMap<WRRLogCreateViewModel, WRRLog>()
                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
@@ -208,6 +209,7 @@ namespace TorranceApi.Mapper
                  .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(x => x.Company, o => o.Ignore())
                .ReverseMap();
             CreateMap<WRRLog, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>()
                 .ReverseMap();

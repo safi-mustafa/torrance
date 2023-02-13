@@ -16,6 +16,8 @@ namespace Models.WeldingRodRecord
         public DateTime DateRodReturned { get; set; }
         public DateTime CalibrationDate { get; set; }
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
+
+        public string? WorkScope { get; set; }
         public string Twr { get; set; }
         public string? Email { get; set; }
         public DateTime RodCheckedOut { get; set; }
@@ -48,8 +50,13 @@ namespace Models.WeldingRodRecord
         public Location Location { get; set; }
 
         [ForeignKey("Contractor")]
-        public long ContractorId { get; set; }
-        public Contractor Contractor { get; set; }
+        public long? ContractorId { get; set; }
+        public Contractor? Contractor { get; set; }
+
+        [ForeignKey("Company")]
+        public long CompanyId { get; set; }
+        public Company Company { get; set; }
+
         [ForeignKey("Approver")]
         public long? ApproverId { get; set; }
         public ToranceUser? Approver { get; set; }

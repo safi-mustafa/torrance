@@ -13,6 +13,8 @@ using ViewModels.Common.Contractor;
 using Enums;
 using ViewModels.Authentication;
 using ViewModels.Authentication.User;
+using ViewModels.TimeOnTools.TOTLog;
+using ViewModels.Common.Company;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
@@ -25,8 +27,18 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Required]
         [Display(Name = "Fume Control Used", Prompt = "Add Fume Control Used")]
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
+
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
         [Display(Prompt = "Add Twr")]
-        public string Twr { get; set; }
+        public string? Twr
+        {
+            get
+            {
+                return TWRModel.Name + "-" + TWRModel.NumericPart.id + "-" + TWRModel.AlphabeticPart.id + "-" + TWRModel.Text;
+            }
+        }
+        public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
         [EmailAddress]
         [Display(Prompt = "Add Email")]
         //[Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
@@ -57,6 +69,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }
 }

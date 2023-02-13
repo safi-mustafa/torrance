@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230213130244_ContractorMadeNullableInWrrLog")]
+    partial class ContractorMadeNullableInWrrLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1582,9 +1585,6 @@ namespace DataLibrary.Migrations
                     b.Property<DateTime>("CalibrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("CompanyId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ContractorId")
                         .HasColumnType("bigint");
 
@@ -1652,8 +1652,6 @@ namespace DataLibrary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApproverId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ContractorId");
 
@@ -2012,12 +2010,6 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverId");
 
-                    b.HasOne("Models.Common.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorId");
@@ -2057,8 +2049,6 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("Approver");
-
-                    b.Navigation("Company");
 
                     b.Navigation("Contractor");
 

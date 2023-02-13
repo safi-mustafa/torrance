@@ -9,45 +9,61 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
+           
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
+                    <input asp-for="WorkCompletedDate" type="date" class="form-control" />
+                    <span asp-validation-for="WorkCompletedDate" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="WorkScope" class="form-label fw-600"></label>
+                    <input asp-for="WorkScope" type="text" class="form-control" />
+                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+                </div>
+            </div>
+           
+
             @if (isAdmin)
             {
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="mb-3">
 
                         <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="mb-3">
                         <label class="form-label fw-600">Company</label>
                         <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
                     </div>
                 </div>
             }
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
-                </div>
-            </div>
 
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
-            </div>
-
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="PoNumber" class="form-label fw-600"></label>
                     <input asp-for="PoNumber" type="number" class="form-control" />
@@ -55,17 +71,7 @@
                 </div>
             </div>
 
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
-                    <input asp-for="WorkCompletedDate" type="date" class="form-control" />
-                    <span asp-validation-for="WorkCompletedDate" class="validation-invalid-label"></span>
-                </div>
-            </div>
-
-
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="mb-3">
                     <label asp-for="Description" class="form-label fw-600"></label>
                     <input asp-for="Description" type="text" class="form-control" />
@@ -78,7 +84,7 @@
 
             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="mb-3">
                         <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
                     </div>
@@ -106,7 +112,8 @@
                     </span>
 
                     <span class="text-center col-md-3">
-                        <button type="button" class="add-cost btn-circle btn-sm"><i class="icon-plus2"></i></button>
+                        <label class="form-label fw-600 w-100">Add</label>
+                        <button type="button" class="add-cost btn-circle btn-sm" style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
                     </span>
                 </div>
             </div>

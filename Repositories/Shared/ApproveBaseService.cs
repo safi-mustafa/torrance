@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
+using Models.WeldingRodRecord;
 using Newtonsoft.Json;
 using Repositories.Common;
 using Repositories.Shared.Interfaces;
@@ -98,7 +99,7 @@ namespace Repositories.Shared
                         logRecord.Status = status;
                         if (logRecord.ApproverId == null)
                         {
-                            logRecord.ApproverId = _userInfoService.LoggedInUserId();
+                            logRecord.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
                         }
                         await _db.SaveChangesAsync();
                         string type = "";
@@ -118,9 +119,9 @@ namespace Repositories.Shared
                         }
                         else
                         {
-                            //type = "WRR";
-                            //identifierKey = "PO";
-                            //identifier = (logRecord as OverrideLog).PoNumber.ToString();
+                            type = "WRR";
+                            identifierKey = "Twr";
+                            identifier = (logRecord as WRRLog).Twr.ToString();
                         }
                         string notificationTitle = $"{type} Log {status}";
                         string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";

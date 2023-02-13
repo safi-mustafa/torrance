@@ -15,7 +15,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
             @if (isAdmin)
@@ -25,12 +25,14 @@
                         <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
                     </div>
                 </div>
-            }
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Company</label>
+                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+                    </div>
                 </div>
-            </div>
+            }
+            
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -54,10 +56,26 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Twr" class="form-label fw-600"></label>
-                    <input asp-for="Twr" type="text" class="form-control" />
-                    <span asp-validation-for="Twr" class="validation-invalid-label"></span>
+                <label class="form-label fw-600">TWR</label>
+
+                <div class="mb-3 d-flex justify-content-start">
+                    <div class="col-2">
+                        <input type="text" value="TWR" class="form-control" readonly />
+                    </div>
+
+                    <div class="col-3">
+                        <partial name="~/Views/Shared/Select2/_TWRNumeric.cshtml" for="TWRModel.NumericPart" />
+                    </div>
+
+                    <div class="col-3">
+                        <partial name="~/Views/Shared/Select2/_TWRAlphabetic.cshtml" for="TWRModel.AlphabeticPart" />
+                    </div>
+
+                    <div class="col-3">
+                        <input type="text" asp-for="TWRModel.Text" class="form-control" />
+                        <span asp-validation-for="TWRModel.Text" class="validation-invalid-label"></span>
+                    </div>
+
                 </div>
             </div>
 
@@ -129,3 +147,15 @@
 <input asp-for="Status" type="hidden" id="status-id" />
 <input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
+
+<script>
+    $(function () {
+        $('#requester-id').on('change.select2', function (e) {
+            if ($(this).select2('data')[0] === undefined) {
+                $("#requestor-company").val("");
+            }
+            else {
+                $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
+            }
+        });
+    });</script>

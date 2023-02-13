@@ -33,6 +33,9 @@ namespace ViewModels.TimeOnTools.TOTLog
             }
         }
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
+       
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]

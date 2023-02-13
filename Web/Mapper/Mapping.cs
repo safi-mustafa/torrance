@@ -161,9 +161,9 @@ namespace Models.Mapper
                 .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
 
-            
+
             CreateMap<ToranceUser, CompanyManagerDetailViewModel>().ReverseMap();
-          
+
 
 
 
@@ -186,6 +186,7 @@ namespace Models.Mapper
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+                .ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))

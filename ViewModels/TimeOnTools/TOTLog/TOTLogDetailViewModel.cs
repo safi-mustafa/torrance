@@ -42,6 +42,8 @@ namespace ViewModels.TimeOnTools.TOTLog
                 return CreatedOn.Date.ToString("MM/dd/yyyy");
             }
         }
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
         public string Twr { get; set; }
 
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
@@ -108,7 +110,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();

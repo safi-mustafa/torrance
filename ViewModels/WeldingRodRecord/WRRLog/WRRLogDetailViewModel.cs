@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication;
 using ViewModels.Authentication.User;
+using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
+using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
@@ -29,6 +31,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
                 return Date.Date.ToString("MM/dd/yyyy");
             }
         }
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
         [DisplayName("Date Rod Returned")]
         public DateTime DateRodReturned { get; set; }
         public string FormattedDateRodReturned
@@ -50,8 +54,9 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Required]
         [DisplayName("Fume Control Used")]
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
-        [DisplayName("Twr")]
         public string Twr { get; set; }
+
+        public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
         [DisplayName("Email")]
         public string Email { get; set; }
         [DisplayName("Rod Checked Out")]
@@ -80,7 +85,9 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
 
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
+
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }
 }
