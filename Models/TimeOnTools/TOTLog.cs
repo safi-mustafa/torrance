@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace Models.TimeOnTools
 {
-    public class TOTLog : BaseDBModel, IApprove, IEmployeeId
+    public class TOTLog : BaseDBModel, IApprove, IEmployeeId, IApproverId
     {
         public DateTime? Date { get; set; }
         public string Twr { get; set; }

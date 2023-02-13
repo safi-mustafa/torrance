@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Repositories.Common;
 using Repositories.Shared.Interfaces;
 using Repositories.Shared.NotificationServices;
+using Repositories.Shared.UserInfoServices;
 using ViewModels.Notification;
 using ViewModels.Shared;
 
@@ -22,7 +23,7 @@ namespace Repositories.Shared
 {
 
     public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
-        where TEntity : BaseDBModel, IApprove, IEmployeeId
+        where TEntity : BaseDBModel, IApprove, IEmployeeId, IApproverId
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
@@ -31,14 +32,16 @@ namespace Repositories.Shared
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
         private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
 
-        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response)
+        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
             _mapper = mapper;
             _response = response;
+            _userInfoService = userInfoService;
             _notificationService = notificationService;
         }
 
@@ -93,6 +96,10 @@ namespace Repositories.Shared
                     if (logRecord != null)
                     {
                         logRecord.Status = status;
+                        if (logRecord.ApproverId == null)
+                        {
+                            logRecord.ApproverId = _userInfoService.LoggedInUserId();
+                        }
                         await _db.SaveChangesAsync();
                         string type = "";
                         string identifier = "";
@@ -108,6 +115,12 @@ namespace Repositories.Shared
                             type = "Override";
                             identifierKey = "PO";
                             identifier = (logRecord as OverrideLog).PoNumber.ToString();
+                        }
+                        else
+                        {
+                            //type = "WRR";
+                            //identifierKey = "PO";
+                            //identifier = (logRecord as OverrideLog).PoNumber.ToString();
                         }
                         string notificationTitle = $"{type} Log {status}";
                         string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
