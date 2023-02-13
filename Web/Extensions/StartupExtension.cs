@@ -48,6 +48,7 @@ using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
+using Repositories.Services.AppSettingServices.ForemanService;
 
 namespace Web.Extensions
 {
@@ -125,6 +126,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IRodTypeService<,,>), typeof(RodTypeService<,,>));
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(CompanyManagerService<,,>));
+            services.AddScoped(typeof(IForemanService<,,>), typeof(ForemanService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
