@@ -64,7 +64,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public double? HoursDelayed { get; set; }
         public Status Status { get; set; }
 
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

@@ -38,7 +38,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
 
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }

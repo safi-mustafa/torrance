@@ -23,6 +23,14 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     {
         public long Id { get; set; }
         public DateTime CreatedOn { get; set; }
+
+        public string FormattedCreatedOn
+        {
+            get
+            {
+                return CreatedOn.Date.ToString("MM/dd/yyyy");
+            }
+        }
         public DateTime Date { get { return CreatedOn; } }
         public string FormattedDate
         {

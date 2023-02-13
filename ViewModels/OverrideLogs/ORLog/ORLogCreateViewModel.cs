@@ -37,7 +37,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
 
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 

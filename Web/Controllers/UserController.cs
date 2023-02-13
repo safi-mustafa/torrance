@@ -17,7 +17,7 @@ using ViewModels.Authentication;
 namespace Web.Controllers
 {
     [Authorize]
-    public abstract class UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel> : CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>
+    public class UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel> : CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>
         where DetailViewModel : UserDetailViewModel, IBaseCrudViewModel, new()
         where PaginatedViewModel : class, new()
         where CreateViewModel : UserUpdateViewModel, IBaseCrudViewModel, new()

@@ -37,6 +37,9 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                  new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
+                new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
+                new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
                 new DataTableViewModel{title = "Date Rod Returned",data = "FormattedDateRodReturned"},
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
@@ -47,6 +50,21 @@ namespace Web.Controllers
             });
             return dataColumns;
 
+        }
+
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>";
+            vm.IsResponsiveDatatable = false;
+            return vm;
         }
         public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
         {

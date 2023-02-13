@@ -2,6 +2,7 @@
 using Pagination;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using ViewModels.Common.Company;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.WeldingRodRecord.Employee;
@@ -14,7 +15,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     public class WRRLogSearchViewModel : BaseSearchModel
     {
         public string Email { get; set; }
-
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();

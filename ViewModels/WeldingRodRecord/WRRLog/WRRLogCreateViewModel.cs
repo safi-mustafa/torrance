@@ -41,11 +41,12 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DateTime RodCheckedOut { get; set; } = DateTime.Now;
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]
         public double RodCheckedOutLbs { get; set; }
+        [Required]
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
-        public double? RodReturnedWasteLbs { get; set; }
+        public double RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
 
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 

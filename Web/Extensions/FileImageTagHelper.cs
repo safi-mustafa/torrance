@@ -44,6 +44,9 @@ namespace Web.Extensions
                 case ".xlsx":
                     url = "xlsx.png";
                     break;
+                case "link":
+                    url = "link.png";
+                    break;
                 default:
                     url = "default.png";
                     break;

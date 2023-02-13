@@ -142,12 +142,12 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
                     return response;
                 }
-                _logger.LogWarning($"No record found for {typeof(TOTLog).FullName} in GetAll()");
+                _logger.LogWarning($"No record found for {typeof(WRRLog).FullName} in GetAll()");
                 return Response.NotFoundResponse(_response);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"GetAll() method for {typeof(TOTLog).FullName} threw an exception.");
+                _logger.LogError(ex, $"GetAll() method for {typeof(WRRLog).FullName} threw an exception.");
                 return Response.BadRequestResponse(_response);
             }
         }

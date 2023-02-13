@@ -48,12 +48,13 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Display(Name = "Rod Checked Out lbs", Prompt = "Add Rod Checked Out lbs")]
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]
         public double RodCheckedOutLbs { get; set; }
+        [Required]
         [Display(Name = "Rod Returned Waste lbs", Prompt = "Add Rod Returned Waste lbs")]
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
-        public double? RodReturnedWasteLbs { get; set; }
+        public double RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
 
-        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         private EmployeeBriefViewModel? _employee;
         public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }

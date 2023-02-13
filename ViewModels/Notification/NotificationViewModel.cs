@@ -49,7 +49,18 @@ namespace ViewModels.Notification
         }
         private NotificationEntityType GetNotificationEntityType(LogType logType)
         {
-            return logType == LogType.Override ? NotificationEntityType.OverrideLog : NotificationEntityType.TOTLog;
+            if (logType == LogType.Override)
+            {
+                return NotificationEntityType.OverrideLog;
+            }
+            else if (logType == LogType.TimeOnTools)
+            {
+                return NotificationEntityType.TOTLog;
+            }
+            else
+            {
+                return NotificationEntityType.WRRLog;
+            }
         }
     }
 }

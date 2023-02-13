@@ -5,7 +5,11 @@ namespace ViewModels.Common.Department
 {
     public class DepartmentBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public DepartmentBriefViewModel() : base(false, "The Department field is required.")
+        public DepartmentBriefViewModel() : base(false, "")
+        {
+
+        }
+        public DepartmentBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Department field is required.")
         {
 
         }
