@@ -9,10 +9,12 @@ using Microsoft.Extensions.Logging;
 using Models.Common;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
+using Models.TimeOnTools;
 using Pagination;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
+using Select2.Model;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using ViewModels;
@@ -248,6 +250,40 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
+        public async Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search)
+        {
+            try
+            {
+
+                List<Select2ViewModel> list = new List<Select2ViewModel>();
+                foreach (OverrideTypeCatalog overrideType in (OverrideTypeCatalog[])Enum.GetValues(typeof(OverrideTypeCatalog)))
+                {
+                    list.Add(new Select2ViewModel()
+                    {
+                        id = ((int)overrideType).ToString(),
+                        text = overrideType.ToString()
+                    });
+                }
+
+                if (list != null && list.Count > 0)
+                {
+                    var paginatedResult = new PaginatedResultModel<Select2ViewModel>();
+                    paginatedResult.Items = list;
+                    paginatedResult._meta = new();
+                    paginatedResult._links = new();
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>> { ReturnModel = paginatedResult };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for {typeof(TOTLog).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for {typeof(TOTLog).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
+        }
+
         private async Task SetRequesterId(OverrideLog mappedModel)
         {
             var role = _userInfoService.LoggedInUserRole();
@@ -324,4 +360,5 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         }
     }
+
 }

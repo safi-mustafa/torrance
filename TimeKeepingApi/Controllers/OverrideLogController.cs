@@ -7,6 +7,7 @@ using Pagination;
 using Repositories.Services.CommonServices;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
+using Select2.Model;
 using TorranceApi.Controllers;
 using ViewModels.Common;
 using ViewModels.OverrideLogs.ORLog;
@@ -61,6 +62,14 @@ namespace API.Controllers
             }
             ModelState.Remove("Company.Name");
             return base.Put(model);
+        }
+
+        [HttpGet]
+        [Route("~/api/[controller]/GetOverrideTypes")]
+        public async Task<IActionResult> GetOverrideTypes([FromQuery] BaseSearchModel search)
+        {
+            var result = await _oRLogService.GetOverrideTypes<Select2ViewModel>(search);
+            return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
     }
 }
