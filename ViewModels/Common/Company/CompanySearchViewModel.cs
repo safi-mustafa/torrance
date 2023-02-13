@@ -1,4 +1,7 @@
-﻿using Pagination;
+﻿using Models.OverrideLogs;
+using Pagination;
+using ViewModels.Common.Unit;
+using ViewModels.OverrideLogs;
 
 namespace ViewModels.Common.Company
 {
@@ -6,5 +9,7 @@ namespace ViewModels.Common.Company
     {
         public string Name { get; set; }
         public override string OrderByColumn { get; set; } = "Id";
+
+        public CraftSkillBriefViewModel CraftSkill { get; set; } = new();
     }
 }

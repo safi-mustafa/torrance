@@ -53,6 +53,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<OverrideLog> OverrideLogs { get; set; }
     public DbSet<OverrideLogCost> OverrideLogCost { get; set; }
     public DbSet<Company> Companies { get; set; }
+    public DbSet<CompanyCraft> CompanyCrafts { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<ApproverUnit> ApproverUnits { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿@using Enums;
 @using ViewModels.OverrideLogs.ORLog;
+@using Web.Extensions;
 @model ORLogModifyViewModel
 @{
     Layout = null;
@@ -99,8 +100,9 @@
                         <label class="form-label fw-600">Hours</label>
                         <input type="text" name="cost-hours" value="" id="cost-hours" class="form-control cost-hours cost" placeholder="Hours" />
                     </span>
-                    <span class="cost-father-name-td col-md-3">
-                        <partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" model='@(new ViewModels.OverrideLogs.CraftSkillBriefViewModel())' id="cost-craft" class="cost-craft cost" />
+                    <span class="cost-craft-skill-td col-md-3">
+                        @*<partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" model='@(new ViewModels.OverrideLogs.CraftSkillBriefViewModel())' />*@
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
                     </span>
 
                     <span class="text-center col-md-3">

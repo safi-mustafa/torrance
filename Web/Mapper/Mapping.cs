@@ -238,14 +238,16 @@ namespace Models.Mapper
 
 
             //User
-            CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
+            CreateMap<EmployeeBriefViewModel, ToranceUser>()
+                 .ForMember(src => src.FullName, opt => opt.MapFrom(dest => dest.Name))
+                 .ReverseMap();
             CreateMap<ToranceUser, UserBriefViewModel>()
                 .ConstructUsing(x => new UserBriefViewModel(true))
-                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.Email))
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                 .ReverseMap();
             CreateMap<ToranceUser, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<ApproverBriefViewModel, ToranceUser>()
-             .ForMember(src => src.Email, opt => opt.MapFrom(dest => dest.Name))
+             .ForMember(src => src.FullName, opt => opt.MapFrom(dest => dest.Name))
              .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
@@ -327,6 +329,7 @@ namespace Models.Mapper
             CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
             CreateMap<CraftSkillModifyViewModel, CraftSkill>().ReverseMap();
             CreateMap<CraftSkill, CraftSkillDetailViewModel>().ReverseMap();
+            CreateMap<CraftSkill, BaseBriefVM>().ReverseMap();
             CreateMap<CraftSkillModifyViewModel, CraftSkillDetailViewModel>().ReverseMap();
 
             //LeadPlanner
