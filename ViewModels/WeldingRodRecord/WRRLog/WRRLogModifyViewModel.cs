@@ -57,9 +57,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
-        //public UserBriefViewModel Approver { get; set; } = new UserBriefViewModel();
-
-        private ApproverBriefViewModel? _approver;
-        public ApproverBriefViewModel? Approver { get => _approver == null ? new ApproverBriefViewModel(true) : _approver; set => _approver = value; }
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
     }
 }

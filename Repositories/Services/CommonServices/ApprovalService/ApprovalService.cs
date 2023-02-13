@@ -6,6 +6,7 @@ using Enums;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models.Common;
 using Pagination;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using Repositories.Shared.UserInfoServices;
@@ -42,6 +43,13 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var loggedInUserId = long.Parse(_userInfo.LoggedInUserId());
             var isApprover = userRoles.Contains("Approver");
             var isEmployee = userRoles.Contains("Employee");
+            List<long> approverUnits = null;
+            bool checkForUnits = false;
+            if (isApprover)
+            {
+                checkForUnits = true;
+                approverUnits = await _db.ApproverUnits.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.Id).ToListAsync();
+            }
 
             try
             {
@@ -63,6 +71,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          (search.Status == x.Status)
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                         &&
+                         (checkForUnits == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -77,37 +87,39 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
                         }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
-                //var wrrLogsQueryable = _db.WRRLogs
-                //    .Include(x => x.Employee)
-                //    .Include(x => x.Approver)
-                //    .Include(x => x.Department)
-                //    .Include(x => x.Contractor)
-                //    .Include(x => x.Unit)
-                //    .Where(x =>
-                //         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                //         &&
-                //         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
-                //         &&
-                //         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                //         &&
-                //         (search.Status == null || search.Status == x.Status)
-                //         &&
-                //         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FirstName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
-                //    )
-                //    .Select(x =>
-                //    new ApprovalDetailViewModel
-                //    {
-                //        Id = x.Id,
-                //        Approver = x.Approver != null ? x.Approver.UserName : "",
-                //        Contractor = x.Contractor != null ? x.Contractor.Name : "",
-                //        Department = x.Department != null ? x.Department.Name : "",
-                //        Date = x.CreatedOn,
-                //        Status = x.Status,
-                //        TWR = x.Twr,
-                //        Unit = x.Unit != null ? x.Unit.Name : "",
-                //        Type = LogType.WeldingRodRecord,
-                //        Employee = x.Employee
-                //    }).AsQueryable();
+                var wrrLogsQueryable = _db.WRRLogs
+                    .Include(x => x.Employee)
+                    .Include(x => x.Approver)
+                    .Include(x => x.Department)
+                    .Include(x => x.Contractor)
+                    .Include(x => x.Unit)
+                    .Where(x =>
+                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                         &&
+                         (!userRoles.Contains("Approver") || (x.Approver != null && x.ApproverId == loggedInUserId))
+                         &&
+                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
+                         &&
+                         (search.Status == null || search.Status == x.Status)
+                         &&
+                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                         &&
+                         (checkForUnits == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
+                    )
+                    .Select(x =>
+                    new ApprovalDetailViewModel
+                    {
+                        Id = x.Id,
+                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Contractor = x.Contractor != null ? x.Contractor.Name : "",
+                        Department = x.Department != null ? x.Department.Name : "",
+                        Date = x.CreatedOn,
+                        Status = x.Status,
+                        TWR = x.Twr,
+                        Unit = x.Unit != null ? x.Unit.Name : "",
+                        Type = LogType.WeldingRodRecord,
+                        Employee = x.Employee
+                    }).AsQueryable();
 
                 var overrideLogsQueryable = _db.OverrideLogs
                     .Include(x => x.Employee)
@@ -129,6 +141,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          (search.Status == null || search.Status == x.Status)
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                         &&
+                         (checkForUnits == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel

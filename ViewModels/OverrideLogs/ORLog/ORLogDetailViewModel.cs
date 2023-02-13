@@ -40,6 +40,9 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public string Description { get; set; }
 
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
+
         [Display(Name = "PO Number")]
 
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]

@@ -25,6 +25,9 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required]
         public string Description { get; set; }
 
+        [Display(Name = "Workscope")]
+        public string? WorkScope { get; set; }
+
         public UnitBriefViewModel Unit { get; set; } = new();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
@@ -33,7 +36,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
