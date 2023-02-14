@@ -15,7 +15,7 @@ using ViewModels.Attachment;
 namespace Web.Controllers
 {
     [Authorize]
-
+    [Authorize(Roles = "SuperAdmin,Approver")]
     public class AttachmentController : CrudBaseController<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentSearchViewModel>
     {
         private readonly ILogger<AttachmentController> _logger;

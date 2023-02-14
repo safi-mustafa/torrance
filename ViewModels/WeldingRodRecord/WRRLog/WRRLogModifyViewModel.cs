@@ -20,7 +20,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
     {
-        [Display(Name = "Date Rod Returned")]
+        [Display(Name = "Rod Returned")]
         public DateTime DateRodReturned { get; set; } = DateTime.Now;
         [Display(Name = "Calibration Date")]
         public DateTime CalibrationDate { get; set; } = DateTime.Now;

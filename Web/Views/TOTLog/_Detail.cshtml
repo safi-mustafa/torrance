@@ -37,12 +37,12 @@
                     <div>@(string.IsNullOrEmpty(Model.ReasonForRequest.Name) ? "-" : Model.ReasonForRequest.Name)</div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            @*<div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600">Reason</label>
                     <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
                 </div>
-            </div>
+            </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="DelayType" class="form-label fw-600"></label>
@@ -73,7 +73,7 @@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="Foreman" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Foreman?.Name) ? "-" : Model.Foreman.Name)</div>
+                    <div>@(string.IsNullOrEmpty(Model.Foreman) ? "-" : Model.Foreman)</div>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -108,7 +108,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="FormattedCreatedOn" class="form-label fw-600"></label>
+                    <label asp-for="FormattedCreatedOn" class="form-label fw-600">Submitted</label>
                     <div>@Model.FormattedCreatedOn</div>
                 </div>
             </div>
@@ -122,8 +122,8 @@
 
             <div class="col-lg-12">
                 <div class="mb-3">
-                    <label asp-for="JobDescription" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.JobDescription) ? "-" : Model.JobDescription)</div>
+                    <label asp-for="WorkScope" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
                 </div>
             </div>
 

@@ -18,7 +18,7 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
-            @if (isAdmin)
+            @*@if (isAdmin)
             {
                 <div class="col-lg-6">
                     <div class="mb-3">
@@ -32,7 +32,11 @@
                     </div>
                 </div>
             }
-            
+            *@
+
+            <div class="col-lg-6">
+                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+            </div>
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -84,13 +88,13 @@
                     <partial name="~/Views/Shared/Select2/_WeldMethod.cshtml" for="WeldMethod" />
                 </div>
             </div>
-            <div class="col-lg-6">
+           @* <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label fw-600"></label>
                     <input asp-for="Email" type="email" class="form-control" />
                     <span asp-validation-for="Email" class="validation-invalid-label"></span>
                 </div>
-            </div>
+            </div>*@
 
             <div class="col-lg-6">
                 <div class="mb-3">

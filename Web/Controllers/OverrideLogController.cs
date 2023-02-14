@@ -40,6 +40,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
                 new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
+                new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
                 new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
                 new DataTableViewModel{title = "Completed",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},

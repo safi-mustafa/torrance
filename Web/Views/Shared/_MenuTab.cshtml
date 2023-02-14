@@ -14,15 +14,19 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
-                @if (!User.IsInRole("Approver"))
+                @if (User.IsInRole("SuperAdmin"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/">Dashboard</a></li>
                 }
-                <li class="nav-item"><a class="nav-link px-3" href="/Approval/Index">Approvals</a></li>
-                <li class="nav-item"><a class="nav-link px-3" href="/TOTLog/Index">Time on Tools</a></li>
-                <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
+                @if (!User.IsInRole("CompanyManager"))
+                {
+                    <li class="nav-item"><a class="nav-link px-3" href="/Approval/Index">Approvals</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/TOTLog/Index">Time on Tools</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
+                }
+
                 <li class="nav-item"><a class="nav-link px-3" href="/OverrideLog/Index">Overrides</a></li>
-                @if (!User.IsInRole("Approver"))
+                @if (User.IsInRole("SuperAdmin"))
                 {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,25 +52,20 @@
                             <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
                             <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
                             <a class="dropdown-item px-3" asp-controller="DelayType" asp-action="Index">Delay Type</a>
+                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Method</a>
+                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
+                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Type</a>
                             <a class="dropdown-item px-3" asp-controller="ReasonForRequest" asp-action="Index">Reason for Request</a>
                             <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
                             <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft</a>
                             @*<a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>*@
                             @*<a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>*@
-                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Method</a>
-                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
-                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Type</a>
                         </div>
                     </li>
-
-
-
-
                 }
-                <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files </a></li>
-
-                @if (User.IsInRole("Approver"))
+                @if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
                 {
+                    <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files </a></li>
                     <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>
                 }
             </ul>

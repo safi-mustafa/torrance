@@ -41,7 +41,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         }
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
-        [DisplayName("Date Rod Returned")]
+        [DisplayName("Returned")]
         public DateTime DateRodReturned { get; set; }
         public string FormattedDateRodReturned
         {
@@ -67,7 +67,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
         [DisplayName("Email")]
         public string Email { get; set; }
-        [DisplayName("Rod Checked Out")]
+        [DisplayName("Checked Out")]
         public DateTime RodCheckedOut { get; set; }
         public string FormattedRodCheckedOut
         {

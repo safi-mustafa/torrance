@@ -104,7 +104,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Shift)
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
-                    .Include(x => x.Foreman)
+                    //.Include(x => x.Foreman)
                     .Include(x => x.Employee)
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
@@ -228,8 +228,13 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             if (role == "Employee")
             {
                 mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
+                mappedModel.CompanyId = (await _db.Users.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync()) ?? 0;
             }
-            mappedModel.CompanyId = (await _db.Users.Where(x => x.Id == mappedModel.EmployeeId).Select(x => x.CompanyId).FirstOrDefaultAsync()) ?? 0;
+            else if (mappedModel.EmployeeId == null || mappedModel.EmployeeId < 1)
+            {
+                mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
+            }
+
         }
 
         public async Task<IRepositoryResponse> GetTWRNumericValues<BaseBriefVM>(IBaseSearchModel search)

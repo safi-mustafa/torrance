@@ -19,6 +19,7 @@ using ViewModels.WeldingRodRecord.WRRLog;
 namespace Web.Controllers
 {
     [Authorize]
+    [Authorize(Roles = "SuperAdmin,Approver,Employee")]
     public class TOTLogController : ApproveBaseController<ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel>, TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel, TOTLogDetailViewModel, TOTLogSearchViewModel>
     {
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
