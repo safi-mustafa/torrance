@@ -212,7 +212,9 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Company, o => o.Ignore())
                .ReverseMap();
             CreateMap<WRRLog, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>()
+                .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ReverseMap();
+
             CreateMap<WRRLogModifyViewModel, ViewModels.WeldingRodRecord.WRRLog.WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
@@ -430,7 +432,8 @@ namespace TorranceApi.Mapper
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<ORLogDetailViewModel, OverrideLog>()
+            CreateMap<OverrideLog, ORLogDetailViewModel>()
+                .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 //.ForMember(x => x.Employees, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()

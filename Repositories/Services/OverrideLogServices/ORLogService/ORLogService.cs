@@ -233,7 +233,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
-                            if (record.ApproverId != updateModel.Approver.Id)
+                            if (record.ApproverId != updateModel.Approver?.Id)
                             {
                                 string notificationTitle = "Override Log Updated";
                                 string notificationMessage = $"The Override Log with PO# ({updateModel.PoNumber}) has been updated";

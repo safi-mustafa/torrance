@@ -206,7 +206,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
-                        if (record.ApproverId != updateModel.Approver.Id)
+                        if (record.ApproverId != updateModel.Approver?.Id)
                         {
                             string notificationTitle = "TOT Log Updated";
                             string notificationMessage = $"The TOT Log with TWR# ({updateModel.Twr}) has been updated";

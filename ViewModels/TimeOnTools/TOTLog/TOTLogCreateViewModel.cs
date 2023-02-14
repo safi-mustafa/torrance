@@ -82,7 +82,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+        public string? Foreman { get; set; }
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 

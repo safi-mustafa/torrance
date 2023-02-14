@@ -106,7 +106,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Include(x => x.Company)
-                    .Where(x => x.Id == id).FirstOrDefaultAsync();
+                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
                 if (dbModel != null)
                 {
@@ -195,7 +195,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     var record = await _db.Set<WRRLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
-                        if (record.ApproverId != updateModel.Approver.Id)
+                        if (record.ApproverId != updateModel.Approver?.Id)
                         {
                             string notificationTitle = "WRR Log Updated";
                             string notificationMessage = $"The WRR Log with TWR# ({updateModel.Twr}) has been updated";

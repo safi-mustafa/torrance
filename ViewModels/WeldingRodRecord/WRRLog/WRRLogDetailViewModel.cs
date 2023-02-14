@@ -21,6 +21,10 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogDetailViewModel : BaseCrudViewModel, IApprove
     {
+        public WRRLogDetailViewModel()
+        {
+            Approver = new ApproverBriefViewModel();
+        }
         public long Id { get; set; }
         public DateTime CreatedOn { get; set; }
 

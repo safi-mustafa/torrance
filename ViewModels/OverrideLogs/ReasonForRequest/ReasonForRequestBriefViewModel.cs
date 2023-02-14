@@ -10,7 +10,7 @@ namespace ViewModels.OverrideLogs
 
         }
         [DisplayName("Reason for Request")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }

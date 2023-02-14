@@ -18,7 +18,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public long Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
-
+        [Display(Name = "Submitted")]
         public string FormattedCreatedOn
         {
             get

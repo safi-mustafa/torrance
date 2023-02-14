@@ -8,13 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ViewModels.TimeOnTools.TOTLog;
+using Repositories.Services.TimeOnToolServices.TOTLogService;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class WRRLogController : CrudBaseController<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogAPISearchViewModel>
+    public class WRRLogController : ApproveCrudBaseController<IWRRLogService<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel>, WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogAPISearchViewModel>
+
     {
         private readonly IWRRLogService<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _wRRLogService;
         private readonly IMapper _mapper;

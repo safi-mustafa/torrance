@@ -174,6 +174,7 @@ namespace Repositories.Services.DashboardService
         private IQueryable<TOTLog> GetFilteredTOTLogs(TOTLogSearchViewModel search)
         {
             return _db.TOTLogs.Where(x =>
+                    x.IsDeleted == false &&
                     (search.DelayType.Id == null || search.DelayType.Id == x.DelayTypeId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == x.UnitId)
@@ -183,6 +184,8 @@ namespace Repositories.Services.DashboardService
         private IQueryable<OverrideLog> GetFilteredORLogs(TOTLogSearchViewModel search)
         {
             return _db.OverrideLogs.Where(x =>
+
+                    x.IsDeleted == false &&
                     search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
                 );
         }
@@ -190,6 +193,7 @@ namespace Repositories.Services.DashboardService
         private IQueryable<WRRLog> GetFilteredWrrLogs(WRRLogSearchViewModel search)
         {
             return _db.WRRLogs.Where(x =>
+                    x.IsDeleted == false &&
                     (search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
