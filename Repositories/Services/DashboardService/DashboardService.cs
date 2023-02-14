@@ -30,8 +30,8 @@ namespace Repositories.Services.DashboardService
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
             var model = new TOTPieChartViewModel();
-            var totHours = await GetFilteredTOTLogs(search).SumAsync(x => x.ManHours);
-            model.Shift = await GetFilteredTOTLogs(search)
+            var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+            model.Shift = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
               .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
               {
@@ -39,7 +39,7 @@ namespace Repositories.Services.DashboardService
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
-            model.Department = await GetFilteredTOTLogs(search)
+            model.Department = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
               .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
               {
@@ -47,7 +47,7 @@ namespace Repositories.Services.DashboardService
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
-            model.Unit = await GetFilteredTOTLogs(search)
+            model.Unit = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
               .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
               {
@@ -55,7 +55,7 @@ namespace Repositories.Services.DashboardService
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
-            model.RequestReason = await GetFilteredTOTLogs(search)
+            model.RequestReason = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.ReasonForRequest)
               .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
               {
@@ -70,8 +70,8 @@ namespace Repositories.Services.DashboardService
         public async Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search)
         {
             var model = new OverridePieChartViewModel();
-            var totHours = await GetFilteredORLogs(search).SumAsync(x => x.TotalCost);
-            model.Shift = await GetFilteredORLogs(search)
+            var totHours = await GetFilteredORLogs(search).IgnoreQueryFilters().SumAsync(x => x.TotalCost);
+            model.Shift = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
               .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
               {
@@ -79,7 +79,7 @@ namespace Repositories.Services.DashboardService
                   Value = x.Sum(y => y.TotalCost) * 100 / totHours
               }).ToListAsync();
 
-            model.Department = await GetFilteredORLogs(search)
+            model.Department = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
               .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
               {
@@ -87,7 +87,7 @@ namespace Repositories.Services.DashboardService
                   Value = x.Sum(y => y.TotalCost) * 100 / totHours
               }).ToListAsync();
 
-            model.Unit = await GetFilteredORLogs(search)
+            model.Unit = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
               .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
               {
@@ -95,7 +95,7 @@ namespace Repositories.Services.DashboardService
                   Value = x.Sum(y => y.TotalCost) * 100 / totHours
               }).ToListAsync();
 
-            model.RequestReason = await GetFilteredORLogs(search)
+            model.RequestReason = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.ReasonForRequest)
               .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
               {
@@ -112,7 +112,7 @@ namespace Repositories.Services.DashboardService
         public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
-            model.ChartData = await GetFilteredTOTLogs(search)
+            model.ChartData = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .GroupBy(x => x.Status).Select(x => new BarChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
@@ -126,7 +126,7 @@ namespace Repositories.Services.DashboardService
         public async Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
-            model.ChartData = await GetFilteredWrrLogs(search)
+            model.ChartData = await GetFilteredWrrLogs(search).IgnoreQueryFilters()
               .GroupBy(x => x.Status).Select(x => new BarChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
@@ -140,7 +140,7 @@ namespace Repositories.Services.DashboardService
         public async Task<StatusChartViewModel> GetOverrideStatusChartData(TOTLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
-            model.ChartData = await GetFilteredORLogs(search)
+            model.ChartData = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .GroupBy(x => x.Status).Select(x => new BarChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
@@ -158,9 +158,9 @@ namespace Repositories.Services.DashboardService
             {
                 var dashboardData = new DashboardViewModel
                 {
-                    TotalORLogs = await _db.OverrideLogs.CountAsync(),
-                    TotalWRRLogs = await _db.WRRLogs.CountAsync(),
-                    TotalTotLogs = await _db.TOTLogs.CountAsync()
+                    TotalORLogs = await _db.OverrideLogs.Where(x=>x.IsDeleted==false).CountAsync(),
+                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false).CountAsync(),
+                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false).CountAsync()
                 };
                 return dashboardData;
             }
