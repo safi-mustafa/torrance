@@ -3,6 +3,7 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "craft-skill-id";
+    var companyId = ViewData["CompanyId"] != null && !string.IsNullOrEmpty(ViewData["CompanyId"].ToString()) ? ViewData["CompanyId"].ToString() : "company-id";
 }
 
 
@@ -30,6 +31,7 @@
 <script>
     $(function () {
         var id = "#" + "@elementId";
+        var companyId = "#" + "@companyId";
         var pageSize = 10;
         var url = '/CraftSkill/Select2';
         var dataArray = function (params) {
@@ -38,6 +40,11 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
+                customParams: JSON.stringify({
+                    Company: {
+                        Id: $(companyId).val()
+                    }
+                })
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Craft Skill");

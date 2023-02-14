@@ -11,6 +11,8 @@ using Models.Common.Interfaces;
 using Web.Helpers;
 using Centangle.Common.ResponseHelpers.Models;
 using Web.Controllers.SharedControllers;
+using Newtonsoft.Json;
+using ViewModels.OverrideLogs;
 
 namespace Web.Controllers
 {
@@ -322,7 +324,10 @@ namespace Web.Controllers
 
         protected virtual SearchViewModel SetSelect2CustomParams(string customParams)
         {
-            return new SearchViewModel();
+            if (customParams == null)
+                return new SearchViewModel();
+            var svm = JsonConvert.DeserializeObject<SearchViewModel>(customParams);
+            return svm;
         }
 
         private ActionResult GetErrors(string action, IBaseCrudViewModel model, List<string> customErrors = null)

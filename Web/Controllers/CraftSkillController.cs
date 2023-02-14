@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 using Repositories.Services.OverrideLogServices.CraftSkillService;
 using ViewModels.DataTable;
 using ViewModels.OverrideLogs;
@@ -30,5 +31,7 @@ namespace Web.Controllers
 
             };
         }
+
+      
     }
 }
