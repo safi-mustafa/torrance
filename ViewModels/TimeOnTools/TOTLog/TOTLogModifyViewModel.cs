@@ -35,7 +35,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
-       
+        public string? Foreman { get; set; }
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
@@ -84,7 +84,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
-        public UserBriefViewModel Foreman { get; set; } = new UserBriefViewModel();
+
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 

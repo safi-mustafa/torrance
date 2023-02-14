@@ -57,7 +57,7 @@
                     <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
                 </div>
             </div>
-            @if (isAdmin)
+           @* @if (isAdmin)
             {
                 <div class="col-lg-4">
                     <div class="mb-3">
@@ -70,10 +70,15 @@
                         <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
                     </div>
                 </div>
-            }
-            <div class="col-lg-4">
+            }*@
+            <div class="col-lg-6">
+                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+            </div>
+            <div class="col-lg-6">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Foreman.cshtml" for="Foreman" view-data='@new ViewDataDictionary(ViewData) { { "Id", "foreman-id" }, { "Heading", "Foreman" } }' />
+                    <label asp-for="Foreman" class="form-label fw-600"></label>
+                    <input asp-for="Foreman" type="text" class="form-control" />
+                    <span asp-validation-for="Foreman" class="validation-invalid-label"></span>
                 </div>
             </div>
             <div class="col-lg-6">

@@ -6,7 +6,7 @@ namespace ViewModels.WeldingRodRecord
 {
     public class EmployeeBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public EmployeeBriefViewModel() : base(true, "The Employee field is required.")
+        public EmployeeBriefViewModel() : base(false, "")
         {
 
         }
