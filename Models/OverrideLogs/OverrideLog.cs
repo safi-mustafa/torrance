@@ -50,5 +50,7 @@ namespace Models.OverrideLogs
         public ToranceUser? Approver { get; set; }
 
         public double TotalCost { get; set; }
+
+        public double TotalHours { get; set; }
     }
 }

@@ -146,7 +146,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     {
                         Id = x.Id,
                         Approver = x.Approver != null ? x.Approver.UserName : "",
-                        TotalHours = x.OverrideHours,
+                        TotalHours = x.TotalHours,
                         Date = x.CreatedOn,
                         Status = x.Status,
                         Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",

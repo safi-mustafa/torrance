@@ -190,6 +190,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     mappedModel.TotalCost = await CalculateTotalCost(costs);
+                    mappedModel.TotalHours = CalculateTotalHours(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
                     string notificationTitle = "Override Log Created";
@@ -230,6 +231,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
+                            dbModel.TotalHours = CalculateTotalHours(costs);
                             await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
                             await SetORLogCosts(costs, dbModel.Id);
@@ -361,6 +363,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 totalCost += cost.OverrideHours * craftCost;
             }
             return totalCost;
+
+        }
+
+        private double CalculateTotalHours(IORLogCost overrideLogCost)
+        {
+            if (overrideLogCost.Costs == null || overrideLogCost.Costs.Count < 1)
+            {
+                return 0;
+            }
+            return overrideLogCost.Costs.Sum(x => x.OverrideHours);
 
         }
     }

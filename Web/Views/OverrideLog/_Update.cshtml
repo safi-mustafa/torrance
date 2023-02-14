@@ -157,6 +157,8 @@
         $(document).off("click", ".add-cost");
         $(document).on("click", ".add-cost", function () {
             AddCost(this);
+            $("#cost-hours").val("");
+            $("#craft-skill-id").val('').trigger('change')
         });
         $(document).off("click", ".remove-cost");
         $(document).on("click", ".remove-cost", function () {

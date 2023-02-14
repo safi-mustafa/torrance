@@ -241,7 +241,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                //new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Requester", orderable=true},
@@ -255,6 +255,17 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
+        }
+
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.DataTableHeaderHtml = @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            vm.IsResponsiveDatatable = false;
+            return vm;
         }
 
         protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model)
