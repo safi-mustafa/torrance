@@ -27,6 +27,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
 
     public DbSet<Contractor> Contractors { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<DepartmentUnit> DepartmentUnits { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<Folder> Folders { get; set; }
     public DbSet<Attachment> Attachments { get; set; }

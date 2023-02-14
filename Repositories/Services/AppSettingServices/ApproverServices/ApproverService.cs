@@ -74,9 +74,6 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             }
         }
 
-
-
-
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
 
@@ -164,7 +161,6 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                 return Response.BadRequestResponse(_response);
             }
         }
-
 
         public async Task<bool> SetApproverUnits(List<long> unitIds, long approverId)
         {
