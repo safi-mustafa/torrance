@@ -30,31 +30,103 @@ namespace Repositories.Services.DashboardService
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
             var model = new TOTPieChartViewModel();
-            var totCount = await GetFilteredTOTLogs(search).CountAsync();
-            model.ShiftDelays = await GetFilteredTOTLogs(search)
-              .Include(x => x.ShiftDelay)
-              .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
+            var totHours = await GetFilteredTOTLogs(search).SumAsync(x => x.ManHours);
+            model.Shift = await GetFilteredTOTLogs(search)
+              .Include(x => x.Shift)
+              .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
               {
-                  Category = x.Max(y => y.ShiftDelay.Name),
-                  Value = x.Count() * 100 / totCount
+                  Category = x.Max(y => y.Shift.Name),
+                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
-            model.ReworkDelays = await GetFilteredTOTLogs(search)
-                .Include(x => x.ReworkDelay)
-                .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
-                {
-                    Category = x.Max(y => y.ReworkDelay.Name),
-                    Value = x.Count() * 100 / totCount
-                }).ToListAsync();
+            model.Department = await GetFilteredTOTLogs(search)
+              .Include(x => x.Department)
+              .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.Department.Name),
+                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).ToListAsync();
+
+            model.Unit = await GetFilteredTOTLogs(search)
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).ToListAsync();
+
+            model.RequestReason = await GetFilteredTOTLogs(search)
+              .Include(x => x.ReasonForRequest)
+              .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.ReasonForRequest.Name),
+                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).ToListAsync();
 
             return model;
 
         }
 
+        public async Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search)
+        {
+            var model = new OverridePieChartViewModel();
+            var totHours = await GetFilteredORLogs(search).SumAsync(x => x.TotalCost);
+            model.Shift = await GetFilteredORLogs(search)
+              .Include(x => x.Shift)
+              .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.Shift.Name),
+                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
+              }).ToListAsync();
+
+            model.Department = await GetFilteredORLogs(search)
+              .Include(x => x.Department)
+              .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.Department.Name),
+                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
+              }).ToListAsync();
+
+            model.Unit = await GetFilteredORLogs(search)
+              .Include(x => x.Unit)
+              .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.Unit.Name),
+                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
+              }).ToListAsync();
+
+            model.RequestReason = await GetFilteredORLogs(search)
+              .Include(x => x.ReasonForRequest)
+              .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
+              {
+                  Category = x.Max(y => y.ReasonForRequest.Name),
+                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
+              }).ToListAsync();
+
+            return model;
+
+        }
+
+
+
         public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
             model.ChartData = await GetFilteredTOTLogs(search)
+              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              {
+                  Category = x.Max(y => y.Status).ToString(),
+                  Value = x.Count()
+              }).ToListAsync();
+
+            return model;
+
+        }
+
+        public async Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search)
+        {
+            var model = new StatusChartViewModel();
+            model.ChartData = await GetFilteredWrrLogs(search)
               .GroupBy(x => x.Status).Select(x => new BarChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
@@ -79,30 +151,6 @@ namespace Repositories.Services.DashboardService
 
         }
 
-        public async Task<WrrPieChartViewModel> GetWrrChartsData(WRRLogSearchViewModel search)
-        {
-            var model = new WrrPieChartViewModel();
-            var totCount = await GetFilteredWrrLogs(search).CountAsync();
-            model.WeldMethods = await GetFilteredWrrLogs(search)
-              .Include(x => x.WeldMethod)
-              .GroupBy(x => x.WeldMethodId).Select(x => new LogPieChartViewModel
-              {
-                  Category = x.Max(y => y.WeldMethod.Name),
-                  Value = x.Count() * 100 / totCount
-              }).ToListAsync();
-
-            model.RodTypes = await GetFilteredWrrLogs(search)
-                .Include(x => x.RodType)
-                .GroupBy(x => x.RodTypeId).Select(x => new LogPieChartViewModel
-                {
-                    Category = x.Max(y => y.RodType.Name),
-                    Value = x.Count() * 100 / totCount
-                }).ToListAsync();
-
-
-            return model;
-
-        }
 
         public async Task<DashboardViewModel> GetDashboardData()
         {
@@ -142,10 +190,12 @@ namespace Repositories.Services.DashboardService
         private IQueryable<WRRLog> GetFilteredWrrLogs(WRRLogSearchViewModel search)
         {
             return _db.WRRLogs.Where(x =>
-                    (search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
+                    (search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
                     &&
-                    (search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
+                    (search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
                 );
         }
+
+
     }
 }

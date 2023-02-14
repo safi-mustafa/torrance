@@ -18,8 +18,19 @@ namespace ViewModels.Dashboard
     }
     public class TOTPieChartViewModel
     {
-        public List<LogPieChartViewModel> ShiftDelays { get; set; }
-        public List<LogPieChartViewModel> ReworkDelays { get; set; }
+        public List<LogPieChartViewModel> Shift { get; set; }
+        public List<LogPieChartViewModel> Unit { get; set; }
+        public List<LogPieChartViewModel> Department { get; set; }
+        public List<LogPieChartViewModel> RequestReason { get; set; }
+    }
+
+
+    public class OverridePieChartViewModel
+    {
+        public List<LogPieChartViewModel> Shift { get; set; }
+        public List<LogPieChartViewModel> Unit { get; set; }
+        public List<LogPieChartViewModel> Department { get; set; }
+        public List<LogPieChartViewModel> RequestReason { get; set; }
     }
 
     public class WrrPieChartViewModel
@@ -27,16 +38,17 @@ namespace ViewModels.Dashboard
         public List<LogPieChartViewModel> WeldMethods { get; set; }
         public List<LogPieChartViewModel> RodTypes { get; set; }
     }
+
     public class LogPieChartViewModel
     {
         public string Category { get; set; }
-        public float Value { get; set; }
+        public double Value { get; set; }
     }
 
     public class BarChartViewModel
     {
         public string Category { get; set; }
-        public float Value { get; set; }
+        public double Value { get; set; }
     }
 
 }

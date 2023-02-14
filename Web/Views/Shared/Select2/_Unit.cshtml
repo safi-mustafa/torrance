@@ -3,6 +3,7 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "unit-id";
+    var departmentId = ViewData["DeparmentId"] != null && !string.IsNullOrEmpty(ViewData["DeparmentId"].ToString()) ? ViewData["DeparmentId"].ToString() : "department-id";
 }
 
 
@@ -30,6 +31,7 @@
 <script>
     $(function () {
         var id = "#" + "@elementId";
+        var departmentId = "#" + "@departmentId";
         var pageSize = 10;
         var url = '/Unit/Select2';
         var dataArray = function (params) {
@@ -38,6 +40,11 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
+                customParams: JSON.stringify({
+                    Department: {
+                        Id: $(departmentId).val()
+                    }
+                })
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Unit");

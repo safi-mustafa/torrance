@@ -6,18 +6,27 @@
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            ShiftDelayChart(data.ShiftDelays);
-            ReworkDelayChart(data.ReworkDelays)
+            TOTDepartmentChart(data.Department);
+            TOTUnitChart(data.Unit);
+            TOTShiftChart(data.Shift);
+            TOTRequestReasonChart(data.RequestReason);
         },
         error: function () {
             console.log("Error occured!!")
         }
     });
 }
-function ShiftDelayChart(seriesData) {
 
-    GeneratePieChart("tot-shift-delay", seriesData)
+function TOTDepartmentChart(seriesData) {
+    GeneratePieChart("tot-department", seriesData)
 }
-function ReworkDelayChart(seriesData) {
-    GeneratePieChart("tot-rework-delay", seriesData)
+function TOTUnitChart(seriesData) {
+    GeneratePieChart("tot-unit", seriesData)
+}
+function TOTShiftChart(seriesData) {
+
+    GeneratePieChart("tot-shift", seriesData)
+}
+function TOTRequestReasonChart(seriesData) {
+    GeneratePieChart("tot-request-reason", seriesData)
 }

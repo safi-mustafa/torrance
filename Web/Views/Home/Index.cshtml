@@ -32,23 +32,36 @@
 
 
         <div class="row dashboard-stats-row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card w-100">
                     <div class="card-body">
                         <div class="content">
-                            <h5 class="card-title"> Total TOTs</h5>
+                            <h5 class="card-title"> Total TOT's</h5>
                             <p class="card-text">@Model.TotalTotLogs</p>
                         </div>
 
                         <div class="icon">
-                            <span class="tot"><i class="bi bi-people"></i></span>
+                            <span class="tot"><i class="bi-file-text"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
-           
 
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title">Total WRR's</h5>
+                            <p class="card-text">@Model.TotalWRRLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="card w-100">
                     <div class="card-body">
                         <div class="content">
@@ -57,44 +70,77 @@
                         </div>
 
                         <div class="icon">
-                            <span class="tos"><i class="bi bi-currency-dollar"></i></span>
+                            <span class="tot"><i class="bi-file-text"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         @* <div id="progress-charts-container" class="row">
-                <div id="progress-chart-div"></div>
-            </div>*@
+        <div id="progress-chart-div"></div>
+        </div>*@
         <div class="row dashboard-filters-row">
 
-           @* <div class="col-md-12">
-                <form id="dashboard-filter-form">
-                    <p>Filter By:</p>
-                    <div class="filter-select">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            @* <div class="col-md-12">
+            <form id="dashboard-filter-form">
+            <p>Filter By:</p>
+            <div class="filter-select">
+            <div class="row">
+            <div class="col-md-4">
+            <div class="form-group">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
+            </div>
+            </div>
+            </div>
+            </div>
+            </form>
             </div>*@
             <partial name="_TOTStatusChart" />
+            <partial name="_WRRStatusChart" />
             <partial name="_OverrideStatusChart" />
-           @* <partial name="_WrrPieCharts" />*@
+            @* <partial name="_WrrPieCharts" />*@
+
+            <div class="row col-12">
+                <partial name="_TOTPieCharts" />
+                @*<div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title">TOT's</h5>
+                        </div>
+                        <div class="row col-12">
+                            
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+            <div class="row col-12">
+                <partial name="_OverridePieCharts" />
+              @*  <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title">Overrides</h5>
+                        </div>
+                        <div class="row col-12">
+                            <partial name="_OverridePieCharts" />
+                        </div>
+                    </div>
+                </div>*@
+            </div>
         </div>
     </main>
 </div>
 <style>
     .am-chart {
+        width: 100%;
+        height: 350px;
+    }
+
+    .am-pie-chart {
         width: 100%;
         height: 350px;
     }
@@ -107,12 +153,17 @@
 <script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
 @*<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
 <script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>*@
-<script src="~/js/custom-scripts/dashboard/tot-status-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/override-status-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/status-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/override-pie-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
 <!-- Chart code -->
-<script>$(function () {
-        GetTOTStatusChartData();
-        GetOverrideStatusChartData();
+<script>
+    $(function () {
+        GetStatusChartData("TOT", "tot-status");
+        GetStatusChartData("WRR", "wrr-status");
+        GetStatusChartData("Override", "override-status");
+        GetTOTChartData();
+        GetOverrideChartData();
 
         //$(document).on("change", "#department-id, #unit-id", function () {
         //    var departmentId = $("#department-id").val();

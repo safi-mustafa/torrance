@@ -10,5 +10,7 @@ namespace ViewModels.Common.Unit
             OrderDir = PaginationOrderCatalog.Asc;
         }
         public string Name { get; set; }
+
+        public BaseBriefVM Department { get; set; } = new BaseBriefVM();
     }
 }

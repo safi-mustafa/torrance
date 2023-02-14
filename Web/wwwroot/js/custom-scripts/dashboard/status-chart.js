@@ -1,12 +1,13 @@
-﻿function GetTOTStatusChartData(formData = "") {
+﻿function GetStatusChartData(type, containerId, formData = "") {
+    let url = "/Home/Get" + type + "StatusChartData";
     $.ajax({
         type: "GET",
-        url: "/Home/GetTotStatusChartData",
+        url: url,
         data: formData,
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            GenerateBarChart("tot-status", data.ChartData);
+            GenerateBarChart(containerId, data.ChartData);
         },
         error: function () {
             console.log("Error occured!!")

@@ -76,13 +76,9 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<ActionResult> GetTotChartsData(TOTLogSearchViewModel search)
-        {
-            var data = await _dashboardService.GetTotChartsData(search);
-            return Json(data);
-        }
+       
 
-        public async Task<ActionResult> GetTotStatusChartData(TOTLogSearchViewModel search)
+        public async Task<ActionResult> GetTOTStatusChartData(TOTLogSearchViewModel search)
         {
             var data = await _dashboardService.GetTotStatusChartData(search);
             return Json(data);
@@ -94,9 +90,21 @@ namespace Web.Controllers
             return Json(data);
         }
 
-        public async Task<ActionResult> GetWrrChartsData(WRRLogSearchViewModel search)
+        public async Task<ActionResult> GetWRRStatusChartData(WRRLogSearchViewModel search)
         {
-            var data = await _dashboardService.GetWrrChartsData(search);
+            var data = await _dashboardService.GetWrrStatusChartData(search);
+            return Json(data);
+        }
+
+        public async Task<ActionResult> GetTotChartsData(TOTLogSearchViewModel search)
+        {
+            var data = await _dashboardService.GetTotChartsData(search);
+            return Json(data);
+        }
+
+        public async Task<ActionResult> GetOverrideChartsData(TOTLogSearchViewModel search)
+        {
+            var data = await _dashboardService.GetOverrideChartsData(search);
             return Json(data);
         }
 
