@@ -14,6 +14,6 @@ namespace ViewModels.Common.Unit
         public string Name { get; set; }
         [DisplayName("Cost Tracker Unit")]
         public string CostTrackerUnit { get; set; }
-        public LogType Type { get; set; }
+        public LogType? Type { get; set; }
     }
 }

@@ -7,9 +7,12 @@ namespace ViewModels.Common.Company
 {
     public class CompanySearchViewModel : BaseSearchModel
     {
+        public CompanySearchViewModel()
+        {
+            OrderByColumn = "Name";
+            OrderDir = PaginationOrderCatalog.Asc;
+        }
         public string Name { get; set; }
-        public override string OrderByColumn { get; set; } = "Id";
-
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new();
     }
 }
