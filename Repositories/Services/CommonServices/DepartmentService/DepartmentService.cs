@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common;
@@ -9,6 +10,8 @@ using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
 using System.Linq.Expressions;
+using ViewModels;
+using ViewModels.Common.Company;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.MultiSelectInterfaces;
@@ -106,6 +109,54 @@ namespace Repositories.Services.CommonServices.DepartmentService
                 response.ReturnModel.Units = await GetDepartmentUnits(id);
             }
             return response;
+        }
+
+        public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
+        {
+            try
+            {
+                var searchFilter = search as DepartmentSearchViewModel;
+
+                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
+
+                var departmentsQueryable = (from c in _db.Departments
+                                            join du in _db.DepartmentUnits on c.Id equals du.DepartmentId into dul
+                                            from du in dul.DefaultIfEmpty()
+                                            where
+                                            (
+                                               (
+                                                   string.IsNullOrEmpty(searchFilter.Search.value) || c.Name.ToLower().Contains(searchFilter.Search.value.ToLower())
+                                               )
+                                               &&
+                                               (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || du.UnitId == searchFilter.Unit.Id)
+                                               &&
+                                               (
+                                                   string.IsNullOrEmpty(searchFilter.Name) || c.Name.ToLower().Contains(searchFilter.Name.ToLower())
+                                               )
+                                           )
+                                            select c
+                            ).GroupBy(x => x.Id)
+                            .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
+                            .AsQueryable();
+                var paginatedDepartments = await departmentsQueryable.Paginate(searchFilter);
+                var filteredDepartmentIds = paginatedDepartments.Items.Select(x => x.Id);
+
+
+                var departmentUnits = await _db.DepartmentUnits.Include(x => x.Unit).Where(x => filteredDepartmentIds.Contains(x.DepartmentId)).ToListAsync();
+
+                paginatedDepartments.Items.ForEach(x =>
+                {
+                    x.Units = _mapper.Map<List<UnitBriefViewModel>>(departmentUnits.Where(u => u.DepartmentId == x.Id).Select(x => x.Unit).ToList());
+                });
+                var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();
+                responseModel.ReturnModel = paginatedDepartments as PaginatedResultModel<M>;
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Department Service GetAll method threw an exception, Message: {ex.Message}");
+                return Response.BadRequestResponse(_response);
+            }
         }
 
         public async Task<bool> SetDepartmentUnits(List<long> unitIds, long departmentId)

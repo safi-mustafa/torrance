@@ -58,7 +58,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var employeeCheck = loggedInUserRole == "Employee";
             var parsedLoggedInId = long.Parse(loggedInUserId);
-            searchFilters.StatusNot = loggedInUserRole == "Approver" ? Status.Pending : searchFilters.StatusNot;
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                searchFilters.StatusNot = null;
+            }
+            else
+            {
+                searchFilters.StatusNot = Status.Pending;
+            }
 
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToString().Contains(searchFilters.Search.value.ToLower()))

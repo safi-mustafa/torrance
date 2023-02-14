@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
@@ -24,17 +25,31 @@ namespace Web.Controllers
     {
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _TOTLogService;
         private readonly ILogger<TOTLogController> _logger;
+        private readonly string _loggedInUserRole;
+        private readonly IUserInfoService _userInfo;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin")))
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
+            _userInfo = userInfo;
+            _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
-            vm.DataTableHeaderHtml = @"
+            var html = "";
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
                     <div class=""p-2 row"">
                         <span class=""badge Approved m-1""> </span>
                         <span class=""stat-name"">Approved</span>
@@ -43,6 +58,7 @@ namespace Web.Controllers
                         <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
                     </div>";
+            vm.DataTableHeaderHtml = html;
             vm.IsResponsiveDatatable = false;
             return vm;
         }
@@ -109,6 +125,10 @@ namespace Web.Controllers
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
             };
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", HideBasedOn = "IsEditRestricted" });
+            }
         }
 
         public async Task<JsonResult> GetTWRNumericValues(string prefix, int pageSize, int pageNumber, string customParams)

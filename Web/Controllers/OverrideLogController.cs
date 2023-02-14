@@ -11,6 +11,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.WeldingRodRecord.WRRLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using ViewModels.TimeOnTools.TOTLog;
+using Enums;
 
 namespace Web.Controllers
 {
@@ -19,12 +20,16 @@ namespace Web.Controllers
     {
         private readonly IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> _OverrideLogService;
         private readonly ILogger<OverrideLogController> _logger;
+        private readonly IUserInfoService _userInfo;
+        private readonly string _loggedInUserRole;
         private readonly IBaseApprove _baseApprove;
 
-        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin")))
+        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _OverrideLogService = OverrideLogService;
             _logger = logger;
+            _userInfo = userInfo;
+            _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
         public override List<DataTableViewModel> GetColumns()
@@ -58,6 +63,10 @@ namespace Web.Controllers
             //    actions.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
             //}
             actions.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/OverrideLog/Detail/Id" });
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id", HideBasedOn = "IsEditRestricted" });
+            }
             result.ActionsList = actions;
         }
         protected override ORLogSearchViewModel SetDefaultFilters()
@@ -98,7 +107,17 @@ namespace Web.Controllers
 
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
-            vm.DataTableHeaderHtml = @"
+            var html = "";
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
                     <div class=""p-2 row"">
                         <span class=""badge Approved m-1""> </span>
                         <span class=""stat-name"">Approved</span>
@@ -107,6 +126,7 @@ namespace Web.Controllers
                         <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
                     </div>";
+            vm.DataTableHeaderHtml = html;
             vm.IsResponsiveDatatable = false;
             return vm;
         }

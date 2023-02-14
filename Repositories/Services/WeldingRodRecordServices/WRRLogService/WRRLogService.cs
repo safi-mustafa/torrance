@@ -59,6 +59,14 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                searchFilters.StatusNot = null;
+            }
+            else
+            {
+                searchFilters.StatusNot = Status.Pending;
+            }
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&

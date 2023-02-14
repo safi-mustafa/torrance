@@ -52,7 +52,13 @@ namespace ViewModels.OverrideLogs.ORLog
         public Status Status { get; set; }
 
         public string FormattedStatus { get => Status.GetDisplayName(); }
-
+        public bool IsEditRestricted
+        {
+            get
+            {
+                return Status != Status.Pending;
+            }
+        }
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();

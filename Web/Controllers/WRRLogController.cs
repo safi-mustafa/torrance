@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
@@ -17,12 +18,16 @@ namespace Web.Controllers
     {
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
         private readonly ILogger<WRRLogController> _logger;
+        private readonly IUserInfoService _userInfo;
+        private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin")))
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _WRRLogService = WRRLogService;
             _logger = logger;
+            _userInfo = userInfo;
+            _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
         protected override WRRLogSearchViewModel SetDefaultFilters()
         {
@@ -55,7 +60,17 @@ namespace Web.Controllers
 
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
-            vm.DataTableHeaderHtml = @"
+            var html = "";
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
                     <div class=""p-2 row"">
                         <span class=""badge Approved m-1""> </span>
                         <span class=""stat-name"">Approved</span>
@@ -64,6 +79,7 @@ namespace Web.Controllers
                         <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
                     </div>";
+            vm.DataTableHeaderHtml = html;
             vm.IsResponsiveDatatable = false;
             return vm;
         }
@@ -93,6 +109,10 @@ namespace Web.Controllers
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/WRRLog/Detail/Id"},
 
             };
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
+            }
         }
     }
 }

@@ -336,22 +336,34 @@ function GetActionLinks(actionsList, cellData) {
         actionHtml += "<div class='dropdown-menu dropdown-menu-right'>";
 
         $.each(actionsList, function (index, actionItem) {
-            if (cellData.IsUserDefined === false || cellData.IsUserDefined === undefined)
-                actionHtml += GetHref(actionItem, cellData);
+            if (cellData.IsUserDefined === false || cellData.IsUserDefined === undefined) {
+                let href = GetHref(actionItem, cellData);
+                if (href != null && href != undefined && href != "") {
+                    actionHtml += href;
+                }
+            }
         });
         actionHtml += "</div>";
     }
     else {
         $.each(actionsList, function (index, actionItem) {
             //to avoid the system defined record in Account table to be deleted.
-            if (cellData.IsUserDefined === false || cellData.IsUserDefined === undefined)
-                actionHtml += GetHref(actionItem, cellData);
+            if (cellData.IsUserDefined === false || cellData.IsUserDefined === undefined) {
+                let href = GetHref(actionItem, cellData);
+                if (href != null && href != undefined && href != "") {
+                    actionHtml += href;
+                }
+            }
         });
     }
     return actionHtml;
     //$(td).html(actionHtml);
 }
 function GetHref(actionItem, cellData) {
+    if (actionItem.HideBasedOn != null && actionItem.HideBasedOn != undefined && actionItem.HideBasedOn != "") {
+        if (cellData[actionItem.HideBasedOn])
+            return "";
+    }
     var link = "javascript:void(0)";
     if (actionItem.Href !== '') {
         link = actionItem.Href;
@@ -610,7 +622,7 @@ function customizePdfExport(doc) {
 function selectAllCheckBoxChanged(element) {
     if ($(element).is(":checked")) {
         dataTable.rows().select();
-        } else {
+    } else {
         dataTable.rows().deselect();
-        }
+    }
 }

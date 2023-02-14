@@ -1,4 +1,6 @@
 ﻿using Pagination;
+using ViewModels.Common.Unit;
+using ViewModels.OverrideLogs;
 
 namespace ViewModels.Common.Department
 {
@@ -10,5 +12,7 @@ namespace ViewModels.Common.Department
             OrderDir = PaginationOrderCatalog.Asc;
         }
         public string Name { get; set; }
+
+        public UnitBriefViewModel Unit { get; set; } = new();
     }
 }

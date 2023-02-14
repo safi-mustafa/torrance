@@ -8,6 +8,8 @@
         public string Href { get; set; }
         public string ReturnUrl { get; set; }
 
+        public string HideBasedOn { get; set; }
+
         public List<string> Attr { get; set; }
 
         public string Class { get; set; }

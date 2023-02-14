@@ -18,6 +18,7 @@ using Models;
 using DataLibrary;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Enums;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -160,9 +161,17 @@ namespace Web.Areas.Identity.Pages.Account
             var userRoles = await _userManager.GetRolesAsync(user);
             var role = userRoles.First();
 
-            if (role == "Approver")
+            if (role == RolesCatalog.Approver.ToString())
             {
                 return LocalRedirect("/Approval");
+            }
+            else if (role == RolesCatalog.Employee.ToString())
+            {
+                return LocalRedirect("/TOTLog");
+            }
+            else if (role == RolesCatalog.CompanyManager.ToString())
+            {
+                return LocalRedirect("/OverrideLog");
             }
             _logger.LogInformation("User logged in.");
             return LocalRedirect(returnUrl);

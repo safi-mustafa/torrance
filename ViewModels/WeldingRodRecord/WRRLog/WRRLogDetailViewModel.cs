@@ -83,7 +83,13 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public Status Status { get; set; }
         public string FormattedStatus { get => Status.GetDisplayName(); }
-
+        public bool IsEditRestricted
+        {
+            get
+            {
+                return Status != Status.Pending;
+            }
+        }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
