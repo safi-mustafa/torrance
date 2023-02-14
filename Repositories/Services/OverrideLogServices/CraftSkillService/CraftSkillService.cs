@@ -9,10 +9,6 @@ using System.Linq.Expressions;
 using ViewModels.Shared;
 using Models.OverrideLogs;
 using ViewModels.OverrideLogs;
-using Microsoft.EntityFrameworkCore;
-using ViewModels.Authentication.Approver;
-using ViewModels.Authentication;
-using System.Runtime.CompilerServices;
 using Helpers.Extensions;
 using Centangle.Common.ResponseHelpers;
 
