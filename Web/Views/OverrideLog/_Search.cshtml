@@ -24,11 +24,15 @@
             <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
         </div>
     </div>*@
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+    @if (!User.IsInRole(RolesCatalog.CompanyManager.ToString()))
+    {
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+            </div>
         </div>
-    </div>
+    }
+ 
     <div class="col-lg-4">
         <div class="form-group profile-input">
             <label asp-for="Status" class="control-label form-label fw-600"></label>

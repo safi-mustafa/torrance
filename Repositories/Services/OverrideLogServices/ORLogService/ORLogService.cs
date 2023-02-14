@@ -15,6 +15,7 @@ using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
+using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using ViewModels;
@@ -37,6 +38,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
+        private readonly string _loggedInUserRole;
+        private readonly long _loggedInUserId;
         private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
 
         public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
@@ -47,6 +50,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _response = response;
             _userInfoService = userInfoService;
             _notificationService = notificationService;
+            _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId()); ;
         }
 
         public override Expression<Func<OverrideLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -54,11 +59,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var searchFilters = filters as ORLogSearchViewModel;
             searchFilters.OrderByColumn = "Status";
             var status = (Status?)((int?)searchFilters.Status);
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var employeeCheck = loggedInUserRole == "Employee";
-            var parsedLoggedInId = long.Parse(loggedInUserId);
-            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
             {
                 searchFilters.StatusNot = null;
             }
@@ -81,11 +82,13 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (_loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||
-                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.ApproverId == _loggedInUserId)
                                 ||
-                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == _loggedInUserId)
+                                ||
+                                (_loggedInUserRole == RolesCatalog.CompanyManager.ToString() && x.CompanyId == searchFilters.Company.Id)
                             )
                             &&
                             (status == null || status == x.Status)
@@ -93,8 +96,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
                             &&
                             x.IsDeleted == false
-            //  &&
-            //(!employeeCheck || x.Employees.Any(e => e.EmployeeId.ToString() == loggedInUserId));
             ;
         }
 
@@ -102,6 +103,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         {
             try
             {
+                var searchFilters = search as ORLogSearchViewModel;
+                if (_loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+                    searchFilters.Company.Id = await _db.Users.Where(x => x.Id == _loggedInUserId).Select(x => x.CompanyId).FirstOrDefaultAsync();
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
                     .Include(x => x.Unit)

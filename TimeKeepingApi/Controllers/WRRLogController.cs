@@ -6,6 +6,8 @@ using AutoMapper;
 using Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ViewModels.TimeOnTools.TOTLog;
 
 namespace API.Controllers
 {
@@ -42,6 +44,7 @@ namespace API.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Post(model);
         }
 
@@ -54,7 +57,17 @@ namespace API.Controllers
             {
                 model.Employee = new ViewModels.WeldingRodRecord.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
+            AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Put(model);
+        }
+
+        private void AddTWRModelStateErrors(ModelStateDictionary modelState, TWRViewModel model)
+        {
+            if (model.AlphabeticPart == null || string.IsNullOrEmpty(model.AlphabeticPart.id) || model.AlphabeticPart.id == "0")
+                modelState.AddModelError("AlphabeticPart", "Required");
+            if (model.NumericPart == null || string.IsNullOrEmpty(model.NumericPart.id) || model.NumericPart.id == "0")
+                modelState.AddModelError("NumericPart", "Required");
+
         }
     }
 }
