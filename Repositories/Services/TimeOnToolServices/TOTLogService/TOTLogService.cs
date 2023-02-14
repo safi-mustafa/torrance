@@ -104,7 +104,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Shift)
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
-                    .Include(x => x.Foreman)
+                    //.Include(x => x.Foreman)
                     .Include(x => x.Employee)
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)

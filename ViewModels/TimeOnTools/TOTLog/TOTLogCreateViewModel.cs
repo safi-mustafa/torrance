@@ -53,7 +53,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? Comment { get; set; }
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         [Display(Name = "Description", Prompt = "Add Description")]
-        public string JobDescription { get; set; }
+        public string? JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
         [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }

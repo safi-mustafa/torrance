@@ -23,7 +23,7 @@ namespace Models.TimeOnTools
         [ForeignKey("ReasonForRequest")]
         public long? ReasonForRequestId { get; set; }
         public ReasonForRequest? ReasonForRequest { get; set; }
-        public string JobDescription { get; set; }
+        public string? JobDescription { get; set; }
         public string? Comment { get; set; }
         public long ManPowerAffected { get; set; }
         public string EquipmentNo { get; set; }

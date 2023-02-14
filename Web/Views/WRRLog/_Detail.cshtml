@@ -19,8 +19,7 @@
                     <div>@Model.FormattedCalibrationDate</div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="FumeControlUsed" class="form-label fw-600"></label>
@@ -33,22 +32,19 @@
                     <div>@(string.IsNullOrEmpty(Model.Twr) ? "-" : Model.Twr)</div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
-                </div>
+
+            @*<div class="col-lg-6">
+            <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
             </div>
+            </div>*@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="RodCheckedOut" class="form-label fw-600"></label>
                     <div>@Model.FormattedRodCheckedOut</div>
                 </div>
             </div>
-        </div>
-         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="RodCheckedOutLbs" class="form-label fw-600"></label>
@@ -61,8 +57,7 @@
                     <div>@Model.RodReturnedWasteLbs</div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Department" class="form-label fw-600"></label>
@@ -75,8 +70,7 @@
                     <div>@(string.IsNullOrEmpty(Model.Employee.Name) ? "-" : Model.Employee.Name)</div>
                 </div>
             </div>
-        </div>
-         <div class="row">
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Unit" class="form-label fw-600"></label>
@@ -89,8 +83,7 @@
                     <div>@(string.IsNullOrEmpty(Model.RodType.Name) ? "-" : Model.RodType.Name)</div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="WeldMethod" class="form-label fw-600">Weld Method</label>
@@ -103,8 +96,7 @@
                     <div>@(string.IsNullOrEmpty(Model.Location.Name) ? "-" : Model.Location.Name)</div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="Company" class="form-label fw-600"></label>
