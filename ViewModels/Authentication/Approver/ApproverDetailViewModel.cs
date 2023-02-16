@@ -1,18 +1,12 @@
 ﻿using Helpers.Extensions;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Unit;
+using ViewModels.OverrideLogs.ORLog;
 
 namespace ViewModels.Authentication.Approver
 {
-    public class ApproverDetailViewModel : UserDetailViewModel
+    public class ApproverDetailViewModel : UserDetailViewModel, IApproverAssociationsViewModel
     {
-        public List<UnitBriefViewModel> Units { get; set; } = new List<UnitBriefViewModel>();
-        public string FormattedUnits
-        {
-            get
-            {
-                return Units != null && Units.Count() > 0 ? string.Join(", ", Units.Select(m => m.Name).ToList()) : "";
-            }
-        }
+        public List<ApproverAssociationsViewModel> Associations { get; set; } = new List<ApproverAssociationsViewModel>();
     }
 }

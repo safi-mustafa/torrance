@@ -1,4 +1,5 @@
 ﻿@using ViewModels.Authentication.Approver;
+@using Web.Extensions;
 @model ApproverModifyViewModel
 @{
     Layout = null;
@@ -44,15 +45,145 @@
                     </div>
                 </div>
             }
-            <div class="col-lg-6">
-                <div class="mb-3 profile-input">
-                    <partial name="~/Views/Shared/Select2/_UnitMultiSelect.cshtml" model="Model" view-data='new ViewDataDictionary(ViewData) { { "MultiSelect", true} }' />
+            @*   <div class="col-lg-6">
+            <div class="mb-3 profile-input">
+            <partial name="~/Views/Shared/Select2/_UnitMultiSelect.cshtml" model="Model" view-data='new ViewDataDictionary(ViewData) { { "MultiSelect", true} }' />
+            </div>
+            </div>
+            *@
+            <div class="col-md-12 mt-3">
+                <div class="form-group container row">
+                    <h4 class="col-md-12">Department & Unit</h4>
+                    <span class="col-md-3">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_Department.cshtml", (new ViewModels.Common.Department.DepartmentBriefViewModel()), "Department")
+                    </span>
+                    <span class="col-md-3">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_Unit.cshtml", (new ViewModels.Common.Unit.UnitBriefViewModel(false)), "Unit")
+                    </span>
+
+                    <span class="text-center col-md-3">
+                        <label class="form-label fw-600 w-100">Add</label>
+                        <button type="button" class="add-association btn-circle btn-sm" style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
+                    </span>
                 </div>
             </div>
-
+            <div class="table-responsive my-3" id="association-table">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Unit</th>
+                            <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody class="association-tbody">
+                        @for (var i = 0; i < Model.Associations.Count(); i++)
+                        {
+                            @await Html.PartialAsync("~/Views/Approver/_ApproverAssociationRow.cshtml", Model.Associations[i], new ViewDataDictionary(ViewData) { { "RowNumber", i } })
+                        }
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>
 </div>
 
 <input type="hidden" asp-for="Id" />
+
+<script>
+    $(function () {
+        $(document).off("click", ".add-association");
+        $(document).on("click", ".add-association", function () {
+            AddAssociation(this);
+        });
+        $(document).off("click", ".remove-association");
+        $(document).on("click", ".remove-association", function () {
+            $(this).closest("tr").remove();
+            RefreshInputIndexes();
+        });
+    });
+    function AddAssociation(element) {
+        var thisElement = $(element);
+        var departmentId = $("#department-id").val();
+        var departmentName = $("#department-id").text();
+        departmentName = departmentName.replace(/(\r\n|\n|\r)/gm, "");
+
+        var unitId = $("#unit-id").val();
+        var unitName = $("#unit-id").text();
+        unitName = unitName.replace(/(\r\n|\n|\r)/gm, "");
+
+        if (departmentId != null && departmentId != "" && unitId != null && unitId != "") {
+            var rowNumber = $(".association-row").length;
+            var obj = {
+                'Department': {
+                    'Id': departmentId,
+                    'Name': departmentName
+                },
+                'Unit': {
+                    'Id': unitId,
+                    'Name': unitName
+                }
+            }
+            console.log(obj, rowNumber);
+            AddAssociationRow(obj, rowNumber);
+            ResetAssociationInputs();
+        }
+        else {
+            swal.fire({
+                title: 'Validation Error',
+                text: "Department & Unit are required fields.",
+                type: 'error',
+                showCancelButton: true,
+                confirmButtonText: "Okay",
+                cancelButtonText: "Cancel",
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            });
+        }
+    }
+    function ResetAssociationInputs() {
+        $("#unit-id").val('').trigger('change')
+        $("#department-id").val('').trigger('change')
+    }
+
+    function AddAssociationRow(obj, rowNumber) {
+        $.ajax({
+            url: "/Approver/_ApproverAssociationRow",
+            type: "post",
+            data: { model: obj, 'rowNumber': rowNumber },
+            dataType: "html",
+            success: function (response) {
+                console.log(response);
+                $('#association-table tbody').append(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function RefreshInputIndexes() {
+        var rowIndex = 0;
+        $.each($("#association-table tr"), function () {
+
+            if ($(this).find('input').length > 1) {
+                var id = $(this).attr("id");
+                if (id != null && id != "") {
+                    $(this).attr("id", "association-row-" + rowIndex);
+                }
+                $.each($(this).find('input'), function () {
+                    if ($(this).attr('name').split(".").length > 2) {
+
+                        $(this).attr("name", "Associations[" + rowIndex + "]." + $(this).attr('name').split(".")[1] + "." + $(this).attr('name').split(".")[2]);
+                    }
+                    else {
+                        $(this).attr("name", "Associations[" + rowIndex + "]." + $(this).attr('name').split(".")[1]);
+                    }
+                });
+                rowIndex++;
+            }
+        });
+    }
+</script>

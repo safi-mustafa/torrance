@@ -11,6 +11,7 @@ using ViewModels.Authentication.Approver;
 using ViewModels.Authentication.User;
 using ViewModels.DataTable;
 using Enums;
+using ViewModels.OverrideLogs.ORLog;
 
 namespace Web.Controllers
 {
@@ -33,10 +34,16 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Email",data = "Email"},
                 new DataTableViewModel{title = "Full Name",data = "FullName"},
                 new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
-                new DataTableViewModel{title = "Units",data = "FormattedUnits"},
+                //new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
+        }
+
+        public IActionResult _ApproverAssociationRow(ApproverAssociationsViewModel model, int rowNumber)
+        {
+            ViewData["RowNumber"] = rowNumber;
+            return PartialView("_ApproverAssociationRow", model);
         }
 
     }

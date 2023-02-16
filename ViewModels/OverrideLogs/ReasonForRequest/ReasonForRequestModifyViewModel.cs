@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
+using ViewModels.Common.Validation;
 
 namespace ViewModels.OverrideLogs
 {
-    public class ReasonForRequestModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class ReasonForRequestModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IValidateName
     {
         [Required]
         [MaxLength(200)]

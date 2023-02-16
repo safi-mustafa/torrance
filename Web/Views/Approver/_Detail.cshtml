@@ -21,14 +21,6 @@
             </div>
         </div>
         <div class="row">
-             <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Units" class="form-label fw-600"></label>
-                    <div>@Model.FormattedUnits</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="AccessCode" class="form-label fw-600"></label>
@@ -36,6 +28,25 @@
                 </div>
             </div>
            
+        </div>
+        <div class="row">
+            <div class="cold -12 table-responsive my-3">
+                <h4>Department & Unit</h4>
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="association-tbody">
+                        @for (var i = 0; i < Model.Associations.Count(); i++)
+                        {
+                            @await Html.PartialAsync("~/Views/Approver/_ApproverAssociationRow.cshtml", Model.Associations[i], new ViewDataDictionary(ViewData) { { "RowNumber", i },{"IsDetailPage",true} })
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

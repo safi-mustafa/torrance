@@ -1,24 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using ViewModels.Authentication.User;
-using ViewModels.Common.Unit;
-using ViewModels.MultiSelectInterfaces;
+﻿using ViewModels.Authentication.User;
 
 namespace ViewModels.Authentication.Approver
 {
-    public class ApproverModifyViewModel : UserUpdateViewModel, IUnitMultiSelect
+    public class ApproverModifyViewModel : UserUpdateViewModel, IApproverAssociationsViewModel
     {
-        [Required(ErrorMessage = "At least one Unit required.")]
-        public List<long> UnitIds { get; set; } = new List<long>();
-        public List<UnitBriefViewModel> Units { get; set; } = new List<UnitBriefViewModel>();
-        public string FormattedUnits
-        {
-            get
-            {
-                return Units != null && Units.Count() > 0 ? string.Join(", ", Units.Select(m => m.Name).ToList()) : "";
-            }
-        }
+        public List<ApproverAssociationsViewModel> Associations { get; set; } = new List<ApproverAssociationsViewModel>();
 
     }
 }

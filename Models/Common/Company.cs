@@ -2,7 +2,7 @@
 
 namespace Models.Common
 {
-    public class Company : BaseDBModel
+    public class Company : BaseDBModel, IName
     {
         public string Name { get; set; }
     }

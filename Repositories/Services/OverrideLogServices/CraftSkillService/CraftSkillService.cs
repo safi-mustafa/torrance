@@ -11,10 +11,11 @@ using Models.OverrideLogs;
 using ViewModels.OverrideLogs;
 using Helpers.Extensions;
 using Centangle.Common.ResponseHelpers;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.OverrideLogServices.CraftSkillService
 {
-    public class CraftSkillService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<CraftSkill, CreateViewModel, UpdateViewModel, DetailViewModel>, ICraftSkillService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class CraftSkillService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<CraftSkill, CreateViewModel, UpdateViewModel, DetailViewModel>, ICraftSkillService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

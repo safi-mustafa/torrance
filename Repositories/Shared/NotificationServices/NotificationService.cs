@@ -12,6 +12,9 @@ using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
 using Repositories.Shared.UserInfoServices;
+using ViewModels.Authentication.Approver;
+using ViewModels.Common.Department;
+using ViewModels.Common.Unit;
 using ViewModels.Notification;
 using ViewModels.Shared;
 
@@ -59,8 +62,8 @@ namespace Repositories.Shared.NotificationServices
             {
                 if ((viewModel.EventType == NotificationEventTypeCatalog.Created || viewModel.EventType == NotificationEventTypeCatalog.Updated) && (string.IsNullOrEmpty(viewModel.SendTo) || viewModel.SendTo == "0"))
                 {
-                    var unitId = await GetLogUnit(viewModel);
-                    var approvers = await _db.ApproverUnits.Where(x => x.UnitId == unitId).ToListAsync();
+                    var association = await GetLogUnitAndDepartment(viewModel);
+                    var approvers = await _db.ApproverAssociations.Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id).Distinct().ToListAsync();
                     if (approvers != null && approvers.Count > 0)
                     {
                         List<Notification> notifications = new List<Notification>();
@@ -93,22 +96,55 @@ namespace Repositories.Shared.NotificationServices
             }
         }
 
-        private async Task<long> GetLogUnit(NotificationModifyViewModel viewModel)
+        private async Task<ApproverAssociationsViewModel> GetLogUnitAndDepartment(NotificationModifyViewModel viewModel)
         {
-            long unitId = 0;
+            ApproverAssociationsViewModel association = new ApproverAssociationsViewModel();
             if (viewModel.EntityType == NotificationEntityType.TOTLog)
             {
-                unitId = await _db.TOTLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+                association = await _db.TOTLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                new ApproverAssociationsViewModel
+                {
+                    Department = new DepartmentBriefViewModel
+                    {
+                        Id = x.DepartmentId
+                    },
+                    Unit = new UnitBriefViewModel()
+                    {
+                        Id = x.UnitId
+                    }
+                }).FirstOrDefaultAsync();
             }
             else if (viewModel.EntityType == NotificationEntityType.WRRLog)
             {
-                unitId = await _db.WRRLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+                association = await _db.WRRLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                new ApproverAssociationsViewModel
+                {
+                    Department = new DepartmentBriefViewModel
+                    {
+                        Id = x.DepartmentId
+                    },
+                    Unit = new UnitBriefViewModel()
+                    {
+                        Id = x.UnitId
+                    }
+                }).FirstOrDefaultAsync();
             }
             else
             {
-                unitId = await _db.OverrideLogs.Where(x => x.Id == viewModel.EntityId).Select(x => x.UnitId).FirstOrDefaultAsync();
+                association = await _db.OverrideLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                new ApproverAssociationsViewModel
+                {
+                    Department = new DepartmentBriefViewModel
+                    {
+                        Id = x.DepartmentId
+                    },
+                    Unit = new UnitBriefViewModel()
+                    {
+                        Id = x.UnitId
+                    }
+                }).FirstOrDefaultAsync();
             }
-            return unitId;
+            return association;
         }
     }
 }

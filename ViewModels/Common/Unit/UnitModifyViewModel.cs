@@ -3,10 +3,11 @@ using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
 using Enums;
+using ViewModels.Common.Validation;
 
 namespace ViewModels.Common.Unit
 {
-    public class UnitModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class UnitModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IValidateName
     {
         [Required]
         [MaxLength(200)]

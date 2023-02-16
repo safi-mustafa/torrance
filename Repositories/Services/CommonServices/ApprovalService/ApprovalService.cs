@@ -45,10 +45,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var isEmployee = userRoles.Contains("Employee");
             try
             {
-                List<long> approverUnits = null;
+                List<long> approverAssociations = null;
                 if (isApprover)
                 {
-                    approverUnits = await _db.ApproverUnits.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.UnitId).Distinct().ToListAsync();
+                    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.UnitId).Distinct().ToListAsync();
                 }
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
@@ -69,7 +69,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      &&
                      (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      &&
-                     (isApprover == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
+                     (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -102,7 +102,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                          &&
-                         (isApprover == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
+                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel
@@ -139,7 +139,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                          &&
-                         (isApprover == false || (approverUnits != null && approverUnits.Contains(x.UnitId)))
+                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel

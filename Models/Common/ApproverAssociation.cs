@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Common
 {
-    public class ApproverUnit : BaseDBModel
+    public class ApproverAssociation : BaseDBModel
     {
         [ForeignKey("TorranceUser")]
         public long ApproverId { get; set; }
@@ -12,5 +12,9 @@ namespace Models.Common
         [ForeignKey("Unit")]
         public long UnitId { get; set; }
         public Unit Unit { get; set; }
+
+        [ForeignKey("Department")]
+        public long DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }

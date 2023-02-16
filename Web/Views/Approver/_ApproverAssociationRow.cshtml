@@ -1,0 +1,39 @@
+﻿@model ViewModels.Authentication.Approver.ApproverAssociationsViewModel;
+@using Enums;
+@{
+    var collectionType = "Associations";
+    var rowNumber = ViewData["RowNumber"] != null ? int.Parse(ViewData["RowNumber"].ToString()) : 0;
+    var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
+
+    var rowName = "association-row[" + rowNumber + "]";
+    var rowId = "association-row-" + rowNumber;
+
+    var departmentId = collectionType + "[" + rowNumber + "].Department.Id";
+    var depatmentName = collectionType + "[" + rowNumber + "].Department.Name";
+    var unitId = collectionType + "[" + rowNumber + "].Unit.Id";
+    var unitName = collectionType + "[" + rowNumber + "].Unit.Name";
+    var hiddenId = collectionType + "[" + rowNumber + "].Id";
+}
+
+<tr class="association-row" id="@rowId">
+    <td>
+        <span style=" text-align: initial !important;">@Model.Department.Name</span>
+        <input type="hidden" name="@departmentId" value="@Model.Department.Id" />
+        <input type="hidden" name="@depatmentName" value="@Model.Department.Name" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.Unit.Name</span>
+        <input type="hidden" name="@unitId" value="@Model.Unit.Id" />
+        <input type="hidden" name="@unitName" value="@Model.Unit.Name" />
+    </td>
+    @if (isDetailPage == false)
+    {
+        <td>
+
+            <a href="javascript:void(0)" class="remove-association mx-1 datatable-action btn bg-custom-dark" data-toggle="tooltip" title="Delete Cost"><i class="icon-trash"></i></a>
+        </td>
+    }
+
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
+</tr>
+

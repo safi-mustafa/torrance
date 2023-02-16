@@ -13,6 +13,8 @@ using Centangle.Common.ResponseHelpers.Models;
 using Web.Controllers.SharedControllers;
 using Newtonsoft.Json;
 using ViewModels.OverrideLogs;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
+using ViewModels.Common.Validation;
 
 namespace Web.Controllers
 {
@@ -86,6 +88,7 @@ namespace Web.Controllers
         {
             try
             {
+                await ExecuteAdditionalValidation(model);
                 if (ModelState.IsValid)
                 {
                     var response = await _service.Create(model);
@@ -110,6 +113,7 @@ namespace Web.Controllers
         {
             try
             {
+                await ExecuteAdditionalValidation(model);
                 if (ModelState.IsValid)
                 {
                     long id = 0;
@@ -346,6 +350,17 @@ namespace Web.Controllers
                 });
             }
             return UpdateView(GetUpdateViewModel(action, model));
+        }
+
+        protected virtual async Task ExecuteAdditionalValidation(IBaseCrudViewModel model)
+        {
+            if (_service is IBaseServiceWithUniqueNameValidation && model is IValidateName)
+            {
+                var nameModel = (model as IValidateName);
+                bool isvalid = await (_service as IBaseServiceWithUniqueNameValidation).IsUniqueName(nameModel);
+                if (!isvalid)
+                    ModelState.AddModelError("Name", $"The Name ({nameModel.Name}) already exist");
+            }
         }
         #endregion
 

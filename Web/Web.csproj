@@ -231,4 +231,11 @@
     <Folder Include="Views\DelayType\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Approver\_ApproverAssociationRow.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

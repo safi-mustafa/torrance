@@ -1,4 +1,5 @@
 ﻿using Helpers.Models.Shared;
+using Models.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.OverrideLogs
 {
-    public class CraftSkill : BaseDBModel
+    public class CraftSkill : BaseDBModel, IName
     {
         public string Name { get; set; }
 

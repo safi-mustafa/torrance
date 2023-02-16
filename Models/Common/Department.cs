@@ -3,7 +3,7 @@ using Helpers.Models.Shared;
 
 namespace Models.Common
 {
-    public class Department : BaseDBModel
+    public class Department : BaseDBModel, IName
     {
         public string Name { get; set; }
         public LogType Type { get; set; }

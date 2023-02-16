@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using Models.Common.Interfaces;
 using ViewModels.Shared;
+using ViewModels.Common.Validation;
 
 namespace ViewModels.WeldingRodRecord.RodType
 {
-    public class RodTypeModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class RodTypeModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IValidateName
     {
         [Required]
         [MaxLength(200)]

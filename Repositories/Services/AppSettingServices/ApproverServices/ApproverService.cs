@@ -17,6 +17,7 @@ using Repositories.Services.CommonServices.UserService;
 using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
+using ViewModels.Common.Department;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -41,11 +42,11 @@ namespace Repositories.Services.AppSettingServices.ApproverService
         }
         protected override async Task<bool> CreateUserAdditionalMappings(CreateViewModel viewModel, SignUpModel model)
         {
-            return await SetApproverUnits((viewModel as ApproverModifyViewModel).UnitIds, model.Id);
+            return await SetApproverAssociations((viewModel as ApproverModifyViewModel).Associations, model.Id);
         }
         protected override async Task<bool> UpdateUserAdditionalMappings(UpdateViewModel viewModel, SignUpModel model)
         {
-            return await SetApproverUnits((viewModel as ApproverModifyViewModel).UnitIds, model.Id);
+            return await SetApproverAssociations((viewModel as ApproverModifyViewModel).Associations, model.Id);
         }
         public async Task<IRepositoryResponse> GetById(long id)
         {
@@ -59,7 +60,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                 if (dbModel != null)
                 {
                     var result = _mapper.Map<ApproverDetailViewModel>(dbModel);
-                    result.Units = await GetApproverUnits(id);
+                    result.Associations = await GetApproverAssociations(id);
                     result.AccessCode = result.AccessCode != null ? dbModel.AccessCode.DecodeFrom64() : "0";
                     var response = new RepositoryResponseWithModel<ApproverDetailViewModel> { ReturnModel = result };
                     return response;
@@ -84,8 +85,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
                 var userQueryable = (from user in _db.Users
-                                     join approverUnit in _db.ApproverUnits on user.Id equals approverUnit.ApproverId into aul
-                                     from approverUnit in aul.DefaultIfEmpty()
+                                     join approverAssociation in _db.ApproverAssociations on user.Id equals approverAssociation.ApproverId into aal
+                                     from approverAssociation in aal.DefaultIfEmpty()
                                      join userRole in _db.UserRoles on user.Id equals userRole.UserId
                                      join r in _db.Roles on userRole.RoleId equals r.Id
                                      where
@@ -94,7 +95,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                             string.IsNullOrEmpty(searchFilter.Search.value) || user.Email.ToLower().Contains(searchFilter.Search.value.ToLower())
                                         )
                                         &&
-                                        (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverUnit.UnitId == searchFilter.Unit.Id)
+                                        (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverAssociation.UnitId == searchFilter.Unit.Id)
                                         &&
                                         ("Approver" == r.Name)
                                         &&
@@ -136,7 +137,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                   })
                   .ToListAsync();
 
-                var approverUnits = await _db.ApproverUnits.Include(x => x.Unit).Where(x => filteredUserIds.Contains(x.ApproverId)).ToListAsync();
+                //var approverUnits = await _db.ApproverAssociations.Where(x => filteredUserIds.Contains(x.ApproverId)).ToListAsync();
 
                 users.Items.ForEach(x =>
                 {
@@ -146,7 +147,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
                     x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
-                    x.Units = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
+                    //x.Associations = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
                 var mappedUserList = users.Items as List<M>;
                 var paginatedModel = new PaginatedResultModel<M> { Items = mappedUserList, _links = users._links, _meta = users._meta };
@@ -162,28 +163,29 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             }
         }
 
-        public async Task<bool> SetApproverUnits(List<long> unitIds, long approverId)
+        public async Task<bool> SetApproverAssociations(List<ApproverAssociationsViewModel> associations, long approverId)
         {
             try
             {
-                var oldApproverUnits = await _db.ApproverUnits.Where(x => x.ApproverId == approverId).ToListAsync();
-                if (oldApproverUnits.Count() > 0)
+                var oldApproverAssociations = await _db.ApproverAssociations.Where(x => x.ApproverId == approverId).ToListAsync();
+                if (oldApproverAssociations.Count() > 0)
                 {
-                    foreach (var oldApproverUnit in oldApproverUnits)
+                    foreach (var oldApproverUnit in oldApproverAssociations)
                     {
                         oldApproverUnit.IsDeleted = true;
                         _db.Entry(oldApproverUnit).State = EntityState.Modified;
                     }
                     _db.SaveChanges();
                 }
-                if (unitIds.Count() > 0)
+                if (associations.Count() > 0)
                 {
-                    List<ApproverUnit> list = new List<ApproverUnit>();
-                    foreach (var unitId in unitIds)
+                    List<ApproverAssociation> list = new List<ApproverAssociation>();
+                    foreach (var association in associations)
                     {
-                        ApproverUnit approverUnit = new ApproverUnit();
+                        ApproverAssociation approverUnit = new ApproverAssociation();
                         approverUnit.ApproverId = approverId;
-                        approverUnit.UnitId = unitId;
+                        approverUnit.DepartmentId = association.Department.Id ?? 0;
+                        approverUnit.UnitId = association.Unit.Id ?? 0;
                         list.Add(approverUnit);
                     }
                     await _db.AddRangeAsync(list);
@@ -194,28 +196,38 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ApproverService SetApproverUnits method threw an exception, Message: {ex.Message}");
+                _logger.LogError($"ApproverService SetApproverAssociations method threw an exception, Message: {ex.Message}");
                 return false;
             }
         }
 
-        public async Task<List<UnitBriefViewModel>> GetApproverUnits(long id)
+        public async Task<List<ApproverAssociationsViewModel>> GetApproverAssociations(long id)
         {
             try
             {
-                var employeeCrafts = await (from au in _db.ApproverUnits
-                                            where au.ApproverId == id
-                                            join u in _db.Units on au.UnitId equals u.Id
-                                            select new UnitBriefViewModel()
+                var employeeCrafts = await (from aa in _db.ApproverAssociations
+                                            join d in _db.Departments on aa.DepartmentId equals d.Id
+                                            join u in _db.Units on aa.UnitId equals u.Id
+                                            where aa.ApproverId == id
+                                            select new ApproverAssociationsViewModel()
                                             {
-                                                Id = au.UnitId,
-                                                Name = u.Name
+                                                Id = aa.Id,
+                                                Unit=new UnitBriefViewModel()
+                                                {
+                                                    Id=u.Id,
+                                                    Name=u.Name
+                                                },
+                                                Department=new DepartmentBriefViewModel()
+                                                {
+                                                    Id = d.Id,
+                                                    Name = d.Name
+                                                }
                                             }).ToListAsync();
                 return employeeCrafts;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ApproverService GetApproverUnits method threw an exception, Message: {ex.Message}");
+                _logger.LogError($"ApproverService GetApproverAssociations method threw an exception, Message: {ex.Message}");
                 return null;
             }
         }

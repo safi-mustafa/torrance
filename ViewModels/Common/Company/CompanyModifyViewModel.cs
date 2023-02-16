@@ -5,10 +5,11 @@ using ViewModels.Shared;
 using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 using ViewModels.MultiSelectInterfaces;
+using ViewModels.Common.Validation;
 
 namespace ViewModels.Common.Company
 {
-    public class CompanyModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, ICraftMultiSelect
+    public class CompanyModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, ICraftMultiSelect, IValidateName
     {
         [Required]
         [MaxLength(200)]

@@ -4,11 +4,13 @@ using Models.Common.Interfaces;
 using ViewModels.Shared;
 using ViewModels.Common.Unit;
 using ViewModels.MultiSelectInterfaces;
+using ViewModels.Common.Validation;
 
 namespace ViewModels.Common.Department
 {
-    public class DepartmentCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IUnitMultiSelect
+    public class DepartmentCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IUnitMultiSelect, IValidateName
     {
+        public long Id { get; set; }
         [Required]
         [MaxLength(200)]
         [DisplayName("Name")]
