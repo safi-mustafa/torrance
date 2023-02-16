@@ -45,10 +45,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var isEmployee = userRoles.Contains("Employee");
             try
             {
-                List<long> approverAssociations = null;
+                List<string> approverAssociations = null;
                 if (isApprover)
                 {
-                    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.UnitId).Distinct().ToListAsync();
+                    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToListAsync();
                 }
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
@@ -69,7 +69,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      &&
                      (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      &&
-                     (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
+                     (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -81,6 +81,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Status = x.Status,
                             Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                             Unit = x.Unit != null ? x.Unit.Name : "",
+                            Department = x.Department != null ? x.Department.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee
                         }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
@@ -102,7 +103,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                          &&
-                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
+                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel
@@ -114,6 +115,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Status = x.Status,
                         Reason = "-",//x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                         Unit = x.Unit != null ? x.Unit.Name : "",
+                        Department=x.Department!=null?x.Department.Name:"",
                         Type = LogType.WeldingRodRecord,
                         Employee = x.Employee
                     }).AsQueryable();
@@ -139,7 +141,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                          &&
-                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.UnitId)))
+                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel
@@ -151,6 +153,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Status = x.Status,
                         Reason = x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                         Unit = x.Unit != null ? x.Unit.Name : "",
+                        Department = x.Department != null ? x.Department.Name : "",
                         Type = LogType.Override,
                         Employee = x.Employee
                     }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
