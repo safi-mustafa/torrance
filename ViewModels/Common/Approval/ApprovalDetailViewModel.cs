@@ -31,6 +31,8 @@ namespace ViewModels.Common
 
         public string Reason { get; set; }
 
+        public double TotalCost { get; set; }
+
         public string Approver { get; set; }
         public string Unit { get; set; }
         public string TWR { get; set; }

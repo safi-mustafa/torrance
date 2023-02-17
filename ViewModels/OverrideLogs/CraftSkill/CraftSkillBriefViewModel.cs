@@ -12,7 +12,11 @@ namespace ViewModels.OverrideLogs
         [DisplayName("Craft Skill")]
         public override string? Name { get; set; }
 
-        public double? Rate { get; set; }
+        public double? STRate { get; set; }
+
+        public double? OTRate { get; set; }
+
+        public double? DTRate { get; set; }
     }
 
 }

@@ -1,10 +1,11 @@
 ﻿@model ViewModels.OverrideLogs.ORLog.ORLogCostViewModel;
 @using Enums;
+@using System.Globalization;
 @{
     var collectionType = "Costs";
     var rowNumber = ViewData["RowNumber"] != null ? int.Parse(ViewData["RowNumber"].ToString()) : 0;
     var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
-    
+
     var rowName = "cost-row[" + rowNumber + "]";
     var rowId = "cost-row-" + rowNumber;
 
@@ -13,6 +14,10 @@
     var craftName = collectionType + "[" + rowNumber + "].CraftSkill.Name";
     var overrideHours = collectionType + "[" + rowNumber + "].OverrideHours";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
+
+    var rate = (Model.OverrideType == OverrideTypeCatalog.ST ? Model.CraftSkill.STRate : (Model.OverrideType == OverrideTypeCatalog.OT ? Model.CraftSkill.OTRate : Model.CraftSkill.DTRate));
+    var cost = String.Format("{0:C}",(rate??0 * Model.OverrideHours));
+
 }
 
 <tr class="cost-row" id="@rowId">
@@ -29,6 +34,12 @@
         <span style=" text-align: initial !important;">@Model.OverrideHours</span>
         <input type="hidden" name="@overrideHours" value="@Model.OverrideHours" />
     </td>
+    @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+    {
+        <td>
+            <span style=" text-align: initial !important;">@cost</span>
+        </td>
+    }
     @if (isDetailPage == false)
     {
         <td>
@@ -36,7 +47,7 @@
             <a href="javascript:void(0)" class="remove-cost mx-1 datatable-action btn bg-custom-dark" data-toggle="tooltip" title="Delete Cost"><i class="icon-trash"></i></a>
         </td>
     }
-   
+
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
 </tr>
 

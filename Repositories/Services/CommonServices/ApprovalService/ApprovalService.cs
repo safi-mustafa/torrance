@@ -83,7 +83,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Unit = x.Unit != null ? x.Unit.Name : "",
                             Department = x.Department != null ? x.Department.Name : "",
                             Type = LogType.TimeOnTools,
-                            Employee = x.Employee
+                            Employee = x.Employee,
+                            TotalCost = 0
                         }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var wrrLogsQueryable = _db.WRRLogs
@@ -115,9 +116,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Status = x.Status,
                         Reason = "-",//x.ReasonForRequest != null ? x.ReasonForRequest.Name : "",
                         Unit = x.Unit != null ? x.Unit.Name : "",
-                        Department=x.Department!=null?x.Department.Name:"",
+                        Department = x.Department != null ? x.Department.Name : "",
                         Type = LogType.WeldingRodRecord,
-                        Employee = x.Employee
+                        Employee = x.Employee,
+                        TotalCost = 0
                     }).AsQueryable();
 
                 var overrideLogsQueryable = _db.OverrideLogs
@@ -155,7 +157,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Unit = x.Unit != null ? x.Unit.Name : "",
                         Department = x.Department != null ? x.Department.Name : "",
                         Type = LogType.Override,
-                        Employee = x.Employee
+                        Employee = x.Employee,
+                        TotalCost = x.TotalCost
                     }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();

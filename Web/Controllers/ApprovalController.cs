@@ -252,6 +252,7 @@ namespace Web.Controllers
                 //new DataTableViewModel{title = "TWR",data = "TWR"},
                 new DataTableViewModel{title = "Reason",data = "Reason", orderable=true},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
+                new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
