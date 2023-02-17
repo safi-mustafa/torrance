@@ -6,7 +6,7 @@ using ViewModels.OverrideLogs;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class LeadPlannerController : CrudBaseController<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel, LeadPlannerDetailViewModel, LeadPlannerSearchViewModel>
     {
         private readonly ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> _leadPlannerService;

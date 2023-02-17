@@ -24,7 +24,7 @@ using Repositories.Services.OverrideLogServices.ORLogService;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Approver")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Approver")]
     public class ApprovalController : DatatableBaseController<ApprovalDetailViewModel, ApprovalSearchViewModel>
     {
         private readonly IApprovalService _approvalService;

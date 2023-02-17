@@ -14,5 +14,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
     {
         Task<IRepositoryResponse> GetTWRNumericValues<M>(IBaseSearchModel search);
         Task<IRepositoryResponse> GetTWRAphabeticValues<M>(IBaseSearchModel search);
+
+        Task<IRepositoryResponse> GetDelayReason<BaseBriefVM>(IBaseSearchModel search);
     }
 }

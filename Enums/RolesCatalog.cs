@@ -3,7 +3,7 @@
     public enum RolesCatalog
     {
         SuperAdmin,
-        Admin,
+        Administrator,
         Employee,
         Approver,
         Foreman,

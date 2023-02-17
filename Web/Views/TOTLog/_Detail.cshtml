@@ -49,7 +49,30 @@
                     <div>@(string.IsNullOrEmpty(Model.DelayType.Name) ? "-" : Model.DelayType.Name)</div>
                 </div>
             </div>
-
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="DelayReason" class="form-label fw-600"></label>
+                    <div>@(Model.DelayReason == null ? "-" : Model.DelayReason.ToString())</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="StartOfWorkDelay" class="form-label fw-600">Start Of Work Delay</label>
+                    <div>@(string.IsNullOrEmpty(Model.StartOfWorkDelay?.Name) ? "-" : Model.StartOfWorkDelay.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="ShiftDelay" class="form-label fw-600">Shift Delay</label>
+                    <div>@(string.IsNullOrEmpty(Model.ShiftDelay?.Name) ? "-" : Model.ShiftDelay.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
+                    <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="PermitType" class="form-label fw-600">Permit Type</label>
@@ -122,8 +145,24 @@
 
             <div class="col-lg-12">
                 <div class="mb-3">
+                    <label asp-for="PermitNo" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.PermitNo) ? "-" : Model.PermitNo)</div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12">
+                <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    <label asp-for="DelayDescription" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.DelayDescription) ? "-" : Model.DelayDescription)</div>
                 </div>
             </div>
 

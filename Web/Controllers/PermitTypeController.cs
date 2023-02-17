@@ -6,7 +6,7 @@ using ViewModels.TimeOnTools.PermitType;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class PermitTypeController : CrudBaseController<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel, PermitTypeDetailViewModel, PermitTypeSearchViewModel>
     {
         private readonly IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> _PermitTypeService;

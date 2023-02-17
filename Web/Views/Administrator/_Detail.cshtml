@@ -1,0 +1,36 @@
+﻿@using ViewModels.Authentication.User;
+@model UserDetailViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label class="form-label fw-600">Full Name</label>
+            <div>@Model.FullName </div>
+        </div>
+    </div>
+   @* <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Company" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Company.Name) ? "-" : Model.Company.Name)</div>
+        </div>
+    </div>*@
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
+        </div>
+    </div>
+@*
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="AccessCode" class="form-label fw-600">Access Code</label>
+            <div>@(string.IsNullOrEmpty(Model.FormattedAccessCode) ? "-" : Model.FormattedAccessCode)</div>
+        </div>
+    </div>*@
+</div>
+
+
+

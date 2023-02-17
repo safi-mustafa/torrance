@@ -35,6 +35,7 @@ using ViewModels.Authentication.Approver;
 using ViewModels.Notification;
 using ViewModels.Authentication.User;
 using ViewModels.AppSettings.CompanyManager;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace TorranceApi.Mapper
 {
@@ -122,6 +123,13 @@ namespace TorranceApi.Mapper
             CreateMap<ShiftDelayModifyViewModel, ShiftDelayDetailViewModel>().ReverseMap();
             CreateMap<ShiftDelay, ShiftDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ShiftDelayBriefViewModel>().ReverseMap();
+
+            //StartOfWorkDelay
+            CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelay>().ReverseMap();
+            CreateMap<StartOfWorkDelay, StartOfWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
 
             //Shift
             CreateMap<ShiftModifyViewModel, Shift>().ReverseMap();
@@ -229,6 +237,8 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
                 .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
                 .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+                .ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
+                .ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
@@ -258,6 +268,8 @@ namespace TorranceApi.Mapper
                .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
                .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
                .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+               .ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
+               .ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
                .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                .ForMember(x => x.Shift, opt => opt.Ignore())
                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))

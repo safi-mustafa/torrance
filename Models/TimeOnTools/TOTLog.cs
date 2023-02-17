@@ -42,6 +42,11 @@ namespace Models.TimeOnTools
         public long? ContractorId { get; set; }
         public Contractor? Contractor { get; set; }
 
+        [ForeignKey("StartOfWorkDelay")]
+        public long? StartOfWorkDelayId { get; set; }
+        public StartOfWorkDelay? StartOfWorkDelay { get; set; }
+
+
         [ForeignKey("ShiftDelay")]
         public long? ShiftDelayId { get; set; }
         public ShiftDelay? ShiftDelay { get; set; }
@@ -50,6 +55,10 @@ namespace Models.TimeOnTools
         public long? ReworkDelayId { get; set; }
         public ReworkDelay? ReworkDelay { get; set; }
 
+        public string? PermitNo { get; set; }
+
+        public string? DelayDescription { get; set; }
+
         [ForeignKey("PermitType")]
         public long PermitTypeId { get; set; }
         public PermitType PermitType { get; set; }
@@ -57,6 +66,8 @@ namespace Models.TimeOnTools
         [ForeignKey("PermittingIssue")]
         public long? PermittingIssueId { get; set; }
         public PermittingIssue? PermittingIssue { get; set; }
+
+        public DelayReasonCatalog? DelayReason { get; set; }
 
         [ForeignKey("Shift")]
         public long ShiftId { get; set; }

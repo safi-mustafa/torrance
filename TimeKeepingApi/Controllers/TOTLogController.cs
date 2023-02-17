@@ -86,6 +86,14 @@ namespace API.Controllers
             return base.Put(model);
         }
 
+        [HttpGet]
+        [Route("~/api/[controller]/GetDelayReasons")]
+        public async Task<IActionResult> GetDelayReasons([FromQuery] BaseSearchModel search)
+        {
+            var result = await _tOTLogService.GetDelayReason<Select2ViewModel>(search);
+            return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
+        }
+
         private void AddTWRModelStateErrors(ModelStateDictionary modelState, TWRViewModel model)
         {
             if (model.AlphabeticPart == null || string.IsNullOrEmpty(model.AlphabeticPart.id) || model.AlphabeticPart.id == "0")

@@ -17,7 +17,7 @@ using Web.Helpers;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Approver")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Approver")]
     public class EmployeeController : UserController<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel, EmployeeDetailViewModel, EmployeeSearchViewModel>
     {
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;

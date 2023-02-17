@@ -21,6 +21,7 @@ using ViewModels.TimeOnTools.PermitType;
 using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.TimeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
@@ -37,7 +38,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         }
         [Required(ErrorMessage = "*")]
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+        [Display(Name = "Permit No")]
+        [RegularExpression(@"^(\d{5})$", ErrorMessage = "Permit No must be of 5-digits.")]
+        public string? PermitNo { get; set; }
 
+        [Display(Name = "Delay Description")]
+        public string? DelayDescription { get; set; }
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
 
@@ -70,7 +76,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
+        public DelayReasonCatalog? DelayReason { get; set; }
+        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();

@@ -35,6 +35,8 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<ReworkDelay> ReworkDelays { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<ShiftDelay> ShiftDelays { get; set; }
+
+    public DbSet<StartOfWorkDelay> StartOfWorkDelays { get; set; }
     public DbSet<StatementOfWork> StatementOfWorks { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Location> Locations { get; set; }

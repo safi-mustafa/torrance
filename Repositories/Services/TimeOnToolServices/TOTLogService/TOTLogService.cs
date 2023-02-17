@@ -108,6 +108,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Company)
                     .Include(x => x.ReworkDelay)
                     .Include(x => x.ShiftDelay)
+                    .Include(x => x.StartOfWorkDelay)
                     .Include(x => x.Shift)
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
@@ -178,6 +179,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 {
                     var mappedModel = _mapper.Map<TOTLog>(model);
                     await SetRequesterId(mappedModel);
+                    SetDelayReasonFields(mappedModel);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "TOT Log Created";
@@ -214,6 +216,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
+                        SetDelayReasonFields(dbModel);
                         await _db.SaveChangesAsync();
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                         return response;
@@ -240,6 +243,35 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             else if (mappedModel.EmployeeId == null || mappedModel.EmployeeId < 1)
             {
                 mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
+            }
+
+        }
+
+        private void SetDelayReasonFields(TOTLog mappedModel)
+        {
+            if (mappedModel.DelayReason != null)
+            {
+                if (mappedModel.DelayReason == DelayReasonCatalog.StartOfWork)
+                {
+                    mappedModel.ShiftDelayId = null;
+                    mappedModel.ReworkDelayId = null;
+                }
+                else if (mappedModel.DelayReason == DelayReasonCatalog.ShiftDelay)
+                {
+                    mappedModel.StartOfWorkDelayId = null;
+                    mappedModel.ReworkDelayId = null;
+                }
+                else if (mappedModel.DelayReason == DelayReasonCatalog.ReworkDelay)
+                {
+                    mappedModel.ShiftDelayId = null;
+                    mappedModel.StartOfWorkDelayId = null;
+                }
+            }
+            else
+            {
+                mappedModel.ShiftDelayId = null;
+                mappedModel.StartOfWorkDelayId = null;
+                mappedModel.ReworkDelayId = null;
             }
 
         }
@@ -300,6 +332,40 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         public static List<Select2ViewModel> GetTWRNumericList() => new TWRViewModel().GetTWRNumericList();
 
         public static List<Select2ViewModel> GetTWRAlphabeticList() => new TWRViewModel().GetTWRAlphabeticList();
+
+        public async Task<IRepositoryResponse> GetDelayReason<BaseBriefVM>(IBaseSearchModel search)
+        {
+            try
+            {
+
+                List<Select2ViewModel> list = new List<Select2ViewModel>();
+                foreach (DelayReasonCatalog delayReason in (DelayReasonCatalog[])Enum.GetValues(typeof(DelayReasonCatalog)))
+                {
+                    list.Add(new Select2ViewModel()
+                    {
+                        id = ((int)delayReason).ToString(),
+                        text = delayReason.ToString()
+                    });
+                }
+
+                if (list != null && list.Count > 0)
+                {
+                    var paginatedResult = new PaginatedResultModel<Select2ViewModel>();
+                    paginatedResult.Items = list;
+                    paginatedResult._meta = new();
+                    paginatedResult._links = new();
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<Select2ViewModel>> { ReturnModel = paginatedResult };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for {typeof(TOTLog).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for {typeof(TOTLog).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
+        }
 
     }
 }

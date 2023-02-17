@@ -39,14 +39,14 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
+            if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
             {
                 result.ActionsList = new List<DataTableActionViewModel>()
                 {
                     new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/{_controllerName}/ResetPassword/Id"},
                 };
             }
-            if (User.IsInRole("SuperAdmin"))
+            if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                 {
@@ -113,14 +113,18 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Create(CreateViewModel model)
         {
-            bool isUnique = await _service.IsAccessCodeUnique(model.Id, model.AccessCode);
+            bool isUnique = await IsAccessCodeUnique(model);
             if (!isUnique)
             {
                 ModelState.AddModelError("AccessCode", "Access Code already in use.");
             }
             return await base.Create(model);
         }
+        public virtual async Task<bool> IsAccessCodeUnique(CreateViewModel model)
+        {
+            return await _service.IsAccessCodeUnique(model.Id, model.AccessCode);
 
+        }
         public override async Task<ActionResult> Update(UpdateViewModel model)
         {
             ModelState.Remove("Email");

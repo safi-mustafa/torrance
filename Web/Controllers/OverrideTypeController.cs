@@ -6,7 +6,7 @@ using ViewModels.OverrideLogs;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class OverrideTypeController : CrudBaseController<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel, OverrideTypeDetailViewModel, OverrideTypeSearchViewModel>
     {
         private readonly IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> _overrideTypeService;

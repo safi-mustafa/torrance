@@ -1119,6 +1119,41 @@ namespace DataLibrary.Migrations
                     b.ToTable("ShiftDelays");
                 });
 
+            modelBuilder.Entity("Models.TimeOnTools.StartOfWorkDelay", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("ActiveStatus")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StartOfWorkDelays");
+                });
+
             modelBuilder.Entity("Models.TimeOnTools.StatementOfWork", b =>
                 {
                     b.Property<long>("Id")
@@ -1186,6 +1221,12 @@ namespace DataLibrary.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DelayDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DelayReason")
+                        .HasColumnType("int");
+
                     b.Property<long>("DelayTypeId")
                         .HasColumnType("bigint");
 
@@ -1217,6 +1258,9 @@ namespace DataLibrary.Migrations
                     b.Property<long>("ManPowerAffected")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("PermitNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("PermitTypeId")
                         .HasColumnType("bigint");
 
@@ -1237,6 +1281,9 @@ namespace DataLibrary.Migrations
 
                     b.Property<DateTime?>("StartOfWork")
                         .HasColumnType("datetime2");
+
+                    b.Property<long?>("StartOfWorkDelayId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -1288,6 +1335,8 @@ namespace DataLibrary.Migrations
                     b.HasIndex("ShiftDelayId");
 
                     b.HasIndex("ShiftId");
+
+                    b.HasIndex("StartOfWorkDelayId");
 
                     b.HasIndex("UnitId");
 
@@ -2013,6 +2062,10 @@ namespace DataLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.TimeOnTools.StartOfWorkDelay", "StartOfWorkDelay")
+                        .WithMany()
+                        .HasForeignKey("StartOfWorkDelayId");
+
                     b.HasOne("Models.Common.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
@@ -2042,6 +2095,8 @@ namespace DataLibrary.Migrations
                     b.Navigation("Shift");
 
                     b.Navigation("ShiftDelay");
+
+                    b.Navigation("StartOfWorkDelay");
 
                     b.Navigation("Unit");
                 });

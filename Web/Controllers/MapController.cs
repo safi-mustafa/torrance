@@ -6,7 +6,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class MapController : CrudBaseController<MapModifyViewModel, MapModifyViewModel, MapDetailViewModel, MapDetailViewModel, MapSearchViewModel>
     {
         private readonly IMapService<MapModifyViewModel, MapModifyViewModel, MapDetailViewModel> _mapService;

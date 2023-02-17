@@ -3,13 +3,11 @@
 @model TOTLogModifyViewModel
 @{
     Layout = null;
-    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Admin");
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
 }
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
-
-
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
@@ -25,7 +23,7 @@
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-            
+
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="StartOfWork" class="form-label fw-600"></label>
@@ -41,9 +39,9 @@
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="WorkScope" class="form-label fw-600"></label>
-                    <input asp-for="WorkScope" type="text" class="form-control" />
-                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+                    <label asp-for="PermitNo" class="form-label fw-600"></label>
+                    <input asp-for="PermitNo" type="text" class="form-control" />
+                    <span asp-validation-for="PermitNo" class="validation-invalid-label"></span>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -51,25 +49,47 @@
                     <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label fw-600">Delay Reason</label>
+                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
+                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+                </div>
+            </div>
 
+            <div class="col-lg-6" id="shift-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+            </div>
+            <div class="col-lg-6" id="rework-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+            </div>
+            <div class="col-lg-6" id="start-of-work-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
+                </div>
+            </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
                 </div>
             </div>
-           @* @if (isAdmin)
+            @* @if (isAdmin)
             {
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600">Company</label>
-                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-                    </div>
-                </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600">Company</label>
+            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+            </div>
+            </div>
             }*@
             <div class="col-lg-6">
                 <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
@@ -128,29 +148,45 @@
                 </div>
             </div>
 
-            @*@if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-            {
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-                    </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="WorkScope" class="form-label fw-600"></label>
+                    <input asp-for="WorkScope" type="text" class="form-control" />
+                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
                 </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DelayDescription" class="form-label fw-600"></label>
+                    <input asp-for="DelayDescription" type="text" class="form-control" />
+                    <span asp-validation-for="DelayDescription" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            @*@if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+            {
+            <div class="col-lg-6">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+            </div>
+            </div>
             }
             else
             {
-                <input asp-for="Approver.Id" type="hidden" />
+            <input asp-for="Approver.Id" type="hidden" />
             }*@
             <input asp-for="Approver.Id" type="hidden" />
-           @* <div class="col-lg-12">
-                <div class="mb-3">
-                    <label asp-for="JobDescription" class="form-label fw-600"></label>
-                    <input asp-for="JobDescription" type="text" class="form-control" />
-                    <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
-                </div>
+            @* <div class="col-lg-12">
+            <div class="mb-3">
+            <label asp-for="JobDescription" class="form-label fw-600"></label>
+            <input asp-for="JobDescription" type="text" class="form-control" />
+            <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
+            </div>
             </div>*@
 
 
-           
+
             @*  <div class="col-lg-4">
             <div class="mb-3">
             <label asp-for="HoursDelayed" class="form-label fw-600"></label>
@@ -214,6 +250,7 @@
 
 <script>
     $(function () {
+        DelayReasonChanged();
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");
@@ -222,4 +259,26 @@
                 $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
             }
         });
-    });</script>
+        $('#delay-reason').on('change', function () {
+            DelayReasonChanged();
+        });
+    });
+
+    function DelayReasonChanged() {
+        var ele = $("#delay-reason");
+        if ($(ele).val() === '0') {
+            $('#shift-delay-container').hide();
+            $('#rework-delay-container').hide();
+            $('#start-of-work-delay-container').show();
+        } else if ($(ele).val() === '1') {
+            $('#shift-delay-container').show();
+            $('#rework-delay-container').hide();
+            $('#start-of-work-delay-container').hide();
+        } else if ($(ele).val() === '2') {
+            $('#shift-delay-container').hide();
+            $('#rework-delay-container').show();
+            $('#start-of-work-delay-container').hide();
+        }
+    }
+
+</script>

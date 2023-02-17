@@ -49,6 +49,8 @@ using Repositories.Shared.UserInfoServices;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.AppSettingServices.ForemanService;
+using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
+using Repositories.Services.AppSettingServices.AdministratorService;
 
 namespace Web.Extensions
 {
@@ -119,12 +121,14 @@ namespace Web.Extensions
             services.AddScoped(typeof(IPermittingIssueService<,,>), typeof(PermittingIssueService<,,>));
             services.AddScoped(typeof(IReworkDelayService<,,>), typeof(ReworkDelayService<,,>));
             services.AddScoped(typeof(IShiftDelayService<,,>), typeof(ShiftDelayService<,,>));
+            services.AddScoped(typeof(IStartOfWorkDelayService<,,>), typeof(StartOfWorkDelayService<,,>));
             services.AddScoped(typeof(IShiftService<,,>), typeof(ShiftService<,,>));
             services.AddScoped(typeof(ISOWService<,,>), typeof(SOWService<,,>));
             services.AddScoped(typeof(ILocationService<,,>), typeof(LocationService<,,>));
             services.AddScoped(typeof(IWeldMethodService<,,>), typeof(WeldMethodService<,,>));
             services.AddScoped(typeof(IRodTypeService<,,>), typeof(RodTypeService<,,>));
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
+            services.AddScoped(typeof(IAdministratorService<,,>), typeof(AdministratorService<,,>));
             services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(CompanyManagerService<,,>));
             services.AddScoped(typeof(IForemanService<,,>), typeof(ForemanService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));

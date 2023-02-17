@@ -18,6 +18,7 @@ using Helpers.Extensions;
 using ViewModels.Common.Company;
 using ViewModels.OverrideLogs;
 using ViewModels.Authentication.User;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -42,6 +43,11 @@ namespace ViewModels.TimeOnTools.TOTLog
                 return CreatedOn.Date.ToString("MM/dd/yyyy");
             }
         }
+        [Display(Name = "Permit No")]
+        public string? PermitNo { get; set; }
+
+        [Display(Name = "Delay Description")]
+        public string? DelayDescription { get; set; }
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
         public string Twr { get; set; }
@@ -107,7 +113,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
+        public DelayReasonCatalog? DelayReason { get; set; }
+        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();

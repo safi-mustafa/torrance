@@ -6,6 +6,7 @@ using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using ViewModels;
+using ViewModels.AppSettings.Administrator;
 using ViewModels.AppSettings.CompanyManager;
 using ViewModels.AppSettings.Map;
 using ViewModels.AppSettings.MobileFiles.Dropbox;
@@ -27,6 +28,7 @@ using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.SOW;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
@@ -127,6 +129,13 @@ namespace Models.Mapper
             CreateMap<ShiftDelay, ShiftDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ShiftDelayBriefViewModel>().ReverseMap();
 
+            //StartOfWorkDelay
+            CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelay>().ReverseMap();
+            CreateMap<StartOfWorkDelay, StartOfWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
+
             //Shift
             CreateMap<ShiftModifyViewModel, Shift>().ReverseMap();
             CreateMap<Shift, ShiftDetailViewModel>().ReverseMap();
@@ -166,7 +175,10 @@ namespace Models.Mapper
           
             CreateMap<CompanyManagerDetailViewModel, CompanyManagerModifyViewModel>().ReverseMap();
 
+            //Administrator
+            CreateMap<ToranceUser, AdministratorDetailViewModel>().ReverseMap();
 
+            CreateMap<AdministratorDetailViewModel, AdministratorModifyViewModel>().ReverseMap();
 
 
             //WRRLog
@@ -207,6 +219,8 @@ namespace Models.Mapper
                 .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
                 .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
                 .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+                .ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
+                .ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))

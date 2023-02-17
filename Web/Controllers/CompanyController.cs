@@ -6,7 +6,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class CompanyController : CrudBaseController<CompanyModifyViewModel, CompanyModifyViewModel, CompanyDetailViewModel, CompanyDetailViewModel, CompanySearchViewModel>
     {
         private readonly ICompanyService<CompanyModifyViewModel, CompanyModifyViewModel, CompanyDetailViewModel> _companyService;

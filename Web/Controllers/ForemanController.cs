@@ -8,7 +8,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Approver")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Approver")]
     public class ForemanController : UserController<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel, CompanyManagerDetailViewModel, CompanyManagerSearchViewModel>
     {
         private readonly string _controllerName = "Foreman";
@@ -22,14 +22,14 @@ namespace Web.Controllers
         }
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            //if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
+            //if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin")|| User.IsInRole("Administrator"))
             //{
             //    result.ActionsList = new List<DataTableActionViewModel>()
             //    {
             //        new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/{_controllerName}/ResetPassword/Id"},
             //    };
             //}
-            if (User.IsInRole("SuperAdmin"))
+            if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                 {

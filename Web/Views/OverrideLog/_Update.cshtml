@@ -4,7 +4,7 @@
 @model ORLogModifyViewModel
 @{
     Layout = null;
-    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Admin");
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
 }
 <div class="row">
     <div class="col-lg-12">
@@ -82,7 +82,7 @@
             </div>
             </div>*@
 
-            @*   @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+            @*   @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
             {
             <div class="col-lg-4">
             <div class="mb-3">

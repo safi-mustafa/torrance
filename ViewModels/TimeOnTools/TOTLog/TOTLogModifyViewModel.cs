@@ -18,6 +18,7 @@ using ViewModels.OverrideLogs;
 using Helpers.Extensions;
 using ViewModels.Common.Company;
 using ViewModels.Authentication.User;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -33,6 +34,12 @@ namespace ViewModels.TimeOnTools.TOTLog
             }
         }
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+        [Display(Name = "Permit No")]
+        [RegularExpression(@"^(\d{5})$", ErrorMessage = "Permit No must be of 5-digits.")]
+        public string? PermitNo { get; set; }
+
+        [Display(Name = "Delay Description")]
+        public string? DelayDescription { get; set; }
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
         public string? Foreman { get; set; }
@@ -63,7 +70,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         //[Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double? HoursDelayed { get; set; }
         public Status Status { get; set; }
-
+        
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -71,6 +78,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
 
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
+        public DelayReasonCatalog? DelayReason { get; set; }
+        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
 

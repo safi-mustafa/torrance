@@ -7,7 +7,7 @@ using ViewModels.DataTable;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class DropboxController : CrudBaseController<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel, DropboxDetailViewModel, DropboxSearchViewModel>
     {
         private readonly IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> _dropboxService;

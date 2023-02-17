@@ -6,7 +6,7 @@ using ViewModels.TimeOnTools.SOW;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class SOWController : CrudBaseController<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel, SOWDetailViewModel, SOWSearchViewModel>
     {
         private readonly ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> _SOWService;

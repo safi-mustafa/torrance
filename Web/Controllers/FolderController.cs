@@ -11,7 +11,7 @@ using Pagination;
 namespace Web.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "SuperAdmin,Approver")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Approver")]
     public class FolderController : CrudBaseController<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel, FolderDetailViewModel, FolderSearchViewModel>
     {
         private readonly IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;

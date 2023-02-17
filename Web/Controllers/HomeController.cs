@@ -22,7 +22,7 @@ namespace Web.Controllers
             _logger = logger;
             _dashboardService = dashboardService;
         }
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin,Administrator")]
         public async Task<IActionResult> Index()
         {
             return View(await _dashboardService.GetDashboardData());

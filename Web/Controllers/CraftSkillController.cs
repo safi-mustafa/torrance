@@ -7,7 +7,7 @@ using ViewModels.OverrideLogs;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class CraftSkillController : CrudBaseController<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel, CraftSkillDetailViewModel, CraftSkillSearchViewModel>
     {
         private readonly ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> _craftSkillService;

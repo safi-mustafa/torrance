@@ -5,7 +5,7 @@ namespace ViewModels.TimeOnTools.ReworkDelay
 {
     public class ReworkDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public ReworkDelayBriefViewModel() : base(false, "The Rework Delay field is required.")
+        public ReworkDelayBriefViewModel() : base(false, "")
         {
 
         }

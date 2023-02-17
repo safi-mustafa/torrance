@@ -14,11 +14,11 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
-                @if (User.IsInRole("SuperAdmin"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/">Dashboard</a></li>
                 }
-                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Approver"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Approver") || User.IsInRole("Administrator"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/Approval/Index">Approvals</a></li>
                 }
@@ -33,13 +33,14 @@
                 }
 
 
-                @if (User.IsInRole("SuperAdmin"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
                 {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             User Setup
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item px-3" asp-controller="Administrator" asp-action="Index">Administrator</a>
                             <a class="dropdown-item px-3" asp-controller="Employee" asp-action="Index">Employee</a>
                             <a class="dropdown-item px-3" asp-controller="CompanyManager" asp-action="Index">Company Manager</a>
                             <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
@@ -59,6 +60,9 @@
                             <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
                             <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
                             <a class="dropdown-item px-3" asp-controller="DelayType" asp-action="Index">Delay Type</a>
+                            <a class="dropdown-item px-3" asp-controller="StartOfWorkDelay" asp-action="Index">Start Of Work Delay</a>
+                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delay</a>
+                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delay</a>
                             <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Method</a>
                             <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
                             <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Type</a>
@@ -70,7 +74,7 @@
                         </div>
                     </li>
                 }
-                @if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
+                @if (User.IsInRole("Approver") || User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/Folder/Index">Mobile Files </a></li>
                 }

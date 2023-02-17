@@ -6,7 +6,7 @@ using ViewModels.TimeOnTools.ShiftDelay;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class ShiftDelayController : CrudBaseController<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel, ShiftDelayDetailViewModel, ShiftDelaySearchViewModel>
     {
         private readonly IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> _ShiftDelayService;

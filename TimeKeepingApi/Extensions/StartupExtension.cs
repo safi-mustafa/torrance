@@ -50,6 +50,7 @@ using Repositories.Services.CommonServices.ApprovalService;
 using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.CommonServices.UserService;
+using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 
 namespace Web.Extensions
 {
@@ -195,6 +196,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IPermittingIssueService<,,>), typeof(PermittingIssueService<,,>));
             services.AddScoped(typeof(IReworkDelayService<,,>), typeof(ReworkDelayService<,,>));
             services.AddScoped(typeof(IShiftDelayService<,,>), typeof(ShiftDelayService<,,>));
+            services.AddScoped(typeof(IStartOfWorkDelayService<,,>), typeof(StartOfWorkDelayService<,,>));
             services.AddScoped(typeof(IShiftService<,,>), typeof(ShiftService<,,>));
             services.AddScoped(typeof(ISOWService<,,>), typeof(SOWService<,,>));
             services.AddScoped(typeof(ILocationService<,,>), typeof(LocationService<,,>));

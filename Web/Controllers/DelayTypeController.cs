@@ -6,7 +6,7 @@ using ViewModels.TimeOnTools;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class DelayTypeController : CrudBaseController<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel, DelayTypeDetailViewModel, DelayTypeSearchViewModel>
     {
         private readonly IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> _DelayTypeService;

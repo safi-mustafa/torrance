@@ -13,7 +13,7 @@ using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Approver,Employee")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Approver,Employee")]
     public class WRRLogController : ApproveBaseController<IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel>, WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel, WRRLogDetailViewModel, WRRLogSearchViewModel>
     {
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
@@ -22,7 +22,7 @@ namespace Web.Controllers
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Admin") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _WRRLogService = WRRLogService;
             _logger = logger;

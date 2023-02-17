@@ -6,7 +6,7 @@ using ViewModels.OverrideLogs;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class ReasonForRequestController : CrudBaseController<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel, ReasonForRequestDetailViewModel, ReasonForRequestSearchViewModel>
     {
         private readonly IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> _reasonForRequestService;

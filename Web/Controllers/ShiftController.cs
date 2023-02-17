@@ -7,7 +7,7 @@ using ViewModels.TimeOnTools.Shift;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class ShiftController : CrudBaseController<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel, ShiftDetailViewModel, ShiftSearchViewModel>
     {
         private readonly IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> _ShiftService;

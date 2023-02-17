@@ -9,7 +9,7 @@ using ViewModels.TimeOnTools.PermittingIssue;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public class PermittingIssueController : CrudBaseController<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel, PermittingIssueDetailViewModel, PermittingIssueSearchViewModel>
     {
         private readonly IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> _permittingIssueService;
