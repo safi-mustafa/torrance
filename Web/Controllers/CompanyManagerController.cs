@@ -22,13 +22,13 @@ namespace Web.Controllers
         }
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            //if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
-            //{
-            //    result.ActionsList = new List<DataTableActionViewModel>()
-            //    {
-            //        new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/{_controllerName}/ResetPassword/Id"},
-            //    };
-            //}
+            if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin"))
+            {
+                result.ActionsList = new List<DataTableActionViewModel>()
+                {
+                    new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/{_controllerName}/ResetPassword/Id"},
+                };
+            }
             if (User.IsInRole("SuperAdmin"))
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
@@ -47,16 +47,10 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Full Name",data = "FullName"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "Email",data = "Email"},
-                //new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
+                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
         }
-        public override async Task<ActionResult> Create(CompanyManagerModifyViewModel model)
-        {
-            ModelState.Remove("AccessCode");
-            return await base.Create(model);
-        }
-
     }
 }
