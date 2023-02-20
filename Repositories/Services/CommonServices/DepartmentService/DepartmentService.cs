@@ -9,6 +9,7 @@ using Models.Common;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using System.Linq.Expressions;
 using ViewModels;
 using ViewModels.Common.Company;
@@ -19,7 +20,7 @@ using ViewModels.Shared;
 
 namespace Repositories.Services.CommonServices.DepartmentService
 {
-    public class DepartmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Department, CreateViewModel, UpdateViewModel, DetailViewModel>, IDepartmentService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class DepartmentService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<Department, CreateViewModel, UpdateViewModel, DetailViewModel>, IDepartmentService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, IUnitMultiSelect, new()
         where CreateViewModel : class, IBaseCrudViewModel, IUnitMultiSelect, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IUnitMultiSelect, IIdentitifier, new()

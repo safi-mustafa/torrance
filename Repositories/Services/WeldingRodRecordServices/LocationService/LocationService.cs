@@ -6,13 +6,14 @@ using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.Location;
 
 namespace Repositories.Services.AppSettingServices.LocationService
 {
-    public class LocationService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Location, CreateViewModel, UpdateViewModel, DetailViewModel>, ILocationService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class LocationService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<Location, CreateViewModel, UpdateViewModel, DetailViewModel>, ILocationService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

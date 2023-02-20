@@ -11,10 +11,11 @@ using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.ReworkDelay;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.TimeOnToolServices.ReworkService
 {
-    public class ReworkDelayService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<ReworkDelay, CreateViewModel, UpdateViewModel, DetailViewModel>, IReworkDelayService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class ReworkDelayService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<ReworkDelay, CreateViewModel, UpdateViewModel, DetailViewModel>, IReworkDelayService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

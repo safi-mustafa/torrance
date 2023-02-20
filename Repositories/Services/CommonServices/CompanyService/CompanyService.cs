@@ -20,10 +20,11 @@ using Centangle.Common.ResponseHelpers;
 using ViewModels.OverrideLogs;
 using ViewModels.Authentication.Approver;
 using ViewModels;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.CommonServices.CompanyService
 {
-    public class CompanyService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Company, CreateViewModel, UpdateViewModel, DetailViewModel>, ICompanyService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class CompanyService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<Company, CreateViewModel, UpdateViewModel, DetailViewModel>, ICompanyService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

@@ -12,10 +12,11 @@ using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.Shift;
 using ViewModels.AppSettings.Map;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.TimeOnToolServices.ShiftService
 {
-    public class ShiftService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Shift, CreateViewModel, UpdateViewModel, DetailViewModel>, IShiftService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class ShiftService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<Shift, CreateViewModel, UpdateViewModel, DetailViewModel>, IShiftService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

@@ -8,6 +8,7 @@ using Models.Common;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using System.Linq.Expressions;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Unit;
@@ -16,7 +17,7 @@ using ViewModels.Shared;
 
 namespace Repositories.Services.CommonServices.UnitService
 {
-    public class UnitService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<Unit, CreateViewModel, UpdateViewModel, DetailViewModel>, IUnitService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class UnitService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<Unit, CreateViewModel, UpdateViewModel, DetailViewModel>, IUnitService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

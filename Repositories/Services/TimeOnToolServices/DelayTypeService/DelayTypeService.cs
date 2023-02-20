@@ -10,10 +10,11 @@ using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.TimeOnToolServices.DelayTypeService
 {
-    public class DelayTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<DelayType, CreateViewModel, UpdateViewModel, DetailViewModel>, IDelayTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class DelayTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<DelayType, CreateViewModel, UpdateViewModel, DetailViewModel>, IDelayTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

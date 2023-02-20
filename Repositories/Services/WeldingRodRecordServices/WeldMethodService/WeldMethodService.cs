@@ -6,13 +6,14 @@ using Models.Common.Interfaces;
 using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace Repositories.Services.AppSettingServices.WeldMethodService
 {
-    public class WeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<WeldMethod, CreateViewModel, UpdateViewModel, DetailViewModel>, IWeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class WeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<WeldMethod, CreateViewModel, UpdateViewModel, DetailViewModel>, IWeldMethodService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

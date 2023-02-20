@@ -10,10 +10,11 @@ using Repositories.Common;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.PermitType;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.TimeOnToolServices.PermitTypeService
 {
-    public class PermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<PermitType, CreateViewModel, UpdateViewModel, DetailViewModel>, IPermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class PermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<PermitType, CreateViewModel, UpdateViewModel, DetailViewModel>, IPermitTypeService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

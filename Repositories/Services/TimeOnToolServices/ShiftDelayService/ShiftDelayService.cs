@@ -11,10 +11,11 @@ using Repositories.Services.CommonServices.ContractorService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.ShiftDelay;
+using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 
 namespace Repositories.Services.TimeOnToolServices.ShiftDelayService
 {
-    public class ShiftDelayService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<ShiftDelay, CreateViewModel, UpdateViewModel, DetailViewModel>, IShiftDelayService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class ShiftDelayService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseServiceWithUniqueNameValidation<ShiftDelay, CreateViewModel, UpdateViewModel, DetailViewModel>, IShiftDelayService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
