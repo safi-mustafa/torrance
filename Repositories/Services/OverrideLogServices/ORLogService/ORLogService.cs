@@ -327,10 +327,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         dbCost.CraftSkillId = cost.CraftSkill.Id ?? 0;
                         dbCost.OverrideType = cost.OverrideType;
                         dbCost.OverrideLogId = id;
-                        list.Add(dbCost);
+                        if (dbCost.CraftSkillId > 0)
+                            list.Add(dbCost);
                     }
-                    await _db.AddRangeAsync(list);
-                    await _db.SaveChangesAsync();
+                    if (list.Count > 0)
+                    {
+                        await _db.AddRangeAsync(list);
+                        await _db.SaveChangesAsync();
+                    }
+                       
                 }
 
                 return true;

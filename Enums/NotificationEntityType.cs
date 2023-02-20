@@ -4,8 +4,9 @@ namespace Enums
     public enum NotificationEntityType
     {
         TOTLog,
-        OverrideLog,
-        WRRLog
+        WRRLog,
+        OverrideLog
+
     }
 }
 
