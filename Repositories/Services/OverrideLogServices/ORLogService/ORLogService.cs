@@ -376,7 +376,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     }
                 }
 
-                totalCost += cost.OverrideHours * craftCost;
+                totalCost += cost.OverrideHours * cost.HeadCount * craftCost;
             }
             return totalCost;
 

@@ -26,26 +26,53 @@
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
                     <input asp-for="WorkCompletedDate" type="date" class="form-control" />
                     <span asp-validation-for="WorkCompletedDate" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
+            @* <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
             </div>
-            <div class="col-lg-4">
+            </div>*@
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <input asp-for="WorkScope" type="text" class="form-control" />
                     <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label class="form-label fw-600">Delay Reason</label>
+                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
+                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+                </div>
+            </div>
 
+            <div class="col-lg-4" id="shift-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+            </div>
+            <div class="col-lg-4" id="rework-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+            </div>
+            <div class="col-lg-4" id="start-of-work-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
+                </div>
+            </div>
 
             @* @if (isAdmin)
             {
@@ -100,9 +127,13 @@
                     <h4 class="col-md-12">Costs</h4>
                     <span class="cost-override-type-td col-md-3">
                         <label class="form-label fw-600">Override Type</label>
-                        <select asp-items="Html.GetEnumSelectList(typeof (OverrideTypeCatalog))" id="cost-override-type" class="cost-type form-control simple-dd"></select>
+                        <select asp-items="Html.GetEnumSelectList(typeof (OverrideTypeCatalog)).OrderBy(x=>x.Text)" id="cost-override-type" class="cost-type form-control simple-dd"></select>
                     </span>
-                    <span class="cost-hours-td col-md-3">
+                    <span class="cost-head-count-td col-md-2">
+                        <label class="form-label fw-600">Head Count</label>
+                        <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
+                    </span>
+                    <span class="cost-hours-td col-md-2">
                         <label class="form-label fw-600">Hours</label>
                         <input type="text" name="cost-hours" value="" id="cost-hours" class="form-control cost-hours cost" placeholder="Hours" />
                     </span>
@@ -111,7 +142,7 @@
                         @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
                     </span>
 
-                    <span class="text-center col-md-3">
+                    <span class="text-center col-md-2">
                         <label class="form-label fw-600 w-100">Add</label>
                         <button type="button" class="add-cost btn-circle btn-sm" style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
                     </span>
@@ -123,6 +154,7 @@
                         <tr>
                             <th>Override Type</th>
                             <th>Craft</th>
+                            <th>Head Count</th>
                             <th>Hours</th>
                             @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
                             {
@@ -147,6 +179,7 @@
 
 <script>
     $(function () {
+        DelayReasonChanged();
         $('#requester-id').off('change.select2');
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
@@ -158,11 +191,13 @@
                 $("#company-id").val($(this).select2('data')[0].additionalAttributesModel.Company.Id);
             }
         });
+
+        $('#delay-reason').on('change', function () {
+            DelayReasonChanged();
+        });
         $(document).off("click", ".add-cost");
         $(document).on("click", ".add-cost", function () {
             AddCost(this);
-            $("#cost-hours").val("");
-            $("#craft-skill-id").val('').trigger('change')
         });
         $(document).off("click", ".remove-cost");
         $(document).on("click", ".remove-cost", function () {
@@ -174,10 +209,11 @@
         var thisElement = $(element);
         var overrideType = $("#cost-override-type").val();
         var costHours = $("#cost-hours").val();
+        var headCount = $("#head-count").val();
         var costCraftId = $("#craft-skill-id").val();
         var costCraftName = $("#craft-skill-id").text();
         costCraftName = costCraftName.replace(/(\r\n|\n|\r)/gm, "");
-        if (overrideType !== null && overrideType !== "" && costHours != null && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
+        if (overrideType !== null && overrideType !== "" && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
             var rowNumber = $(".cost-row").length;
             var obj = {
                 'OverrideType': overrideType,
@@ -188,16 +224,16 @@
                     'OTRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.OTRate,
                     'DTRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.DTRate,
                 },
+                'HeadCount': headCount,
                 'OverrideHours': costHours
             }
-            console.log(obj, rowNumber);
             AddCosttRow(obj, rowNumber);
             ResetCostInputs();
         }
         else {
             swal.fire({
                 title: 'Validation Error',
-                text: "OverrideType, Craft and Hours are required fields.",
+                text: "OverrideType, Craft, Head Count & Hours are required fields.",
                 type: 'error',
                 showCancelButton: true,
                 confirmButtonText: "Okay",
@@ -209,7 +245,8 @@
         }
     }
     function ResetCostInputs() {
-        $('.cost-inputs-container').find(':input').val(null);
+        $('.costs-inputs-container').find(':input').val(null);
+        $("#craft-skill-id").val('').trigger('change')
     }
 
     function AddCosttRow(obj, rowNumber) {
@@ -250,5 +287,20 @@
             }
         });
     }
+    function DelayReasonChanged() {
+        var ele = $("#delay-reason");
+        if ($(ele).val() === '0') {
+            $('#shift-delay-container').hide();
+            $('#rework-delay-container').hide();
+            $('#start-of-work-delay-container').show();
+        } else if ($(ele).val() === '1') {
+            $('#shift-delay-container').show();
+            $('#rework-delay-container').hide();
+            $('#start-of-work-delay-container').hide();
+        } else if ($(ele).val() === '2') {
+            $('#shift-delay-container').hide();
+            $('#rework-delay-container').show();
+            $('#start-of-work-delay-container').hide();
+        }
+    }
 </script>
-

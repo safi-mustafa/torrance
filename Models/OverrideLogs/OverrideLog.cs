@@ -30,8 +30,26 @@ namespace Models.OverrideLogs
         public Department? Department { get; set; }
 
         [ForeignKey("ReasonForRequest")]
-        public long ReasonForRequestId { get; set; }
-        public ReasonForRequest ReasonForRequest { get; set; }
+        public long? ReasonForRequestId { get; set; }
+        public ReasonForRequest? ReasonForRequest { get; set; }
+        [ForeignKey("DelayType")]
+        public long? DelayTypeId { get; set; }
+        public DelayType? DelayType { get; set; }
+
+        public DelayReasonCatalog? DelayReason { get; set; }
+
+        [ForeignKey("StartOfWorkDelay")]
+        public long? StartOfWorkDelayId { get; set; }
+        public StartOfWorkDelay? StartOfWorkDelay { get; set; }
+
+
+        [ForeignKey("ShiftDelay")]
+        public long? ShiftDelayId { get; set; }
+        public ShiftDelay? ShiftDelay { get; set; }
+
+        [ForeignKey("ReworkDelay")]
+        public long? ReworkDelayId { get; set; }
+        public ReworkDelay? ReworkDelay { get; set; }
 
         [ForeignKey("Company")]
         public long CompanyId { get; set; }

@@ -9,6 +9,12 @@ using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using Models.Common;
 using ViewModels.Common.Department;
+using Enums;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
+using ViewModels.TimeOnTools;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -39,6 +45,14 @@ namespace ViewModels.OverrideLogs.ORLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
+
+        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
+        public DelayReasonCatalog? DelayReason { get; set; }
+        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
+
+        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+
 
         //private ApproverBriefViewModel? _approver;
         //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }

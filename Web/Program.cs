@@ -4,6 +4,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Web.Extensions;
 using Microsoft.Extensions.FileProviders;
+using DataLibrary;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.ConfigureDependencies();
 var app = builder.Build();
 
+await using var scope = app.Services.CreateAsyncScope();
+using var db = scope.ServiceProvider.GetService<ToranceContext>();
+await db.Database.MigrateAsync();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

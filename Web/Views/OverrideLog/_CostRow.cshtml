@@ -13,6 +13,7 @@
     var craftId = collectionType + "[" + rowNumber + "].CraftSkill.Id";
     var craftName = collectionType + "[" + rowNumber + "].CraftSkill.Name";
     var overrideHours = collectionType + "[" + rowNumber + "].OverrideHours";
+    var headCount = collectionType + "[" + rowNumber + "].HeadCount";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
 
     var rate = (Model.OverrideType == OverrideTypeCatalog.ST ? Model.CraftSkill.STRate : (Model.OverrideType == OverrideTypeCatalog.OT ? Model.CraftSkill.OTRate : Model.CraftSkill.DTRate));
@@ -29,6 +30,10 @@
         <span style=" text-align: initial !important;">@Model.CraftSkill.Name</span>
         <input type="hidden" name="@craftId" value="@Model.CraftSkill.Id" />
         <input type="hidden" name="@craftName" value="@Model.CraftSkill.Name" />
+    </td>
+    <td>
+        <span style="text-align: initial !important;">@Model.HeadCount</span>
+        <input type="hidden" name="@headCount" value="@Model.HeadCount" />
     </td>
     <td>
         <span style=" text-align: initial !important;">@Model.OverrideHours</span>

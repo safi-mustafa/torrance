@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230304180028_LogsFieldsUpdated")]
+    partial class LogsFieldsUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -765,7 +768,7 @@ namespace DataLibrary.Migrations
                     b.Property<long>("PoNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ReasonForRequestId")
+                    b.Property<long>("ReasonForRequestId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ReworkDelayId")
@@ -1981,7 +1984,9 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.OverrideLogs.ReasonForRequest", "ReasonForRequest")
                         .WithMany()
-                        .HasForeignKey("ReasonForRequestId");
+                        .HasForeignKey("ReasonForRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.ReworkDelay", "ReworkDelay")
                         .WithMany()

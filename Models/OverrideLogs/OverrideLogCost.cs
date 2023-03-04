@@ -16,6 +16,7 @@ namespace Models.OverrideLogs
         public long OverrideLogId { get; set; }
         public OverrideLog OverrideLog { get; set; }
 
+        public int HeadCount { get; set; }
         public OverrideTypeCatalog OverrideType { get; set; }
 
         [ForeignKey("CraftSkill")]

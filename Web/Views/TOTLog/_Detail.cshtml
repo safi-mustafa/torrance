@@ -27,21 +27,58 @@
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="StartOfWork" class="form-label fw-600"></label>
-                    <div>@Model.FormattedStartOfWork</div>
+                    <label asp-for="PermitNo" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.PermitNo) ? "-" : Model.PermitNo)</div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="ReasonForRequest" class="form-label fw-600">Reason</label>
-                    <div>@(string.IsNullOrEmpty(Model.ReasonForRequest.Name) ? "-" : Model.ReasonForRequest.Name)</div>
+                    <label asp-for="PermitType" class="form-label fw-600">Permit Type</label>
+                    <div>@(string.IsNullOrEmpty(Model.PermitType?.Name) ? "-" : Model.PermitType.Name)</div>
                 </div>
             </div>
-            @*<div class="col-lg-4">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="WorkScope" class="form-label fw-600">Reason</label>
-                    <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
+                    <label asp-for="JobDescription" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.JobDescription) ? "-" : Model.JobDescription)</div>
                 </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="Company" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Company?.Name) ? "-" : Model.Company.Name)</div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="Foreman" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Foreman) ? "-" : Model.Foreman)</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="Twr" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Twr) ? "-" : Model.Twr)</div>
+                </div>
+            </div>
+            @* <div class="col-lg-4">
+            <div class="mb-3">
+            <label asp-for="StartOfWork" class="form-label fw-600"></label>
+            <div>@Model.FormattedStartOfWork</div>
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label asp-for="ReasonForRequest" class="form-label fw-600">Reason</label>
+            <div>@(string.IsNullOrEmpty(Model.ReasonForRequest.Name) ? "-" : Model.ReasonForRequest.Name)</div>
+            </div>
+            </div>*@
+            @*<div class="col-lg-4">
+            <div class="mb-3">
+            <label asp-for="WorkScope" class="form-label fw-600">Reason</label>
+            <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
+            </div>
             </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -73,44 +110,17 @@
                     <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="PermitType" class="form-label fw-600">Permit Type</label>
-                    <div>@(string.IsNullOrEmpty(Model.PermitType?.Name) ? "-" : Model.PermitType.Name)</div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="Employee" class="form-label fw-600">Requestor</label>
-                    <div>@(string.IsNullOrEmpty(Model.Employee?.Name) ? "-" : Model.Employee.Name)</div>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="Company" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Company?.Name) ? "-" : Model.Company.Name)</div>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="Foreman" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Foreman) ? "-" : Model.Foreman)</div>
-                </div>
+
+
+            @* <div class="col-lg-4">
+            <div class="mb-3">
+            <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+            <div> @Model.EquipmentNo</div>
             </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
-                    <div> @Model.EquipmentNo</div>
-                </div>
             </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="Twr" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Twr) ? "-" : Model.Twr)</div>
-                </div>
-            </div>
+            *@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="ManPowerAffected" class="form-label fw-600"></label>
@@ -121,6 +131,19 @@
                 <div class="mb-3">
                     <label asp-for="ManHours" class="form-label fw-600"></label>
                     <div>@Model.ManHours</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="DelayDescription" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.DelayDescription) ? "-" : Model.DelayDescription)</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="Employee" class="form-label fw-600">Requestor</label>
+                    <div>@(string.IsNullOrEmpty(Model.Employee?.Name) ? "-" : Model.Employee.Name)</div>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -143,30 +166,19 @@
             </div>
 
 
-            <div class="col-lg-12">
-                <div class="mb-3">
-                    <label asp-for="PermitNo" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.PermitNo) ? "-" : Model.PermitNo)</div>
-                </div>
-            </div>
 
 
-            <div class="col-lg-12">
+
+           @* <div class="col-lg-12">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
                 </div>
-            </div>
+            </div>*@
 
 
-            <div class="col-lg-12">
-                <div class="mb-3">
-                    <label asp-for="DelayDescription" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.DelayDescription) ? "-" : Model.DelayDescription)</div>
-                </div>
-            </div>
 
-            
+
 
         </div>
     </div>

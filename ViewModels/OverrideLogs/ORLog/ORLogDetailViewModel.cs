@@ -10,6 +10,11 @@ using Helpers.Extensions;
 using System.Globalization;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Department;
+using ViewModels.TimeOnTools.PermitType;
+using ViewModels.TimeOnTools.ReworkDelay;
+using ViewModels.TimeOnTools.ShiftDelay;
+using ViewModels.TimeOnTools.StartOfWorkDelay;
+using ViewModels.TimeOnTools;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -68,7 +73,12 @@ namespace ViewModels.OverrideLogs.ORLog
         public CraftRateBriefViewModel CraftRate { get; set; } = new CraftRateBriefViewModel();
 
 
+        public DelayReasonCatalog? DelayReason { get; set; }
+        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
+        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
 
+        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
         public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();

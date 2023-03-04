@@ -350,6 +350,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
                 if (list != null && list.Count > 0)
                 {
+                    list = list.OrderBy(x => x.text).ToList();
                     var paginatedResult = new PaginatedResultModel<Select2ViewModel>();
                     paginatedResult.Items = list;
                     paginatedResult._meta = new();

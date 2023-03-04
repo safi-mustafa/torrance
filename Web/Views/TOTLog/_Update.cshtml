@@ -24,19 +24,19 @@
                 </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="StartOfWork" class="form-label fw-600"></label>
-                    <input asp-for="StartOfWork" type="date" class="form-control" />
-                    <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
-                </div>
+            @*     <div class="col-lg-4">
+            <div class="mb-3">
+            <label asp-for="StartOfWork" class="form-label fw-600"></label>
+            <input asp-for="StartOfWork" type="date" class="form-control" />
+            <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
+            </div>
             </div>
 
             <div class="col-lg-4">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
             </div>
+            </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="PermitNo" class="form-label fw-600"></label>
@@ -44,68 +44,26 @@
                     <span asp-validation-for="PermitNo" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label fw-600">Delay Reason</label>
-                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
-                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
-                </div>
-            </div>
-
-            <div class="col-lg-6" id="shift-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-                </div>
-            </div>
-            <div class="col-lg-6" id="rework-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-                </div>
-            </div>
-            <div class="col-lg-6" id="start-of-work-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
-                </div>
-            </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
                 </div>
             </div>
-            @* @if (isAdmin)
-            {
             <div class="col-lg-4">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                <div class="mb-3">
+                    <label asp-for="JobDescription" class="form-label fw-600"></label>
+                    <input asp-for="JobDescription" type="text" class="form-control" />
+                    <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
+                </div>
             </div>
-            </div>
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label fw-600">Company</label>
-            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-            </div>
-            </div>
-            }*@
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="mb-3">
                     <label asp-for="Foreman" class="form-label fw-600"></label>
                     <input asp-for="Foreman" type="text" class="form-control" />
                     <span asp-validation-for="Foreman" class="validation-invalid-label"></span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
-                    <input asp-for="EquipmentNo" type="text" class="form-control" />
-                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -131,8 +89,59 @@
 
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label class="form-label fw-600">Delay Reason</label>
+                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
+                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+                </div>
+            </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4" id="shift-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+                </div>
+            </div>
+            <div class="col-lg-4" id="rework-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+                </div>
+            </div>
+            <div class="col-lg-4" id="start-of-work-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
+                </div>
+            </div>
+
+            @* @if (isAdmin)
+            {
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600">Company</label>
+            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+            </div>
+            </div>
+            }*@
+           
+     @*       <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentNo" type="text" class="form-control" />
+                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
+                </div>
+            </div>*@
+
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="ManPowerAffected" class="form-label fw-600"></label>
                     <input asp-for="ManPowerAffected" type="number" class="form-control" />
@@ -140,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="ManHours" class="form-label fw-600"></label>
                     <input asp-for="ManHours" type="number" class="form-control" />
@@ -148,15 +157,15 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
+           @* <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <input asp-for="WorkScope" type="text" class="form-control" />
                     <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
                 </div>
-            </div>
+            </div>*@
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="DelayDescription" class="form-label fw-600"></label>
                     <input asp-for="DelayDescription" type="text" class="form-control" />

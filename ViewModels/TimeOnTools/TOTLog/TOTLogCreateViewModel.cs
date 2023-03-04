@@ -64,8 +64,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Total Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No")]
-        [Required(ErrorMessage ="The field Equipment No is required.")]
-        public string EquipmentNo { get; set; }
+        //[Required(ErrorMessage ="The field Equipment No is required.")]
+        public string? EquipmentNo { get; set; }
 
         //[Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double? HoursDelayed { get; set; }

@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230304153431_LogFieldsUpdated")]
+    partial class LogFieldsUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -744,7 +747,7 @@ namespace DataLibrary.Migrations
                     b.Property<int?>("DelayReason")
                         .HasColumnType("int");
 
-                    b.Property<long?>("DelayTypeId")
+                    b.Property<long>("DelayTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("DepartmentId")
@@ -765,7 +768,7 @@ namespace DataLibrary.Migrations
                     b.Property<long>("PoNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ReasonForRequestId")
+                    b.Property<long>("ReasonForRequestId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ReworkDelayId")
@@ -843,9 +846,6 @@ namespace DataLibrary.Migrations
 
                     b.Property<long>("CraftSkillId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("HeadCount")
-                        .HasColumnType("int");
 
                     b.Property<int>("OverrideHours")
                         .HasColumnType("int");
@@ -1969,7 +1969,9 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.DelayType", "DelayType")
                         .WithMany()
-                        .HasForeignKey("DelayTypeId");
+                        .HasForeignKey("DelayTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Common.Department", "Department")
                         .WithMany()
@@ -1981,7 +1983,9 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.OverrideLogs.ReasonForRequest", "ReasonForRequest")
                         .WithMany()
-                        .HasForeignKey("ReasonForRequestId");
+                        .HasForeignKey("ReasonForRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.TimeOnTools.ReworkDelay", "ReworkDelay")
                         .WithMany()

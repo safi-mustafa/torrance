@@ -31,16 +31,46 @@
             <div>@Model.FormattedDateOfWorkCompleted</div>
         </div>
     </div>
-    <div class="col-lg-4">
+  @*  <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
         </div>
-    </div>
+    </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="WorkScope" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="DelayType" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.DelayType.Name) ? "-" : Model.DelayType.Name)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="DelayReason" class="form-label fw-600"></label>
+            <div>@(Model.DelayReason == null ? "-" : Model.DelayReason.ToString())</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="StartOfWorkDelay" class="form-label fw-600">Start Of Work Delay</label>
+            <div>@(string.IsNullOrEmpty(Model.StartOfWorkDelay?.Name) ? "-" : Model.StartOfWorkDelay.Name)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="ShiftDelay" class="form-label fw-600">Shift Delay</label>
+            <div>@(string.IsNullOrEmpty(Model.ShiftDelay?.Name) ? "-" : Model.ShiftDelay.Name)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
+            <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
         </div>
     </div>
     <div class="col-lg-4">

@@ -14,6 +14,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public long Id { get; set; }
         [Display(Name = "Hours")]
         public int OverrideHours { get; set; }
+
+        public int HeadCount { get; set; }
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
         public OverrideTypeCatalog OverrideType { get; set; }
