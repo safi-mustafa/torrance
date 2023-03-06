@@ -126,15 +126,15 @@
                 <div class="form-group costs-inputs-container row">
                     <h4 class="col-md-12">Costs</h4>
                     <span class="cost-override-type-td col-md-3">
-                        <label class="form-label fw-600">Override Type</label>
+                        <label class="form-label fw-600">Override Type<span style="color:red"> *</span></label>
                         <select asp-items="Html.GetEnumSelectList(typeof (OverrideTypeCatalog)).OrderBy(x=>x.Text)" id="cost-override-type" class="cost-type form-control simple-dd"></select>
                     </span>
                     <span class="cost-head-count-td col-md-2">
-                        <label class="form-label fw-600">Head Count</label>
+                        <label class="form-label fw-600">Head Count<span style="color:red"> *</span></label>
                         <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
                     </span>
                     <span class="cost-hours-td col-md-2">
-                        <label class="form-label fw-600">Hours</label>
+                        <label class="form-label fw-600">Hours<span style="color:red"> *</span></label>
                         <input type="text" name="cost-hours" value="" id="cost-hours" class="form-control cost-hours cost" placeholder="Hours" />
                     </span>
                     <span class="cost-craft-skill-td col-md-3">

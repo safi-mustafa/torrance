@@ -49,6 +49,7 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
+            model.Validate(ModelState);
             ModelState.Remove("Company.Name");
             return base.Post(model);
         }
@@ -60,6 +61,7 @@ namespace API.Controllers
             {
                // ModelState.Remove("Approver.Name");
             }
+            model.Validate(ModelState);
             ModelState.Remove("Company.Name");
             return base.Put(model);
         }

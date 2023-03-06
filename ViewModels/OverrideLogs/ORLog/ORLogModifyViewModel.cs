@@ -15,10 +15,11 @@ using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.TimeOnTools;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
+    public class ORLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
     {
 
         [Display(Name = "Completed")]
@@ -46,17 +47,13 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
-        public DelayReasonCatalog? DelayReason { get; set; }
-        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
-
-        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
+     
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
 
 
-        //private ApproverBriefViewModel? _approver;
-        //public ApproverBriefViewModel Approver { get => _approver == null ? new ApproverBriefViewModel(false) : _approver; set => _approver = value; }
-
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
+
+
+       
     }
 }

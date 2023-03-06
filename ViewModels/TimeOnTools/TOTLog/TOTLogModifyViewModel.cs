@@ -22,7 +22,7 @@ using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class TOTLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier
     {
         public DateTime? Date { get; set; } = DateTime.Now;
         [Display(Name = "Twr", Prompt = "Add Twr")]
@@ -34,14 +34,16 @@ namespace ViewModels.TimeOnTools.TOTLog
             }
         }
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+        [Required]
         [Display(Name = "Permit No")]
         [RegularExpression(@"^(\d{5})$", ErrorMessage = "Permit No must be of 5-digits.")]
         public string? PermitNo { get; set; }
-
+        [Required]
         [Display(Name = "Delay Description")]
         public string? DelayDescription { get; set; }
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
+        [Required]
         public string? Foreman { get; set; }
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
@@ -57,6 +59,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
         [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
@@ -70,18 +73,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         //[Range(1, double.MaxValue, ErrorMessage = "The Hours Delayed must be greater than zero.")]
         public double? HoursDelayed { get; set; }
         public Status Status { get; set; }
-        
+
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-
-        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
-        public DelayReasonCatalog? DelayReason { get; set; }
-        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
-
-        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
 
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 

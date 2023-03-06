@@ -26,7 +26,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel
+    public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel
     {
         public DateTime? Date { get; set; } = DateTime.Now;
         public string? Twr
@@ -38,10 +38,11 @@ namespace ViewModels.TimeOnTools.TOTLog
         }
         [Required(ErrorMessage = "*")]
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
+        [Required]
         [Display(Name = "Permit No")]
         [RegularExpression(@"^(\d{5})$", ErrorMessage = "Permit No must be of 5-digits.")]
         public string? PermitNo { get; set; }
-
+        [Required]
         [Display(Name = "Delay Description")]
         public string? DelayDescription { get; set; }
         [Display(Name = "Workscope")]
@@ -58,6 +59,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
         [Range(1, long.MaxValue, ErrorMessage = "The Man Power must be greater than zero.")]
@@ -76,19 +78,13 @@ namespace ViewModels.TimeOnTools.TOTLog
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-        public DelayReasonCatalog? DelayReason { get; set; }
-        public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
-        public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
-
-        public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
-
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
-
+        [Required]
         public string? Foreman { get; set; }
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();

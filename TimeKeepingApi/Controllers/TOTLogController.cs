@@ -64,7 +64,7 @@ namespace API.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
-            AddTWRModelStateErrors(ModelState, model.TWRModel);
+            model.Validate(ModelState);
             return base.Post(model);
         }
 
@@ -77,7 +77,7 @@ namespace API.Controllers
             {
                 model.Employee = new EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
-            AddTWRModelStateErrors(ModelState, model.TWRModel);
+            model.Validate(ModelState);
             ModelState.Remove("Contractor");
             ModelState.Remove("ShiftDelay");
             ModelState.Remove("ReworkDelay");

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Department;
@@ -10,7 +9,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost
+    public class ORLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel, IORLogCost
     {
 
         [Display(Name = "Completed")]

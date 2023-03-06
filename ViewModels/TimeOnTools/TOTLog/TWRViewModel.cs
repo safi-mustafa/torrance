@@ -35,8 +35,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string Name { get; set; } = "TWR";
         public Select2ViewModel NumericPart { get; set; } = new Select2ViewModel();
         public Select2ViewModel AlphabeticPart { get; set; } = new Select2ViewModel();
-        [Required(ErrorMessage = "Required")]
-        public string Text { get; set; }
+        //[Required(ErrorMessage = "Required")]
+        public string? Text { get; set; }
 
         public List<Select2ViewModel> GetTWRNumericList() => new List<Select2ViewModel>()
         {

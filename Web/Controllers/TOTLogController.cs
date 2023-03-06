@@ -101,17 +101,19 @@ namespace Web.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            model.Validate(ModelState);
             return base.Create(model);
         }
 
-        public override Task<ActionResult> Update(int id)
+        public override Task<ActionResult> Update(TOTLogModifyViewModel model)
         {
             if (User.IsInRole("Employee"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
-            return base.Update(id);
+            model.Validate(ModelState);
+            return base.Update(model);
         }
 
         public override ActionResult DataTableIndexView(CrudListViewModel vm)

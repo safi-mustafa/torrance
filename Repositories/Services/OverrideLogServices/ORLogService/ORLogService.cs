@@ -168,10 +168,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                                {
                                                    Id = olc.Id,
                                                    OverrideHours = olc.OverrideHours,
+                                                   HeadCount = olc.HeadCount,
                                                    CraftSkill = new CraftSkillBriefViewModel()
                                                    {
                                                        Id = cs.Id,
-                                                       Name = cs.Name
+                                                       Name = cs.Name,
+                                                       STRate = cs.STRate,
+                                                       OTRate = cs.OTRate,
+                                                       DTRate = cs.DTRate
                                                    },
                                                    OverrideType = olc.OverrideType
                                                }).ToListAsync();
@@ -326,6 +330,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         dbCost.OverrideHours = cost.OverrideHours;
                         dbCost.CraftSkillId = cost.CraftSkill.Id ?? 0;
                         dbCost.OverrideType = cost.OverrideType;
+                        dbCost.HeadCount = cost.HeadCount;
                         dbCost.OverrideLogId = id;
                         if (dbCost.CraftSkillId > 0)
                             list.Add(dbCost);
@@ -335,7 +340,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         await _db.AddRangeAsync(list);
                         await _db.SaveChangesAsync();
                     }
-                       
+
                 }
 
                 return true;
