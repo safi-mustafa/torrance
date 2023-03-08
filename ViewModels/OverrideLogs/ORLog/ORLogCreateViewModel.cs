@@ -29,7 +29,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
 
         public EmployeeBriefViewModel Employee { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new();

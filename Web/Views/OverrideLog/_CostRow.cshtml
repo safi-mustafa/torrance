@@ -17,7 +17,8 @@
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
 
     var rate = (Model.OverrideType == OverrideTypeCatalog.ST ? Model.CraftSkill.STRate : (Model.OverrideType == OverrideTypeCatalog.OT ? Model.CraftSkill.OTRate : Model.CraftSkill.DTRate));
-    var cost = String.Format("{0:C}",(rate??0 * Model.OverrideHours));
+    var totalCost = ((rate ?? 0) * Model.OverrideHours * Model.HeadCount);
+    var cost = String.Format("{0:C}", totalCost);
 
 }
 

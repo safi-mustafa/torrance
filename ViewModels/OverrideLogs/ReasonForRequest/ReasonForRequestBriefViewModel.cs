@@ -9,6 +9,10 @@ namespace ViewModels.OverrideLogs
         {
 
         }
+        public ReasonForRequestBriefViewModel(bool isValidationEnabled,string errorMessage) : base(isValidationEnabled, errorMessage)
+        {
+
+        }
         [DisplayName("Reason for Request")]
         public override string? Name { get; set; }
     }

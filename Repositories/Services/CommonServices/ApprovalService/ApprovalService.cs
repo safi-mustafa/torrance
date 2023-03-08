@@ -84,7 +84,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Department = x.Department != null ? x.Department.Name : "",
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee,
-                            TotalCost = 0
+                            TotalCost = 0,
+                            TotalHeadCount = 0
                         }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var wrrLogsQueryable = _db.WRRLogs
@@ -119,7 +120,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Department = x.Department != null ? x.Department.Name : "",
                         Type = LogType.WeldingRodRecord,
                         Employee = x.Employee,
-                        TotalCost = 0
+                        TotalCost = 0,
+                        TotalHeadCount = 0
                     }).AsQueryable();
 
                 var overrideLogsQueryable = _db.OverrideLogs
@@ -158,7 +160,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         Department = x.Department != null ? x.Department.Name : "",
                         Type = LogType.Override,
                         Employee = x.Employee,
-                        TotalCost = x.TotalCost
+                        TotalCost = x.TotalCost,
+                        TotalHeadCount = x.TotalHeadCount
                     }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();

@@ -51,7 +51,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
                 new DataTableViewModel{title = "Twr",data = "Twr"},
-                new DataTableViewModel{title = "Email",data = "Email"},
+                //new DataTableViewModel{title = "Email",data = "Email"},
                 //new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
             });

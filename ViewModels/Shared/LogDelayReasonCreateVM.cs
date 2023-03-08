@@ -11,23 +11,47 @@ namespace ViewModels.Shared
     {
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
         [Required]
-        public DelayReasonCatalog DelayReason { get; set; }
+        public DelayReasonCatalog? DelayReason { get; set; }
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
         public void Validate(ModelStateDictionary modelState)
         {
-            if (DelayReason == DelayReasonCatalog.ReworkDelay && (ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
+            modelState.Remove("ShiftDelay");
+            modelState.Remove("ReworkDelay");
+            modelState.Remove("StartOfWorkDelay");
+            modelState.Remove("ShiftDelay.Id");
+            modelState.Remove("ReworkDelay.Id");
+            modelState.Remove("StartOfWorkDelay.Id");
+            if (DelayReason == DelayReasonCatalog.ReworkDelay)
             {
-                modelState.AddModelError("ReworkDelay", "The field Rework Delay is required");
+                ShiftDelay.Id = null;
+                StartOfWorkDelay.Id = null;
+                if ((ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
+                {
+                    modelState.AddModelError("ReworkDelay.Id", "The field Rework Delay is required");
+                }
+
             }
-            else if (DelayReason == DelayReasonCatalog.ShiftDelay && (ShiftDelay == null || ShiftDelay.Id == null || ShiftDelay?.Id < 1))
+            else if (DelayReason == DelayReasonCatalog.ShiftDelay)
             {
-                modelState.AddModelError("ShiftDelay", "The field Shift Delay is required");
+                ReworkDelay.Id = null;
+                StartOfWorkDelay.Id = null;
+                if (ShiftDelay == null || ShiftDelay.Id == null || ShiftDelay?.Id < 1)
+                {
+                    modelState.AddModelError("ShiftDelay.Id", "The field Shift Delay is required");
+                }
+
             }
-            else if (DelayReason == DelayReasonCatalog.StartOfWork && (StartOfWorkDelay == null || StartOfWorkDelay.Id == null || StartOfWorkDelay.Id < 1))
+            else if (DelayReason == DelayReasonCatalog.StartOfWork)
             {
-                modelState.AddModelError("StartOfWorkDelay", "The field Start Of Work is required.");
+                ShiftDelay.Id = null;
+                ReworkDelay.Id = null;
+                if ((StartOfWorkDelay == null || StartOfWorkDelay.Id == null || StartOfWorkDelay.Id < 1))
+                {
+                    modelState.AddModelError("StartOfWorkDelay.Id", "The field Start Of Work is required.");
+                }
+
             }
         }
     }

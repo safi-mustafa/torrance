@@ -37,6 +37,8 @@ namespace ViewModels.Common
         public string Unit { get; set; }
         public string TWR { get; set; }
         public double TotalHours { get; set; }
+
+        public double TotalHeadCount { get; set; }
         public ActiveStatus ActiveStatus { get; set; }
     }
 }

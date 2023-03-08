@@ -42,7 +42,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public long LocationId { get; set; }
 
-        public Status Status { get; set; }
+        public Status? Status { get; set; } = null;
 
     }
 }

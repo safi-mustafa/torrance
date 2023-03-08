@@ -15,7 +15,7 @@ namespace Web.Controllers
         private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _employeeService;
         private readonly ILogger<AdministratorController> _logger;
 
-        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Administrator", "Administrators", RolesCatalog.Administrator)
+        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Administrator", "Master Admin", RolesCatalog.Administrator)
         {
             _employeeService = employeeService;
             _logger = logger;

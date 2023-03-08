@@ -151,6 +151,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     //.Include(x => x.OverrideType)
                     .Include(x => x.Department)
                     .Include(x => x.Shift)
+                    .Include(x => x.ReworkDelay)
+                    .Include(x => x.ShiftDelay)
+                    .Include(x => x.StartOfWorkDelay)
                     .Include(x => x.Unit)
                     .Include(x => x.Approver)
                     .Include(x => x.Employee)
@@ -206,6 +209,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     mappedModel.TotalCost = await CalculateTotalCost(costs);
                     mappedModel.TotalHours = CalculateTotalHours(costs);
+                    mappedModel.TotalHeadCount=CalculateTotalHeadCount(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
                     string notificationTitle = "Override Log Created";
@@ -247,6 +251,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
                             dbModel.TotalHours = CalculateTotalHours(costs);
+                            dbModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                             await SetRequesterId(dbModel);
                             await _db.SaveChangesAsync();
                             await SetORLogCosts(costs, dbModel.Id);
@@ -394,6 +399,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 return 0;
             }
             return overrideLogCost.Costs.Sum(x => x.OverrideHours);
+
+        }
+        private double CalculateTotalHeadCount(IORLogCost overrideLogCost)
+        {
+            if (overrideLogCost.Costs == null || overrideLogCost.Costs.Count < 1)
+            {
+                return 0;
+            }
+            return overrideLogCost.Costs.Sum(x => x.HeadCount);
 
         }
     }

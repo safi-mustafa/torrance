@@ -14,6 +14,10 @@ namespace ViewModels.TimeOnTools
         {
 
         }
+        public DelayTypeBriefViewModel(bool isValidationEnabled, string errorMessage) : base(isValidationEnabled, errorMessage)
+        {
+
+        }
         [DisplayName("DelayType")]
         public override string? Name { get; set; }
     }

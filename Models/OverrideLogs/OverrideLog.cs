@@ -70,5 +70,7 @@ namespace Models.OverrideLogs
         public double TotalCost { get; set; }
 
         public double TotalHours { get; set; }
+
+        public double TotalHeadCount { get; set; }
     }
 }

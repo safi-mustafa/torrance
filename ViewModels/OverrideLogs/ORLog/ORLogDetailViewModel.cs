@@ -44,6 +44,7 @@ namespace ViewModels.OverrideLogs.ORLog
         }
         public double TotalCost { get; set; }
         public double TotalHours { get; set; }
+        public double TotalHeadCount { get; set; }
         public string Description { get; set; }
 
         [Display(Name = "Workscope")]

@@ -64,6 +64,7 @@ namespace API.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            ModelState.Remove("ReasonForRequest");
             model.Validate(ModelState);
             return base.Post(model);
         }
@@ -83,6 +84,7 @@ namespace API.Controllers
             ModelState.Remove("ReworkDelay");
             ModelState.Remove("PermittingIssue");
             ModelState.Remove("Department");
+            ModelState.Remove("ReasonForRequest");
             return base.Put(model);
         }
 

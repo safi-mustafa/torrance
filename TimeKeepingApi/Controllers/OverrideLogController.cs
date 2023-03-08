@@ -49,8 +49,10 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
-            model.Validate(ModelState);
             ModelState.Remove("Company.Name");
+            ModelState.Remove("ReasonForRequest");
+            ModelState.Remove("DelayType");
+            model.Validate(ModelState);
             return base.Post(model);
         }
 
@@ -61,8 +63,10 @@ namespace API.Controllers
             {
                // ModelState.Remove("Approver.Name");
             }
-            model.Validate(ModelState);
             ModelState.Remove("Company.Name");
+            ModelState.Remove("ReasonForRequest");
+            ModelState.Remove("DelayType");
+            model.Validate(ModelState);
             return base.Put(model);
         }
 

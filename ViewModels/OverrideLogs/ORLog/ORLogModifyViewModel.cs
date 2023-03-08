@@ -39,7 +39,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
@@ -48,7 +48,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
      
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false,"");
 
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();

@@ -15,7 +15,7 @@ namespace Web.Controllers
         private readonly ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _employeeService;
         private readonly ILogger<CompanyManagerController> _logger;
 
-        public CompanyManagerController(ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> employeeService, ILogger<CompanyManagerController> logger, IMapper mapper) : base(employeeService, logger, mapper, "CompanyManager", "Company Managers", RolesCatalog.CompanyManager)
+        public CompanyManagerController(ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> employeeService, ILogger<CompanyManagerController> logger, IMapper mapper) : base(employeeService, logger, mapper, "CompanyManager", "Contractor Admin", RolesCatalog.CompanyManager)
         {
             _employeeService = employeeService;
             _logger = logger;

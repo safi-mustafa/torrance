@@ -58,7 +58,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? Comment { get; set; }
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
         [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }

@@ -58,7 +58,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Time Signed")]
         public TimeSpan? TimeSigned { get; set; } = TimeSpan.Zero;
         public string? Comment { get; set; }
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
         [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
