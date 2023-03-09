@@ -42,14 +42,17 @@ public class NotificationWorker : BackgroundService
         try
         {
             var currentDate = DateTime.Now;
-            var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && x.CreatedOn.Date <= currentDate.Date && x.IsSent==false).Skip(0).Take(5).ToListAsync();
+            var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && x.CreatedOn.Date <= currentDate.Date && x.IsSent == false).Skip(0).Take(5).ToListAsync();
             var emails = notifications.Where(x => x.Type == NotificationType.Email).ToList();
             var smss = notifications.Where(x => x.Type == NotificationType.Sms).ToList();
             var pushNotifications = notifications.Where(x => x.Type == NotificationType.Push).ToList();
+            var sendToIds = notifications.Where(x => !string.IsNullOrEmpty(x.SendTo)).Select(x => long.Parse(x.SendTo)).Distinct().ToList();
+            var users = await _db.Users.Where(x => sendToIds.Contains(x.Id)).ToListAsync();
             var appEmail = _configuration["AppEmail"];
             foreach (var email in emails)
             {
-                var emailResult = await _emailService.SendEmail(email.SendTo, appEmail, email.Subject, email.Message);
+                var sendToEmail = users.Where(x => x.Id.ToString() == email.SendTo).Select(x => x.Email).FirstOrDefault();
+                var emailResult = await _emailService.SendEmail(sendToEmail ?? "", appEmail ?? "", email.Subject ?? "", email.Message);
                 if (emailResult)
                 {
                     email.IsSent = true;
@@ -89,7 +92,7 @@ public class NotificationWorker : BackgroundService
                             notification.IsSent = false;
                             notification.ResendCount += 1;
                         }
-                        
+
                     }
                     else
                     {

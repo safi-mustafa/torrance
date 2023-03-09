@@ -51,6 +51,7 @@ using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.AppSettingServices.ForemanService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using Repositories.Services.AppSettingServices.AdministratorService;
+using ExcelReader.Repository;
 
 namespace Web.Extensions
 {
@@ -108,6 +109,7 @@ namespace Web.Extensions
         }
         public static void ConfigureDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IExcelReader, ExcelReaderService>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddHostedService<SeedWorker>();
@@ -146,7 +148,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
-            services.AddScoped(typeof(INotificationService<,,>), typeof(NotificationService<,,>));
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
             //services.AddScoped<IUserService, UserService>();

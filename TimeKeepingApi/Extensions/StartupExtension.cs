@@ -137,7 +137,7 @@ namespace Web.Extensions
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-               // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
             services.AddSwaggerGen(c =>
@@ -186,7 +186,7 @@ namespace Web.Extensions
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
-            services.AddScoped(typeof(INotificationService<,,>), typeof(NotificationService<,,>));
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped(typeof(IContractorService<,,>), typeof(ContractorService<,,>));
             services.AddScoped(typeof(ICompanyService<,,>), typeof(CompanyService<,,>));

@@ -34,9 +34,9 @@ namespace Repositories.Shared
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
+        private readonly INotificationService _notificationService;
 
-        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response)
+        public ApproveBaseService(ToranceContext db, ILogger logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;

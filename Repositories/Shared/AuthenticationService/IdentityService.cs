@@ -27,7 +27,7 @@ namespace Repositories.Shared.AuthenticationService
         private readonly IMapper _mapper;
         private readonly ToranceContext _db;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly IActionContextAccessor _actionContext;
 
         public IdentityService(
@@ -38,7 +38,7 @@ namespace Repositories.Shared.AuthenticationService
             IMapper mapper,
             ToranceContext db,
             IUserInfoService userInfoService,
-            INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService,
+            INotificationService notificationService,
             IActionContextAccessor actionContext
             )
         {

@@ -4,12 +4,16 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Models;
+using Repositories.Shared.AuthenticationService;
+using ViewModels.Notification;
 
 namespace Web.Areas.Identity.Pages.Account.Manage
 {
@@ -18,15 +22,18 @@ namespace Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ToranceUser> _userManager;
         private readonly SignInManager<ToranceUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
+        private readonly IIdentityService _identityService;
 
         public ChangePasswordModel(
             UserManager<ToranceUser> userManager,
             SignInManager<ToranceUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger,
+            IIdentityService identityService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _identityService = identityService;
         }
 
         /// <summary>
@@ -117,7 +124,11 @@ namespace Web.Areas.Identity.Pages.Account.Manage
                 }
                 return Page();
             }
+            var message = $"Your password has been changed.";
 
+            var mailRequest = new MailRequestViewModel(user.Id.ToString(), "Password Changed", message, user.Email, NotificationType.Email);
+
+            await _identityService.SendNotification(mailRequest);
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";

@@ -23,6 +23,7 @@ using ViewModels.Notification;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.WeldingRodRecord;
 using ViewModels.WeldingRodRecord.Employee;
 
@@ -40,9 +41,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IUserInfoService _userInfoService;
         private readonly string _loggedInUserRole;
         private readonly long _loggedInUserId;
-        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
+        private readonly INotificationService _notificationService;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -182,6 +183,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                                    },
                                                    OverrideType = olc.OverrideType
                                                }).ToListAsync();
+                    mappedModel.ShiftDelay = mappedModel.ShiftDelay ?? new();
+                    mappedModel.ReworkDelay = mappedModel.ReworkDelay ?? new();
+                    mappedModel.StartOfWorkDelay = mappedModel.StartOfWorkDelay ?? new();
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -209,12 +213,20 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await _db.Set<OverrideLog>().AddAsync(mappedModel);
                     mappedModel.TotalCost = await CalculateTotalCost(costs);
                     mappedModel.TotalHours = CalculateTotalHours(costs);
-                    mappedModel.TotalHeadCount=CalculateTotalHeadCount(costs);
+                    mappedModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
                     string notificationTitle = "Override Log Created";
                     string notificationMessage = $"A new Override Log with PO# ({mappedModel.PoNumber}) has been created";
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
+                    await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
+
+                    await _notificationService.Create(new NotificationModifyViewModel(
+                        mappedModel.Id,
+                        typeof(OverrideLog),
+                        mappedModel.ApproverId?.ToString() ?? "",
+                        notificationTitle, notificationMessage,
+                        NotificationType.Email,
+                        NotificationEventTypeCatalog.Created));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

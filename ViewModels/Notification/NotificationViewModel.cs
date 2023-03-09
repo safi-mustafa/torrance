@@ -9,7 +9,7 @@ using ViewModels.Shared;
 
 namespace ViewModels.Notification
 {
-    public class NotificationModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class NotificationModifyViewModel
     {
         public NotificationModifyViewModel()
         {
@@ -35,6 +35,7 @@ namespace ViewModels.Notification
             Type = type;
 
         }
+        public Guid Id { get; set; }
         public long EntityId { get; set; }
         public string Message { get; set; }
         public string? Subject { get; set; }

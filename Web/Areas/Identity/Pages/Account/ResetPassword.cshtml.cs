@@ -4,24 +4,31 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Models;
+using Repositories.Shared.AuthenticationService;
+using ViewModels.Notification;
 
 namespace Web.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<ToranceUser> _userManager;
+        private readonly IIdentityService _identity;
 
-        public ResetPasswordModel(UserManager<ToranceUser> userManager)
+        public ResetPasswordModel(UserManager<ToranceUser> userManager, IIdentityService identity)
         {
             _userManager = userManager;
+            _identity = identity;
         }
 
         /// <summary>
@@ -105,6 +112,11 @@ namespace Web.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                var message = $"Your password has been changed.";
+
+                var mailRequest = new MailRequestViewModel(user.Id.ToString(), "Password Reset", message, Input.Email, NotificationType.Email);
+
+                await _identity.SendNotification(mailRequest);
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

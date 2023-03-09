@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class NotificationController : CrudBaseBriefController<NotificationModifyViewModel, NotificationSearchViewModel>
     {
-        public NotificationController(INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> permitTypeService) : base(permitTypeService)
+        public NotificationController(INotificationService permitTypeService) : base(permitTypeService)
         {
         }
 

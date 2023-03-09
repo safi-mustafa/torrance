@@ -103,6 +103,11 @@ namespace Web.Controllers
             return base.Update(model);
         }
 
+        public async Task<IActionResult> ApproveByNotification(Guid id)
+        {
+            return View();
+        }
+
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return View("~/Views/OverrideLog/_Index.cshtml", vm);
@@ -111,7 +116,7 @@ namespace Web.Controllers
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
             var html = "";
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
             {
                 html += @"
                     <div class=""p-2 row"">

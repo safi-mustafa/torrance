@@ -14,6 +14,7 @@ using ViewModels.Authentication.Approver;
 using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.Employee;
 using Web.Helpers;
+using ViewModels.Shared;
 
 namespace Web.Controllers
 {
@@ -29,6 +30,23 @@ namespace Web.Controllers
             _employeeService = employeeService;
             _approverService = approverService;
             _logger = logger;
+        }
+
+
+        public IActionResult ImportExcelSheet()
+        {
+            var model = new ExcelFileVM();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportExcelSheet(ExcelFileVM model)
+        {
+            if (await _employeeService.InitializeExcelContractData(model))
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("ImportExcelSheet");
         }
 
     }

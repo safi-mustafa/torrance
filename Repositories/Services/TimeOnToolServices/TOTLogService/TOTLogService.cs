@@ -36,9 +36,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
-        private readonly INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> _notificationService;
+        private readonly INotificationService _notificationService;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService<NotificationModifyViewModel, NotificationModifyViewModel, NotificationModifyViewModel> notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -184,7 +184,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "TOT Log Created";
                     string notificationMessage = $"A new TOT Log with TWR# ({mappedModel.Twr}) has been created";
-                    await _notificationService.Create(new NotificationModifyViewModel(mappedModel.Id, typeof(TOTLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
+                    await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(TOTLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

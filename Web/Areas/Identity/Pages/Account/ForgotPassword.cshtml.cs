@@ -83,7 +83,7 @@ namespace Web.Areas.Identity.Pages.Account
                 //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                 var message = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
-                var mailRequest = new MailRequestViewModel(Input.Email, "Reset Password", message, Input.Email, NotificationType.Email);
+                var mailRequest = new MailRequestViewModel(user.Id.ToString(), "Reset Password", message, Input.Email, NotificationType.Email);
 
                 await _identity.SendNotification(mailRequest);
                 return RedirectToPage("./ForgotPasswordConfirmation");

@@ -9,5 +9,6 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
+        Task<bool> InitializeExcelContractData(ExcelFileVM model);
     }
 }
