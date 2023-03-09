@@ -262,7 +262,9 @@ namespace Models.Mapper
                 .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                 .ReverseMap();
-            CreateMap<ToranceUser, EmployeeDetailViewModel>().ReverseMap();
+            CreateMap<ToranceUser, EmployeeDetailViewModel>()
+                .ForMember(dest => dest.Company, act => act.Condition(src => (src.Company != null)))
+                .ReverseMap();
             CreateMap<ApproverBriefViewModel, ToranceUser>()
              .ForMember(src => src.FullName, opt => opt.MapFrom(dest => dest.Name))
              .ReverseMap();

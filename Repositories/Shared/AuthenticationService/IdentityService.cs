@@ -103,7 +103,7 @@ namespace Repositories.Shared.AuthenticationService
                 {
                     //user.UserName = model.UserName;
                     //user.Email = model.Email;
-                    //user.AccessCode = model.AccessCode;
+                    user.AccessCode = model.IsExcelSheet ? model.AccessCode.EncodePasswordToBase64() : user.AccessCode;
                     user.FullName = model.FullName;
                     user.CompanyId = model.Company?.Id;
                     var result = await _userManager.UpdateAsync(user);
@@ -112,7 +112,7 @@ namespace Repositories.Shared.AuthenticationService
                         if (!string.IsNullOrEmpty(model.Password))
                         {
                             await _userManager.RemovePasswordAsync(user);
-                            var response = await _userManager.AddPasswordAsync(user, model.EmployeeId);
+                            var response = await _userManager.AddPasswordAsync(user, model.Password);
                             if (response.Succeeded)
                             {
                                 return result.Succeeded;
