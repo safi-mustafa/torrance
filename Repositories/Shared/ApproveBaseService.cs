@@ -108,8 +108,8 @@ namespace Repositories.Shared
                         if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
                         {
                             type = "TOT";
-                            identifierKey = "Twr";
-                            identifier = (logRecord as TOTLog).Twr;
+                            identifierKey = "Permit";
+                            identifier = (logRecord as TOTLog).PermitNo;
                         }
                         else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
                         {

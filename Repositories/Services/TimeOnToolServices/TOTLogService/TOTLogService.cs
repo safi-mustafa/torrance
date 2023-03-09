@@ -183,7 +183,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "TOT Log Created";
-                    string notificationMessage = $"A new TOT Log with TWR# ({mappedModel.Twr}) has been created";
+                    string notificationMessage = $"A new TOT Log with Permit# ({mappedModel.PermitNo}) has been created";
                     await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(TOTLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -211,7 +211,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
                             string notificationTitle = "TOT Log Updated";
-                            string notificationMessage = $"The TOT Log with TWR# ({updateModel.Twr}) has been updated";
+                            string notificationMessage = $"The TOT Log with Permit# ({updateModel.PermitNo}) has been updated";
                             await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
                         }
                         var dbModel = _mapper.Map(model, record);
@@ -350,7 +350,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
                 if (list != null && list.Count > 0)
                 {
-                    list = list.OrderBy(x => x.text).ToList();
+                    //list = list.OrderBy(x => x.text).ToList();
                     var paginatedResult = new PaginatedResultModel<Select2ViewModel>();
                     paginatedResult.Items = list;
                     paginatedResult._meta = new();

@@ -49,7 +49,7 @@
             <div>@(string.IsNullOrEmpty(Model.DelayType?.Name) ? "-" : Model.DelayType.Name)</div>
         </div>
     </div>*@
-    <div class="col-lg-4">
+    @*<div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="DelayReason" class="form-label fw-600"></label>
             <div>@(Model.DelayReason == null ? "-" : Model.DelayReason.ToString())</div>
@@ -71,6 +71,12 @@
         <div class="mb-3">
             <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
             <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
+        </div>
+    </div>*@
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label asp-for="Reason" class="form-label fw-600"></label>
+            <div>@(Model.Reason == null ? "-" : Model.Reason.ToString())</div>
         </div>
     </div>
     <div class="col-lg-4">

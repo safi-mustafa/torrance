@@ -87,8 +87,9 @@ namespace Web.Controllers
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _service.GetAll<PaginatedViewModel>(svm);
                 var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<PaginatedViewModel>>;
+                var totalCount = parsedResponse.ReturnModel._meta.TotalCount;
                 var select2List = GetSelect2List(parsedResponse.ReturnModel);
-                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, select2List));
+                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, totalCount, select2List));
             }
             catch (Exception ex)
             {
