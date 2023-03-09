@@ -44,7 +44,7 @@ namespace ViewModels.Authentication.User
         //public string ConfirmAccessCode { get; set; }
 
         public RolesCatalog? Role { get; set; }
-
+        public bool IsExcelSheet { get; set; }
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }

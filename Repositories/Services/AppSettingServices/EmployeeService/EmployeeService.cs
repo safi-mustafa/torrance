@@ -53,13 +53,14 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
         {
             try
             {
-                var existingEmployees = await _db.Employees.Select(x => new { Id = x.Id, Email = x.Email }).ToListAsync();
+                var existingEmployees = await _db.Users.Select(x => new { Id = x.Id, Email = x.Email }).ToListAsync();
                 foreach (var item in excelDataList)
                 {
                     var existingEmployee = existingEmployees.Where(x => x.Email == item.Email.Trim()).FirstOrDefault();
                     if (existingEmployee != null)
                     {
                         item.Id = existingEmployee.Id;
+                        
                         await Update(item as UpdateViewModel);
                     }
                     else
