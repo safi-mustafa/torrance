@@ -306,6 +306,7 @@ namespace Web.Controllers
         {
             IRepositoryResponse response = new RepositoryResponse();
             var isApproval = false;
+            ViewBag.IgnoreLayout = true;
             if (type == LogType.TimeOnTools)
             {
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";

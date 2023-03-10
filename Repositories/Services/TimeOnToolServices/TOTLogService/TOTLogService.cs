@@ -15,8 +15,10 @@ using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using ViewModels;
 using ViewModels.Notification;
@@ -343,10 +345,13 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 List<Select2ViewModel> list = new List<Select2ViewModel>();
                 foreach (DelayReasonCatalog delayReason in (DelayReasonCatalog[])Enum.GetValues(typeof(DelayReasonCatalog)))
                 {
+                    var field = typeof(DelayReasonCatalog).GetField(delayReason.ToString());
+                    var displayAttribute = field.GetCustomAttribute<DisplayAttribute>();
+                    var displayName = displayAttribute?.Name ?? delayReason.ToString();
                     list.Add(new Select2ViewModel()
                     {
                         id = ((int)delayReason).ToString(),
-                        text = delayReason.ToString()
+                        text = displayName
                     });
                 }
 

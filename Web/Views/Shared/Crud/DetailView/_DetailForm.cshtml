@@ -2,6 +2,10 @@
 @model CrudDetailViewModel
 @{
     ViewData["Title"] = Model.Title;
+    if (ViewBag.IgnoreLayout != null && ViewBag.IgnoreLayout)
+    {
+        Layout = null;
+    }
 }
 <div class="card">
     <div class="card-body">

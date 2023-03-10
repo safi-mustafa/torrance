@@ -23,16 +23,8 @@ namespace ViewModels.Shared
             modelState.Remove("ShiftDelay.Id");
             modelState.Remove("ReworkDelay.Id");
             modelState.Remove("StartOfWorkDelay.Id");
-            if (DelayReason == null)
-            {
-                ShiftDelay.Id = null;
-                StartOfWorkDelay.Id = null;
-                ReworkDelay.Id = null;
-            }
             if (DelayReason == DelayReasonCatalog.ReworkDelay)
             {
-                ShiftDelay.Id = null;
-                StartOfWorkDelay.Id = null;
                 if ((ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
                 {
                     modelState.AddModelError("ReworkDelay.Id", "The field Rework Delay is required");
@@ -41,8 +33,6 @@ namespace ViewModels.Shared
             }
             else if (DelayReason == DelayReasonCatalog.ShiftDelay)
             {
-                ReworkDelay.Id = null;
-                StartOfWorkDelay.Id = null;
                 if (ShiftDelay == null || ShiftDelay.Id == null || ShiftDelay?.Id < 1)
                 {
                     modelState.AddModelError("ShiftDelay.Id", "The field Shift Delay is required");
@@ -51,8 +41,6 @@ namespace ViewModels.Shared
             }
             else if (DelayReason == DelayReasonCatalog.StartOfWork)
             {
-                ShiftDelay.Id = null;
-                ReworkDelay.Id = null;
                 if ((StartOfWorkDelay == null || StartOfWorkDelay.Id == null || StartOfWorkDelay.Id < 1))
                 {
                     modelState.AddModelError("StartOfWorkDelay.Id", "The field Start Of Work is required.");

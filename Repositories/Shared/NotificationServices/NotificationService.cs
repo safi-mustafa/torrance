@@ -5,6 +5,7 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
@@ -29,14 +30,16 @@ namespace Repositories.Shared.NotificationServices
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
+        private readonly IHttpContextAccessor contextAccessor;
 
-        public NotificationService(ToranceContext db, ILogger<NotificationService> logger, IUserInfoService userInfoService, IMapper mapper, IRepositoryResponse response)
+        public NotificationService(ToranceContext db, ILogger<NotificationService> logger, IUserInfoService userInfoService, IMapper mapper, IRepositoryResponse response, IHttpContextAccessor contextAccessor)
         {
             _db = db;
             _logger = logger;
             _userInfoService = userInfoService;
             _mapper = mapper;
             _response = response;
+            this.contextAccessor = contextAccessor;
         }
 
         public async Task<IRepositoryResponse> CreateLogNotification(NotificationModifyViewModel model)
@@ -51,7 +54,7 @@ namespace Repositories.Shared.NotificationServices
                     foreach (var approver in approvers)
                     {
                         SetLogPushNotification(model, notifications, approver);
-                        SendLogEmailNotification(model, notifications, approver);
+                        //SendLogEmailNotification(model, notifications, approver);
                     }
                     _db.Set<Notification>().AddRange(notifications);
                     await _db.SaveChangesAsync();
@@ -70,10 +73,13 @@ namespace Repositories.Shared.NotificationServices
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Id = Guid.NewGuid();
-            var approveRedirectUrl = $"https://localhost:7090/Approval/ApproveByNotification/{notificationMappedModel.Id}";
+            var request = contextAccessor.HttpContext.Request;
+            var domain = $"{request.Scheme}://{request.Host}";
+            var approveRedirectUrl = $"{domain}/Approval/ApproveByNotification/{notificationMappedModel.Id}";
             notificationMappedModel.Message = $"A new {model.EntityType?.GetDisplayName()} has been created, to approve it <a href='{approveRedirectUrl}'>click here.</a>";
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Email;
+            notificationMappedModel.CreatedOn = DateTime.Now;
             notifications.Add(notificationMappedModel);
         }
 
@@ -83,6 +89,7 @@ namespace Repositories.Shared.NotificationServices
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Push;
+            notificationMappedModel.CreatedOn= DateTime.Now;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
             notifications.Add(notificationMappedModel);
         }
@@ -93,6 +100,7 @@ namespace Repositories.Shared.NotificationServices
             {
                 var mappedModel = _mapper.Map<Notification>(model);
                 mappedModel.Id = Guid.NewGuid();
+                mappedModel.CreatedOn = DateTime.Now;
                 await _db.Set<Notification>().AddAsync(mappedModel);
                 await _db.SaveChangesAsync();
 

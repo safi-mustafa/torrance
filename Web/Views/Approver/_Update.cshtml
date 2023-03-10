@@ -125,10 +125,26 @@
                     'Name': unitName
                 }
             }
-            console.log(obj, rowNumber);
-            AddAssociationRow(obj, rowNumber);
-            ResetAssociationInputs();
+            if (!isAlreadyAdded(obj)) {
+                AddAssociationRow(obj, rowNumber);
+                ResetAssociationInputs();
+            }
+            else {
+                swal.fire({
+                    title: 'Validation Error',
+                    text: "This department and unit has already been added",
+                    type: 'error',
+                    showCancelButton: true,
+                    confirmButtonText: "Okay",
+                    cancelButtonText: "Cancel",
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                });
+            }
+            
         }
+           
         else {
             swal.fire({
                 title: 'Validation Error',
@@ -144,8 +160,10 @@
         }
     }
     function ResetAssociationInputs() {
-        $("#unit-id").val('').trigger('change')
-        $("#department-id").val('').trigger('change')
+        $("#unit-id").val('').trigger('change');
+        $("#unit-id").empty().trigger('change');
+        $("#department-id").val('').trigger('change');
+        $("#department-id").empty().trigger('change');
     }
 
     function AddAssociationRow(obj, rowNumber) {
@@ -162,6 +180,26 @@
                 console.log(textStatus, errorThrown);
             }
         });
+    }
+
+    function isAlreadyAdded(obj) {
+        var departmentId = obj.Department.Id;
+        var unitId = obj.Unit.Id;
+
+        var rows = $('#association-table tbody tr');
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = $(rows[i]);
+
+            var rowDepartmentId = row.find('input[name$="Department.Id"]').val();
+            var rowUnitId = row.find('input[name$="Unit.Id"]').val();
+
+            if (rowDepartmentId === departmentId && rowUnitId === unitId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     function RefreshInputIndexes() {

@@ -80,6 +80,7 @@ namespace API.Controllers
             }
             model.Validate(ModelState);
             ModelState.Remove("Contractor");
+            ModelState.Remove("DelayType");
             ModelState.Remove("ShiftDelay");
             ModelState.Remove("ReworkDelay");
             ModelState.Remove("PermittingIssue");
