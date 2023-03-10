@@ -143,8 +143,8 @@ namespace Repositories.Shared
                         _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in SetApproveStatus()");
 
                         await transaction.RollbackAsync();
-                        return Response.NotFoundResponse(_response);
                     }
+                    return Response.NotFoundResponse(_response);
                 }
                 catch (Exception ex)
                 {
