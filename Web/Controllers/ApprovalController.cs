@@ -305,14 +305,14 @@ namespace Web.Controllers
         private async Task<IActionResult> SetDetailView(long id, LogType type, string view, bool isUnauthenticatedApproval, Guid notificationId = new Guid(), long approverId = 0)
         {
             IRepositoryResponse response = new RepositoryResponse();
-            var isApproval = false;
+            var isApproval = true;
             ViewBag.IgnoreLayout = true;
             if (type == LogType.TimeOnTools)
             {
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
                 response = await _totService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
-                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<TOTLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else if (type == LogType.WeldingRodRecord)
@@ -320,7 +320,7 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                 response = await _wrrService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
-                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else
@@ -328,7 +328,7 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
                 response = await _overrideLogService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;
-                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<ORLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
         }

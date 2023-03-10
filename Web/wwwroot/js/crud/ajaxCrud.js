@@ -35,7 +35,7 @@ function rejectDetail(element) {
 function sendApproveAjax(status) {
     var controller = $("#controller-name").val();
     var id = $("#log-id").val();
-    var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val();
+    var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val().toLowerCase();
     var approverId = $("#approver-id").val();
     var notificationId = $("#notification-id").val();
     var url = "/" + controller + "/ApproveStatus";
@@ -47,7 +47,7 @@ function sendApproveAjax(status) {
         data: data,
         success: function (result) {
             $("#crudModalPanel").modal("toggle");
-            if (isUnauthenticatedApproval == false)
+            if (isUnauthenticatedApproval == "false")
                 ReInitializeDataTables();
             else
                 window.location.href = "/Identity/Account/Login";
