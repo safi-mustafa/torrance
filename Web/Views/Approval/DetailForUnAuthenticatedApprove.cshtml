@@ -2,6 +2,7 @@
 @model CrudDetailViewModel
 @{
     ViewData["Title"] = Model.Title;
+    //Layout = null;
 }
 <div class="card">
     <div class="card-body">
@@ -20,9 +21,20 @@
                     </div>
                 </div>
             }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="text-center">
+                            Log has been already Processed.
+                        </div>
+                    </div>
+                </div>
+            }
             <input type="hidden" id="modal-title" value="@Model.Title" />
         </div>
     </div>
 </div>
 
+<script src="~/js/crud/ajaxCrud.js"></script>
 <script src="/js/masking/initiate-masking.js"></script>

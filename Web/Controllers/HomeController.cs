@@ -76,8 +76,6 @@ namespace Web.Controllers
             }
         }
 
-       
-
         public async Task<ActionResult> GetTOTStatusChartData(TOTLogSearchViewModel search)
         {
             var data = await _dashboardService.GetTotStatusChartData(search);
@@ -107,6 +105,14 @@ namespace Web.Controllers
             var data = await _dashboardService.GetOverrideChartsData(search);
             return Json(data);
         }
+
+        [AllowAnonymous]
+        public ActionResult ShowMessage(string message)
+        {
+            ViewBag.Message = message;
+            return View();
+        }
+
 
     }
 }

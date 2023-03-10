@@ -87,51 +87,61 @@ namespace Repositories.Shared
             }
         }
 
-        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status)
+        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid())
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
-                    if (logRecord != null)
+                    var allowUnauthenticatedApproval = isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid();
+                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
+
+                    if (isUnauthenticatedApproval == false || allowUnauthenticatedApproval)
                     {
-                        logRecord.Status = status;
-                        if (logRecord.ApproverId == null)
+                        var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+                        if (logRecord != null)
                         {
-                            logRecord.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
+                            logRecord.Status = status;
+                            if (allowUnauthenticatedApproval)
+                            {
+                                logRecord.ApproverId = approverId;
+                            }
+                            else if (logRecord.ApproverId == null)
+                            {
+                                logRecord.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
+                            }
+                            await _db.SaveChangesAsync();
+                            string type = "";
+                            string identifier = "";
+                            string identifierKey = "";
+                            if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
+                            {
+                                type = "TOT";
+                                identifierKey = "Twr";
+                                identifier = (logRecord as TOTLog).Twr;
+                            }
+                            else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
+                            {
+                                type = "Override";
+                                identifierKey = "PO";
+                                identifier = (logRecord as OverrideLog).PoNumber.ToString();
+                            }
+                            else
+                            {
+                                type = "WRR";
+                                identifierKey = "Twr";
+                                identifier = (logRecord as WRRLog).Twr.ToString();
+                            }
+                            var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
+                            string notificationTitle = $"{type} Log {status}";
+                            string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
+                            var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
+                            await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
+                            await transaction.CommitAsync();
+                            return _response;
                         }
-                        await _db.SaveChangesAsync();
-                        string type = "";
-                        string identifier = "";
-                        string identifierKey = "";
-                        if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
-                        {
-                            type = "TOT";
-                            identifierKey = "Twr";
-                            identifier = (logRecord as TOTLog).Twr;
-                        }
-                        else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
-                        {
-                            type = "Override";
-                            identifierKey = "PO";
-                            identifier = (logRecord as OverrideLog).PoNumber.ToString();
-                        }
-                        else
-                        {
-                            type = "WRR";
-                            identifierKey = "Twr";
-                            identifier = (logRecord as WRRLog).Twr.ToString();
-                        }
-                        var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
-                        string notificationTitle = $"{type} Log {status}";
-                        string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
-                        var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
-                        await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
-                        await transaction.CommitAsync();
-                        return _response;
                     }
-                    _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in Delete()");
+                    _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in SetApproveStatus()");
 
                     await transaction.RollbackAsync();
                     return Response.NotFoundResponse(_response);

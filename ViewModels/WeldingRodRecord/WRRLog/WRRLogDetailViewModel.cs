@@ -19,7 +19,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogDetailViewModel : BaseCrudViewModel, IApprove
+    public class WRRLogDetailViewModel : LogCommonDetailViewModel, IApprove
     {
         public WRRLogDetailViewModel()
         {
@@ -85,15 +85,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [DisplayName("Rod Returned Waste lbs")]
         public double RodReturnedWasteLbs { get; set; }
 
-        public Status Status { get; set; }
-        public string FormattedStatus { get => Status.GetDisplayName(); }
-        public bool IsEditRestricted
-        {
-            get
-            {
-                return Status != Status.Pending;
-            }
-        }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
@@ -103,7 +94,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
 
         public WeldMethodBriefViewModel WeldMethod { get; set; } = new WeldMethodBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();

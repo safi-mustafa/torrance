@@ -103,11 +103,6 @@ namespace Web.Controllers
             return base.Update(model);
         }
 
-        public async Task<IActionResult> ApproveByNotification(Guid id)
-        {
-            return View();
-        }
-
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return View("~/Views/OverrideLog/_Index.cshtml", vm);

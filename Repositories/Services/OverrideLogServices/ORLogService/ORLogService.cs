@@ -52,7 +52,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _userInfoService = userInfoService;
             _notificationService = notificationService;
             _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
-            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId()); ;
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
 
         public override Expression<Func<OverrideLog, bool>> SetQueryFilter(IBaseSearchModel filters)

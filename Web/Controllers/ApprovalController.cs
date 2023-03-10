@@ -21,6 +21,8 @@ using ViewModels.Shared;
 using Web.Helpers;
 using ViewModels.OverrideLogs.ORLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
+using static Repositories.Services.CommonServices.ApprovalService.ApprovalService;
+using ViewModels.Authentication.User;
 
 namespace Web.Controllers
 {
@@ -66,26 +68,7 @@ namespace Web.Controllers
         {
             try
             {
-                IRepositoryResponse response = new RepositoryResponse();
-
-                if (type == LogType.TimeOnTools)
-                {
-                    _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
-                    response = await _totService.GetById(id);
-                    return GetDetailView<TOTLogDetailViewModel>(response, id, type);
-                }
-                else if (type == LogType.WeldingRodRecord)
-                {
-                    _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
-                    response = await _wrrService.GetById(id);
-                    return GetDetailView<WRRLogDetailViewModel>(response, id, type);
-                }
-                else
-                {
-                    _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
-                    response = await _overrideLogService.GetById(id);
-                    return GetDetailView<ORLogDetailViewModel>(response, id, type);
-                }
+                return await SetDetailView(id, type, "~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", true);
             }
             catch (Exception ex) { _logger.LogError($"{_controllerName} Detail method threw an exception, Message: {ex.Message}"); }
             return RedirectToAction("Index");
@@ -121,9 +104,31 @@ namespace Web.Controllers
         {
             return await SetUpdateView(id, type, "Update");
         }
+
         public async Task<IActionResult> Approve(long id, LogType type)
         {
             return await SetUpdateView(id, type, "Approve");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ApproveByNotification(Guid id)
+        {
+            var response = await _approvalService.GetLogIdAndTypeFromNotificationId(id);
+
+            if (response.Status == System.Net.HttpStatusCode.OK)
+            {
+                var parsedModel = response as RepositoryResponseWithModel<LogDetailFromNotification>;
+                var responseModel = parsedModel?.ReturnModel;
+                try
+                {
+                    return await SetDetailView(responseModel.LogId, responseModel.LogType, "~/Views/Approval/DetailForUnAuthenticatedApprove.cshtml", true, id, responseModel.ApproverId);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            return RedirectToAction("ShowMessage", "Home", new { message = "No such Log exists" });
         }
 
         private async Task<IActionResult> SetUpdateView(long id, LogType type, string view)
@@ -214,7 +219,6 @@ namespace Web.Controllers
             vm.IsApprovalForm = view == "Approve" ? true : false;
             vm.UpdateModel = updateModel == null ? new() : updateModel;
             return vm;
-
         }
 
         protected ActionResult UpdateView(CrudUpdateViewModel vm)
@@ -270,26 +274,26 @@ namespace Web.Controllers
             return vm;
         }
 
-        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model)
+        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model, bool isApproval)
         {
             CrudDetailViewModel vm = new CrudDetailViewModel()
             {
                 Title = $"{_detailTitle} Details",
                 DetailViewPath = _detailViewPath,
                 DetailModel = model,
-                IsApprovalForm = true
+                IsApprovalForm = isApproval
             };
             return vm;
         }
 
-        private ActionResult GetDetailView<DetailViewModel>(IRepositoryResponse response, long id, LogType type) where DetailViewModel : BaseCrudViewModel, new()
+        private ActionResult GetDetailView<DetailViewModel>(IRepositoryResponse response, long id, LogType type, bool isApproval, string view) where DetailViewModel : BaseCrudViewModel, new()
         {
             if (response.Status == System.Net.HttpStatusCode.OK)
             {
                 var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
                 var model = parsedResponse?.ReturnModel ?? new();
-                var vm = SetDetailViewModel(model);
-                return View("~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", vm);
+                var vm = SetDetailViewModel(model, isApproval);
+                return View(view, vm);
             }
             else
             {
@@ -297,6 +301,51 @@ namespace Web.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        private async Task<IActionResult> SetDetailView(long id, LogType type, string view, bool isUnauthenticatedApproval, Guid notificationId = new Guid(), long approverId = 0)
+        {
+            IRepositoryResponse response = new RepositoryResponse();
+            var isApproval = false;
+            if (type == LogType.TimeOnTools)
+            {
+                _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
+                response = await _totService.GetById(id);
+                var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                return GetDetailView<TOTLogDetailViewModel>(parsedModel, id, type, isApproval, view);
+            }
+            else if (type == LogType.WeldingRodRecord)
+            {
+                _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
+                response = await _wrrService.GetById(id);
+                var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
+            }
+            else
+            {
+                _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
+                response = await _overrideLogService.GetById(id);
+                var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                return GetDetailView<ORLogDetailViewModel>(parsedModel, id, type, isApproval, view);
+            }
+        }
+
+        private static bool SetApproverValues<T>(bool isUnauthenticatedApproval, Guid notificationId, long approverId, RepositoryResponseWithModel<T>? parsedModel)
+            where T : LogCommonDetailViewModel, new()
+        {
+            bool isApproval = false;
+            if (approverId > 0 && isUnauthenticatedApproval && parsedModel != null)
+            {
+                parsedModel.ReturnModel.Approver = new ApproverBriefViewModel { Id = approverId };
+                parsedModel.ReturnModel.IsUnauthenticatedApproval = isUnauthenticatedApproval;
+                parsedModel.ReturnModel.NotificationId = notificationId;
+                isApproval = parsedModel.ReturnModel.Status == Status.Pending;
+            }
+            return isApproval;
+        }
+
 
         #endregion
     }

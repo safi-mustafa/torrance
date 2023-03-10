@@ -35,8 +35,11 @@ function rejectDetail(element) {
 function sendApproveAjax(status) {
     var controller = $("#controller-name").val();
     var id = $("#log-id").val();
+    var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val();
+    var approverId = $("#approver-id").val();
+    var notificationId = $("#notification-id").val();
     var url = "/" + controller + "/ApproveStatus";
-    var data = { status: status, id: id };
+    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId };
 
     $.ajax({
         type: "Get",
@@ -44,7 +47,10 @@ function sendApproveAjax(status) {
         data: data,
         success: function (result) {
             $("#crudModalPanel").modal("toggle");
-            ReInitializeDataTables();
+            if (isUnauthenticatedApproval == false)
+                ReInitializeDataTables();
+            else
+                window.location.href = "/Identity/Account/Login";
         }
     });
 }

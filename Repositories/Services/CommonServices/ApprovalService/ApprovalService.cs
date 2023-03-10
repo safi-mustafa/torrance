@@ -4,6 +4,7 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common;
@@ -189,6 +190,43 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 return Response.BadRequestResponse(_response);
             }
 
+        }
+        public class LogDetailFromNotification
+        {
+            public long LogId { get; set; }
+            public LogType LogType { get; set; }
+            public long ApproverId { get; set; }
+        }
+        public async Task<IRepositoryResponse> GetLogIdAndTypeFromNotificationId(Guid notificationId)
+        {
+            var logDetails = new LogDetailFromNotification();
+            try
+            {
+                var notification = await _db.Notifications.Where(x => x.Id == notificationId && x.Type == NotificationType.Email).FirstOrDefaultAsync();
+                if (notification != null)
+                {
+                    logDetails.LogId = notification.EntityId ?? 0;
+                    logDetails.LogType = notification.EntityType == NotificationEntityType.OverrideLog
+                         ?
+                         LogType.Override
+                         :
+                             notification.EntityType == NotificationEntityType.TOTLog
+                             ?
+                             LogType.TimeOnTools
+                             :
+                             LogType.WeldingRodRecord;
+                    logDetails.ApproverId = long.Parse(notification.SendTo);
+
+                    var response = new RepositoryResponseWithModel<LogDetailFromNotification> { ReturnModel = logDetails };
+                    return response;
+                }
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetLogIdAndTypeFromNotificationId() threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
         }
     }
 }

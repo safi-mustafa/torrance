@@ -10,6 +10,7 @@ namespace Repositories.Services.CommonServices.ApprovalService.Interface
     public interface IApprovalService : IBaseSearch
     {
         Task<IRepositoryResponse> Delete(long id, LogType type);
+        Task<IRepositoryResponse> GetLogIdAndTypeFromNotificationId(Guid notificationId);
     }
 }
 

@@ -22,7 +22,7 @@ using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogDetailViewModel : BaseCrudViewModel
+    public class TOTLogDetailViewModel : LogCommonDetailViewModel
     {
         public long Id { get; set; }
         public DateTime Date { get; set; }
@@ -97,17 +97,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Hours Delayed")]
         public double HoursDelayed { get; set; }
-        public Status Status { get; set; }
 
-        public string FormattedStatus { get => Status.GetDisplayName(); }
-
-        public bool IsEditRestricted
-        {
-            get
-            {
-                return Status != Status.Pending;
-            }
-        }
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -125,7 +115,6 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public string Foreman { get; set; }
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();

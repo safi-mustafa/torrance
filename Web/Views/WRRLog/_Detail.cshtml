@@ -34,11 +34,11 @@
             </div>
 
             @*<div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="Email" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
+                </div>
+                </div>*@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="RodCheckedOut" class="form-label fw-600"></label>
@@ -105,7 +105,11 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="log-id" asp-for="Id" />
+    <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
     <input type="hidden" id="controller-name" value="WRRLog" />
+    <input type="hidden" id="approver-id" asp-for="Approver.Id" />
+    <input type="hidden" id="is-unauthenticated-approval" asp-for="IsUnauthenticatedApproval" />
+    <input type="hidden" id="notification-id" name="NotificationId" value="@Model.NotificationId" />
+
 </div>
 

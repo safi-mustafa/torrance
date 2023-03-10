@@ -18,7 +18,7 @@ using ViewModels.TimeOnTools;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogDetailViewModel : BaseCrudViewModel
+    public class ORLogDetailViewModel : LogCommonDetailViewModel
     {
         public long Id { get; set; }
 
@@ -55,16 +55,8 @@ namespace ViewModels.OverrideLogs.ORLog
         [Range(1, long.MaxValue, ErrorMessage = "The PO Number must be greater than zero.")]
         public long PoNumber { get; set; }
 
-        public Status Status { get; set; }
 
-        public string FormattedStatus { get => Status.GetDisplayName(); }
-        public bool IsEditRestricted
-        {
-            get
-            {
-                return Status != Status.Pending;
-            }
-        }
+
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
@@ -83,7 +75,6 @@ namespace ViewModels.OverrideLogs.ORLog
         public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 

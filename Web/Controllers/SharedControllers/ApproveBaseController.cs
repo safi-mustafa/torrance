@@ -12,6 +12,7 @@ using Web.Helpers;
 using Centangle.Common.ResponseHelpers.Models;
 using Repositories.Shared.Interfaces;
 using Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
@@ -55,8 +56,8 @@ namespace Web.Controllers
                 _logger.LogError($"Activity _ApproveTimesheets method threw an exception, Message: {ex.Message}");
                 return null;
             }
-
         }
+
         public async Task<ActionResult> GetApprovedRecordIds()
         {
             try
@@ -71,12 +72,12 @@ namespace Web.Controllers
             }
 
         }
-
-        public async Task<bool> ApproveStatus(long id, Status status)
+        [AllowAnonymous]
+        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId)
         {
             try
             {
-                var response = await _service.SetApproveStatus(id, status);
+                var response = await _service.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.Now);

@@ -31,24 +31,24 @@
             <div>@Model.FormattedDateOfWorkCompleted</div>
         </div>
     </div>
-  @*  <div class="col-lg-4">
-        <div class="mb-3">
-            <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
-        </div>
-    </div>*@
+    @*  <div class="col-lg-4">
+            <div class="mb-3">
+                <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
+            </div>
+        </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="WorkScope" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
         </div>
     </div>
-@*    <div class="col-lg-4">
-        <div class="mb-3">
-            <label asp-for="DelayType" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.DelayType?.Name) ? "-" : Model.DelayType.Name)</div>
-        </div>
-    </div>*@
+    @*    <div class="col-lg-4">
+            <div class="mb-3">
+                <label asp-for="DelayType" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.DelayType?.Name) ? "-" : Model.DelayType.Name)</div>
+            </div>
+        </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="DelayReason" class="form-label fw-600"></label>
@@ -104,7 +104,7 @@
         </div>
     </div>
 
-   
+
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Approver" class="form-label fw-600"></label>
@@ -112,11 +112,11 @@
         </div>
     </div>
     @*<div class="col-lg-12">
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label fw-600"></label>
-            <div>@Model.Description</div>
-        </div>
-    </div>*@
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-600"></label>
+                <div>@Model.Description</div>
+            </div>
+        </div>*@
     <div class="col-md-12 mt-3">
         <h4 class="col-md-12">Costs</h4>
 
@@ -137,7 +137,7 @@
                 <tbody class="cost-tbody">
                     @for (var i = 0; i < Model.Costs.Count(); i++)
                     {
-                        @await Html.PartialAsync("~/Views/OverrideLog/_CostRow.cshtml", Model.Costs[i], new ViewDataDictionary(ViewData) { { "RowNumber", i },{"IsDetailPage",true} })
+                        @await Html.PartialAsync("~/Views/OverrideLog/_CostRow.cshtml", Model.Costs[i], new ViewDataDictionary(ViewData) { { "RowNumber", i }, { "IsDetailPage", true } })
                     }
                 </tbody>
             </table>
@@ -145,6 +145,10 @@
     </div>
 </div>
 
-<input type="hidden" id="log-id" asp-for="Id" />
+<input type="hidden" id="log-id" name="Id" value="@Model.Id" />
 <input type="hidden" id="controller-name" value="OverrideLog" />
+<input type="hidden" id="approver-id" asp-for="Approver.Id" />
+<input type="hidden" id="is-unauthenticated-approval" asp-for="IsUnauthenticatedApproval" />
+<input type="hidden" id="notification-id" name="NotificationId" value="@Model.NotificationId" />
+
 

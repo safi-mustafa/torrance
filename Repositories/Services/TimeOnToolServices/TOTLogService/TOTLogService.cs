@@ -102,7 +102,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         {
             try
             {
-                var dbModel = await _db.TOTLogs
+                var queryable = _db.TOTLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
                     .Include(x => x.Company)
@@ -117,7 +117,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
                     .Include(x => x.ReasonForRequest)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
+                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters();
+                var query = queryable.ToQueryString();
+                var dbModel = await queryable.FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
