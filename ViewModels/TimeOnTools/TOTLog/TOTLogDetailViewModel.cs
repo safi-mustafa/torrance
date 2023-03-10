@@ -54,7 +54,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
-        [Display(Name = "Total Manhours")]
+        [Display(Name = "Hours")]
         public long ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; }
@@ -90,8 +90,13 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel();
         [Display(Name = "Description")]
         public string JobDescription { get; set; }
-        [Display(Name = "Total Head Count")]
+        [Display(Name = "Head Count")]
         public long ManPowerAffected { get; set; }
+        [Display(Name = "Total Hours")]
+        public long TotalHours { get
+            {
+                return ManPowerAffected * ManHours;
+            } }
         [Display(Name = "Equipment No")]
         public string EquipmentNo { get; set; }
 

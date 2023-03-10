@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230309104932_Addded Reason Column For Override Log")]
+    partial class AdddedReasonColumnForOverrideLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1257,7 +1260,7 @@ namespace DataLibrary.Migrations
                     b.Property<int?>("DelayReason")
                         .HasColumnType("int");
 
-                    b.Property<long?>("DelayTypeId")
+                    b.Property<long>("DelayTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("DepartmentId")
@@ -2073,7 +2076,9 @@ namespace DataLibrary.Migrations
 
                     b.HasOne("Models.TimeOnTools.DelayType", "DelayType")
                         .WithMany()
-                        .HasForeignKey("DelayTypeId");
+                        .HasForeignKey("DelayTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Common.Department", "Department")
                         .WithMany()

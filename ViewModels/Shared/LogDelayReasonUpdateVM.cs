@@ -10,6 +10,7 @@ namespace ViewModels.Shared
     {
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
         [Required]
+        [Display(Name = "Delay Type")]
         public DelayReasonCatalog? DelayReason { get; set; }
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
 
@@ -22,6 +23,12 @@ namespace ViewModels.Shared
             modelState.Remove("ShiftDelay.Id");
             modelState.Remove("ReworkDelay.Id");
             modelState.Remove("StartOfWorkDelay.Id");
+            if (DelayReason == null)
+            {
+                ShiftDelay.Id = null;
+                StartOfWorkDelay.Id = null;
+                ReworkDelay.Id = null;
+            }
             if (DelayReason == DelayReasonCatalog.ReworkDelay)
             {
                 ShiftDelay.Id = null;

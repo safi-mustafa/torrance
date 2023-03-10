@@ -14,6 +14,6 @@ namespace ViewModels.WeldingRodRecord.Employee
 {
     public class EmployeeModifyViewModel : UserUpdateViewModel
     {
-
+        public bool IsExcelSheet { get; set; } = true;
     }
 }

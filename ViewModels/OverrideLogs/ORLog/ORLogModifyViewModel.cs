@@ -22,8 +22,10 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
     {
 
-        [Display(Name = "Completed")]
-        public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
+
+        [Required]
+        [Display(Name = "Work Date")]
+        public DateTime? WorkCompletedDate { get; set; }
 
         [Required(ErrorMessage = "The PO Number field is required.")]
         [Display(Name = "PO Number")]
@@ -39,7 +41,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
@@ -47,13 +49,19 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-     
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false,"");
+
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false, "");
 
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
+        public new DelayReasonCatalog? DelayReason { get; set; }
 
-       
+        [Required]
+        [Display(Name = "Override Reason")]
+        public string? Reason { get; set; }
+
+
+
     }
 }

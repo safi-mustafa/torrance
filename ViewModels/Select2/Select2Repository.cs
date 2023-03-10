@@ -7,35 +7,29 @@ namespace Select2
 {
     public class Select2Repository
     {
-        List<Select2ViewModel> GetPagedListOptions(int pageSize, int pageNumber, List<Select2ViewModel> list, out int totalSearchRecords)
+        List<Select2ViewModel> GetPagedListOptions(int pageSize, int pageNumber, List<Select2ViewModel> list)
         {
-            //var allSearchedResults = GetAllSearchResults(searchTerm);
-            totalSearchRecords = list.Count;
             return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        public Select2PagedResultViewModel GetSelect2PagedResult(int pageSize, int pageNumber, List<Select2ViewModel> list)
+        public Select2PagedResultViewModel GetSelect2PagedResult(int pageSize, int pageNumber,int totalCount, List<Select2ViewModel> list)
         {
             var select2pagedResult = new Select2PagedResultViewModel();
-            var totalResults = 0;
-            select2pagedResult.Results = GetPagedListOptions(pageSize, pageNumber, list, out totalResults);
-            select2pagedResult.Total = totalResults;
+            select2pagedResult.Results = list;// GetPagedListOptions(pageSize, pageNumber, list);
+            select2pagedResult.Total = totalCount;
             return select2pagedResult;
         }
 
-        List<Select2OptionModel<T>> GetPagedListOptions<T>(int pageSize, int pageNumber, List<Select2OptionModel<T>> list, out int totalSearchRecords)
+        List<Select2OptionModel<T>> GetPagedListOptions<T>(int pageSize, int pageNumber, List<Select2OptionModel<T>> list)
         {
-            //var allSearchedResults = GetAllSearchResults(searchTerm);
-            totalSearchRecords = list.Count;
             return list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        public Select2PagedResult<T> GetSelect2PagedResult<T>(int pageSize, int pageNumber, List<Select2OptionModel<T>> list)
+        public Select2PagedResult<T> GetSelect2PagedResult<T>(int pageSize, int pageNumber, int totalCount, List<Select2OptionModel<T>> list)
         {
             var select2pagedResult = new Select2PagedResult<T>();
-            var totalResults = 0;
-            select2pagedResult.Results = GetPagedListOptions(pageSize, pageNumber, list, out totalResults);
-            select2pagedResult.Total = totalResults;
+            select2pagedResult.Results = list;// GetPagedListOptions(pageSize, pageNumber, list);
+            select2pagedResult.Total = totalCount;
             return select2pagedResult;
         }
     }

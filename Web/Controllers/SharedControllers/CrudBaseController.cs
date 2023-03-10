@@ -216,14 +216,16 @@ namespace Web.Controllers
                 svm.CurrentPage = pageNumber;
                 svm.Search = new DataTableSearchViewModel() { value = prefix };
                 var response = await _service.GetAll<PaginatedResultViewModel>(svm);
+                var totalCount = 0;
                 PaginatedResultModel<PaginatedResultViewModel> items = new();
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     var parsedResponse = response as RepositoryResponseWithModel<PaginatedResultModel<PaginatedResultViewModel>>;
                     items = parsedResponse?.ReturnModel ?? new();
+                    totalCount = parsedResponse.ReturnModel._meta.TotalCount;
                 }
                 var select2List = GetSelect2List(items);
-                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, select2List));
+                return Json(new Select2Repository().GetSelect2PagedResult(pageSize, pageNumber, totalCount, select2List));
             }
             catch (Exception ex)
             {

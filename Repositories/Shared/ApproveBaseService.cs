@@ -117,8 +117,8 @@ namespace Repositories.Shared
                             if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
                             {
                                 type = "TOT";
-                                identifierKey = "Twr";
-                                identifier = (logRecord as TOTLog).Twr;
+                                identifierKey = "Permit";
+                                identifier = (logRecord as TOTLog).PermitNo;
                             }
                             else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
                             {
@@ -140,11 +140,11 @@ namespace Repositories.Shared
                             await transaction.CommitAsync();
                             return _response;
                         }
-                    }
-                    _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in SetApproveStatus()");
+                        _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in SetApproveStatus()");
 
-                    await transaction.RollbackAsync();
-                    return Response.NotFoundResponse(_response);
+                        await transaction.RollbackAsync();
+                        return Response.NotFoundResponse(_response);
+                    }
                 }
                 catch (Exception ex)
                 {

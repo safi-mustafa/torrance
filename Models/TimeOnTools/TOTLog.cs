@@ -87,7 +87,7 @@ namespace Models.TimeOnTools
         public Company Company { get; set; }
 
         [ForeignKey("DelayType")]
-        public long DelayTypeId { get; set; }
-        public DelayType DelayType { get; set; }
+        public long? DelayTypeId { get; set; }
+        public DelayType? DelayType { get; set; }
     }
 }

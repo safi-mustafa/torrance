@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Enums;
+using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Department;
@@ -12,7 +13,7 @@ namespace ViewModels.OverrideLogs.ORLog
     public class ORLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel, IORLogCost
     {
 
-        [Display(Name = "Completed")]
+        [Display(Name = "Work Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
 
         [Display(Name = "PO Number")]
@@ -39,6 +40,12 @@ namespace ViewModels.OverrideLogs.ORLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
+
+        public new DelayReasonCatalog? DelayReason { get; set; }
+
+        [Required]
+        [Display(Name = "Override Reason")]
+        public string? Reason { get; set; }
 
     }
 }

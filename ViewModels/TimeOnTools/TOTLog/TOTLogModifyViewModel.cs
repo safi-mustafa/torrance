@@ -46,8 +46,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Required]
         public string? Foreman { get; set; }
 
-        [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        [Display(Name = "Hours", Prompt = "Add Hours")]
+        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
         public long ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.Now;
@@ -62,7 +62,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }
-        [Display(Name = "Total Head Count", Prompt = "Add Head Count")]
+        [Display(Name = "Head Count", Prompt = "Add Head Count")]
         [Range(1, long.MaxValue, ErrorMessage = "The Head Count must be greater than zero.")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Equipment No")]
@@ -82,7 +82,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false,"");
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 

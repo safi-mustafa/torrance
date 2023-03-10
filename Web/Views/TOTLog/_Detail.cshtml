@@ -74,18 +74,18 @@
                 <div>@(string.IsNullOrEmpty(Model.ReasonForRequest.Name) ? "-" : Model.ReasonForRequest.Name)</div>
                 </div>
                 </div>*@
-            @*<div class="col-lg-4">
-                <div class="mb-3">
-                <label asp-for="WorkScope" class="form-label fw-600">Reason</label>
-                <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
-                </div>
-                </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="DelayType" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.DelayType.Name) ? "-" : Model.DelayType.Name)</div>
+                    <label asp-for="WorkScope" class="form-label fw-600">Reason</label>
+                    <div>@(string.IsNullOrEmpty(Model.WorkScope) ? "-" : Model.WorkScope)</div>
                 </div>
-            </div>
+            </div>*@
+            @* <div class="col-lg-4">
+                    <div class="mb-3">
+                        <label asp-for="DelayType" class="form-label fw-600"></label>
+                        <div>@(string.IsNullOrEmpty(Model.DelayType.Name) ? "-" : Model.DelayType.Name)</div>
+                    </div>
+                </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="DelayReason" class="form-label fw-600"></label>
@@ -133,7 +133,17 @@
                     <div>@Model.ManHours</div>
                 </div>
             </div>
+            <<<<<<< HEAD
 
+            =======
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label asp-for="TotalHours" class="form-label fw-600"></label>
+                    <div>@Model.TotalHours</div>
+                </div>
+            </div>
+
+            >>>>>>> 6161d0019d7744853d122f1827398f2e1c2830f3
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="DelayDescription" class="form-label fw-600"></label>

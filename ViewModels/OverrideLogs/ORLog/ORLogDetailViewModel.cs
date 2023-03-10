@@ -32,8 +32,7 @@ namespace ViewModels.OverrideLogs.ORLog
             }
         }
 
-
-        [Display(Name = "Completed")]
+        [Display(Name = "Work Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
         public string FormattedDateOfWorkCompleted
         {
@@ -79,5 +78,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+
+        [Display(Name = "Override Reason")]
+        public string? Reason { get; set; }
     }
 }
