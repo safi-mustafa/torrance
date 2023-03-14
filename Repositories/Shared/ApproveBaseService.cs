@@ -136,7 +136,7 @@ namespace Repositories.Shared
                             string notificationTitle = $"{type} Log {status}";
                             string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                             var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
-                            await _notificationService.Create(new NotificationModifyViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
+                            await _notificationService.Create(new NotificationViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
                             await transaction.CommitAsync();
                             return _response;
                         }

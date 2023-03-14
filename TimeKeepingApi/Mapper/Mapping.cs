@@ -462,7 +462,7 @@ namespace TorranceApi.Mapper
                 .ReverseMap();
 
             //Notification
-            CreateMap<Notification, NotificationModifyViewModel>().ReverseMap();
+            CreateMap<Notification, NotificationViewModel>().ReverseMap();
         }
     }
 }

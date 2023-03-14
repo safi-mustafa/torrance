@@ -2,7 +2,7 @@
 
 namespace ViewModels.Notification
 {
-    public class MailRequestViewModel
+    public class MailRequestViewModel: EmailBaseModel
     {
         public MailRequestViewModel(string sendTo, string subject, string body, string userName, NotificationType type)
         {
@@ -14,8 +14,7 @@ namespace ViewModels.Notification
         }
         public string SendTo { get; set; }
         public string UserName { get; set; }
-        public string Subject { get; set; }
-        public string Body { get; set; }
+
         public NotificationType Type { get; set; }
     }
 }

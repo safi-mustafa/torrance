@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Models;
+using Newtonsoft.Json;
 using Pagination;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
@@ -230,12 +231,11 @@ namespace Repositories.Shared.AuthenticationService
         {
             try
             {
-                NotificationModifyViewModel viewModel = new()
+                NotificationViewModel viewModel = new()
                 {
-                    Message = mailRequest.Body,
+                    Message = JsonConvert.SerializeObject(mailRequest),
                     SendTo = mailRequest.SendTo,
                     Type = mailRequest.Type,
-                    Subject = mailRequest.Subject
                 };
 
                 return (await _notificationService.Create(viewModel)).Status == System.Net.HttpStatusCode.OK;

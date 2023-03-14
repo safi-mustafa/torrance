@@ -10,7 +10,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class NotificationController : CrudBaseBriefController<NotificationModifyViewModel, NotificationSearchViewModel>
+    public class NotificationController : CrudBaseBriefController<NotificationViewModel, NotificationSearchViewModel>
     {
         public NotificationController(INotificationService permitTypeService) : base(permitTypeService)
         {

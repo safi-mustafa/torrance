@@ -4,6 +4,7 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common;
@@ -42,8 +43,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly string _loggedInUserRole;
         private readonly long _loggedInUserId;
         private readonly INotificationService _notificationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -51,6 +53,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _response = response;
             _userInfoService = userInfoService;
             _notificationService = notificationService;
+            _httpContextAccessor = httpContextAccessor;
             _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
@@ -216,17 +219,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     mappedModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
-                    string notificationTitle = "Override Log Created";
-                    string notificationMessage = $"A new Override Log with PO# ({mappedModel.PoNumber}) has been created";
-                    await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(OverrideLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
-
-                    await _notificationService.Create(new NotificationModifyViewModel(
-                        mappedModel.Id,
-                        typeof(OverrideLog),
-                        mappedModel.ApproverId?.ToString() ?? "",
-                        notificationTitle, notificationMessage,
-                        NotificationType.Email,
-                        NotificationEventTypeCatalog.Created));
+                    var notification = GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -253,13 +247,13 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
+                           
+                            var dbModel = _mapper.Map(model, record);
                             if (record.ApproverId != updateModel.Approver?.Id)
                             {
-                                string notificationTitle = "Override Log Updated";
-                                string notificationMessage = $"The Override Log with PO# ({updateModel.PoNumber}) has been updated";
-                                await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(OverrideLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
+                                var notification = GetNotificationModel(dbModel,NotificationEventTypeCatalog.Updated);
+                                await _notificationService.Create(notification);
                             }
-                            var dbModel = _mapper.Map(model, record);
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
                             dbModel.TotalHours = CalculateTotalHours(costs);
@@ -422,6 +416,21 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
             return overrideLogCost.Costs.Sum(x => x.HeadCount);
 
+        }
+
+        private NotificationViewModel GetNotificationModel(OverrideLog model, NotificationEventTypeCatalog eventType)
+        {
+            return new NotificationViewModel()
+            {
+                LogId = model.Id,
+                EntityId = model.Id,
+                EventType = eventType,
+                EntityType = NotificationEntityType.OverrideLog,
+                IdentifierKey = "PO#",
+                IdentifierValue = model.PoNumber.ToString(),
+                SendTo = model?.Approver?.Id.ToString(),
+                User = _httpContextAccessor?.HttpContext?.User?.Identity?.Name
+            };
         }
     }
 

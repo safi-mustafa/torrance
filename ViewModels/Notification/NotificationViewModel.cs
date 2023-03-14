@@ -9,62 +9,32 @@ using ViewModels.Shared;
 
 namespace ViewModels.Notification
 {
-    public class NotificationModifyViewModel
+    public class NotificationViewModel
     {
-        public NotificationModifyViewModel()
+        public NotificationViewModel() { }
+        public NotificationViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEventTypeCatalog eventType)
         {
 
-        }
-        public NotificationModifyViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEventTypeCatalog eventType)
-        {
-            var pushNotification = new PushNotificationViewModel
-            {
-                LogId = logId,
-                EntityId = logId,
-                LogType = GetLogType(logType),
-                Message = message,
-                Title = title
-            };
-
-            EntityId = logId;
-            EntityType = GetNotificationEntityType(pushNotification.LogType);
-            EventType = eventType;
-            pushNotification.EntityType = EntityType.ToString();
-            Message = JsonConvert.SerializeObject(pushNotification);
-            SendTo = sendTo;
-            Type = type;
 
         }
         public Guid Id { get; set; }
-        public long EntityId { get; set; }
-        public string Message { get; set; }
-        public string? Subject { get; set; }
+        public long LogId { get; set; }
+        public string IdentifierKey { get; set; }
+        public string IdentifierValue { get; set; }
         public string SendTo { get; set; }
-        public NotificationType Type { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
 
+        public string User { get; set; }
+        public NotificationType Type { get; set; }
+        public long EntityId { get; set; }
         public NotificationEventTypeCatalog EventType { get; set; }
-        public NotificationEntityType? EntityType { get; set; }
+        public NotificationEntityType EntityType { get; set; } // For Identifying DB Table. It has nothing to do with log 
         public DateTime CreatedOn { get; set; }
         public string FormattedCreatedOn { get => CreatedOn.ToString("U"); }
 
-        private LogType GetLogType(Type entity)
-        {
-            return entity == typeof(TOTLog) ? LogType.TimeOnTools : entity == typeof(OverrideLog) ? LogType.Override : LogType.WeldingRodRecord;
-        }
-        private NotificationEntityType GetNotificationEntityType(LogType logType)
-        {
-            if (logType == LogType.Override)
-            {
-                return NotificationEntityType.OverrideLog;
-            }
-            else if (logType == LogType.TimeOnTools)
-            {
-                return NotificationEntityType.TOTLog;
-            }
-            else
-            {
-                return NotificationEntityType.WRRLog;
-            }
-        }
+
+
+
     }
 }

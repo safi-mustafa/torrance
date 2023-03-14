@@ -4,8 +4,10 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models;
 using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
@@ -33,6 +35,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public WRRLogService(
                 ToranceContext db,
@@ -40,7 +43,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IMapper mapper,
                 IRepositoryResponse response,
                 IUserInfoService userInfoService,
-                INotificationService notificationService
+                INotificationService notificationService,
+                IHttpContextAccessor httpContextAccessor
             ) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
@@ -49,6 +53,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             _response = response;
             _userInfoService = userInfoService;
             _notificationService = notificationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -169,9 +174,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<WRRLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    string notificationTitle = "WRR Log Created";
-                    string notificationMessage = $"A new WRR Log with TWR# ({mappedModel.Twr}) has been created";
-                    await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(WRRLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
+                    var notification = GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -195,13 +199,13 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     var record = await _db.Set<WRRLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                      
+                        var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            string notificationTitle = "WRR Log Updated";
-                            string notificationMessage = $"The WRR Log with TWR# ({updateModel.Twr}) has been updated";
-                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(WRRLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
+                            var notification = GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
+                            await _notificationService.Create(notification);
                         }
-                        var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
@@ -236,6 +240,21 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         {
             var check = await _db.WRRLogs.Where(x => x.Email == email && x.Id != id).CountAsync();
             return check < 1;
+        }
+
+        private NotificationViewModel GetNotificationModel(WRRLog model, NotificationEventTypeCatalog eventType)
+        {
+            return new NotificationViewModel()
+            {
+                LogId = model.Id,
+                EntityId = model.Id,
+                EventType = eventType,
+                EntityType = NotificationEntityType.WRRLog,
+                IdentifierKey = "TWR#",
+                IdentifierValue = model.Twr,
+                SendTo = model?.Approver?.Id.ToString(),
+                User = _httpContextAccessor?.HttpContext?.User?.Identity?.Name
+            };
         }
     }
 }

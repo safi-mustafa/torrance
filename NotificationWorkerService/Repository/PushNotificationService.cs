@@ -24,7 +24,7 @@ namespace NotificationWorkerService.Repository
             try
             {
 
-                var notificationBody = JsonConvert.DeserializeObject<PushNotificationViewModel>(notification.Message);
+                var notificationBody = JsonConvert.DeserializeObject<LogPushNotificationViewModel>(notification.Message);
 
                 var expoSDKClient = new PushApiClient();
                 var pushTicketReq = new PushTicketRequest()

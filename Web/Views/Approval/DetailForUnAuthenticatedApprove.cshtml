@@ -2,11 +2,19 @@
 @model CrudDetailViewModel
 @{
     ViewData["Title"] = Model.Title;
-    
+
 }
 <div class="card">
     <div class="card-body">
         <div class="row">
+            <div class="col-md-12">
+                 @if(ViewBag.Message!=null && !string.IsNullOrEmpty(ViewBag.Message.ToString())){
+                    var className = ViewBag.Message.ToString().ToLower().Contains("rejected")?"danger":"success";
+                    <div class="alert alert-@(className)" role="alert">
+                        @ViewBag.Message.ToString()
+                    </div>
+                 }
+            </div>
             <div class="col-md-12">
                 @await Html.PartialAsync(Model.DetailViewPath, Model.DetailModel, new ViewDataDictionary(ViewData))
             </div>

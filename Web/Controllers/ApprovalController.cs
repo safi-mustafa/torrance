@@ -68,7 +68,7 @@ namespace Web.Controllers
         {
             try
             {
-                return await SetDetailView(id, type, "~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", true);
+                return await SetDetailView(id, type, "~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", false);
             }
             catch (Exception ex) { _logger.LogError($"{_controllerName} Detail method threw an exception, Message: {ex.Message}"); }
             return RedirectToAction("Index");
@@ -111,7 +111,7 @@ namespace Web.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> ApproveByNotification(Guid id)
+        public async Task<IActionResult> ApproveByNotification(Guid id,string message="")
         {
             var response = await _approvalService.GetLogIdAndTypeFromNotificationId(id);
 
@@ -121,6 +121,7 @@ namespace Web.Controllers
                 var responseModel = parsedModel?.ReturnModel;
                 try
                 {
+                    ViewBag.Message=message;
                     return await SetDetailView(responseModel.LogId, responseModel.LogType, "~/Views/Approval/DetailForUnAuthenticatedApprove.cshtml", true, id, responseModel.ApproverId);
                 }
                 catch (Exception ex)
@@ -312,7 +313,7 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
                 response = await _totService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
-                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<TOTLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else if (type == LogType.WeldingRodRecord)
@@ -320,7 +321,7 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                 response = await _wrrService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
-                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else
@@ -328,7 +329,7 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
                 response = await _overrideLogService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;
-                //isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<ORLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
         }
@@ -337,6 +338,8 @@ namespace Web.Controllers
             where T : LogCommonDetailViewModel, new()
         {
             bool isApproval = false;
+            if (!isUnauthenticatedApproval)
+                return true;
             if (approverId > 0 && isUnauthenticatedApproval && parsedModel != null)
             {
                 parsedModel.ReturnModel.Approver = new ApproverBriefViewModel { Id = approverId };

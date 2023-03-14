@@ -4,10 +4,12 @@ using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.TimeOnTools;
+using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
@@ -35,8 +37,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IRepositoryResponse _response;
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -44,6 +47,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             _response = response;
             _userInfoService = userInfoService;
             _notificationService = notificationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -182,9 +186,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    string notificationTitle = "TOT Log Created";
-                    string notificationMessage = $"A new TOT Log with Permit# ({mappedModel.PermitNo}) has been created";
-                    await _notificationService.CreateLogNotification(new NotificationModifyViewModel(mappedModel.Id, typeof(TOTLog), mappedModel.ApproverId?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Created));
+                    var notification = GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -208,13 +211,12 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                        var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            string notificationTitle = "TOT Log Updated";
-                            string notificationMessage = $"The TOT Log with Permit# ({updateModel.PermitNo}) has been updated";
-                            await _notificationService.Create(new NotificationModifyViewModel(record.Id, typeof(TOTLog), updateModel.Approver.Id?.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, NotificationEventTypeCatalog.Updated));
+                            var notification = GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
+                            await _notificationService.Create(notification);
                         }
-                        var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
                         SetDelayReasonFields(dbModel, model);
                         await _db.SaveChangesAsync();
@@ -370,6 +372,21 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 return Response.BadRequestResponse(_response);
             }
         }
+        private NotificationViewModel GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
+        {
+            return new NotificationViewModel()
+            {
+                LogId = model.Id,
+                EntityId = model.Id,
+                EventType = eventType,
+                EntityType = NotificationEntityType.TOTLog,
+                IdentifierKey = "Permit#",
+                IdentifierValue = model.PermitNo,
+                SendTo = model?.Approver?.Id.ToString(),
+                User = _httpContextAccessor?.HttpContext?.User?.Identity?.Name
+            };
+        }
+
 
     }
 }

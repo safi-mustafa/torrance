@@ -2,8 +2,11 @@
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Common.Interfaces;
+using Newtonsoft.Json;
 using NotificationWorkerService.Context;
 using NotificationWorkerService.Interface;
+using ViewModels.Notification;
 
 namespace NotificationWorkerService;
 
@@ -33,7 +36,7 @@ public class NotificationWorker : BackgroundService
             _logger.LogInformation("Notification Worker running at: {time}", DateTimeOffset.Now);
 
             await SendNotifications();
-            await Task.Delay(7000, stoppingToken);
+            await Task.Delay(20000, stoppingToken);
         }
     }
 
@@ -52,7 +55,8 @@ public class NotificationWorker : BackgroundService
             foreach (var email in emails)
             {
                 var sendToEmail = users.Where(x => x.Id.ToString() == email.SendTo).Select(x => x.Email).FirstOrDefault();
-                var emailResult = await _emailService.SendEmail(sendToEmail ?? "", appEmail ?? "", email.Subject ?? "", email.Message);
+                var baseModel= JsonConvert.DeserializeObject<EmailBaseModel>(email.Message);
+                var emailResult = await _emailService.SendEmail(sendToEmail ?? "", appEmail ?? "", baseModel.Subject ?? "", baseModel.Body);
                 if (emailResult)
                 {
                     email.IsSent = true;
@@ -62,6 +66,7 @@ public class NotificationWorker : BackgroundService
                     email.IsSent = false;
                     email.ResendCount += 1;
                 }
+                await _db.SaveChangesAsync();
             }
             foreach (var sms in smss)
             {
@@ -73,6 +78,7 @@ public class NotificationWorker : BackgroundService
                     sms.IsSent = false;
                     sms.ResendCount += 1;
                 }
+                await _db.SaveChangesAsync();
             }
             if (pushNotifications.Count > 0)
             {
@@ -98,9 +104,10 @@ public class NotificationWorker : BackgroundService
                     {
                         notification.ResendCount += 1;
                     }
+                    await _db.SaveChangesAsync();
                 }
             }
-            await _db.SaveChangesAsync();
+            
 
 
             return true;

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
 using Models.Common.Interfaces;
+using Newtonsoft.Json;
 using Pagination;
 using Repositories.Common;
 using Repositories.Interfaces;
@@ -42,19 +43,19 @@ namespace Repositories.Shared.NotificationServices
             this.contextAccessor = contextAccessor;
         }
 
-        public async Task<IRepositoryResponse> CreateLogNotification(NotificationModifyViewModel model)
+        public async Task<IRepositoryResponse> CreateLogNotification(NotificationViewModel model)
         {
             try
             {
                 var association = await GetLogUnitAndDepartment(model);
-                var approvers = await _db.ApproverAssociations.Include(x => x.Approver).Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id).Distinct().ToListAsync();
+                var approvers = await _db.ApproverAssociations.Include(x => x.Approver).Include(x=>x.Department).Include(x=>x.Unit).Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id).Distinct().ToListAsync();
                 if (approvers != null && approvers.Count > 0)
                 {
                     List<Notification> notifications = new List<Notification>();
                     foreach (var approver in approvers)
                     {
                         SetLogPushNotification(model, notifications, approver);
-                        //SendLogEmailNotification(model, notifications, approver);
+                        SendLogEmailNotification(model, notifications, approver);
                     }
                     _db.Set<Notification>().AddRange(notifications);
                     await _db.SaveChangesAsync();
@@ -69,32 +70,35 @@ namespace Repositories.Shared.NotificationServices
             }
         }
 
-        private void SendLogEmailNotification(NotificationModifyViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private void SendLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
         {
+
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Id = Guid.NewGuid();
             var request = contextAccessor.HttpContext.Request;
             var domain = $"{request.Scheme}://{request.Host}";
-            var approveRedirectUrl = $"{domain}/Approval/ApproveByNotification/{notificationMappedModel.Id}";
-            notificationMappedModel.Message = $"A new {model.EntityType?.GetDisplayName()} has been created, to approve it <a href='{approveRedirectUrl}'>click here.</a>";
+            var approvalLink = $"{domain}/Approval/ApproveByNotificationD{notificationMappedModel.Id}";
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, approvalLink));
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Email;
             notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.IsSent = false;
             notifications.Add(notificationMappedModel);
         }
 
-        private void SetLogPushNotification(NotificationModifyViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Push;
-            notificationMappedModel.CreatedOn= DateTime.Now;
+            notificationMappedModel.CreatedOn = DateTime.Now;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
             notifications.Add(notificationMappedModel);
         }
 
-        public async Task<IRepositoryResponse> Create(NotificationModifyViewModel model)
+        public async Task<IRepositoryResponse> Create(NotificationViewModel model)
         {
             try
             {
@@ -149,7 +153,7 @@ namespace Repositories.Shared.NotificationServices
             }
         }
 
-        private async Task<ApproverAssociationsViewModel> GetLogUnitAndDepartment(NotificationModifyViewModel viewModel)
+        private async Task<ApproverAssociationsViewModel> GetLogUnitAndDepartment(NotificationViewModel viewModel)
         {
             ApproverAssociationsViewModel association = new ApproverAssociationsViewModel();
             if (viewModel.EntityType == NotificationEntityType.TOTLog)
@@ -159,11 +163,11 @@ namespace Repositories.Shared.NotificationServices
                 {
                     Department = new DepartmentBriefViewModel
                     {
-                        Id = x.DepartmentId
+                        Id = x.DepartmentId,
                     },
                     Unit = new UnitBriefViewModel()
                     {
-                        Id = x.UnitId
+                        Id = x.UnitId,
                     }
                 }).FirstOrDefaultAsync();
             }
@@ -174,11 +178,11 @@ namespace Repositories.Shared.NotificationServices
                 {
                     Department = new DepartmentBriefViewModel
                     {
-                        Id = x.DepartmentId
+                        Id = x.DepartmentId,
                     },
                     Unit = new UnitBriefViewModel()
                     {
-                        Id = x.UnitId
+                        Id = x.UnitId,
                     }
                 }).FirstOrDefaultAsync();
             }
@@ -189,11 +193,11 @@ namespace Repositories.Shared.NotificationServices
                 {
                     Department = new DepartmentBriefViewModel
                     {
-                        Id = x.DepartmentId
+                        Id = x.DepartmentId,
                     },
                     Unit = new UnitBriefViewModel()
                     {
-                        Id = x.UnitId
+                        Id = x.UnitId,
                     }
                 }).FirstOrDefaultAsync();
             }

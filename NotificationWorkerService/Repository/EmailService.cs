@@ -17,6 +17,7 @@ namespace Repository
 
         public async Task<bool> SendEmail(string to, string from, string subject, string htmlMessage)
         {
+            Console.WriteLine(to,from,subject,htmlMessage);
             try
             {
                 MimeMessage message = new MimeMessage();

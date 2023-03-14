@@ -49,8 +49,17 @@ function sendApproveAjax(status) {
             $("#crudModalPanel").modal("toggle");
             if (isUnauthenticatedApproval == "false")
                 ReInitializeDataTables();
-            else
-                window.location.href = "/Identity/Account/Login";
+            else {
+                let statusMessage = "";
+                if (status == "1") {
+                    statusMessage = "Log Approved Successfully";
+                }
+                else {
+                    statusMessage = "Log Rejected Successfully";
+                }
+                window.location.href = window.location.href + "&message=" + statusMessage;
+            }
+               
         }
     });
 }
