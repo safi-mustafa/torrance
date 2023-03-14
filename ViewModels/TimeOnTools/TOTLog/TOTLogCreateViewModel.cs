@@ -1,14 +1,5 @@
 ﻿using Enums;
-using Models.Common.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using ViewModels.AppSettings.Map;
-using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
@@ -18,10 +9,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.TimeOnTools.PermitType;
-using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.Shift;
-using ViewModels.TimeOnTools.ShiftDelay;
-using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
@@ -79,7 +67,6 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false,"");
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 

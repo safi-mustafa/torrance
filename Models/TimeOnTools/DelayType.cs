@@ -11,5 +11,9 @@ namespace Models.TimeOnTools
     public class DelayType : BaseDBModel, IName
     {
         public string Name { get; set; }
+
+        public string Identifier { get; set; }
+
+        public int Order { get; set; }
     }
 }

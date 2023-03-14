@@ -22,7 +22,7 @@
     data_val_required = "The field Start Of Work is required.",
     data_val = true
     })
-    <input type="hidden" name="StartOfWorkDelay.Name" value="@Model.Name" />
+    <input type="hidden" name="StartOfWorkDelay.Name" value="@Model?.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 

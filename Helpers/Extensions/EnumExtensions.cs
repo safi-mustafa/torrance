@@ -36,5 +36,13 @@ namespace Helpers.Extensions
             }
 
         }
+
+        // Extension method to get display name of enum value
+        public static string GetDisplayName(this Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = field?.GetCustomAttribute<DisplayAttribute>();
+            return attribute?.GetName() ?? value.ToString();
+        }
     }
 }

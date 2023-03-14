@@ -7,10 +7,8 @@ using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
-using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Pagination;
-using Repositories.Common;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
@@ -19,19 +17,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using ViewModels;
 using ViewModels.Notification;
-using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
 
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
     public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IDelayType, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -183,7 +179,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 {
                     var mappedModel = _mapper.Map<TOTLog>(model);
                     await SetRequesterId(mappedModel);
-                    SetDelayReasonFields(mappedModel);
+                    SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     string notificationTitle = "TOT Log Created";
@@ -220,7 +216,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         }
                         var dbModel = _mapper.Map(model, record);
                         await SetRequesterId(dbModel);
-                        SetDelayReasonFields(dbModel);
+                        SetDelayReasonFields(dbModel, model);
                         await _db.SaveChangesAsync();
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                         return response;
@@ -251,21 +247,21 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
         }
 
-        private void SetDelayReasonFields(TOTLog mappedModel)
+        private void SetDelayReasonFields(TOTLog mappedModel, IDelayType delayType)
         {
-            if (mappedModel.DelayReason != null)
+            if (mappedModel.DelayTypeId != null && mappedModel.DelayTypeId > 0)
             {
-                if (mappedModel.DelayReason == DelayReasonCatalog.StartOfWork)
+                if (delayType.DelayType.Identifier == DelayReasonCatalog.StartOfWork.ToString())
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.ReworkDelayId = null;
                 }
-                else if (mappedModel.DelayReason == DelayReasonCatalog.ShiftDelay)
+                else if (delayType.DelayType.Identifier == DelayReasonCatalog.ShiftDelay.ToString())
                 {
                     mappedModel.StartOfWorkDelayId = null;
                     mappedModel.ReworkDelayId = null;
                 }
-                else if (mappedModel.DelayReason == DelayReasonCatalog.ReworkDelay)
+                else if (delayType.DelayType.Identifier == DelayReasonCatalog.ReworkDelay.ToString())
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.StartOfWorkDelayId = null;

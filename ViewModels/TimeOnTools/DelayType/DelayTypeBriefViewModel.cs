@@ -20,6 +20,7 @@ namespace ViewModels.TimeOnTools
         }
         [DisplayName("DelayType")]
         public override string? Name { get; set; }
+        public string? Identifier { get; set; }
     }
 
 }

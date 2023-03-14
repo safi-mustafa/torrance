@@ -84,7 +84,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Permit No",data = "PermitNo", orderable=true},
                 //new DataTableViewModel{title = "Equip.",data = "EquipmentNo", orderable=true},
                 //new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
-                new DataTableViewModel{title = "Delay Reason",data = "DelayReason", orderable=true},
+                new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
                 new DataTableViewModel{title = "Permit",data = "PermitType.Name", orderable=true},
                 new DataTableViewModel{title = "Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
                 new DataTableViewModel{title = "HC",data = "ManPowerAffected", orderable=true},

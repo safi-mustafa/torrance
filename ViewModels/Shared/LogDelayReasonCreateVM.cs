@@ -1,18 +1,21 @@
 ﻿using Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using ViewModels.Shared.Interfaces;
+using ViewModels.TimeOnTools;
 using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.Shared
 {
-    public class LogDelayReasonCreateVM: BaseCreateVM
+    public class LogDelayReasonCreateVM: BaseCreateVM, IDelayType
     {
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
         [Required]
         [Display(Name = "Delay Type")]
-        public DelayReasonCatalog? DelayReason { get; set; }
+        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
@@ -24,7 +27,7 @@ namespace ViewModels.Shared
             modelState.Remove("ShiftDelay.Id");
             modelState.Remove("ReworkDelay.Id");
             modelState.Remove("StartOfWorkDelay.Id");
-            if (DelayReason == DelayReasonCatalog.ReworkDelay)
+            if (DelayType.Identifier == DelayReasonCatalog.ReworkDelay.ToString())
             {
                 if ((ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
                 {
@@ -32,7 +35,7 @@ namespace ViewModels.Shared
                 }
 
             }
-            else if (DelayReason == DelayReasonCatalog.ShiftDelay)
+            else if (DelayType.Identifier ==DelayReasonCatalog.ShiftDelay.ToString())
             {
                 if (ShiftDelay == null || ShiftDelay.Id == null || ShiftDelay?.Id < 1)
                 {
@@ -40,7 +43,7 @@ namespace ViewModels.Shared
                 }
 
             }
-            else if (DelayReason == DelayReasonCatalog.StartOfWork)
+            else if (DelayType.Identifier == DelayReasonCatalog.StartOfWork.ToString())
             {
                 if ((StartOfWorkDelay == null || StartOfWorkDelay.Id == null || StartOfWorkDelay.Id < 1))
                 {

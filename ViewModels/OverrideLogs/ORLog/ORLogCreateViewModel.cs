@@ -10,7 +10,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel, IORLogCost
+    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost
     {
 
         [Display(Name = "Work Date")]
@@ -41,7 +41,6 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
-        public new DelayReasonCatalog? DelayReason { get; set; }
 
         [Required]
         [Display(Name = "Override Reason")]

@@ -12,5 +12,8 @@ namespace ViewModels.TimeOnTools
         [MaxLength(200)]
         [DisplayName("Name")]
         public string Name { get; set; }
+        public string Identifier { get; set; }
+
+        public int Order { get; set; }
     }
 }

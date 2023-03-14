@@ -86,7 +86,6 @@ namespace Web.Controllers
                 ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
-            model.Validate(ModelState);
             return base.Create(model);
         }
 
@@ -99,7 +98,6 @@ namespace Web.Controllers
                 ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
-            model.Validate(ModelState);
             return base.Update(model);
         }
 

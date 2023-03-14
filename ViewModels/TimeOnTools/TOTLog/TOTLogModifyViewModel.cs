@@ -82,7 +82,6 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel();
 
-        public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false,"");
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 

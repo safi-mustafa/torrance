@@ -338,6 +338,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 var oldCosts = await _db.OverrideLogCost.Where(x => x.OverrideLogId == id).ToListAsync();
                 _db.OverrideLogCost.RemoveRange(oldCosts);
+                await _db.SaveChangesAsync();
                 if (overrideLogCost.Costs.Count() > 0)
                 {
                     List<OverrideLogCost> list = new List<OverrideLogCost>();

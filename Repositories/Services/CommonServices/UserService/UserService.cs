@@ -88,6 +88,7 @@ namespace Repositories.Services.CommonServices.UserService
                     {
                         var user = _mapper.Map<SignUpModel>(model);
                         user.Role = _role.ToString();
+                        user.AccessCode = record.AccessCode.DecodeFrom64();
                         var result = await _identity.UpdateUser(user, transaction);
                         if (result)
                         {

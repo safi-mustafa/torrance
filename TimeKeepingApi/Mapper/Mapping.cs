@@ -322,7 +322,7 @@ namespace TorranceApi.Mapper
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
             //Employee
-            CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
+            //CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<Employee, EmployeeBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
@@ -430,11 +430,11 @@ namespace TorranceApi.Mapper
                 .ForMember(x => x.Shift, opt => opt.Ignore())
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
                 .ForMember(x => x.Department, opt => opt.Ignore())
-                .ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
-                .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
-                .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
-                .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
-                .ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
+                //.ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
+                //.ForMember(x => x.ReworkDelay, opt => opt.Ignore())
+                //.ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
+                //.ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+                //.ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
                 .ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
                 .ForMember(x => x.DelayType, opt => opt.Ignore())

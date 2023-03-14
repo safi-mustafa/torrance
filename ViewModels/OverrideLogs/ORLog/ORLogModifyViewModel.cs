@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
     {
 
 
@@ -55,7 +55,6 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
-        public new DelayReasonCatalog? DelayReason { get; set; }
 
         [Required]
         [Display(Name = "Override Reason")]

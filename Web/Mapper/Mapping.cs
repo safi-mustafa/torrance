@@ -159,10 +159,13 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<Employee, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
+
+            CreateMap<ToranceUser, EmployeeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
             CreateMap<Employee, EmployeeBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
                 .ReverseMap();
-            CreateMap<BaseBriefVM, EmployeeBriefViewModel>().ReverseMap();
+
             CreateMap<Employee, BaseBriefVM>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FirstName + " " + dest.LastName))
                 .ReverseMap();
@@ -204,6 +207,7 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
+                .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
             CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>().ReverseMap();
@@ -245,36 +249,43 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
-                .ForMember(dest => dest.Foreman, act => act.Condition(src => (src.Foreman != null)))
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<TOTLogModifyViewModel, TOTLogDetailViewModel>()
+
+            CreateMap<DelayTypeBriefViewModel, DelayTypeBriefViewModel>()
+            .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Identifier));
+
+            CreateMap<TOTLogDetailViewModel, TOTLogModifyViewModel>()
+                .ForMember(dest => dest.DelayType, opt => opt.MapFrom(src => src.DelayType))
+                .ForPath(dest => dest.DelayType.Identifier, opt => opt.MapFrom(src => src.DelayType.Identifier))
                 .ReverseMap();
+
             CreateMap<TOTLog, TOTLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
 
-
             //User
-            CreateMap<EmployeeBriefViewModel, ToranceUser>()
-                 .ForMember(src => src.FullName, opt => opt.MapFrom(dest => dest.Name))
-                 .ReverseMap();
+
+
+            CreateMap<ToranceUser, EmployeeBriefViewModel>()
+              .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+              .ReverseMap();
             CreateMap<ToranceUser, UserBriefViewModel>()
-                .ConstructUsing(x => new UserBriefViewModel(true))
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                 .ReverseMap();
             CreateMap<ToranceUser, EmployeeDetailViewModel>()
                 .ForMember(dest => dest.Company, act => act.Condition(src => (src.Company != null)))
                 .ReverseMap();
-            CreateMap<ApproverBriefViewModel, ToranceUser>()
-             .ForMember(src => src.FullName, opt => opt.MapFrom(dest => dest.Name))
-             .ReverseMap();
+            CreateMap<ToranceUser, ApproverBriefViewModel>()
+               .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+               .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 .ForMember(x => x.Company, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<UserUpdateViewModel, ToranceUser>()
               .ReverseMap();
-            CreateMap<ToranceUser, UserDetailViewModel>().ReverseMap();
+            CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();
+            CreateMap<UserDetailViewModel, Employee>().ReverseMap();
             CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
             CreateMap<UserUpdateViewModel, SignUpModel>().ReverseMap();
 
@@ -379,6 +390,7 @@ namespace Models.Mapper
 
             CreateMap<OverrideLog, ORLogDetailViewModel>()
                  .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
+                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
             CreateMap<ORLogModifyViewModel, ORLogDetailViewModel>()
                 .ReverseMap();
@@ -391,12 +403,12 @@ namespace Models.Mapper
                 .ForMember(x => x.Department, opt => opt.Ignore())
                 .ForMember(src => src.ShiftId, opt => opt.MapFrom(dest => dest.Shift.Id))
                 .ForMember(x => x.Shift, opt => opt.Ignore())
-                .ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
-                .ForMember(x => x.ReworkDelay, opt => opt.Ignore())
-                .ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
-                .ForMember(x => x.ShiftDelay, opt => opt.Ignore())
-                .ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
-                .ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
+                //.ForMember(src => src.ReworkDelayId, opt => opt.MapFrom(dest => dest.ReworkDelay.Id))
+                //.ForMember(x => x.ReworkDelay, opt => opt.Ignore())
+                //.ForMember(src => src.ShiftDelayId, opt => opt.MapFrom(dest => dest.ShiftDelay.Id))
+                //.ForMember(x => x.ShiftDelay, opt => opt.Ignore())
+                //.ForMember(src => src.StartOfWorkDelayId, opt => opt.MapFrom(dest => dest.StartOfWorkDelay.Id))
+                //.ForMember(x => x.StartOfWorkDelay, opt => opt.Ignore())
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
                 .ForMember(x => x.DelayType, opt => opt.Ignore())
                 //.ForMember(src => src.CraftRateId, opt => opt.MapFrom(dest => dest.CraftRate.Id))

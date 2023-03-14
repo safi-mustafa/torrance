@@ -1,5 +1,4 @@
 ﻿using Enums;
-using System.ComponentModel;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
@@ -8,17 +7,13 @@ using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.PermitType;
 using ViewModels.TimeOnTools.Shift;
-using ViewModels.Authentication;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-using ViewModels.AppSettings.Map;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.WeldingRodRecord;
-using Helpers.Extensions;
 using ViewModels.Common.Company;
 using ViewModels.OverrideLogs;
-using ViewModels.Authentication.User;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
+using System.Reflection;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -108,7 +103,6 @@ namespace ViewModels.TimeOnTools.TOTLog
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-        public DelayReasonCatalog? DelayReason { get; set; }
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
 

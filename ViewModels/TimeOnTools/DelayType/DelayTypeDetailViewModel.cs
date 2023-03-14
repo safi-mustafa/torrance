@@ -9,5 +9,9 @@ namespace ViewModels.TimeOnTools
         public long? Id { get; set; }
         [DisplayName("Name")]
         public string Name { get; set; }
+
+        public string Identifier { get; set; }
+
+        public int Order { get; set; }
     }
 }

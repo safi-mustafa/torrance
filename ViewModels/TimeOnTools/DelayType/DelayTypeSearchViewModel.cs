@@ -6,7 +6,7 @@ namespace ViewModels.TimeOnTools
     {
         public DelayTypeSearchViewModel()
         {
-            OrderByColumn = "Name";
+            OrderByColumn = "Order";
             OrderDir = PaginationOrderCatalog.Asc;
         }
         public string Name { get; set; }
