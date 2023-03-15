@@ -17,6 +17,7 @@ using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Data.Common;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using ViewModels.Notification;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.TOTLog;
@@ -174,7 +175,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<WRRLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -203,7 +204,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            var notification = GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
+                            var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
                             await _notificationService.Create(notification);
                         }
                         await SetRequesterId(dbModel);
@@ -242,8 +243,14 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             return check < 1;
         }
 
-        private NotificationViewModel GetNotificationModel(WRRLog model, NotificationEventTypeCatalog eventType)
+        private async Task<NotificationViewModel> GetNotificationModel(WRRLog model, NotificationEventTypeCatalog eventType)
         {
+            string userFullName = "";
+            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
+            }
             return new NotificationViewModel()
             {
                 LogId = model.Id,
@@ -253,7 +260,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IdentifierKey = "TWR#",
                 IdentifierValue = model.Twr,
                 SendTo = model?.Approver?.Id.ToString(),
-                User = _httpContextAccessor?.HttpContext?.User?.Identity?.Name
+                User = userFullName
             };
         }
     }

@@ -19,6 +19,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Security.Claims;
 using ViewModels.Notification;
 using ViewModels.Shared;
 using ViewModels.Shared.Interfaces;
@@ -186,7 +187,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -214,7 +215,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            var notification = GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
+                            var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
                             await _notificationService.Create(notification);
                         }
                         await SetRequesterId(dbModel);
@@ -372,8 +373,14 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 return Response.BadRequestResponse(_response);
             }
         }
-        private NotificationViewModel GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
+        private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
         {
+            string userFullName = "";
+            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
+            }
             return new NotificationViewModel()
             {
                 LogId = model.Id,
@@ -383,7 +390,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 IdentifierKey = "Permit#",
                 IdentifierValue = model.PermitNo,
                 SendTo = model?.Approver?.Id.ToString(),
-                User = _httpContextAccessor?.HttpContext?.User?.Identity?.Name
+                User = userFullName
             };
         }
 

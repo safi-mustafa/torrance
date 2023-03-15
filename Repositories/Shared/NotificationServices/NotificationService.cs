@@ -7,6 +7,7 @@ using Enums;
 using Helpers.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
@@ -31,16 +32,16 @@ namespace Repositories.Shared.NotificationServices
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IRepositoryResponse _response;
-        private readonly IHttpContextAccessor contextAccessor;
+        private readonly IConfiguration _configuration;
 
-        public NotificationService(ToranceContext db, ILogger<NotificationService> logger, IUserInfoService userInfoService, IMapper mapper, IRepositoryResponse response, IHttpContextAccessor contextAccessor)
+        public NotificationService(ToranceContext db, ILogger<NotificationService> logger, IUserInfoService userInfoService, IMapper mapper, IRepositoryResponse response, IConfiguration configuration)
         {
             _db = db;
             _logger = logger;
             _userInfoService = userInfoService;
             _mapper = mapper;
             _response = response;
-            this.contextAccessor = contextAccessor;
+            _configuration = configuration;
         }
 
         public async Task<IRepositoryResponse> CreateLogNotification(NotificationViewModel model)
@@ -75,9 +76,8 @@ namespace Repositories.Shared.NotificationServices
 
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Id = Guid.NewGuid();
-            var request = contextAccessor.HttpContext.Request;
-            var domain = $"{request.Scheme}://{request.Host}";
-            var approvalLink = $"{domain}/Approval/ApproveByNotificationD{notificationMappedModel.Id}";
+            var domain = _configuration["WebUrl"];
+            var approvalLink = $"{domain}/Approval/ApproveByNotification?id={notificationMappedModel.Id}";
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, approvalLink));
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Email;
