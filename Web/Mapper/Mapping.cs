@@ -173,9 +173,13 @@ namespace Models.Mapper
                 .ForMember(src => src.UserName, opt => opt.MapFrom(dest => dest.Email))
                .ReverseMap();
 
+            CreateMap<EmployeeModifyViewModel, EmployeeExcelViewModel>()
+                .ForMember(d => d.CompanyName, s => s.MapFrom(x => x.Company.Name)).ReverseMap();
+
+
             //Company Manager
             CreateMap<ToranceUser, CompanyManagerDetailViewModel>().ReverseMap();
-          
+
             CreateMap<CompanyManagerDetailViewModel, CompanyManagerModifyViewModel>().ReverseMap();
 
             //Administrator
@@ -297,7 +301,7 @@ namespace Models.Mapper
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
 
-         
+
 
             //Folder
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
