@@ -103,6 +103,7 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var mappedModel = _mapper.Map<Notification>(model);
+                mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
                 mappedModel.Id = Guid.NewGuid();
                 mappedModel.CreatedOn = DateTime.Now;
                 await _db.Set<Notification>().AddAsync(mappedModel);

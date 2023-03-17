@@ -22,7 +22,7 @@ namespace Helper.Attributes
                 var isValidationEnabled = instance.GetType().GetProperty(IsValidationEnabledPropertyName)?.GetValue(instance, null);
                 if (isValidationEnabled != null && bool.Parse(isValidationEnabled.ToString()))
                 {
-                    if (value?.ToString() == "0")
+                    if (value==null || value?.ToString() == "0")
                     {
                         return new ValidationResult(errorPropertyValue?.ToString());
                     }

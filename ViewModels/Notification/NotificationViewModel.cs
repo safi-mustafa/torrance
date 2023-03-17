@@ -12,11 +12,7 @@ namespace ViewModels.Notification
     public class NotificationViewModel
     {
         public NotificationViewModel() { }
-        public NotificationViewModel(long logId, Type logType, string sendTo, string title, string message, NotificationType type, NotificationEventTypeCatalog eventType)
-        {
-
-
-        }
+  
         public Guid Id { get; set; }
         public long LogId { get; set; }
         public string IdentifierKey { get; set; }

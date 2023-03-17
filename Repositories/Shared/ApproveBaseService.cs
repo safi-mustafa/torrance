@@ -7,6 +7,7 @@ using DataLibrary;
 using Enums;
 using Helpers.Models.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
@@ -93,8 +94,8 @@ namespace Repositories.Shared
             {
                 try
                 {
-                    var allowUnauthenticatedApproval = isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid();
-                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
+                    var allowUnauthenticatedApproval = (isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid());
+                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
 
                     if (isUnauthenticatedApproval == false || allowUnauthenticatedApproval)
                     {
@@ -114,29 +115,47 @@ namespace Repositories.Shared
                             string type = "";
                             string identifier = "";
                             string identifierKey = "";
+                            NotificationEntityType notificationEntityType;
                             if (typeof(TEntity).IsAssignableFrom(typeof(TOTLog)))
                             {
                                 type = "TOT";
-                                identifierKey = "Permit";
+                                identifierKey = "Permit#";
                                 identifier = (logRecord as TOTLog).PermitNo;
+                                notificationEntityType = NotificationEntityType.TOTLog;
+
+
                             }
                             else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
                             {
                                 type = "Override";
-                                identifierKey = "PO";
+                                identifierKey = "PO#";
                                 identifier = (logRecord as OverrideLog).PoNumber.ToString();
+                                notificationEntityType = NotificationEntityType.OverrideLog;
                             }
                             else
                             {
                                 type = "WRR";
-                                identifierKey = "Twr";
+                                identifierKey = "TWR#";
                                 identifier = (logRecord as WRRLog).Twr.ToString();
+                                notificationEntityType = NotificationEntityType.WRRLog;
                             }
                             var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                             string notificationTitle = $"{type} Log {status}";
                             string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                             var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
-                            await _notificationService.Create(new NotificationViewModel(logRecord.Id, typeof(TEntity), userId.ToString() ?? "", notificationTitle, notificationMessage, NotificationType.Push, eventType));
+                            var notification = new NotificationViewModel()
+                            {
+                                LogId = logRecord.Id,
+                                EntityId = logRecord.Id,
+                                EventType = eventType,
+                                Type = NotificationType.Push,
+                                EntityType = notificationEntityType,
+                                SendTo = userId.ToString() ?? "",
+                                IdentifierKey = identifierKey,
+                                IdentifierValue = identifier
+
+                            };
+                            await _notificationService.Create(notification);
                             await transaction.CommitAsync();
                             return _response;
                         }

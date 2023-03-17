@@ -15,6 +15,7 @@ namespace ViewModels.Notification
         public LogType LogType { get; set; }
         public string Message { get; set; }
         public string Title { get; set; }
+        public LogPushNotificationViewModel() { }
         public LogPushNotificationViewModel(NotificationViewModel notification)
         {
             _notification = notification;
@@ -22,12 +23,12 @@ namespace ViewModels.Notification
             EntityId = notification.LogId;
             EntityType = notification.EntityType.ToString();
             LogType = GetLogType(_notification.EntityType);
-            Title = GetTitle();
+            Title =  GetTitle();
             Message = GetMessage();
         }
         public string GetTitle()
         {
-            return $"{LogType.GetDisplayName()} Created";
+            return $"{LogType.GetDisplayName()} {_notification.EventType.ToString().ToLower()}";
         }
         public string GetMessage()
         {
