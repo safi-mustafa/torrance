@@ -26,6 +26,7 @@ using Enums;
 using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using ViewModels.AppSettings.CompanyManager;
+using Centangle.Common.ResponseHelpers.Error;
 
 namespace TorranceApi.Controllers
 {
@@ -118,7 +119,7 @@ namespace TorranceApi.Controllers
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user == null)
                     {
-                        ModelState.AddModelError("Email", "Invalid login attempt. The Email is incorrect.");
+                        ModelState.AddModelError("Email", "Invalid login attempt.");
                         return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
                     }
 
@@ -129,11 +130,49 @@ namespace TorranceApi.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("Password", "Invalid login attempt. The Password is incorrect.");
+                        ModelState.AddModelError("Password", "Invalid login attempt.");
                         _logger.LogError("Invalid login attempt");
                         result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
                         return ReturnProcessedResponse(result);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Email", ex.Message);
+                _logger.LogError(ex.Message, "Login Endpoint Exception msg");
+            }
+            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+            return ReturnProcessedResponse(result);
+        }
+
+        [HttpPut]
+        [Route("/api/Account/ResetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
+        {
+            IRepositoryResponse result;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("Email", "User does not exist.");
+                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
+                    }
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var resetResult = await _userManager.ResetPasswordAsync(user, code, model.Password);
+                    if (resetResult.Succeeded)
+                    {
+                        return ReturnProcessedResponse(_response);
+                    }
+                    else
+                    {
+                        ErrorsHelper.AddErrorsToModelState(resetResult, ModelState, "Password");
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -207,7 +246,7 @@ namespace TorranceApi.Controllers
 
             else
             {
-                ModelState.AddModelError("pincode", "Invalid login attempt. The pincode is incorrect.");
+                ModelState.AddModelError("pincode", "Invalid login attempt");
                 _logger.LogError("Invalid login attempt");
                 result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
                 return ReturnProcessedResponse(result);

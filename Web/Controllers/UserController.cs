@@ -119,6 +119,8 @@ namespace Web.Controllers
             {
                 ModelState.AddModelError("AccessCode", "Access Code already in use.");
             }
+            model.Password = "Torrance";
+            model.ChangePassword = true;
             return await base.Create(model);
         }
         public virtual async Task<bool> IsAccessCodeUnique(CreateViewModel model)

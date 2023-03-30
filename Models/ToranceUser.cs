@@ -32,5 +32,7 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     [ForeignKey("Company")]
     public long? CompanyId { get; set; }
     public Company? Company { get; set; }
+
+    public bool ChangePassword { get; set; }
 }
 

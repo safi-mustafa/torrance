@@ -9,7 +9,7 @@ namespace ViewModels.Common.Company
         {
 
         }
-        public CompanyBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Company field is required.")
+        public CompanyBriefViewModel(bool isValidationEnabled, string message) : base(isValidationEnabled, message)
         {
 
         }

@@ -41,12 +41,12 @@
             </div>
 
         </header>
-        @if (SignInManager.IsSignedIn(User))
-{
-        <div class="menu-tab-container">
-            <partial name="_MenuTab.cshtml" />
-        </div>
-}
+        @if (SignInManager.IsSignedIn(User) && (ViewData["HideMenu"] == null || bool.Parse(ViewData["HideMenu"].ToString()) == false))
+        {
+            <div class="menu-tab-container">
+                <partial name="_MenuTab.cshtml" />
+            </div>
+        }
     </div>
 
     <div class="content-body-container container-fluid">

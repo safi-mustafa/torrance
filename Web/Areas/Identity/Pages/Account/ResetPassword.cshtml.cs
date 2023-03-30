@@ -77,9 +77,10 @@ namespace Web.Areas.Identity.Pages.Account
             [Required]
             public string Code { get; set; }
 
+
         }
 
-        public IActionResult OnGet(string code = null)
+        public async Task<IActionResult> OnGet(string code = null, string email = null)
         {
             if (code == null)
             {
@@ -89,7 +90,8 @@ namespace Web.Areas.Identity.Pages.Account
             {
                 Input = new InputModel
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)),
+                    Email = email,
                 };
                 return Page();
             }
@@ -112,11 +114,19 @@ namespace Web.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                var message = $"Your password has been changed.";
+                if (user.ChangePassword)
+                {
+                    user.ChangePassword = false;
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    var message = $"Your password has been changed.";
 
-                var mailRequest = new MailRequestViewModel(user.Id.ToString(), "Password Reset", message, Input.Email, NotificationType.Email);
+                    var mailRequest = new MailRequestViewModel(user.Id.ToString(), "Password Reset", message, Input.Email, NotificationType.Email);
 
-                await _identity.SendNotification(mailRequest);
+                    await _identity.SendNotification(mailRequest);
+                }
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

@@ -11,6 +11,6 @@ namespace ViewModels.OverrideLogs
             OrderDir = PaginationOrderCatalog.Asc;
         }
         public string Name { get; set; }
-        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false);
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false,"");
     }
 }

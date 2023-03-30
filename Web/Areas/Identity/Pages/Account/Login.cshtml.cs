@@ -19,6 +19,9 @@ using DataLibrary;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Enums;
+using DocumentFormat.OpenXml.EMMA;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -118,37 +121,60 @@ namespace Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user != null)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    return await GetReturnUrl(returnUrl, user);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    var encodedAccessCode = Input.Password.EncodePasswordToBase64();
-                    var user = await _db.Users.Where(x => x.Email == Input.Email && x.AccessCode == encodedAccessCode).FirstOrDefaultAsync();
-                    if (user != null)
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _userManager.CheckPasswordAsync(user, Input.Password);
+                    if (result)
                     {
-                        await _signInManager.SignInAsync(user, true);
-                        return await GetReturnUrl(returnUrl, user);
+                       
+                        if (user.ChangePassword)
+                        {
+                            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            return RedirectToPage("./ResetPassword", new { Code = code, Email = user.Email, IsFirstTimeLogin = true });
+                        }
+                        else
+                        {
+                            var url = await GetReturnUrl(returnUrl, user);
+                            var signInResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                            if (signInResult.RequiresTwoFactor)
+                            {
+                                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                            }
+                            if (signInResult.IsLockedOut)
+                            {
+                                _logger.LogWarning("User account locked out.");
+                                return RedirectToPage("./Lockout");
+                            }
+                            return LocalRedirect(url);
+                        }
+                       
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
+                        var encodedAccessCode = Input.Password.EncodePasswordToBase64();
+                        var userWithAccessCode = await _db.Users.Where(x => x.Email == Input.Email && x.AccessCode == encodedAccessCode).FirstOrDefaultAsync();
+                        if (userWithAccessCode != null)
+                        {
+                            await _signInManager.SignInAsync(userWithAccessCode, true);
+                            var url = await GetReturnUrl(returnUrl, user);
+                            return LocalRedirect(url);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
                 }
             }
 
@@ -156,25 +182,25 @@ namespace Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private async Task<IActionResult> GetReturnUrl(string returnUrl, ToranceUser user)
+        private async Task<string> GetReturnUrl(string returnUrl, ToranceUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
             var role = userRoles.First();
 
             if (role == RolesCatalog.Approver.ToString())
             {
-                return LocalRedirect("/Approval");
+                return "/Approval";
             }
             else if (role == RolesCatalog.Employee.ToString())
             {
-                return LocalRedirect("/TOTLog");
+                return "/TOTLog";
             }
             else if (role == RolesCatalog.CompanyManager.ToString())
             {
-                return LocalRedirect("/OverrideLog");
+                return "/OverrideLog";
             }
             _logger.LogInformation("User logged in.");
-            return LocalRedirect(returnUrl);
+            return returnUrl;
         }
     }
 }

@@ -6,11 +6,12 @@ namespace Centangle.Common.ResponseHelpers.Error
 {
     public static class ErrorsHelper
     {
-        public static ModelStateDictionary AddErrorsToModelState(IdentityResult identityResult, ModelStateDictionary modelState)
+        public static ModelStateDictionary AddErrorsToModelState(IdentityResult identityResult, ModelStateDictionary modelState,string code=null)
         {
             foreach (var e in identityResult.Errors)
             {
-                modelState.TryAddModelError(e.Code, e.Description);
+                var key = string.IsNullOrEmpty(code) ? e.Code : code;
+                modelState.TryAddModelError(key, e.Description);
             }
 
             return modelState;

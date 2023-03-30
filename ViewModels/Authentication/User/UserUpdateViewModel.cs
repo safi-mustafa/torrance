@@ -24,14 +24,14 @@ namespace ViewModels.Authentication.User
         //[Required]
         //[Display(Name = "Username")]
         //public string UserName { get; set; }
-        [Required]
+        //[Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
+        public string? Password { get; set; }
+        //[Required]
+        //[DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
-        [Compare("Password", ErrorMessage = "Confirm Password Does not Match with password")]
-        public string ConfirmPassword { get; set; }
+        //[Compare("Password", ErrorMessage = "Confirm Password Does not Match with password")]
+        public string? ConfirmPassword { get; set; }
 
         [DisplayName("Access Code")]
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Access Code must be of 4-digits.")]
@@ -46,6 +46,8 @@ namespace ViewModels.Authentication.User
         public RolesCatalog? Role { get; set; }
         public bool IsExcelSheet { get; set; }
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+        public  CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+
+        public bool ChangePassword { get; set; }
     }
 }

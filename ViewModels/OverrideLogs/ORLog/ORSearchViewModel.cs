@@ -15,7 +15,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public OverrideTypeCatalog? OverrideType { get; set; }
-        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false);
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");
 
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]

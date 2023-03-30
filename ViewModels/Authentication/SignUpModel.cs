@@ -56,5 +56,6 @@ namespace ViewModels.Authentication
             }
             return "Others";
         }
+        public bool ChangePassword { get; set; }
     }
 }

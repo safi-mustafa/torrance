@@ -34,5 +34,7 @@ namespace ViewModels.Authentication.User
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+
+        public bool ChangePassword { get; set; }
     }
 }
