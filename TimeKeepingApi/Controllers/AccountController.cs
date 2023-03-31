@@ -164,6 +164,8 @@ namespace TorranceApi.Controllers
                     }
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var resetResult = await _userManager.ResetPasswordAsync(user, code, model.Password);
+                    user.ChangePassword = false;
+                    await _userManager.UpdateAsync(user);
                     if (resetResult.Succeeded)
                     {
                         return ReturnProcessedResponse(_response);

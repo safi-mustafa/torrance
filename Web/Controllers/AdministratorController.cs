@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Repositories.Services.AppSettingServices.AdministratorService;
 using ViewModels.AppSettings.Administrator;
 using ViewModels.DataTable;
@@ -14,11 +16,13 @@ namespace Web.Controllers
         private readonly string _controllerName = "Administrator";
         private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _employeeService;
         private readonly ILogger<AdministratorController> _logger;
+        private readonly UserManager<ToranceUser> _userManager;
 
-        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper) : base(employeeService, logger, mapper, "Administrator", "Master Admin", RolesCatalog.Administrator)
+        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
         {
             _employeeService = employeeService;
             _logger = logger;
+            _userManager = userManager;
         }
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {

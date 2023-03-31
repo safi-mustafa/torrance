@@ -1,0 +1,54 @@
+﻿@using ViewModels.Authentication;
+@model ChangeAccessCodeVM
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="ResetAccessCode" enctype="multipart/form-data" id="change-password-form">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="AccessCode" class="form-label fw-600"></label>
+                        <input asp-for="AccessCode" type="text" class="form-control" placeholder="xxxx" />
+                        <span asp-validation-for="AccessCode" class="validation-invalid-label"></span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="ConfirmAccessCode" class="form-label fw-600"></label>
+                        <input asp-for="ConfirmAccessCode" type="text" class="form-control" placeholder="xxxx" />
+                        <span asp-validation-for="ConfirmAccessCode" class="validation-invalid-label"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="text-center">
+                    <a asp-action="Index" type="button" class="btn btn-dark">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn blue-btn" id="submit-btn">Submit</button>
+                </div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CurrentAccessCode" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="~/js/crud/add_asterik_on_required.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+
+
+
+

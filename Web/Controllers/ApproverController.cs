@@ -12,6 +12,8 @@ using ViewModels.Authentication.User;
 using ViewModels.DataTable;
 using Enums;
 using ViewModels.OverrideLogs.ORLog;
+using Microsoft.AspNetCore.Identity;
+using Models;
 
 namespace Web.Controllers
 {
@@ -20,11 +22,13 @@ namespace Web.Controllers
     {
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _service;
         private readonly ILogger<ApproverController> _logger;
+        private readonly UserManager<ToranceUser> _userManager;
 
-        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> service, ILogger<ApproverController> logger, IMapper mapper) : base(service, logger, mapper, "Approver", "Approver", RolesCatalog.Approver)
+        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> service, ILogger<ApproverController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(service, logger, mapper, userManager, "Approver", "Approver", RolesCatalog.Approver)
         {
             _service = service;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public override List<DataTableViewModel> GetColumns()

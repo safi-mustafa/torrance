@@ -11,12 +11,12 @@ namespace ViewModels.Authentication
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password is Required")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm Password is Required")]
+        [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Confirm Password Does not Match with password")]
         public string ConfirmPassword { get; set; }
 

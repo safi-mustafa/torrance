@@ -42,8 +42,8 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item px-3" asp-controller="Administrator" asp-action="Index">Master Admin</a>
                             <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approver</a>
-                            <a class="dropdown-item px-3" asp-controller="Employee" asp-action="Index">Requestor </a>
-                            <a class="dropdown-item px-3" asp-controller="CompanyManager" asp-action="Index">Contractor Admin</a>
+                            <a class="dropdown-item px-3" asp-controller="Requestor" asp-action="Index">Requestor </a>
+                            <a class="dropdown-item px-3" asp-controller="TimeKeeper" asp-action="Index">Time Keeper</a>
                             
                         </div>
                     </li>
@@ -81,7 +81,7 @@
                 }
                 @if (User.IsInRole("Approver"))
                 {
-                    <li class="nav-item"><a class="nav-link px-3" href="/Employee/Index">Reset Access Codes </a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/Requestor/Index">Reset Access Codes </a></li>
                 }
             </ul>
 

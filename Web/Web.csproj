@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Employee\Modify.cshtml" />
-    <None Include="Views\Employee\_Detail.cshtml" />
-    <None Include="Views\Employee\_Search.cshtml" />
-    <None Include="Views\Employee\_Update.cshtml" />
+    <None Include="Views\Requestor\Modify.cshtml" />
+    <None Include="Views\Requestor\_Detail.cshtml" />
+    <None Include="Views\Requestor\_Search.cshtml" />
+    <None Include="Views\Requestor\_Update.cshtml" />
     <None Include="wwwroot\js\fileinput\fileinput.min.js" />
     <None Include="wwwroot\js\fileinput\plugins\piexif.js" />
     <None Include="wwwroot\js\fileinput\plugins\piexif.min.js" />

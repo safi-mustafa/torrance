@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Repositories.Services.AppSettingServices.ForemanService;
 using ViewModels.AppSettings.CompanyManager;
 using ViewModels.DataTable;
@@ -13,9 +15,9 @@ namespace Web.Controllers
     {
         private readonly string _controllerName = "Foreman";
         private readonly IForemanService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _foremanService;
-        private readonly ILogger<CompanyManagerController> _logger;
+        private readonly ILogger<TimeKeeperController> _logger;
 
-        public ForemanController(IForemanService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> foremanService, ILogger<CompanyManagerController> logger, IMapper mapper) : base(foremanService, logger, mapper, "Foreman", "Foreman", RolesCatalog.Foreman)
+        public ForemanController(IForemanService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> foremanService, ILogger<TimeKeeperController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(foremanService, logger, mapper, userManager, "Foreman", "Foreman", RolesCatalog.Foreman)
         {
             _foremanService = foremanService;
             _logger = logger;

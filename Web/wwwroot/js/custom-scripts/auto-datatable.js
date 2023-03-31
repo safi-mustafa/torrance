@@ -15,6 +15,7 @@ actionIcons["POD"] = "fa-solid fa-file";
 actionIcons["Timesheet"] = "fa-solid fa-file-spreadsheet";
 actionIcons["Report"] = "icon-copy";
 actionIcons["ResetPassword"] = "icon-key";
+actionIcons["ResetAccessCode"] = "icon-lock";
 actionIcons["Approve"] = "icon-checkmark4";
 actionIcons["AddToCart"] = "icon-cart2";
 actionIcons["Comments"] = "fa-solid fa-comments";
@@ -325,7 +326,7 @@ function GetColumnSortings(columns) {
 }
 function GetActionLinks(actionsList, cellData) {
     var actionHtml = "";
-    if (actionsList.length > 4) {
+    if (actionsList.length > 5) {
 
         actionHtml = "<div class='list-icons'>";
         actionHtml += "<div class='dropdown show'>";

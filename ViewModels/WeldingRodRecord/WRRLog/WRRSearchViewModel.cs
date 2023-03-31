@@ -17,6 +17,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public string Email { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
+        [Display(Name = "Requestor")]
 
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 

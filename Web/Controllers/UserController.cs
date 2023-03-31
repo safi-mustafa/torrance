@@ -13,6 +13,9 @@ using Repositories.Services.CommonServices.UserService;
 using Centangle.Common.ResponseHelpers.Models;
 using ViewModels.DataTable;
 using ViewModels.Authentication;
+using Centangle.Common.ResponseHelpers.Error;
+using Microsoft.AspNetCore.Identity;
+using Models;
 
 namespace Web.Controllers
 {
@@ -26,25 +29,33 @@ namespace Web.Controllers
     {
         private readonly IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> _service;
         private readonly ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> _logger;
+        private readonly UserManager<ToranceUser> _userManager;
         private readonly string _controllerName;
         private readonly RolesCatalog _role;
 
-        public UserController(IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> logger, IMapper mapper, string controllerName, string title, RolesCatalog role) : base(service, logger, mapper, controllerName, title)
+        public UserController(IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> logger, IMapper mapper, UserManager<ToranceUser> userManager, string controllerName, string title, RolesCatalog role) : base(service, logger, mapper, controllerName, title)
         {
             _service = service;
             _logger = logger;
+            _userManager = userManager;
             _controllerName = controllerName;
             _role = role;
         }
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
+            result.ActionsList = new List<DataTableActionViewModel>();
+            if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+            {
+                result.ActionsList.Add(
+                    new DataTableActionViewModel() { Action = "ResetPassword", Title = "ResetPassword", Href = $"/{_controllerName}/ResetPassword/Id" }
+                );
+            }
             if (User.IsInRole("Approver") || User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
             {
-                result.ActionsList = new List<DataTableActionViewModel>()
-                {
-                    new DataTableActionViewModel() {Action="ResetPassword",Title="ResetPassword",Href=$"/{_controllerName}/ResetPassword/Id"},
-                };
+                result.ActionsList.Add(
+                    new DataTableActionViewModel() { Action = "ResetAccessCode", Title = "ResetAccessCode", Href = $"/{_controllerName}/ResetAccessCode/Id" }
+                );
             }
             if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
             {
@@ -152,14 +163,13 @@ namespace Web.Controllers
                 var response = await _service.GetById(id);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    var parsedResponse = response as RepositoryResponseWithModel<UserDetailViewModel>;
+                    var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
                     var model = parsedResponse?.ReturnModel ?? new();
-                    ChangeAccessCodeVM viewModel = new ChangeAccessCodeVM
+                    ResetPasswordVM viewModel = new ResetPasswordVM
                     {
-                        Id = model.Id ?? 0,
-                        CurrentAccessCode = model.AccessCode
+                        Email = model.Email
                     };
-                    return View(viewModel);
+                    return View("Views/User/_ResetPassword.cshtml", viewModel);
                 }
                 else
                 {
@@ -170,7 +180,62 @@ namespace Web.Controllers
             catch (Exception ex) { _logger.LogError($"Account ResetPassword method threw an exception, Message: {ex.Message}"); return RedirectToAction("Index"); }
         }
         [HttpPost]
-        public async Task<ActionResult> ResetPassword(ChangeAccessCodeVM model)
+        public async Task<JsonResult> ResetPassword(ResetPasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "User does not exist.");
+                    //return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
+                }
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var resetResult = await _userManager.ResetPasswordAsync(user, code, model.Password);
+                if (resetResult.Succeeded)
+                {
+                    return new JsonResult(new { success = true });
+                }
+                else
+                {
+                    ErrorsHelper.AddErrorsToModelState(resetResult, ModelState, "Password");
+                }
+
+            }
+            var errors = ModelState.ToDictionary(
+             kvp => kvp.Key,
+             kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList()
+            );
+            return new JsonResult(new { success = false, errors = errors });
+        }
+
+
+        public async Task<ActionResult> ResetAccessCode(int id)
+        {
+            try
+            {
+                var response = await _service.GetById(id);
+                if (response.Status == System.Net.HttpStatusCode.OK)
+                {
+                    var parsedResponse = response as RepositoryResponseWithModel<UserDetailViewModel>;
+                    var model = parsedResponse?.ReturnModel ?? new();
+                    ChangeAccessCodeVM viewModel = new ChangeAccessCodeVM
+                    {
+                        Id = model.Id ?? 0,
+                        CurrentAccessCode = model.AccessCode
+                    };
+                    return View("Views/User/_ResetAccessCode.cshtml", viewModel);
+                }
+                else
+                {
+                    _logger.LogInformation($"Record with id " + id + "not found");
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex) { _logger.LogError($"Account ResetPassword method threw an exception, Message: {ex.Message}"); return RedirectToAction("Index"); }
+        }
+        [HttpPost]
+        public async Task<ActionResult> ResetAccessCode(ChangeAccessCodeVM model)
         {
             await _service.ResetAccessCode(model);
             return RedirectToAction("Index");

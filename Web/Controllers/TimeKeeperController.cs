@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using ViewModels.AppSettings.CompanyManager;
 using ViewModels.DataTable;
@@ -9,16 +11,18 @@ using ViewModels.DataTable;
 namespace Web.Controllers
 {
     [Authorize(Roles = "SuperAdmin,Administrator,Approver")]
-    public class CompanyManagerController : UserController<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel, CompanyManagerDetailViewModel, CompanyManagerSearchViewModel>
+    public class TimeKeeperController : UserController<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel, CompanyManagerDetailViewModel, CompanyManagerSearchViewModel>
     {
-        private readonly string _controllerName = "CompanyManager";
+        private readonly string _controllerName = "TimeKeeper";
         private readonly ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _employeeService;
-        private readonly ILogger<CompanyManagerController> _logger;
+        private readonly ILogger<TimeKeeperController> _logger;
+        private readonly UserManager<ToranceUser> _userManager;
 
-        public CompanyManagerController(ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> employeeService, ILogger<CompanyManagerController> logger, IMapper mapper) : base(employeeService, logger, mapper, "CompanyManager", "Contractor Admin", RolesCatalog.CompanyManager)
+        public TimeKeeperController(ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> employeeService, ILogger<TimeKeeperController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper,userManager, "TimeKeeper", "Time Keeper", RolesCatalog.CompanyManager)
         {
             _employeeService = employeeService;
             _logger = logger;
+            _userManager = userManager;
         }
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
