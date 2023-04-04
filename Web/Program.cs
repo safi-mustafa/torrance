@@ -10,7 +10,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureServices(builder.Configuration);
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllAuthorized", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+    });
+});
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 

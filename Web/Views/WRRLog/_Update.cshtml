@@ -20,22 +20,31 @@
             </div>
             @*@if (isAdmin)
             {
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <label class="form-label fw-600">Company</label>
-                        <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-                    </div>
-                </div>
+            <div class="col-lg-6">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            </div>
+            </div>
+            <div class="col-lg-6">
+            <div class="mb-3">
+            <label class="form-label fw-600">Company</label>
+            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+            </div>
+            </div>
             }
             *@
 
             <div class="col-lg-6">
-                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
+                {
+                    <label class="form-label fw-600">Company</label>
+                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
+                    <input asp-for="Company.Id" type="hidden" />
+                }
+                else
+                {
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                }
             </div>
 
             <div class="col-lg-6">
@@ -88,12 +97,12 @@
                     <partial name="~/Views/Shared/Select2/_WeldMethod.cshtml" for="WeldMethod" />
                 </div>
             </div>
-           @* <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-600"></label>
-                    <input asp-for="Email" type="email" class="form-control" />
-                    <span asp-validation-for="Email" class="validation-invalid-label"></span>
-                </div>
+            @* <div class="col-lg-6">
+            <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-600"></label>
+            <input asp-for="Email" type="email" class="form-control" />
+            <span asp-validation-for="Email" class="validation-invalid-label"></span>
+            </div>
             </div>*@
 
             <div class="col-lg-6">

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.CommonServices.DepartmentService;
 using ViewModels.Common.Department;
 using ViewModels.DataTable;

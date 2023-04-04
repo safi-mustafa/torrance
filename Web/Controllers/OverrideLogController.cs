@@ -12,6 +12,9 @@ using ViewModels.WeldingRodRecord.WRRLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using ViewModels.TimeOnTools.TOTLog;
 using Enums;
+using Microsoft.AspNetCore.Identity;
+using Models;
+using ViewModels.Common.Company;
 
 namespace Web.Controllers
 {
@@ -21,14 +24,16 @@ namespace Web.Controllers
         private readonly IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> _OverrideLogService;
         private readonly ILogger<OverrideLogController> _logger;
         private readonly IUserInfoService _userInfo;
+        private readonly UserManager<ToranceUser> _userManager;
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _baseApprove;
 
-        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo,UserManager<ToranceUser> userManager) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _OverrideLogService = OverrideLogService;
             _logger = logger;
             _userInfo = userInfo;
+            _userManager = userManager;
             _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
@@ -76,7 +81,11 @@ namespace Web.Controllers
             filters.StatusNot = Enums.Status.Pending;
             return filters;
         }
-
+        public override async Task<ActionResult> Create()
+        {
+            var model = await GetCreateViewModel();
+            return UpdateView(GetUpdateViewModel("Create", model));
+        }
         public override Task<ActionResult> Create(ORLogModifyViewModel model)
         {
             if (User.IsInRole("Employee"))
@@ -136,6 +145,27 @@ namespace Web.Controllers
         {
             ViewData["RowNumber"] = rowNumber;
             return PartialView("_CostRow", model);
+        }
+
+        private async Task<ORLogModifyViewModel> GetCreateViewModel()
+        {
+            var model = new ORLogModifyViewModel();
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+            {
+                model.Company = new CompanyBriefViewModel();
+                var companyIdClaim = User.Claims.Where(c => c.Type == "CompanyId").Select(x => x.Value).FirstOrDefault();
+                if (companyIdClaim != null)
+                {
+                    model.Company.Id = int.Parse(companyIdClaim.ToString());
+                }
+                var companyNameClaim = User.Claims.Where(c => c.Type == "CompanyName").Select(x => x.Value).FirstOrDefault();
+                if (companyNameClaim != null)
+                {
+                    model.Company.Name = companyNameClaim.ToString();
+                }
+            }
+            return model;
         }
     }
 

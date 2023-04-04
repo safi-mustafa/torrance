@@ -45,10 +45,10 @@
                     <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
                 </div>
             </div>
-@*            <div class="col-lg-4">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
-                </div>
+            @*            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+            </div>
             </div>*@
             <div class="col-lg-12">
                 <div class="mb-3">
@@ -57,28 +57,28 @@
                     <span asp-validation-for="Reason" class="validation-invalid-label"></span>
                 </div>
             </div>
-           @* <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label fw-600">Delay Reason</label>
-                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
-                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
-                </div>
+            @* <div class="col-lg-6">
+            <div class="mb-3">
+            <label class="form-label fw-600">Delay Reason</label>
+            <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
+            <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+            </div>
             </div>
 
             <div class="col-lg-6" id="shift-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+            </div>
             </div>
             <div class="col-lg-6" id="rework-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+            </div>
             </div>
             <div class="col-lg-6" id="start-of-work-delay-container">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
+            </div>
             </div>*@
 
             @* @if (isAdmin)
@@ -98,7 +98,16 @@
             </div>
             }*@
             <div class="col-lg-6">
-                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
+                {
+                    <label class="form-label fw-600">Company</label>
+                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
+                    <input asp-for="Company.Id" type="hidden" />
+                }
+                else
+                {
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                }
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">

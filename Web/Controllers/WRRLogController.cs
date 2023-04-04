@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using NuGet.Packaging;
 using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
+using ViewModels.Common.Company;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.TimeOnTools.TOTLog;
@@ -19,14 +22,16 @@ namespace Web.Controllers
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _WRRLogService;
         private readonly ILogger<WRRLogController> _logger;
         private readonly IUserInfoService _userInfo;
+        private readonly UserManager<ToranceUser> _userManager;
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _WRRLogService = WRRLogService;
             _logger = logger;
             _userInfo = userInfo;
+            _userManager = userManager;
             _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
         protected override WRRLogSearchViewModel SetDefaultFilters()
@@ -88,6 +93,12 @@ namespace Web.Controllers
         {
             return Json(await _WRRLogService.IsWRRLogEmailUnique(id, email));
         }
+
+        public override async Task<ActionResult> Create()
+        {
+            var model = await GetCreateViewModel();
+            return UpdateView(GetUpdateViewModel("Create", model));
+        }
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
@@ -114,6 +125,27 @@ namespace Web.Controllers
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
+        }
+
+        private async Task<WRRLogModifyViewModel> GetCreateViewModel()
+        {
+            var model = new WRRLogModifyViewModel();
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+            {
+                model.Company = new CompanyBriefViewModel();
+                var companyIdClaim = User.Claims.Where(c => c.Type == "CompanyId").Select(x => x.Value).FirstOrDefault();
+                if (companyIdClaim != null)
+                {
+                    model.Company.Id = int.Parse(companyIdClaim.ToString());
+                }
+                var companyNameClaim = User.Claims.Where(c => c.Type == "CompanyName").Select(x => x.Value).FirstOrDefault();
+                if (companyNameClaim != null)
+                {
+                    model.Company.Name = companyNameClaim.ToString();
+                }
+            }
+            return model;
         }
     }
 }

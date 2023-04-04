@@ -87,6 +87,7 @@ namespace Web.Controllers
             var svm = JsonConvert.DeserializeObject<SearchViewModel>(customParams);
             return svm;
         }
+        [AllowAnonymous]
         public override async Task<JsonResult> Select2(string prefix, int pageSize, int pageNumber, string customParams)
         {
             try

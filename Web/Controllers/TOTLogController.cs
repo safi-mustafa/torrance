@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using NuGet.Packaging;
 using Pagination;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
@@ -10,7 +13,9 @@ using Repositories.Shared.Interfaces;
 using Repositories.Shared.UserInfoServices;
 using Select2;
 using Select2.Model;
+using System.Security.Claims;
 using ViewModels;
+using ViewModels.Common.Company;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels.OverrideLogs.ORLog;
@@ -27,20 +32,22 @@ namespace Web.Controllers
         private readonly ILogger<TOTLogController> _logger;
         private readonly string _loggedInUserRole;
         private readonly IUserInfoService _userInfo;
+        private readonly UserManager<ToranceUser> _userManager;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
             _userInfo = userInfo;
+            _userManager = userManager;
             _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
             var html = "";
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
             {
                 html += @"
                     <div class=""p-2 row"">
@@ -94,7 +101,11 @@ namespace Web.Controllers
             });
             return dataColumns;
         }
-
+        public override async Task<ActionResult> Create()
+        {
+            var model = await GetCreateViewModel();
+            return UpdateView(GetUpdateViewModel("Create", model));
+        }
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
         {
             if (User.IsInRole("Employee"))
@@ -200,6 +211,27 @@ namespace Web.Controllers
             }
 
 
+        }
+
+        private async Task<TOTLogModifyViewModel> GetCreateViewModel()
+        {
+            var model = new TOTLogModifyViewModel();
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+            {
+                model.Company = new CompanyBriefViewModel();
+                var companyIdClaim = User.Claims.Where(c => c.Type == "CompanyId").Select(x => x.Value).FirstOrDefault();
+                if (companyIdClaim != null)
+                {
+                    model.Company.Id = int.Parse(companyIdClaim.ToString());
+                }
+                var companyNameClaim = User.Claims.Where(c => c.Type == "CompanyName").Select(x => x.Value).FirstOrDefault();
+                if (companyNameClaim != null)
+                {
+                    model.Company.Name = companyNameClaim.ToString();
+                }
+            }
+            return model;
         }
 
 

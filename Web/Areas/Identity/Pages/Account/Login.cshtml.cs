@@ -22,6 +22,7 @@ using Enums;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using System.Security.Claims;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -121,7 +122,7 @@ namespace Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
+                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email);
                 if (user != null)
                 {
                     // This doesn't count login failures towards account lockout
@@ -129,7 +130,7 @@ namespace Web.Areas.Identity.Pages.Account
                     var result = await _userManager.CheckPasswordAsync(user, Input.Password);
                     if (result)
                     {
-                       
+
                         if (user.ChangePassword)
                         {
                             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -149,9 +150,17 @@ namespace Web.Areas.Identity.Pages.Account
                                 _logger.LogWarning("User account locked out.");
                                 return RedirectToPage("./Lockout");
                             }
+                            if (signInResult.Succeeded)
+                            {
+                                if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                                {
+                                    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
+                                    await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
+                                }
+                            }
                             return LocalRedirect(url);
                         }
-                       
+
                     }
                     else
                     {

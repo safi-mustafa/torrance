@@ -58,7 +58,16 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
+                {
+                    <label class="form-label fw-600">Company</label>
+                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
+                    <input asp-for="Company.Id" type="hidden" />
+                }
+                else
+                {
+                        <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                }
             </div>
             <div class="col-lg-3">
                 <div class="mb-3">
@@ -96,11 +105,11 @@
                 </div>
             </div>
             @*<div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label fw-600">Delay Type</label>
-                    <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
-                    <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
-                </div>
+            <div class="mb-3">
+            <label class="form-label fw-600">Delay Type</label>
+            <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
+            <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+            </div>
             </div>*@
 
             <div class="col-lg-6" id="shift-delay-container">
@@ -133,13 +142,13 @@
             </div>
             </div>
             }*@
-           
-     @*       <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="EquipmentNo" class="form-label fw-600"></label>
-                    <input asp-for="EquipmentNo" type="text" class="form-control" />
-                    <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
-                </div>
+
+            @*       <div class="col-lg-6">
+            <div class="mb-3">
+            <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+            <input asp-for="EquipmentNo" type="text" class="form-control" />
+            <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
+            </div>
             </div>*@
 
             <div class="col-lg-4">
@@ -158,12 +167,12 @@
                 </div>
             </div>
 
-           @* <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="WorkScope" class="form-label fw-600"></label>
-                    <input asp-for="WorkScope" type="text" class="form-control" />
-                    <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
-                </div>
+            @* <div class="col-lg-6">
+            <div class="mb-3">
+            <label asp-for="WorkScope" class="form-label fw-600"></label>
+            <input asp-for="WorkScope" type="text" class="form-control" />
+            <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+            </div>
             </div>*@
 
             <div class="col-lg-4">
@@ -276,7 +285,7 @@
     });
 
     function DelayTypeChanged(identifier) {
-        
+
         if (identifier === 'StartOfWork') {
             $('#shift-delay-container').hide();
             $('#rework-delay-container').hide();

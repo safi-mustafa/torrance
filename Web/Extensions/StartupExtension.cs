@@ -77,7 +77,7 @@ namespace Web.Extensions
                 .AddDefaultTokenProviders()
                  .AddDefaultUI();
 
-            //services.AddAuthorization();
+           
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.

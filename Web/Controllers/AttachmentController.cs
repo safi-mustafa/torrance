@@ -59,9 +59,9 @@ namespace Web.Controllers
         }
 
         [NonAction]
-        public override ActionResult Create()
+        public override async Task<ActionResult> Create()
         {
-            return base.Create();
+            return await base.Create();
         }
         [NonAction]
         public override ActionResult Index()

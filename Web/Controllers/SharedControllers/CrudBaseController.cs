@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using ViewModels.OverrideLogs;
 using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using ViewModels.Common.Validation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers
 {
@@ -53,7 +54,7 @@ namespace Web.Controllers
 
         #region[CRUD]
 
-        public virtual ActionResult Create()
+        public virtual async Task<ActionResult> Create()
         {
             return UpdateView(GetUpdateViewModel("Create", null));
         }
@@ -205,6 +206,7 @@ namespace Web.Controllers
         //    }
         //    catch (Exception ex) { _logger.LogError($"{_controllerName} Approve method threw an exception for record with id: {id}, Message: {ex.Message}"); return RedirectToAction("Index"); }
         //}
+        [AllowAnonymous]
 
         public virtual async Task<JsonResult> Select2(string prefix, int pageSize, int pageNumber, string customParams)
         {

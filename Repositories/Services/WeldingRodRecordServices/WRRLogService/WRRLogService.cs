@@ -83,7 +83,9 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (loggedInUserRole == "SuperAdmin") 
+                                || 
+                                (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
                                 (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
                                 ||
