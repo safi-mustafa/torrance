@@ -116,7 +116,7 @@ namespace TorranceApi.Controllers
                 {
                     _logger.LogInformation("Model State is valid", "login method 2");
 
-                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == model.Email && u.IsDeleted == false);
                     if (user == null)
                     {
                         ModelState.AddModelError("Email", "Invalid login attempt.");

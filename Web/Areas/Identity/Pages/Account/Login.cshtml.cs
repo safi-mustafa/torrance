@@ -122,7 +122,7 @@ namespace Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email);
+                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted==false);
                 if (user != null)
                 {
                     // This doesn't count login failures towards account lockout
@@ -140,6 +140,11 @@ namespace Web.Areas.Identity.Pages.Account
                         else
                         {
                             var url = await GetReturnUrl(returnUrl, user);
+                            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                            {
+                                await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
+                                await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
+                            }
                             var signInResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                             if (signInResult.RequiresTwoFactor)
                             {
@@ -149,14 +154,6 @@ namespace Web.Areas.Identity.Pages.Account
                             {
                                 _logger.LogWarning("User account locked out.");
                                 return RedirectToPage("./Lockout");
-                            }
-                            if (signInResult.Succeeded)
-                            {
-                                if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
-                                {
-                                    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
-                                    await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
-                                }
                             }
                             return LocalRedirect(url);
                         }

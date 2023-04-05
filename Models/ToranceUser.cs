@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Models;
 
 // Add profile data for application users by adding properties to the TimeKeepingUser class
-[Index(nameof(AccessCode), IsUnique = false)]
+//[Index(nameof(AccessCode), IsUnique = false)]
 public class ToranceUser : IdentityUser<long>, IBaseModel
 {
     public bool IsDeleted { get; set; }
