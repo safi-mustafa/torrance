@@ -6,6 +6,8 @@ using ViewModels.WeldingRodRecord.WRRLog;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.AppSettingServices.EmployeeService;
+using Centangle.Common.ResponseHelpers.Models;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -28,6 +30,37 @@ namespace API.Controllers
             var mappedSearchModel = _mapper.Map<EmployeeSearchViewModel>(search);
             var result = await _employeeService.GetAll<EmployeeDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<EmployeeDetailViewModel>>(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> Post([FromBody] EmployeeModifyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                bool isUnique = await IsAccessCodeUnique(model);
+                if (!isUnique)
+                {
+                    ModelState.AddModelError("AccessCode", "Access Code already in use or illegal Access Code.");
+                }
+                else
+                {
+                    model.Password = "TorrancePass";
+                    model.ChangePassword = false;
+                    var data = await _employeeService.Create(model);
+                    return ReturnProcessedResponse(data);
+                }
+            }
+            return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
+        }
+
+        private async Task<bool> IsAccessCodeUnique(EmployeeModifyViewModel model)
+        {
+            return await _employeeService.IsAccessCodeUnique(model.Id, model.AccessCode);
+
         }
 
     }

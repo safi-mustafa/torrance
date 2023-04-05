@@ -54,7 +54,7 @@ namespace Repositories.Shared.AuthenticationService
             _actionContext = actionContext;
         }
 
-        public async Task<long> CreateUser(SignUpModel model, IDbContextTransaction transaction, string optionalUsernamePrefix = "")
+        public async Task<long> CreateUser(SignUpModel model, string optionalUsernamePrefix = "")
         {
             try
             {
@@ -75,25 +75,22 @@ namespace Repositories.Shared.AuthenticationService
                     else
                     {
                         Errors.AddErrorsToModelState(result, _actionContext.ActionContext.ModelState);
-                        await transaction.RollbackAsync();
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "CraeteUser threw the following exception");
-                    await transaction.RollbackAsync();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CraeteUser threw the following exception");
-                await transaction.RollbackAsync();
             }
             return -1;
         }
 
 
-        public async Task<bool> UpdateUser(SignUpModel model, IDbContextTransaction transaction)
+        public async Task<bool> UpdateUser(SignUpModel model)
         {
             string errorMsg = "There was some problem in updating data. Please try again later.";
             try
@@ -121,7 +118,6 @@ namespace Repositories.Shared.AuthenticationService
                             else
                             {
                                 _logger.LogWarning("Error! Password not updating.");
-                                await transaction.RollbackAsync();
                             }
                         }
                         return result.Succeeded;
@@ -130,15 +126,11 @@ namespace Repositories.Shared.AuthenticationService
                     {
                         Errors.AddErrorsToModelState(result, _actionContext.ActionContext.ModelState);
                         _logger.LogWarning(errorMsg, "Warning while updating user");
-
-                        await transaction.RollbackAsync();
                     }
                 }
                 else
                 {
-                    await transaction.RollbackAsync();
                     return false;
-
                 }
 
             }
@@ -146,7 +138,6 @@ namespace Repositories.Shared.AuthenticationService
             {
                 _logger.LogError(ex, "UpdateUser threw following exception.");
             }
-            await transaction.RollbackAsync();
             return false;
         }
 

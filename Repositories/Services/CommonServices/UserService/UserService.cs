@@ -55,7 +55,7 @@ namespace Repositories.Services.CommonServices.UserService
                 var user = _mapper.Map<SignUpModel>(model);
                 user.AccessCode = viewModel.AccessCode.EncodePasswordToBase64();
                 user.Role = _role.ToString();
-                user.Id = await _identity.CreateUser(user, transaction);
+                user.Id = await _identity.CreateUser(user);
                 if (user.Id > 0)
                 {
                     var result = await CreateUserAdditionalMappings(model, user);
@@ -89,7 +89,7 @@ namespace Repositories.Services.CommonServices.UserService
                         var user = _mapper.Map<SignUpModel>(model);
                         user.Role = _role.ToString();
                         user.AccessCode = record.AccessCode.DecodeFrom64();
-                        var result = await _identity.UpdateUser(user, transaction);
+                        var result = await _identity.UpdateUser(user);
                         if (result)
                         {
                             var mappingsModified = await UpdateUserAdditionalMappings(model, user);
@@ -140,8 +140,8 @@ namespace Repositories.Services.CommonServices.UserService
 
         public async Task<bool> IsAccessCodeUnique(long id, string accessCode)
         {
-            accessCode = accessCode.EncodePasswordToBase64();
-            return (await _db.Users.Where(x => x.AccessCode == accessCode && x.Id != id).CountAsync()) < 1;
+            var encodedAccessCode = accessCode.EncodePasswordToBase64();
+            return (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id).CountAsync()) < 1 && accessCode != "9999";
         }
         public async Task<bool> IsEmailUnique(long id, string email)
         {
