@@ -169,6 +169,7 @@ namespace TorranceApi.Mapper
             CreateMap<ToranceUser, EmployeeDetailViewModel>()
 
                 .ReverseMap();
+            CreateMap<EmployeeModifyViewModel, EmployeeCreateViewModel>().ReverseMap();
             CreateMap<EmployeeModifyViewModel, EmployeeDetailViewModel>().ReverseMap();
             CreateMap<ToranceUser, EmployeeBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))

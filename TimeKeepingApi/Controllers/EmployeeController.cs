@@ -37,20 +37,21 @@ namespace API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Post([FromBody] EmployeeModifyViewModel model)
+        public async Task<IActionResult> Post([FromBody] EmployeeCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                bool isUnique = await IsAccessCodeUnique(model);
+                var mappedModel = _mapper.Map<EmployeeModifyViewModel>(model);
+                bool isUnique = await IsAccessCodeUnique(mappedModel);
                 if (!isUnique)
                 {
                     ModelState.AddModelError("AccessCode", "Access Code already in use or illegal Access Code.");
                 }
                 else
                 {
-                    model.Password = "TorrancePass";
-                    model.ChangePassword = false;
-                    var data = await _employeeService.Create(model);
+                    mappedModel.Password = "TorrancePass";
+                    mappedModel.ChangePassword = false;
+                    var data = await _employeeService.Create(mappedModel);
                     return ReturnProcessedResponse(data);
                 }
             }

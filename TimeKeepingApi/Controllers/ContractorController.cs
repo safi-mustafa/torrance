@@ -9,7 +9,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class ContractorController : CrudBaseBriefController<ContractorDetailViewModel, ContractorSearchViewModel>
     {
         public ContractorController(IContractorService<ContractorCreateViewModel, ContractorModifyViewModel, ContractorDetailViewModel> contractorService) : base(contractorService)

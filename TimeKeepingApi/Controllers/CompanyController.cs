@@ -9,7 +9,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class CompanyController : CrudBaseBriefController<CompanyDetailViewModel, CompanySearchViewModel>
     {
         public CompanyController(ICompanyService<CompanyCreateViewModel, CompanyModifyViewModel, CompanyDetailViewModel> CompanyService) : base(CompanyService)
