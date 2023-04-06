@@ -16,6 +16,7 @@ using ViewModels.OverrideLogs;
 using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
 using ViewModels.Common.Validation;
 using Microsoft.AspNetCore.Authorization;
+using ViewModels.Authentication.User;
 
 namespace Web.Controllers
 {
@@ -96,8 +97,8 @@ namespace Web.Controllers
                     long id = 0;
                     if (response.Status == System.Net.HttpStatusCode.OK)
                     {
-                        var parsedResponse = response as RepositoryResponseWithModel<long>;
-                        id = parsedResponse?.ReturnModel ?? 0;
+                        var parsedResponse = response as RepositoryResponseWithModel<UserCreateResponseViewModel>;
+                        id = parsedResponse?.ReturnModel.Id ?? 0;
                     }
                     return PostModify(id, model, "Create");
                 }

@@ -16,7 +16,7 @@ namespace TorranceApi.Controllers
             {
                 case HttpStatusCode.OK:
                     {
-                        return Ok(new { Status = 200});
+                        return Ok(new { Status = 200, Message = response.Message });
                     }
                 case HttpStatusCode.BadRequest:
                     {

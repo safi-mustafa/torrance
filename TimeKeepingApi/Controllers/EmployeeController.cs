@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Repositories.Services.AppSettingServices.EmployeeService;
 using Centangle.Common.ResponseHelpers.Models;
 using System.Net;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using ViewModels.Authentication.User;
+using Centangle.Common.ResponseHelpers;
 
 namespace API.Controllers
 {
@@ -43,15 +46,24 @@ namespace API.Controllers
             {
                 var mappedModel = _mapper.Map<EmployeeModifyViewModel>(model);
                 bool isUnique = await IsAccessCodeUnique(mappedModel);
+                bool isEmailUnique = await IsEmailUnique(mappedModel);
                 if (!isUnique)
                 {
                     ModelState.AddModelError("AccessCode", "Access Code already in use.");
+                }
+                else if (!isEmailUnique)
+                {
+                    ModelState.AddModelError("Email", "Email already in use.");
                 }
                 else
                 {
                     mappedModel.Password = "TorrancePass";
                     mappedModel.ChangePassword = false;
                     var data = await _employeeService.Create(mappedModel);
+                    if (data.Status == HttpStatusCode.OK)
+                    {
+                        return ReturnProcessedResponse<UserCreateResponseViewModel>(data);
+                    }
                     return ReturnProcessedResponse(data);
                 }
             }
@@ -61,6 +73,12 @@ namespace API.Controllers
         private async Task<bool> IsAccessCodeUnique(EmployeeModifyViewModel model)
         {
             return await _employeeService.IsAccessCodeUnique(model.Id, model.AccessCode);
+
+        }
+
+        private async Task<bool> IsEmailUnique(EmployeeModifyViewModel model)
+        {
+            return await _employeeService.IsEmailUnique(model.Id, model.Email);
 
         }
 
