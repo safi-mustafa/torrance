@@ -31,7 +31,7 @@ namespace API.Controllers
             var result = await _employeeService.GetAll<EmployeeDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<EmployeeDetailViewModel>>(result);
         }
-
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -45,7 +45,7 @@ namespace API.Controllers
                 bool isUnique = await IsAccessCodeUnique(mappedModel);
                 if (!isUnique)
                 {
-                    ModelState.AddModelError("AccessCode", "Access Code already in use or illegal Access Code.");
+                    ModelState.AddModelError("AccessCode", "Access Code already in use.");
                 }
                 else
                 {
