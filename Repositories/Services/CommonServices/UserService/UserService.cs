@@ -62,14 +62,15 @@ namespace Repositories.Services.CommonServices.UserService
                     if (result)
                     {
                         await transaction.CommitAsync();
-                        var response = new RepositoryResponseWithModel<UserCreateResponseViewModel>
-                        {
-                            ReturnModel = new UserCreateResponseViewModel
-                            {
-                                Id = user.Id,
-                                Message = "Account created successfully. Please login using the pin used at the time of signup."
-                            }
-                        };
+                        //var response = new RepositoryResponseWithModel<UserCreateResponseViewModel>
+                        //{
+                        //    ReturnModel = new UserCreateResponseViewModel
+                        //    {
+                        //        Id = user.Id,
+                        //        Message = "Account created successfully."// Please login using the pin used at the time of signup.
+                        //    }
+                        //};
+                        var response = new RepositoryResponseWithModel<long> { ReturnModel = user.Id };
                         return response;
                     }
                 }

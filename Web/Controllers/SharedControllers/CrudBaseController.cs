@@ -97,8 +97,8 @@ namespace Web.Controllers
                     long id = 0;
                     if (response.Status == System.Net.HttpStatusCode.OK)
                     {
-                        var parsedResponse = response as RepositoryResponseWithModel<UserCreateResponseViewModel>;
-                        id = parsedResponse?.ReturnModel.Id ?? 0;
+                        var parsedResponse = response as RepositoryResponseWithModel<long>;
+                        id = parsedResponse?.ReturnModel ?? 0;
                     }
                     return PostModify(id, model, "Create");
                 }

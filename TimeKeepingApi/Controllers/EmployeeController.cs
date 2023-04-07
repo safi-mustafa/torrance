@@ -11,6 +11,7 @@ using System.Net;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using ViewModels.Authentication.User;
 using Centangle.Common.ResponseHelpers;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace API.Controllers
 {
@@ -62,7 +63,17 @@ namespace API.Controllers
                     var data = await _employeeService.Create(mappedModel);
                     if (data.Status == HttpStatusCode.OK)
                     {
-                        return ReturnProcessedResponse<UserCreateResponseViewModel>(data);
+                        var parsedResponse = data as RepositoryResponseWithModel<long>;
+                        var id = parsedResponse?.ReturnModel ?? 0;
+                        var response = new RepositoryResponseWithModel<UserCreateResponseViewModel>
+                        {
+                            ReturnModel = new UserCreateResponseViewModel
+                            {
+                                Id = id,
+                                Message = "Account created successfully."// Please login using the pin used at the time of signup.
+                            }
+                        };
+                        return ReturnProcessedResponse<UserCreateResponseViewModel>(response);
                     }
                     return ReturnProcessedResponse(data);
                 }
