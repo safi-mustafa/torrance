@@ -125,6 +125,12 @@ namespace Web.Areas.Identity.Pages.Account
                 var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted==false);
                 if (user != null)
                 {
+                    if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
+
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _userManager.CheckPasswordAsync(user, Input.Password);
@@ -140,11 +146,11 @@ namespace Web.Areas.Identity.Pages.Account
                         else
                         {
                             var url = await GetReturnUrl(returnUrl, user);
-                            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
-                            {
-                                await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
-                                await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
-                            }
+                            //if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                            //{
+                            //    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
+                            //    await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
+                            //}
                             var signInResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                             if (signInResult.RequiresTwoFactor)
                             {
