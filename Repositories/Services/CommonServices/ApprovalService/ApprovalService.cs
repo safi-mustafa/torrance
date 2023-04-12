@@ -86,7 +86,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                             Type = LogType.TimeOnTools,
                             Employee = x.Employee,
                             TotalCost = 0,
-                            TotalHeadCount = 0
+                            TotalHeadCount = x.ManPowerAffected,
                         }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
                 var wrrLogsQueryable = _db.WRRLogs

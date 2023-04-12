@@ -5,7 +5,7 @@ namespace ViewModels.Common.Contractor
 {
     public class ContractorBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public ContractorBriefViewModel() : base(false, "The Contractor field is required.")
+        public ContractorBriefViewModel() : base(false, "")
         {
 
         }

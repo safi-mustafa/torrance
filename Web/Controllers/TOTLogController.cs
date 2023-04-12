@@ -35,7 +35,7 @@ namespace Web.Controllers
         private readonly UserManager<ToranceUser> _userManager;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", userInfo)
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
@@ -44,31 +44,7 @@ namespace Web.Controllers
             _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
-        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
-        {
-            var html = "";
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>";
-            }
 
-            html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Approved m-1""> </span>
-                        <span class=""stat-name"">Approved</span>
-                    </div>
-                    <div class=""m-2 row"">
-                        <span class=""badge Rejected m-1""> </span>
-                        <span class=""stat-name"">Rejected</span>
-                    </div>";
-            vm.DataTableHeaderHtml = html;
-            vm.IsResponsiveDatatable = false;
-            return vm;
-        }
 
         protected override TOTLogSearchViewModel SetDefaultFilters()
         {

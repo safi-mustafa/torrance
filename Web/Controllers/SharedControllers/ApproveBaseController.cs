@@ -13,6 +13,8 @@ using Centangle.Common.ResponseHelpers.Models;
 using Repositories.Shared.Interfaces;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Repositories.Shared.UserInfoServices;
 
 namespace Web.Controllers
 {
@@ -30,20 +32,50 @@ namespace Web.Controllers
         private readonly ILogger<Controller> _logger;
         private readonly string _controllerName;
         private readonly string _title;
-        private readonly bool _hideCreateButton;
+        private readonly IUserInfoService _userInfo;
         private readonly bool _useSameUpdateViews;
         private readonly IMapper _mapper;
-        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title, bool hideCreateButton = false, bool useSameUpdateViews = true) : base(service, logger, mapper, controllerName, title, hideCreateButton, useSameUpdateViews)
+        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title,IUserInfoService userInfo, bool hideCreateButton = false, bool useSameUpdateViews = true) : base(service, logger, mapper, controllerName, title, hideCreateButton, useSameUpdateViews)
         {
             _service = service;
             _logger = logger;
             _controllerName = controllerName;
             _title = title;
-            _hideCreateButton = hideCreateButton;
+            _userInfo = userInfo;
             _useSameUpdateViews = useSameUpdateViews;
             _mapper = mapper;
         }
 
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            var loggedInUserRole = _userInfo.LoggedInUserRole();
+            var html = "";
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>";
+            vm.DataTableHeaderHtml = html;
+            vm.IsResponsiveDatatable = false;
+            bool canAddLogs = false;
+            var canAddLogsClaim = User.FindFirst("CanAddLogs");
+            bool.TryParse(canAddLogsClaim?.Value, out canAddLogs);
+            vm.HideCreateButton = !(_userInfo.LoggedInUserRoles().Contains("Administrator") || _userInfo.LoggedInUserRoles().Contains("SuperAdmin") || _userInfo.LoggedInUserRoles().Contains("Employee") || canAddLogs);
+            return vm;
+        }
         public async Task<ActionResult> ApproveRecords(List<long> Ids, bool Status)
         {
             try

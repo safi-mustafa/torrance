@@ -34,5 +34,7 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     public Company? Company { get; set; }
 
     public bool ChangePassword { get; set; }
+
+    public bool CanAddLogs { get; set; }
 }
 

@@ -72,6 +72,9 @@ namespace API.Controllers
                 }
                 model.Employee = new ViewModels.WeldingRodRecord.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
+            ModelState.Remove("Contractor");
+            ModelState.Remove("Contractor.Id");
+            ModelState.Remove("Contractor.Name");
             AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Put(model);
         }

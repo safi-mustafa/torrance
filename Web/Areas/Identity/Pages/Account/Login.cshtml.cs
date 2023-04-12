@@ -122,7 +122,7 @@ namespace Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted==false);
+                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted == false);
                 if (user != null)
                 {
                     if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
@@ -146,6 +146,7 @@ namespace Web.Areas.Identity.Pages.Account
                         else
                         {
                             var url = await GetReturnUrl(returnUrl, user);
+
                             //if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
                             //{
                             //    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
@@ -160,6 +161,12 @@ namespace Web.Areas.Identity.Pages.Account
                             {
                                 _logger.LogWarning("User account locked out.");
                                 return RedirectToPage("./Lockout");
+                            }
+
+                            if (signInResult.Succeeded)
+                            {
+                                var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()) };
+                                await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
                             }
                             return LocalRedirect(url);
                         }
