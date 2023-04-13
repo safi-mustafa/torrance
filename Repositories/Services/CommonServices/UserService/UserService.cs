@@ -149,11 +149,14 @@ namespace Repositories.Services.CommonServices.UserService
         public async Task<bool> IsAccessCodeUnique(long id, string accessCode)
         {
             var encodedAccessCode = accessCode.EncodePasswordToBase64();
-            return (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id).CountAsync()) < 1 && accessCode != "9999";
+            if (accessCode == "9999")
+                return false;
+            bool isUnique = (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id && x.IsDeleted == false).CountAsync()) < 1;
+            return isUnique;
         }
         public async Task<bool> IsEmailUnique(long id, string email)
         {
-            return (await _db.Users.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
+            return (await _db.Users.Where(x => x.Email == email && x.Id != id && x.IsDeleted == false).CountAsync()) < 1;
         }
 
         public async Task<IRepositoryResponse> ResetAccessCode(ChangeAccessCodeVM model)

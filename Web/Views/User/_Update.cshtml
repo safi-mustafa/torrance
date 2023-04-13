@@ -20,17 +20,17 @@
     </div>
 
 
-
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-600"></label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Email" class="validation-invalid-label"></span>
+        </div>
+    </div>
 
     @if (Model.Id < 1)
     {
-        <div class="col-lg-6">
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label fw-600"></label>
-                <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
-                <span asp-validation-for="Email" class="validation-invalid-label"></span>
-            </div>
-        </div>
+       
 
 
        @* <div class="col-lg-6">

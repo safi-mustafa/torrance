@@ -37,6 +37,7 @@ namespace ViewModels.Authentication.User
 
         public bool ChangePassword { get; set; }
 
+        [Display(Name = "Can Add Logs?")]
         public bool CanAddLogs { get; set; }
     }
 }
