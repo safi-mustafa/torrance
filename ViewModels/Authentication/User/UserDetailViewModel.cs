@@ -39,5 +39,13 @@ namespace ViewModels.Authentication.User
 
         [Display(Name = "Can Add Logs?")]
         public bool CanAddLogs { get; set; }
+
+        public string FormattedCanAddLogs
+        {
+            get
+            {
+                return CanAddLogs ? "Yes" : "No";
+            }
+        }
     }
 }
