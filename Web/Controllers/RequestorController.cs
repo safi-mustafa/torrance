@@ -41,6 +41,13 @@ namespace Web.Controllers
             return View(model);
         }
 
+        public override Task<ActionResult> Create(EmployeeModifyViewModel model)
+        {
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmPassword");
+            return base.Create(model);
+        }
+
         [HttpPost]
         public async Task<ActionResult> ImportExcelSheet(ExcelFileVM model)
         {

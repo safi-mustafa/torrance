@@ -14,5 +14,6 @@ namespace Repositories.Services.CommonServices.UserService
         Task<bool> IsAccessCodeUnique(long id, string accessCode);
         Task<bool> IsEmailUnique(long id, string email);
         Task<IRepositoryResponse> ResetAccessCode(ChangeAccessCodeVM model);
+        Task<bool> ValidatePassword(string password);
     }
 }

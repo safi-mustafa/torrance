@@ -23,10 +23,10 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Name",data = "Name"},
-                new DataTableViewModel{title = "ST Rate",data = "STRate", className="dt-currency"},
-                new DataTableViewModel{title = "OT Rate",data = "OTRate", className="dt-currency"},
-                new DataTableViewModel{title = "DT Rate",data = "DTRate", className="dt-currency"},
+                new DataTableViewModel{title = "Name",data = "Name", orderable = true},
+                new DataTableViewModel{title = "ST Rate",data = "STRate", className="dt-currency",orderable=true},
+                new DataTableViewModel{title = "OT Rate",data = "OTRate", className="dt-currency", orderable = true},
+                new DataTableViewModel{title = "DT Rate",data = "DTRate", className="dt-currency", orderable = true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

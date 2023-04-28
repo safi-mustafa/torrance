@@ -122,9 +122,21 @@ namespace Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted==false);
+                var user = await _userManager.Users.Include(u => u.Company).SingleOrDefaultAsync(u => u.Email == Input.Email && u.IsDeleted == false);
                 if (user != null)
                 {
+                    if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
+
+                    if(user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "You can't login. Your status is inactive.");
+                        return Page();
+                    }
+
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _userManager.CheckPasswordAsync(user, Input.Password);
@@ -140,11 +152,12 @@ namespace Web.Areas.Identity.Pages.Account
                         else
                         {
                             var url = await GetReturnUrl(returnUrl, user);
-                            if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
-                            {
-                                await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
-                                await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
-                            }
+
+                            //if (await _userManager.IsInRoleAsync(user, RolesCatalog.Employee.ToString()))
+                            //{
+                            //    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
+                            //    await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
+                            //}
                             var signInResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                             if (signInResult.RequiresTwoFactor)
                             {
@@ -154,6 +167,12 @@ namespace Web.Areas.Identity.Pages.Account
                             {
                                 _logger.LogWarning("User account locked out.");
                                 return RedirectToPage("./Lockout");
+                            }
+
+                            if (signInResult.Succeeded)
+                            {
+                                var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()) };
+                                await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
                             }
                             return LocalRedirect(url);
                         }

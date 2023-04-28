@@ -19,6 +19,8 @@ using Helpers.Extensions;
 using ViewModels.Authentication.Approver;
 using ViewModels.Authentication.User;
 using Enums;
+using Repositories.Shared.UserInfoServices;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Repositories.Services.CommonServices.UserService
 {
@@ -34,8 +36,18 @@ namespace Repositories.Services.CommonServices.UserService
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
 
-        public UserService(ToranceContext db, RolesCatalog role, UserManager<ToranceUser> userManager, ILogger logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, logger, mapper, response)
+        public UserService
+            (
+                ToranceContext db, 
+                RolesCatalog role, 
+                UserManager<ToranceUser> userManager, 
+                ILogger logger, 
+                IMapper mapper, 
+                IIdentityService identity, 
+                IRepositoryResponse response, 
+                IUserInfoService userInfoService) : base(db, logger, mapper, response)
         {
             _db = db;
             _role = role;
@@ -44,6 +56,7 @@ namespace Repositories.Services.CommonServices.UserService
             _mapper = mapper;
             _identity = identity;
             _response = response;
+            _userInfoService = userInfoService;
         }
 
         public override async Task<IRepositoryResponse> Create(CreateViewModel model)
@@ -62,14 +75,15 @@ namespace Repositories.Services.CommonServices.UserService
                     if (result)
                     {
                         await transaction.CommitAsync();
-                        var response = new RepositoryResponseWithModel<UserCreateResponseViewModel>
-                        {
-                            ReturnModel = new UserCreateResponseViewModel
-                            {
-                                Id = user.Id,
-                                Message = "Account created successfully. Please login using the pin used at the time of signup."
-                            }
-                        };
+                        //var response = new RepositoryResponseWithModel<UserCreateResponseViewModel>
+                        //{
+                        //    ReturnModel = new UserCreateResponseViewModel
+                        //    {
+                        //        Id = user.Id,
+                        //        Message = "Account created successfully."// Please login using the pin used at the time of signup.
+                        //    }
+                        //};
+                        var response = new RepositoryResponseWithModel<long> { ReturnModel = user.Id };
                         return response;
                     }
                 }
@@ -148,11 +162,14 @@ namespace Repositories.Services.CommonServices.UserService
         public async Task<bool> IsAccessCodeUnique(long id, string accessCode)
         {
             var encodedAccessCode = accessCode.EncodePasswordToBase64();
-            return (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id).CountAsync()) < 1 && accessCode != "9999";
+            if (accessCode == "9999")
+                return false;
+            bool isUnique = (await _db.Users.Where(x => x.AccessCode == encodedAccessCode && x.Id != id && x.IsDeleted == false).CountAsync()) < 1;
+            return isUnique;
         }
         public async Task<bool> IsEmailUnique(long id, string email)
         {
-            return (await _db.Users.Where(x => x.Email == email && x.Id != id).CountAsync()) < 1;
+            return (await _db.Users.Where(x => x.Email == email && x.Id != id && x.IsDeleted == false).CountAsync()) < 1;
         }
 
         public async Task<IRepositoryResponse> ResetAccessCode(ChangeAccessCodeVM model)
@@ -204,6 +221,21 @@ namespace Repositories.Services.CommonServices.UserService
         protected virtual async Task<bool> UpdateUserAdditionalMappings(UpdateViewModel viewModel, SignUpModel model)
         {
             return true;
+        }
+
+        public async Task<bool> ValidatePassword(string password)
+        {
+            try
+            {
+                var loggedInUserId = long.Parse(_userInfoService.LoggedInUserId());
+                var user = await _db.Users.Where(x => x.Id == loggedInUserId).FirstOrDefaultAsync();
+                var result = await _userManager.CheckPasswordAsync(user, password);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

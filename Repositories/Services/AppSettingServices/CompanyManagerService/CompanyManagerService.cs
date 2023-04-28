@@ -8,6 +8,7 @@ using ViewModels.Shared;
 using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.UserService;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.CompanyManagerService
 {
@@ -23,7 +24,7 @@ namespace Repositories.Services.AppSettingServices.CompanyManagerService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public CompanyManagerService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<CompanyManagerService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.CompanyManager, userManager, logger, mapper, identity, response)
+        public CompanyManagerService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<CompanyManagerService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.CompanyManager, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _userManager = userManager;

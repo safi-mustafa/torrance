@@ -110,7 +110,11 @@ namespace Web.Areas.Identity.Pages.Account
                 // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
-
+            if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+            {
+                ModelState.AddModelError(string.Empty, "Notification can not be generated for your account. Your status is inactive.");
+                return Page();
+            }
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {

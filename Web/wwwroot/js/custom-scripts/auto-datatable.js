@@ -95,7 +95,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
             deleteReturnUrl: ""
         }
 
-        DeleteDataItem(deleteObj);
+        DeleteItem(deleteObj);
 
     });
     $(document).off('click', '.cancel');
@@ -517,6 +517,64 @@ function SearchDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
     $("#" + tableId).dataTable().fnDestroy();
     FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
 }
+
+function DeleteItem(deleteObj)
+{
+    $("#crudDeleteModal").modal("show");
+    $("#user-password").val('');
+    $(document).off('click', '#validate-password');
+    $(document).on('click', '#validate-password', function () {
+        var password = $("#user-password").val();
+        if (password != null && password != "") {
+            $.ajax({
+                url: "/Administrator/ValidatePassword",
+                type: "post",
+                data: { password: password },
+                success: function (response) {
+                    if (response) {
+                        debugger;
+                        DeleteCardItem(deleteObj.deleteUrl).then(function (ajaxResult) {
+                            if (ajaxResult.Success) {
+                                $("#crudDeleteModal").modal("hide");
+                                $("#user-password").val('');
+                                if (ajaxResult.ReloadDatatable) {
+                                    SearchDataTable(deleteObj.ajaxSearchUrl, deleteObj.tableId, deleteObj.formId, deleteObj.actionsList, deleteObj.dtColumns);
+                                }
+                                else {
+                                    if (deleteReturnUrl === "" || deleteReturnUrl === null || deleteReturnUrl === undefined) {
+                                        location.reload();
+                                    }
+                                    else {
+                                        window.location.href = deleteReturnUrl;
+                                    }
+                                }
+
+                            }
+                            else {
+                                $("#crudDeleteModal").modal("hide");
+                                $("#user-password").val('');
+                                Swal.fire("Couldn't delete. Try again later.")
+                            }
+                        });
+                    }
+                    else {
+                        $("#crudDeleteModal").modal("hide");
+                        $("#user-password").val('');
+                        Swal.fire("You've entered a wrong password.")
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+        else {
+            Swal.fire("Please enter the password.")
+        }
+       
+    });
+}
+
 
 function DeleteDataItem(deleteObj) {
 

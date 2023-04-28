@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.ForemanService
 {
@@ -24,7 +25,7 @@ namespace Repositories.Services.AppSettingServices.ForemanService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public ForemanService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ForemanService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.Foreman, userManager, logger, mapper, identity, response)
+        public ForemanService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ForemanService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Foreman, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _userManager = userManager;

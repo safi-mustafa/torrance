@@ -22,8 +22,8 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Latitude",data = "Latitude"},
-                new DataTableViewModel{title = "Longitude",data = "Longitude"},
+                new DataTableViewModel{title = "Latitude",data = "Latitude", orderable = true},
+                new DataTableViewModel{title = "Longitude",data = "Longitude", orderable = true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

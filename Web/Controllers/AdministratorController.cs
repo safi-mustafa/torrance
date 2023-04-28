@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositories.Services.AppSettingServices.AdministratorService;
 using ViewModels.AppSettings.Administrator;
+using ViewModels.Authentication.User;
 using ViewModels.DataTable;
 
 namespace Web.Controllers
@@ -14,13 +15,13 @@ namespace Web.Controllers
     public class AdministratorController : UserController<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel, AdministratorDetailViewModel, AdministratorSearchViewModel>
     {
         private readonly string _controllerName = "Administrator";
-        private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _employeeService;
+        private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _adminService;
         private readonly ILogger<AdministratorController> _logger;
         private readonly UserManager<ToranceUser> _userManager;
 
-        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
+        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> adminService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(adminService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
         {
-            _employeeService = employeeService;
+            _adminService = adminService;
             _logger = logger;
             _userManager = userManager;
         }
@@ -48,9 +49,9 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Full Name",data = "FullName"},
+                new DataTableViewModel{title = "Full Name",data = "FullName",orderable=true},
                 //new DataTableViewModel{title = "Company",data = "Company.Name"},
-                new DataTableViewModel{title = "Email",data = "Email"},
+                new DataTableViewModel{title = "Email",data = "Email",orderable=true},
                 //new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
@@ -65,11 +66,21 @@ namespace Web.Controllers
             ModelState.Remove("AccessCode");
             return base.Create(model);
         }
-
-        public override async Task<bool> IsAccessCodeUnique(AdministratorModifyViewModel model)
+        public override Task<ActionResult> Update(AdministratorModifyViewModel model)
         {
-            
+            ModelState.Remove("Company.Id");
+            ModelState.Remove("Company.Name");
+            ModelState.Remove("AccessCode");
+            return base.Update(model);
+        }
+        public override async Task<bool> IsAccessCodeUnique(UserUpdateViewModel model)
+        {
             return await Task.FromResult(true);
+        }
+        public async Task<bool> ValidatePassword(string password)
+        {
+            var response = await _adminService.ValidatePassword(password);
+            return response;
         }
     }
 }

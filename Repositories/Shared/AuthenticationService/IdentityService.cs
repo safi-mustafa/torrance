@@ -61,8 +61,7 @@ namespace Repositories.Shared.AuthenticationService
                 var user = _mapper.Map<ToranceUser>(model);
                 try
                 {
-                    user.UserName = user.Email;
-                    // var password = model.Role == "Employee" ? model.EmployeeId : model.Password;
+                    user.UserName = Guid.NewGuid().ToString();
                     var result = await _userManager.CreateAsync(user, model.Password);
                     var role = model.Role != null ? model.Role : "SuperAdmin";
                     if (result.Succeeded)
@@ -104,6 +103,10 @@ namespace Repositories.Shared.AuthenticationService
                     user.AccessCode = model.IsExcelSheet ? model.AccessCode.EncodePasswordToBase64() : user.AccessCode;
                     user.FullName = model.FullName;
                     user.CompanyId = model.Company?.Id;
+                    user.Email = model.Email;
+                    user.ActiveStatus = model.ActiveStatus;
+                    user.NormalizedEmail = model.Email.ToUpper();
+                    user.CanAddLogs = model.CanAddLogs;
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {

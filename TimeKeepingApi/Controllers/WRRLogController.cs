@@ -42,6 +42,13 @@ namespace API.Controllers
             var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
+                if (model.Company.Id < 1)
+                {
+                    var claims = User.Claims;
+                    var companyIdClaim = claims.FirstOrDefault(c => c.Type == "CompanyId");
+                    model.Company.Id =string.IsNullOrEmpty(companyIdClaim.Value)?0:int.Parse(companyIdClaim.Value);
+                }
+                
                 model.Employee.Id = parsedLoggedInId;
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
@@ -57,8 +64,17 @@ namespace API.Controllers
             var parsedLoggedInId = long.Parse(loggedInUserId);
             if (loggedInUserRole == "Employee")
             {
+                if (model.Company.Id < 1)
+                {
+                    var claims = User.Claims;
+                    var companyIdClaim = claims.FirstOrDefault(c => c.Type == "CompanyId");
+                    model.Company.Id = string.IsNullOrEmpty(companyIdClaim.Value) ? 0 : int.Parse(companyIdClaim.Value);
+                }
                 model.Employee = new ViewModels.WeldingRodRecord.EmployeeBriefViewModel { Id = parsedLoggedInId, Name = "" };
             }
+            ModelState.Remove("Contractor");
+            ModelState.Remove("Contractor.Id");
+            ModelState.Remove("Contractor.Name");
             AddTWRModelStateErrors(ModelState, model.TWRModel);
             return base.Put(model);
         }

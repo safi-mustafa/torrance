@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common.Department;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -32,7 +33,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response)
+        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _logger = logger;
@@ -121,7 +122,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         Email = x.Email,
                         FullName = x.FullName,
                         UserName = x.UserName,
-                        AccessCode = x.AccessCode
+                        AccessCode = x.AccessCode,
+                        CanAddLogs = x.CanAddLogs
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -146,6 +148,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
                     x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
                     x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
+                    x.CanAddLogs = userList.Where(a => a.Id == x.Id).Select(x => x.CanAddLogs).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     //x.Associations = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
@@ -212,12 +215,12 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                             select new ApproverAssociationsViewModel()
                                             {
                                                 Id = aa.Id,
-                                                Unit=new UnitBriefViewModel()
+                                                Unit = new UnitBriefViewModel()
                                                 {
-                                                    Id=u.Id,
-                                                    Name=u.Name
+                                                    Id = u.Id,
+                                                    Name = u.Name
                                                 },
-                                                Department=new DepartmentBriefViewModel()
+                                                Department = new DepartmentBriefViewModel()
                                                 {
                                                     Id = d.Id,
                                                     Name = d.Name

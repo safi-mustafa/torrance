@@ -251,7 +251,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Requester", orderable=true},
                 //new DataTableViewModel{title = "Approver",data = "Approver"},
-                new DataTableViewModel{title = "Department",data = "Department"},
+                new DataTableViewModel{title = "Department",data = "Department",orderable=true},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit", orderable=true},
                 //new DataTableViewModel{title = "TWR",data = "TWR"},

@@ -36,7 +36,6 @@ namespace Web.Controllers
         private readonly ILogger<Controller> _logger;
         private readonly string _controllerName;
         private readonly string _title;
-        private readonly bool _hideCreateButton;
         private readonly bool _useSameUpdateViews;
         private readonly IMapper _mapper;
 
@@ -48,7 +47,6 @@ namespace Web.Controllers
             _logger = logger;
             _controllerName = controllerName;
             _title = title;
-            _hideCreateButton = hideCreateButton;
             _useSameUpdateViews = useSameUpdateViews;
             _mapper = mapper;
         }
@@ -97,8 +95,8 @@ namespace Web.Controllers
                     long id = 0;
                     if (response.Status == System.Net.HttpStatusCode.OK)
                     {
-                        var parsedResponse = response as RepositoryResponseWithModel<UserCreateResponseViewModel>;
-                        id = parsedResponse?.ReturnModel.Id ?? 0;
+                        var parsedResponse = response as RepositoryResponseWithModel<long>;
+                        id = parsedResponse?.ReturnModel ?? 0;
                     }
                     return PostModify(id, model, "Create");
                 }

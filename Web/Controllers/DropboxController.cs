@@ -23,8 +23,8 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Url",data = "Url"},
-                new DataTableViewModel{title = "Status",data = "FormattedStatus"},
+                new DataTableViewModel{title = "Url",data = "Url", orderable = true},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus", orderable = true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };

@@ -91,7 +91,22 @@ namespace BainBridgeApi.Controllers
                     _logger.LogInformation("Model State is valid", "login method 2");
                     var encodedPinCode = model.Pincode.EncodePasswordToBase64();
                     var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode && x.IsDeleted == false).FirstOrDefaultAsync();
-                    return await SetClaimns(model.DeviceId, user);
+                    if (user != null)
+                    {
+                        if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                        {
+                            ModelState.AddModelError("pincode", "You can't login. Your status is inactive.");
+                            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                            return ReturnProcessedResponse(result);
+                        }
+
+                        return await SetClaimns(model.DeviceId, user);
+                    }
+                    else
+                    {
+                        result = Centangle.Common.ResponseHelpers.Response.NotFoundResponse(_response);
+                        return ReturnProcessedResponse(result);
+                    }
                 }
             }
             catch (Exception ex)
@@ -120,7 +135,14 @@ namespace BainBridgeApi.Controllers
                     if (user == null)
                     {
                         ModelState.AddModelError("Email", "Invalid login attempt.");
-                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
+                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.NotFoundResponse(_response));
+                    }
+
+                    if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    {
+                        ModelState.AddModelError("Email", "You can't login. Your status is inactive.");
+                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                        return ReturnProcessedResponse(result);
                     }
 
                     var response = await _userManager.CheckPasswordAsync(user, model.Password);
@@ -234,12 +256,14 @@ namespace BainBridgeApi.Controllers
 
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var role = userRoles.First();
-
+                var companyId = user.CompanyId == null ? "0" : user.CompanyId.ToString();
                 var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Role, role),
                             new Claim("FullName", user.FullName),
+                            new Claim("CompanyId", companyId),
+                            new Claim("ShowLogForms", user.CanAddLogs.ToString()),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
                         };

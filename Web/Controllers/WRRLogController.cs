@@ -26,7 +26,7 @@ namespace Web.Controllers
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", userInfo)
         {
             _WRRLogService = WRRLogService;
             _logger = logger;
@@ -51,11 +51,11 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
-                new DataTableViewModel{title = "Returned",data = "FormattedDateRodReturned"},
-                new DataTableViewModel{title = "Checkout",data = "FormattedRodCheckedOut"},
-                new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate"},
-                new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed"},
-                new DataTableViewModel{title = "Twr",data = "Twr"},
+                new DataTableViewModel{title = "Returned",data = "FormattedDateRodReturned", orderable = true},
+                new DataTableViewModel{title = "Checkout",data = "FormattedRodCheckedOut", orderable = true},
+                new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate", orderable = true},
+                new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed", orderable = true},
+                new DataTableViewModel{title = "Twr",data = "Twr", orderable = true},
                 //new DataTableViewModel{title = "Email",data = "Email"},
                 //new DataTableViewModel{title = "Status",data = "Status"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
@@ -64,31 +64,7 @@ namespace Web.Controllers
 
         }
 
-        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
-        {
-            var html = "";
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole== RolesCatalog.CompanyManager.ToString())
-            {
-                html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>";
-            }
-
-            html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Approved m-1""> </span>
-                        <span class=""stat-name"">Approved</span>
-                    </div>
-                    <div class=""m-2 row"">
-                        <span class=""badge Rejected m-1""> </span>
-                        <span class=""stat-name"">Rejected</span>
-                    </div>";
-            vm.DataTableHeaderHtml = html;
-            vm.IsResponsiveDatatable = false;
-            return vm;
-        }
+   
         public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
         {
             return Json(await _WRRLogService.IsWRRLogEmailUnique(id, email));
