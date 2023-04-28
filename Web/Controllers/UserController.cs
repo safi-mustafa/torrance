@@ -131,7 +131,7 @@ namespace Web.Controllers
             {
                 ModelState.AddModelError("AccessCode", "Access Code already in use.");
             }
-            model.Password = "Torrance";
+            model.Password = "BainBridge";
             model.ChangePassword = true;
             return await base.Create(model);
         }

@@ -1,4 +1,4 @@
-﻿using TorranceApi.Controllers;
+﻿using BainBridgeApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.Employee;
 using Pagination;
@@ -57,7 +57,7 @@ namespace API.Controllers
                 }
                 else
                 {
-                    mappedModel.Password = "TorrancePass";
+                    mappedModel.Password = "BainBridgePass";
                     mappedModel.ChangePassword = false;
                     var data = await _employeeService.Create(mappedModel);
                     if (data.Status == HttpStatusCode.OK)

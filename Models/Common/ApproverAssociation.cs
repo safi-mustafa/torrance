@@ -5,7 +5,7 @@ namespace Models.Common
 {
     public class ApproverAssociation : BaseDBModel
     {
-        [ForeignKey("TorranceUser")]
+        [ForeignKey("BainBridgeUser")]
         public long ApproverId { get; set; }
         public ToranceUser Approver { get; set; }
 

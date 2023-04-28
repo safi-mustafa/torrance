@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text;
-using TorranceApi.Mapper;
+using BainBridgeApi.Mapper;
 using Centangle.Common.RequestHelpers.SwaggerFilters;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
@@ -61,7 +61,7 @@ namespace Web.Extensions
         {
             services.AddDbContext<ToranceContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("TorranceConnection"), b => b.MigrationsAssembly("DataLibrary"))
+                options.UseSqlServer(configuration.GetConnectionString("BainBridgeConnection"), b => b.MigrationsAssembly("DataLibrary"))
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
             });
 
@@ -143,7 +143,7 @@ namespace Web.Extensions
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Torrance API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BainBridge API", Version = "v1" });
                 c.OperationFilter<SwaggerFileOperationFilter>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

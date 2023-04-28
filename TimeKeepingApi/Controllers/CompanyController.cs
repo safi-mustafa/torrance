@@ -1,5 +1,5 @@
 ﻿using System;
-using TorranceApi.Controllers;
+using BainBridgeApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.CommonServices.CompanyService;
 using ViewModels.Common.Company;
