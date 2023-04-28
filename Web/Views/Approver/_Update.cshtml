@@ -1,4 +1,5 @@
-﻿@using ViewModels.Authentication.Approver;
+﻿@using Enums;
+@using ViewModels.Authentication.Approver;
 @using Web.Extensions;
 @model ApproverModifyViewModel
 @{
@@ -20,6 +21,11 @@
                     <input asp-for="Email" type="text" class="form-control" placeholder="Email" />
                     <span asp-validation-for="Email" class="validation-invalid-label"></span>
                 </div>
+            </div>
+            <div class="col-lg-6">
+                <label asp-for="ActiveStatus" class="form-label fw-600">Active Status</label>
+                <select asp-for="ActiveStatus" class="form-control" asp-items="@Html.GetEnumSelectList<ActiveStatus>()"></select>
+                <span asp-validation-for="ActiveStatus" class="validation-invalid-label"></span>
             </div>
             @if (Model.Id < 1)
             {

@@ -1,4 +1,5 @@
-﻿using Helpers.File;
+﻿using Enums;
+using Helpers.File;
 using Helpers.ValidationAttributes;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
@@ -33,7 +34,7 @@ namespace ViewModels.Authentication
 
         [Required]
         public string UserName { get; set; }
-
+        public ActiveStatus ActiveStatus { get; set; }
         public string Action { get; set; }
         public string Role { get; set; }
         public string? ImageUrl { get; set; }
