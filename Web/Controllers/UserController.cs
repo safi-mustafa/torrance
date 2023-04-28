@@ -133,10 +133,6 @@ namespace Web.Controllers
             {
                 ModelState.AddModelError("AccessCode", "Access Code already in use.");
             }
-<<<<<<< HEAD
-            model.Password = "BainBridge";
-            model.ChangePassword = true;
-=======
             bool isEmailUnique = await IsEmailUnique(model);
             if (!isEmailUnique)
             {
@@ -147,7 +143,6 @@ namespace Web.Controllers
                 model.Password = "Torrance";
                 model.ChangePassword = true;
             }
->>>>>>> 530f9e51ed7f8054cff0cd231cdf4b0860180f09
             return await base.Create(model);
         }
         public virtual async Task<bool> IsAccessCodeUnique(UserUpdateViewModel model)
@@ -159,8 +154,8 @@ namespace Web.Controllers
         {
             return await _service.IsEmailUnique(model.Id, model.Email);
 
-        } 
-       
+        }
+
         public override async Task<ActionResult> Update(UpdateViewModel model)
         {
             ModelState.Remove("AccessCode");

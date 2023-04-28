@@ -59,7 +59,7 @@ namespace Web.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("BainBridgeConnection") ?? throw new InvalidOperationException("Connection string 'BainBridgeConnection' not found.");
+            var connectionString = configuration.GetConnectionString("TorranceConnection") ?? throw new InvalidOperationException("Connection string 'TorranceConnection' not found.");
 
             services.AddDbContext<ToranceContext>(options =>
                 options
@@ -77,7 +77,7 @@ namespace Web.Extensions
                 .AddDefaultTokenProviders()
                  .AddDefaultUI();
 
-           
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
