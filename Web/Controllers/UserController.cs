@@ -72,10 +72,10 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Full Name",data = "FullName"},
-                new DataTableViewModel{title = "Company",data = "Company.Name"},
-                new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
+                new DataTableViewModel{title = "Full Name",data = "FullName", orderable = true},
+                new DataTableViewModel{title = "Company",data = "Company.Name", orderable = true},
+                new DataTableViewModel{title = "Email",data = "Email", orderable = true},
+                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
