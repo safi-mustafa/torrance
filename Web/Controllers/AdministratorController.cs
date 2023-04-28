@@ -15,13 +15,13 @@ namespace Web.Controllers
     public class AdministratorController : UserController<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel, AdministratorDetailViewModel, AdministratorSearchViewModel>
     {
         private readonly string _controllerName = "Administrator";
-        private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _employeeService;
+        private readonly IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> _adminService;
         private readonly ILogger<AdministratorController> _logger;
         private readonly UserManager<ToranceUser> _userManager;
 
-        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> employeeService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
+        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> adminService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(adminService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
         {
-            _employeeService = employeeService;
+            _adminService = adminService;
             _logger = logger;
             _userManager = userManager;
         }
@@ -77,6 +77,10 @@ namespace Web.Controllers
         {
             return await Task.FromResult(true);
         }
-       
+        public async Task<bool> ValidatePassword(string password)
+        {
+            var response = await _adminService.ValidatePassword(password);
+            return response;
+        }
     }
 }

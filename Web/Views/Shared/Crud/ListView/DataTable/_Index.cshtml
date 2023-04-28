@@ -21,7 +21,27 @@
         @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Search.cshtml", Model)
     </div>
 </div>
-
+<div class="modal fade" id="crudDeleteModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Enter your password:</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div id="crudModalPanelBody" class="modal-body">
+                <input name="Password" type="password" id="user-password" class="form-control" placeholder="Password" autocomplete="off" />
+                <br/>
+                <div class="text-center">
+                    <a asp-action="Index" asp-controller="@Model.ControllerName" type="button" class="btn btn-dark">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn blue-btn" id="validate-password">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @*@await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Search.cshtml", Model)*@
 

@@ -8,6 +8,7 @@ using ViewModels.Shared;
 using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.UserService;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.AdministratorService
 {
@@ -23,7 +24,7 @@ namespace Repositories.Services.AppSettingServices.AdministratorService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public AdministratorService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<AdministratorService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.Administrator, userManager, logger, mapper, identity, response)
+        public AdministratorService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<AdministratorService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Administrator, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _userManager = userManager;
