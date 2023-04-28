@@ -126,26 +126,44 @@ namespace Web.Controllers
         }
         public override async Task<ActionResult> Create(CreateViewModel model)
         {
-            bool isUnique = await IsAccessCodeUnique(model);
-            if (!isUnique)
+            bool isAccessCodeUnique = await IsAccessCodeUnique(model);
+
+            if (!isAccessCodeUnique)
             {
                 ModelState.AddModelError("AccessCode", "Access Code already in use.");
             }
-            model.Password = "Torrance";
-            model.ChangePassword = true;
+            bool isEmailUnique = await IsEmailUnique(model);
+            if (!isEmailUnique)
+            {
+                ModelState.AddModelError("Email", "Email already in use.");
+            }
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                model.Password = "Torrance";
+                model.ChangePassword = true;
+            }
             return await base.Create(model);
         }
-        public virtual async Task<bool> IsAccessCodeUnique(CreateViewModel model)
+        public virtual async Task<bool> IsAccessCodeUnique(UserUpdateViewModel model)
         {
             return await _service.IsAccessCodeUnique(model.Id, model.AccessCode);
 
         }
+        public virtual async Task<bool> IsEmailUnique(UserUpdateViewModel model)
+        {
+            return await _service.IsEmailUnique(model.Id, model.Email);
+
+        }
         public override async Task<ActionResult> Update(UpdateViewModel model)
         {
-            ModelState.Remove("Email");
             ModelState.Remove("AccessCode");
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
+            bool isEmailUnique = await IsEmailUnique(model);
+            if (!isEmailUnique)
+            {
+                ModelState.AddModelError("Email", "Email already in use.");
+            }
             return await base.Update(model);
         }
         public async Task<IActionResult> ValidateAccessCode(int id, string accessCode)

@@ -121,7 +121,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         Email = x.Email,
                         FullName = x.FullName,
                         UserName = x.UserName,
-                        AccessCode = x.AccessCode
+                        AccessCode = x.AccessCode,
+                        CanAddLogs = x.CanAddLogs
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -146,6 +147,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
                     x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
                     x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
+                    x.CanAddLogs = userList.Where(a => a.Id == x.Id).Select(x => x.CanAddLogs).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     //x.Associations = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
@@ -212,12 +214,12 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                             select new ApproverAssociationsViewModel()
                                             {
                                                 Id = aa.Id,
-                                                Unit=new UnitBriefViewModel()
+                                                Unit = new UnitBriefViewModel()
                                                 {
-                                                    Id=u.Id,
-                                                    Name=u.Name
+                                                    Id = u.Id,
+                                                    Name = u.Name
                                                 },
-                                                Department=new DepartmentBriefViewModel()
+                                                Department = new DepartmentBriefViewModel()
                                                 {
                                                     Id = d.Id,
                                                     Name = d.Name

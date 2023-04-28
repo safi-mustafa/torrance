@@ -28,7 +28,7 @@ namespace Web.Controllers
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _baseApprove;
 
-        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo,UserManager<ToranceUser> userManager) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", !(userInfo.LoggedInUserRoles().Contains("Administrator") || userInfo.LoggedInUserRoles().Contains("SuperAdmin") || userInfo.LoggedInUserRoles().Contains("Employee")))
+        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> OverrideLogService, ILogger<OverrideLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(OverrideLogService, logger, mapper, "OverrideLog", "Override Log", userInfo)
         {
             _OverrideLogService = OverrideLogService;
             _logger = logger;
@@ -115,31 +115,7 @@ namespace Web.Controllers
             return View("~/Views/OverrideLog/_Index.cshtml", vm);
         }
 
-        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
-        {
-            var html = "";
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
-                        <span class=""stat-name"">Pending</span>
-                    </div>";
-            }
 
-            html += @"
-                    <div class=""p-2 row"">
-                        <span class=""badge Approved m-1""> </span>
-                        <span class=""stat-name"">Approved</span>
-                    </div>
-                    <div class=""m-2 row"">
-                        <span class=""badge Rejected m-1""> </span>
-                        <span class=""stat-name"">Rejected</span>
-                    </div>";
-            vm.DataTableHeaderHtml = html;
-            vm.IsResponsiveDatatable = false;
-            return vm;
-        }
 
         public IActionResult _CostRow(ORLogCostViewModel model, int rowNumber)//
         {

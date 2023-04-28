@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositories.Services.AppSettingServices.AdministratorService;
 using ViewModels.AppSettings.Administrator;
+using ViewModels.Authentication.User;
 using ViewModels.DataTable;
 
 namespace Web.Controllers
@@ -65,11 +66,17 @@ namespace Web.Controllers
             ModelState.Remove("AccessCode");
             return base.Create(model);
         }
-
-        public override async Task<bool> IsAccessCodeUnique(AdministratorModifyViewModel model)
+        public override Task<ActionResult> Update(AdministratorModifyViewModel model)
         {
-            
+            ModelState.Remove("Company.Id");
+            ModelState.Remove("Company.Name");
+            ModelState.Remove("AccessCode");
+            return base.Update(model);
+        }
+        public override async Task<bool> IsAccessCodeUnique(UserUpdateViewModel model)
+        {
             return await Task.FromResult(true);
         }
+       
     }
 }

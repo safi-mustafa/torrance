@@ -23,7 +23,7 @@
             </div>
             @if (Model.Id < 1)
             {
-              @*  <div class="col-lg-6">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label asp-for="Password" class="form-label fw-600"></label>
                         <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
@@ -36,7 +36,7 @@
                         <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
                         <span asp-validation-for="ConfirmPassword" class="validation-invalid-label"></span>
                     </div>
-                </div>*@
+                </div>
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label asp-for="AccessCode" class="form-label fw-600"></label>
@@ -51,6 +51,13 @@
             </div>
             </div>
             *@
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="CanAddLogs" class="form-label fw-600"></label>
+                    <input asp-for="CanAddLogs" class="form-control" style="width: 20px;" />
+                    <span asp-validation-for="CanAddLogs" class="validation-invalid-label"></span>
+                </div>
+            </div>
             <div class="col-md-12 mt-3">
                 <div class="form-group container row">
                     <h4 class="col-md-12">Department & Unit</h4>

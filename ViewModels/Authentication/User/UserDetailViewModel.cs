@@ -36,5 +36,16 @@ namespace ViewModels.Authentication.User
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
         public bool ChangePassword { get; set; }
+
+        [Display(Name = "Can Add Logs?")]
+        public bool CanAddLogs { get; set; }
+
+        public string FormattedCanAddLogs
+        {
+            get
+            {
+                return CanAddLogs ? "Yes" : "No";
+            }
+        }
     }
 }

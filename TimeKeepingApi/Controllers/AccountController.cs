@@ -234,13 +234,14 @@ namespace TorranceApi.Controllers
 
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var role = userRoles.First();
-
+                var companyId = user.CompanyId == null ? "0" : user.CompanyId.ToString();
                 var authClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                             new Claim(ClaimTypes.Role, role),
                             new Claim("FullName", user.FullName),
-                            new Claim("CompanyId", user.CompanyId?.ToString()),
+                            new Claim("CompanyId", companyId),
+                            new Claim("ShowLogForms", user.CanAddLogs.ToString()),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
                         };

@@ -38,6 +38,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Email",data = "Email"},
                 new DataTableViewModel{title = "Full Name",data = "FullName"},
                 new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
+                new DataTableViewModel{title = "Can Add Logs?",data = "FormattedCanAddLogs"},
                 //new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 

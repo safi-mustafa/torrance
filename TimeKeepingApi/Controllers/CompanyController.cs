@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repositories.Services.CommonServices.CompanyService;
 using ViewModels.Common.Company;
 using Microsoft.AspNetCore.Authorization;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace API.Controllers
 {
@@ -14,6 +15,12 @@ namespace API.Controllers
     {
         public CompanyController(ICompanyService<CompanyCreateViewModel, CompanyModifyViewModel, CompanyDetailViewModel> CompanyService) : base(CompanyService)
         {
+             
+        }
+        public override Task<IActionResult> GetAll([FromQuery] CompanySearchViewModel search)
+        {
+            search.DisablePagination = true;
+            return base.GetAll(search);
         }
     }
 }
