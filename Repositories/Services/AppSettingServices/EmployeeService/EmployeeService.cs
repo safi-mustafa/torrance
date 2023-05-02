@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Data;
 using System.ComponentModel;
 using ViewModels.Common.Company;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService
 {
@@ -32,9 +33,9 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
         private readonly IRepositoryResponse _response;
         private readonly IExcelReader _excelReader;
 
-        public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IExcelReader excelReader)
+        public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IExcelReader excelReader, IUserInfoService userInfoService)
             :
-            base(db, Enums.RolesCatalog.Employee, userManager, logger, mapper, identity, response)
+            base(db, Enums.RolesCatalog.Employee, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _userManager = userManager;

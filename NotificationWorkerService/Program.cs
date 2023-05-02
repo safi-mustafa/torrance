@@ -44,7 +44,7 @@ namespace NotificationWService
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
-                    var connectionString = configuration.GetConnectionString("TorranceConnection");
+                    var connectionString = configuration.GetConnectionString("BainBridgeConnection");
 
                     services.AddDbContextFactory<NotificationDbContext>(config =>
                     {

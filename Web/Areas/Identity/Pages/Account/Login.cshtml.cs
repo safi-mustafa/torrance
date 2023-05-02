@@ -131,6 +131,12 @@ namespace Web.Areas.Identity.Pages.Account
                         return Page();
                     }
 
+                    if(user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "You can't login. Your status is inactive.");
+                        return Page();
+                    }
+
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _userManager.CheckPasswordAsync(user, Input.Password);

@@ -1,4 +1,4 @@
-﻿using TorranceApi.Controllers;
+﻿using BainBridgeApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.RodType;
 using Repositories.Services.AppSettingServices.RodTypeService;

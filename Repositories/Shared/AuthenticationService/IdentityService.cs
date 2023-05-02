@@ -104,6 +104,7 @@ namespace Repositories.Shared.AuthenticationService
                     user.FullName = model.FullName;
                     user.CompanyId = model.Company?.Id;
                     user.Email = model.Email;
+                    user.ActiveStatus = model.ActiveStatus;
                     user.NormalizedEmail = model.Email.ToUpper();
                     user.CanAddLogs = model.CanAddLogs;
                     var result = await _userManager.UpdateAsync(user);

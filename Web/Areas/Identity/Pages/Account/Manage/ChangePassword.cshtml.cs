@@ -114,7 +114,11 @@ namespace Web.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
+            if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+            {
+                ModelState.AddModelError(string.Empty, "Notification can not be generated for your account. Your status is inactive.");
+                return Page();
+            }
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {

@@ -68,6 +68,12 @@ namespace Web.Areas.Identity.Pages.Account
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
+                if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Notification can not be generated for your account. Your status is inactive.");
+                    return Page();
+                }
+
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);

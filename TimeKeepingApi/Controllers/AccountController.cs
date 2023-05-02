@@ -28,11 +28,11 @@ using Repositories.Services.AppSettingServices.CompanyManagerService;
 using ViewModels.AppSettings.CompanyManager;
 using Centangle.Common.ResponseHelpers.Error;
 
-namespace TorranceApi.Controllers
+namespace BainBridgeApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : TorranceController
+    public class AccountController : BainBridgeController
     {
         public IConfiguration _configuration;
         private readonly ToranceContext _db;
@@ -91,7 +91,22 @@ namespace TorranceApi.Controllers
                     _logger.LogInformation("Model State is valid", "login method 2");
                     var encodedPinCode = model.Pincode.EncodePasswordToBase64();
                     var user = await _db.Users.Where(x => x.AccessCode == encodedPinCode && x.IsDeleted == false).FirstOrDefaultAsync();
-                    return await SetClaimns(model.DeviceId, user);
+                    if (user != null)
+                    {
+                        if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                        {
+                            ModelState.AddModelError("pincode", "You can't login. Your status is inactive.");
+                            result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                            return ReturnProcessedResponse(result);
+                        }
+
+                        return await SetClaimns(model.DeviceId, user);
+                    }
+                    else
+                    {
+                        result = Centangle.Common.ResponseHelpers.Response.NotFoundResponse(_response);
+                        return ReturnProcessedResponse(result);
+                    }
                 }
             }
             catch (Exception ex)
@@ -120,7 +135,14 @@ namespace TorranceApi.Controllers
                     if (user == null)
                     {
                         ModelState.AddModelError("Email", "Invalid login attempt.");
-                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response));
+                        return ReturnProcessedResponse(Centangle.Common.ResponseHelpers.Response.NotFoundResponse(_response));
+                    }
+
+                    if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    {
+                        ModelState.AddModelError("Email", "You can't login. Your status is inactive.");
+                        result = Centangle.Common.ResponseHelpers.Response.BadRequestResponse(_response);
+                        return ReturnProcessedResponse(result);
                     }
 
                     var response = await _userManager.CheckPasswordAsync(user, model.Password);

@@ -9,11 +9,11 @@ using System.Net;
 using System.Security.Claims;
 using ViewModels.Shared;
 
-namespace TorranceApi.Controllers
+namespace BainBridgeApi.Controllers
 {
 
     [Controller]
-    public abstract class CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : TorranceController
+    public abstract class CrudBaseController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedResultViewModel, SearchViewModel> : BainBridgeController
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where PaginatedResultViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()

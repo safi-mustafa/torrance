@@ -16,6 +16,7 @@ using ViewModels.Authentication;
 using Centangle.Common.ResponseHelpers.Error;
 using Microsoft.AspNetCore.Identity;
 using Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Web.Controllers
 {
@@ -72,10 +73,10 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Full Name",data = "FullName"},
-                new DataTableViewModel{title = "Company",data = "Company.Name"},
-                new DataTableViewModel{title = "Email",data = "Email"},
-                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode"},
+                new DataTableViewModel{title = "Full Name",data = "FullName", orderable = true},
+                new DataTableViewModel{title = "Company",data = "Company.Name", orderable = true},
+                new DataTableViewModel{title = "Email",data = "Email", orderable = true},
+                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
 
             };
@@ -154,6 +155,7 @@ namespace Web.Controllers
             return await _service.IsEmailUnique(model.Id, model.Email);
 
         }
+
         public override async Task<ActionResult> Update(UpdateViewModel model)
         {
             ModelState.Remove("AccessCode");

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common.Department;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -32,7 +33,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
 
-        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response)
+        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _logger = logger;
