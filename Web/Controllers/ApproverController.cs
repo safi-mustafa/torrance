@@ -39,7 +39,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Full Name",data = "FullName", orderable = true},
                 new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = false},
                 new DataTableViewModel{title = "Can Add Logs?",data = "FormattedCanAddLogs", orderable = false},
-                new DataTableViewModel{title = "Staus",data = "FormattedStatus", orderable = false},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus", orderable = false},
                 //new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
