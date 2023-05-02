@@ -49,7 +49,7 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var association = await GetLogUnitAndDepartment(model);
-                var approvers = await _db.ApproverAssociations.Include(x => x.Approver).Include(x=>x.Department).Include(x=>x.Unit).Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id).Distinct().ToListAsync();
+                var approvers = await _db.ApproverAssociations.Include(x => x.Approver).Include(x => x.Department).Include(x => x.Unit).Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id).Distinct().ToListAsync();
                 if (approvers != null && approvers.Count > 0)
                 {
                     List<Notification> notifications = new List<Notification>();
@@ -103,7 +103,8 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var mappedModel = _mapper.Map<Notification>(model);
-                mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
+                if (string.IsNullOrEmpty(mappedModel.Message))
+                    mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
                 mappedModel.Id = Guid.NewGuid();
                 mappedModel.CreatedOn = DateTime.Now;
                 await _db.Set<Notification>().AddAsync(mappedModel);

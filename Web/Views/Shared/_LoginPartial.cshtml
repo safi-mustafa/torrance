@@ -1,14 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Models;
+@using System.Security.Claims;
 @inject SignInManager<ToranceUser> SignInManager
 @inject UserManager<ToranceUser> UserManager
-
+@{
+    var emailClaim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email);
+}
 @if (SignInManager.IsSignedIn(User))
 {
     <div class="dropdown text-end">
         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="~/img/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
-            <span class="user-name-span">Hello @User.Identity?.Name!</span>
+
+            <span class="user-name-span">Hello @(emailClaim != null ? emailClaim.Value : "")</span>
         </a>
         <ul class="dropdown-menu text-small" style="">
             @*  <li><a class="dropdown-item" href="#">New project...</a></li>
