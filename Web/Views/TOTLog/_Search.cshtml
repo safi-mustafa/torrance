@@ -9,15 +9,15 @@
             <input asp-for="EquipmentNo" type="search" class="form-control" placeholder="Search Equipment No" />
         </div>
     </div>
-  
+
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" }, { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
     <div class="col-lg-4">
@@ -27,7 +27,7 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
     <div class="col-lg-4">

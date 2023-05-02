@@ -3,17 +3,17 @@
 @using ViewModels.WeldingRodRecord.WRRLog;
 
 <div class="row">
-   @* <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="Email" class="control-label form-label fw-600"></label>
-            <input asp-for="Email" type="search" class="form-control" placeholder="Search Email" />
-        </div>
-    </div>*@
+    @* <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label form-label fw-600"></label>
+                <input asp-for="Email" type="search" class="form-control" placeholder="Search Email" />
+            </div>
+        </div>*@
     @*<div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Company" />
-        </div>
-    </div>*@
+            <div class="mb-3">
+                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Company" />
+            </div>
+        </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
@@ -21,13 +21,13 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
         </div>
     </div>
 
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
         </div>
     </div>
     <div class="col-lg-4">

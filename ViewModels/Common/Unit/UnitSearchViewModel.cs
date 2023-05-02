@@ -1,4 +1,5 @@
-﻿using Pagination;
+﻿using Enums;
+using Pagination;
 
 namespace ViewModels.Common.Unit
 {
@@ -12,5 +13,7 @@ namespace ViewModels.Common.Unit
         public string Name { get; set; }
 
         public BaseBriefVM Department { get; set; } = new BaseBriefVM();
+        public bool IsSearchForm { get; set; }
+        public FilterLogType LogType { get; set; }
     }
 }

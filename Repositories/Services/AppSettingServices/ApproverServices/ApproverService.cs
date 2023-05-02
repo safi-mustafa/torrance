@@ -19,6 +19,11 @@ using Models;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common.Department;
 using Repositories.Shared.UserInfoServices;
+using Enums;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
+using Models.WeldingRodRecord;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -85,29 +90,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
 
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
-                var userQueryable = (from user in _db.Users
-                                     join approverAssociation in _db.ApproverAssociations on user.Id equals approverAssociation.ApproverId into aal
-                                     from approverAssociation in aal.DefaultIfEmpty()
-                                     join userRole in _db.UserRoles on user.Id equals userRole.UserId
-                                     join r in _db.Roles on userRole.RoleId equals r.Id
-                                     where
-                                     (
-                                        (
-                                            string.IsNullOrEmpty(searchFilter.Search.value) || user.Email.ToLower().Contains(searchFilter.Search.value.ToLower())
-                                        )
-                                        &&
-                                        (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverAssociation.UnitId == searchFilter.Unit.Id)
-                                        &&
-                                        ("Approver" == r.Name)
-                                        &&
-                                        (
-                                            string.IsNullOrEmpty(searchFilter.Email) || user.Email.ToLower().Contains(searchFilter.Email.ToLower())
-                                        )
-                                    )
-                                     select new ApproverDetailViewModel { Id = user.Id }
-                            ).GroupBy(x => x.Id)
-                            .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
-                            .AsQueryable();
+                var userQueryable = GetPaginationDbSet(searchFilter);
 
                 //var queryString = userQueryable.ToQueryString();
 
@@ -166,6 +149,64 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             }
         }
 
+        public IQueryable<ApproverDetailViewModel> GetPaginationDbSet(ApproverSearchViewModel search)
+        {
+            var empQueryable = (from user in _db.Users
+                                join approverAssociation in _db.ApproverAssociations on user.Id equals approverAssociation.ApproverId into aal
+                                from approverAssociation in aal.DefaultIfEmpty()
+                                join userRole in _db.UserRoles on user.Id equals userRole.UserId
+                                join r in _db.Roles on userRole.RoleId equals r.Id
+                                where
+                                (
+                                   (
+                                       string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
+                                   )
+                                   &&
+                                   (search.Unit.Id == null || search.Unit.Id == 0 || approverAssociation.UnitId == search.Unit.Id)
+                                   &&
+                                   ("Approver" == r.Name)
+                                   &&
+                                   (
+                                       string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
+                                   )
+                               )
+                                select user);
+            //select new ApproverDetailViewModel { Id = user.Id });
+            if (search.IsSearchForm && search.LogType != FilterLogType.None)
+            {
+                switch (search.LogType)
+                {
+                    case FilterLogType.Override:
+                        empQueryable = JoinApproverWithLogs<OverrideLog>(empQueryable);
+                        break;
+                    case FilterLogType.TimeOnTools:
+                        empQueryable = JoinApproverWithLogs<TOTLog>(empQueryable);
+                        break;
+                    case FilterLogType.WeldingRodRecord:
+                        empQueryable = JoinApproverWithLogs<WRRLog>(empQueryable);
+                        break;
+                    case FilterLogType.All:
+                        empQueryable = JoinApproverWithLogs<OverrideLog>(empQueryable, true);
+                        empQueryable = JoinApproverWithLogs<TOTLog>(empQueryable, true);
+                        empQueryable = JoinApproverWithLogs<WRRLog>(empQueryable, true);
+                        break;
+                }
+            }
+            return empQueryable
+                            .Select(x => new ApproverDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
+                            .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
+                            .AsQueryable();
+        }
+        private IQueryable<ToranceUser> JoinApproverWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId
+        {
+            if (isInnerJoin == false)
+                return userQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ol) => new { u, ol }).Select(x => x.u);
+            else
+                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ols) => new { u, ols })
+                    .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
+                    .Where(x => x.ol != null)
+                    .Select(x => x.u);
+        }
         public async Task<bool> SetApproverAssociations(List<ApproverAssociationsViewModel> associations, long approverId)
         {
             try

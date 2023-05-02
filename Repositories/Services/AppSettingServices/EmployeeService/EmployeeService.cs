@@ -17,6 +17,15 @@ using System.Data;
 using System.ComponentModel;
 using ViewModels.Common.Company;
 using Repositories.Shared.UserInfoServices;
+using Pagination;
+using Helpers.Extensions;
+using Models.WeldingRodRecord;
+using Centangle.Common.ResponseHelpers;
+using System.Linq.Expressions;
+using ViewModels.Authentication.User;
+using Enums;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService
 {
@@ -35,7 +44,7 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
 
         public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IExcelReader excelReader, IUserInfoService userInfoService)
             :
-            base(db, Enums.RolesCatalog.Employee, userManager, logger, mapper, identity, response, userInfoService)
+            base(db, RolesCatalog.Employee, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
             _userManager = userManager;
@@ -162,6 +171,69 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                 return false;
             }
         }
+
+        public async override Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel searchFilter)
+        {
+            try
+            {
+                var search = searchFilter as EmployeeSearchViewModel;
+                var filters = SetQueryFilter(search);
+                var result = await GetPaginationDbSet(search.IsSearchForm, search.LogType).Where(filters).Paginate(search);
+                if (result != null)
+                {
+                    var paginatedResult = new PaginatedResultModel<M>();
+                    paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    paginatedResult._meta = result._meta;
+                    paginatedResult._links = result._links;
+                    var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
+                    return response;
+                }
+                _logger.LogWarning($"No record found for {typeof(Employee).FullName} in GetAll()");
+                return Response.NotFoundResponse(_response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"GetAll() method for {typeof(Employee).FullName} threw an exception.");
+                return Response.BadRequestResponse(_response);
+            }
+        }
+        public IQueryable<ToranceUser> GetPaginationDbSet(bool isSearchForm, FilterLogType logType)
+        {
+            var empQueryable = (from user in _db.Users.Include(x => x.Company)
+                                join userRole in _db.UserRoles on user.Id equals userRole.UserId
+                                join r in _db.Roles on userRole.RoleId equals r.Id
+                                where r.Name == RolesCatalog.Employee.ToString()
+                                select user);
+            if (isSearchForm && logType != FilterLogType.None)
+            {
+                switch (logType)
+                {
+                    case FilterLogType.Override:
+                        return JoinEmployeesWithLogs<OverrideLog>(empQueryable);
+                    case FilterLogType.TimeOnTools:
+                        return JoinEmployeesWithLogs<TOTLog>(empQueryable);
+                    case FilterLogType.WeldingRodRecord:
+                        return JoinEmployeesWithLogs<WRRLog>(empQueryable);
+                    case FilterLogType.All:
+                        empQueryable = JoinEmployeesWithLogs<OverrideLog>(empQueryable, true);
+                        empQueryable = JoinEmployeesWithLogs<TOTLog>(empQueryable, true);
+                        empQueryable = JoinEmployeesWithLogs<WRRLog>(empQueryable, true);
+                        return empQueryable;
+                }
+            }
+            return empQueryable;
+        }
+        private IQueryable<ToranceUser> JoinEmployeesWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId
+        {
+            if (isInnerJoin == false)
+                return userQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ol) => new { u, ol }).Select(x => x.u);
+            else
+                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ols) => new { u, ols })
+                    .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
+                    .Where(x => x.ol != null)
+                    .Select(x => x.u);
+        }
+
 
     }
 }

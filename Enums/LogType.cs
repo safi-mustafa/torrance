@@ -12,4 +12,16 @@ namespace Enums
         [Display(Name = "Override")]
         Override
     }
+    public enum FilterLogType
+    {
+
+        [Display(Name = "Time On Tools")]
+        TimeOnTools,
+        [Display(Name = "Welding Rod Record")]
+        WeldingRodRecord,
+        [Display(Name = "Override")]
+        Override,
+        All,
+        None
+    }
 }

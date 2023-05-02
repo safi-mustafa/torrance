@@ -6,33 +6,33 @@
 
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requester" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" },{ "IsSearchForm", "true" }, { "LogType", "Override" }  }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "Override" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "Override" } }' />
         </div>
     </div>
-  @*  <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
-        </div>
-    </div>*@
-    @if (!User.IsInRole(RolesCatalog.CompanyManager.ToString()))
-    {
-        <div class="col-lg-4">
+    @*  <div class="col-lg-4">
             <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                <partial name="~/Views/Shared/Select2/_OTType.cshtml" for="OverrideType" />
             </div>
-        </div>
-    }
- 
+        </div>*@
+    @*@if (!User.IsInRole(RolesCatalog.CompanyManager.ToString()))
+        {
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+                </div>
+            </div>
+        }*@
+
     <div class="col-lg-4">
         <div class="form-group profile-input">
             <label asp-for="Status" class="control-label form-label fw-600"></label>

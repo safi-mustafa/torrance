@@ -15,6 +15,9 @@ using ViewModels.DataTable;
 using ViewModels.WeldingRodRecord.Employee;
 using Web.Helpers;
 using ViewModels.Shared;
+using Pagination;
+using Select2;
+using Newtonsoft.Json;
 
 namespace Web.Controllers
 {
@@ -29,7 +32,7 @@ namespace Web.Controllers
         public RequestorController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService, ILogger<RequestorController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Requestor", "Requestor", RolesCatalog.Employee)
         {
             _employeeService = employeeService;
-            _approverService = approverService;
+            _approverService = approverService ?? throw new ArgumentNullException(nameof(approverService));
             _logger = logger;
             _userManager = userManager;
         }
@@ -57,6 +60,5 @@ namespace Web.Controllers
             }
             return RedirectToAction("ImportExcelSheet");
         }
-
     }
 }

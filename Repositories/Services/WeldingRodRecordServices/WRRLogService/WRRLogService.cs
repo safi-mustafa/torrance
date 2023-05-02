@@ -83,8 +83,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin") 
-                                || 
+                                (loggedInUserRole == "SuperAdmin")
+                                ||
                                 (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
                                 (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
@@ -97,6 +97,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            &&
+                            x.IsDeleted == false
             ;
         }
 
@@ -202,7 +204,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     var record = await _db.Set<WRRLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
-                      
+
                         var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {

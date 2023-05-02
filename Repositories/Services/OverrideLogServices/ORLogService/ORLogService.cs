@@ -250,7 +250,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
-                           
+
                             var dbModel = _mapper.Map(model, record);
                             if (record.ApproverId != updateModel.Approver?.Id)
                             {

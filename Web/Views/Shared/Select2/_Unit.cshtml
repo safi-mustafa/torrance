@@ -4,6 +4,8 @@
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "unit-id";
     var departmentId = ViewData["DeparmentId"] != null && !string.IsNullOrEmpty(ViewData["DeparmentId"].ToString()) ? ViewData["DeparmentId"].ToString() : "department-id";
+    var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
+    var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
 }
 
 
@@ -20,7 +22,7 @@
     {
     @id = elementId,
     @class = "form-control disable-field",
-    data_val_required =(Model.IsValidationEnabled? Model.ErrorMessage:""),
+    data_val_required = (Model.IsValidationEnabled ? Model.ErrorMessage : ""),
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
     <input type="hidden" name="Unit.Name" value="@Model.Name" />
@@ -42,8 +44,10 @@
                 pageNumber: params.page,
                 customParams: JSON.stringify({
                     Department: {
-                        Id: $(departmentId).val()
-                    }
+                        Id: $(departmentId).val(),
+                    },
+                    IsSearchForm: "@isSearchForm",
+                    LogType: "@logType"
                 })
             };
         };

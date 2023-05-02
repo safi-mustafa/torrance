@@ -11,7 +11,7 @@ using Models.Common.Interfaces;
 
 namespace Models.WeldingRodRecord
 {
-    public class WRRLog : BaseDBModel, IApprove, IEmployeeId, IApproverId
+    public class WRRLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId
     {
         public DateTime DateRodReturned { get; set; }
         public DateTime CalibrationDate { get; set; }

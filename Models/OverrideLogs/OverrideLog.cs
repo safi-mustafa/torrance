@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.OverrideLogs
 {
-    public class OverrideLog : BaseDBModel, IApprove, IEmployeeId, IApproverId
+    public class OverrideLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId
     {
         public DateTime WorkCompletedDate { get; set; }
         public string? WorkScope { get; set; }
