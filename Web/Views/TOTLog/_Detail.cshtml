@@ -191,6 +191,7 @@
     </div>
 
     <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
+    <input type="hidden" id="log-requestor" value="@Model.Employee.Email" />
     <input type="hidden" id="controller-name" value="TOTLog" />
     <input type="hidden" id="approver-id" asp-for="Approver.Id" />
     <input type="hidden" id="is-unauthenticated-approval" asp-for="IsUnauthenticatedApproval" />
