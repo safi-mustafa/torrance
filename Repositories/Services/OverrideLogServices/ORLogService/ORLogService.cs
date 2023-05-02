@@ -116,7 +116,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
                     .Include(x => x.Unit)
-                    //.Include(x => x.Department)
+                    .Include(x => x.Department)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
                     //.Include(x => x.CraftSkill)

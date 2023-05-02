@@ -86,7 +86,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin") 
+                                (loggedInUserRole == "SuperAdmin")
                                 ||
                                  (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
@@ -151,7 +151,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 var resultQuery = _db.Set<TOTLog>()
                     .Include(x => x.Unit)
                     .Include(x => x.DelayType)
+                    .Include(x => x.ReworkDelay)
+                    .Include(x => x.ShiftDelay)
+                    .Include(x => x.StartOfWorkDelay)
                     .Include(x => x.Shift)
+                    .Include(x => x.Department)
                     .Include(x => x.PermitType)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)

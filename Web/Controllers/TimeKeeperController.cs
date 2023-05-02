@@ -52,7 +52,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Company",data = "Company.Name", orderable = true},
                 new DataTableViewModel{title = "Email",data = "Email", orderable = true},
                 new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = true},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
             };
         }

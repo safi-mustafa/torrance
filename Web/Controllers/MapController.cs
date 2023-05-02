@@ -24,7 +24,7 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Latitude",data = "Latitude", orderable = true},
                 new DataTableViewModel{title = "Longitude",data = "Longitude", orderable = true},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
             };
         }

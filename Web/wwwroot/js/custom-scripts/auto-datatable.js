@@ -285,15 +285,15 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                         orthogonal: "export"
                     }
                 },
-                {
-                    extend: 'pdf',
-                    exportOptions: {
-                        columns: getColumnsToExport,
-                        page: 'current',
-                        orthogonal: "export"
-                    },
-                    customize: customizePdfExport
-                },
+                //{
+                //    extend: 'pdf',
+                //    exportOptions: {
+                //        columns: getColumnsToExport,
+                //        page: 'current',
+                //        orthogonal: "export"
+                //    },
+                //    customize: customizePdfExport
+                //},
                 {
                     extend: 'print',
                     exportOptions: {
@@ -518,8 +518,7 @@ function SearchDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
     FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
 }
 
-function DeleteItem(deleteObj)
-{
+function DeleteItem(deleteObj) {
     $("#crudDeleteModal").modal("show");
     $("#user-password").val('');
     $(document).off('click', '#validate-password');
@@ -571,7 +570,7 @@ function DeleteItem(deleteObj)
         else {
             Swal.fire("Please enter the password.")
         }
-       
+
     });
 }
 
@@ -644,7 +643,9 @@ function getColumnsToExport(idx, data, node) {
     return true;
 }
 function shouldColumnBeIgnoredForExport(element) {
-    if ($(element).hasClass("exclude-form-export") || $(element).is(":visible") === false)
+    if ($(element).hasClass("include-in-export"))
+        return false;
+    else if ($(element).hasClass("exclude-from-export") || $(element).is(":visible") === false)
         return true;
     return false;
 
