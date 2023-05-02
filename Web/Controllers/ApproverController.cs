@@ -40,7 +40,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = true},
                 new DataTableViewModel{title = "Can Add Logs?",data = "FormattedCanAddLogs", orderable = true},
                 //new DataTableViewModel{title = "Units",data = "FormattedUnits"},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
             };
         }

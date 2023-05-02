@@ -89,7 +89,6 @@ div.dt-buttons {
 }*/
 .datatable-action {
     margin-right: 1px !important;
- 
 }
 
 .card .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover, .page-item.current a, .page-item a:hover {
@@ -130,4 +129,8 @@ table.dataTable thead th, table.dataTable tfoot th {
 .datatable .datatable-action .fa-pen-to-square,
 .datatable .datatable-action .fa-folder-open {
     color: #0057af;
+}
+
+.exclude-form-table {
+    display: none !important;
 }

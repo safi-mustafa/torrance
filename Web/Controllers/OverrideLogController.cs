@@ -42,20 +42,23 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-form-export", data = ""},//
+                new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn="CreatedOn", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
-                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
+                new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
-                //new DataTableViewModel{title = "Reason",data = "ReasonForRequest.Name", orderable=true},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
+                new DataTableViewModel{title = "Work Date",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
+                new DataTableViewModel{title = "Workscope",data = "WorkScope",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "Override Reason",data = "Reason",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "Company",data = "Company.Name",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
-                new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
-                new DataTableViewModel{title = "Work Date",data = "FormattedDateOfWorkCompleted", sortingColumn="DateOfWorkCompleted", orderable=true},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
             }); ;
             return dataColumns;
         }
