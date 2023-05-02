@@ -51,13 +51,11 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
-                 new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true,className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Company",data = "Company.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Company",data = "Company.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate", orderable = true},
                 new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed", orderable = true},
-                new DataTableViewModel{title = "Rod Type",data = "RodType.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Rod Type",data = "RodType.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Twr",data = "Twr", orderable = true},
                 new DataTableViewModel{title = "Weld Method",data = "WeldMethod.Name",className="exclude-form-table include-in-export"},
@@ -74,7 +72,7 @@ namespace Web.Controllers
 
         }
 
-   
+
         public async Task<IActionResult> ValidateWRRLogEmail(int id, string email)
         {
             return Json(await _WRRLogService.IsWRRLogEmailUnique(id, email));

@@ -12,6 +12,7 @@ using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using Pagination;
+using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
@@ -37,6 +38,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPossibleApproverService _possibleApproverService;
 
         public WRRLogService(
                 ToranceContext db,
@@ -45,7 +47,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IRepositoryResponse response,
                 IUserInfoService userInfoService,
                 INotificationService notificationService,
-                IHttpContextAccessor httpContextAccessor
+                IHttpContextAccessor httpContextAccessor,
+                IPossibleApproverService possibleApproverService
             ) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
@@ -55,6 +58,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             _userInfoService = userInfoService;
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
+            _possibleApproverService = possibleApproverService;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -120,6 +124,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }

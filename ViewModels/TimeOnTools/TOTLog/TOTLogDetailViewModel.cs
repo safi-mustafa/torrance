@@ -140,7 +140,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
-
+        public string PossibleApprovers { get; set; }
         public string Foreman { get; set; }
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
