@@ -221,18 +221,18 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                     case FilterLogType.All:
                         return (
                             from ap in empQueryable
-                            join tl in _db.TOTLogs on ap.Id equals tl.ApproverId into ttl
+                            join tl in _db.TOTLogs on ap.Id equals tl.EmployeeId into ttl
                             from tl in ttl.DefaultIfEmpty()
-                            join wl in _db.WRRLogs on ap.Id equals wl.ApproverId into wwl
+                            join wl in _db.WRRLogs on ap.Id equals wl.EmployeeId into wwl
                             from wl in wwl.DefaultIfEmpty()
-                            join ol in _db.OverrideLogs on ap.Id equals ol.ApproverId into ool
+                            join ol in _db.OverrideLogs on ap.Id equals ol.EmployeeId into ool
                             from ol in ool.DefaultIfEmpty()
                             where
-                            tl.IsDeleted == false
-                            &&
-                            wl.IsDeleted == false
-                            &&
-                            ol.IsDeleted == false
+                            tl != null
+                            ||
+                            wl != null
+                            ||
+                            ol != null
                             group ap by ap.Id
                                       ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }
