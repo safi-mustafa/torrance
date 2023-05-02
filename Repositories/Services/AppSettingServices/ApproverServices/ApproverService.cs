@@ -91,25 +91,31 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                      join userRole in _db.UserRoles on user.Id equals userRole.UserId
                                      join r in _db.Roles on userRole.RoleId equals r.Id
                                      where
-                                     (
-                                        (
-                                            string.IsNullOrEmpty(searchFilter.Search.value) || user.Email.ToLower().Contains(searchFilter.Search.value.ToLower())
-                                        )
-                                        &&
-                                        (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverAssociation.UnitId == searchFilter.Unit.Id)
-                                        &&
-                                        ("Approver" == r.Name)
-                                        &&
-                                        (
-                                            string.IsNullOrEmpty(searchFilter.Email) || user.Email.ToLower().Contains(searchFilter.Email.ToLower())
-                                        )
-                                    )
-                                     select new ApproverDetailViewModel { Id = user.Id }
+                                      (
+                                         (
+                                             string.IsNullOrEmpty(searchFilter.Search.value) || user.Email.ToLower().Contains(searchFilter.Search.value.ToLower())
+                                         )
+                                         &&
+                                         (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || approverAssociation.UnitId == searchFilter.Unit.Id)
+                                         &&
+                                         ("Approver" == r.Name)
+                                         &&
+                                         (
+                                             string.IsNullOrEmpty(searchFilter.Email) || user.Email.ToLower().Contains(searchFilter.Email.ToLower())
+                                         )
+                                     )
+                                     select new ApproverDetailViewModel { Id = user.Id, Email = user.Email, FullName = user.FullName }
                             ).GroupBy(x => x.Id)
-                            .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
+                            .Select(x => new ApproverDetailViewModel
+                            {
+                                Id = x.Max(m => m.Id),
+                                Email = x.Max(m => m.Email),
+                                FullName = x.Max(m => m.FullName),
+
+                            })
                             .AsQueryable();
 
-                //var queryString = userQueryable.ToQueryString();
+                var queryString = userQueryable.ToQueryString();
 
                 var users = await userQueryable.Paginate(searchFilter);
                 var filteredUserIds = users.Items.Select(x => x.Id);
@@ -123,7 +129,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         FullName = x.FullName,
                         UserName = x.UserName,
                         AccessCode = x.AccessCode,
-                        CanAddLogs = x.CanAddLogs
+                        CanAddLogs = x.CanAddLogs,
+                        ActiveStatus = x.ActiveStatus
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -149,6 +156,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
                     x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
                     x.CanAddLogs = userList.Where(a => a.Id == x.Id).Select(x => x.CanAddLogs).FirstOrDefault();
+                    x.ActiveStatus = userList.Where(a => a.Id == x.Id).Select(x => x.ActiveStatus).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     //x.Associations = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });

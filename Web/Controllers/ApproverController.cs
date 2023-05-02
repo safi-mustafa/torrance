@@ -37,8 +37,9 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Email",data = "Email",orderable=true},
                 new DataTableViewModel{title = "Full Name",data = "FullName", orderable = true},
-                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = true},
-                new DataTableViewModel{title = "Can Add Logs?",data = "FormattedCanAddLogs", orderable = true},
+                new DataTableViewModel{title = "Access Code",data = "FormattedAccessCode", orderable = false},
+                new DataTableViewModel{title = "Can Add Logs?",data = "FormattedCanAddLogs", orderable = false},
+                new DataTableViewModel{title = "Staus",data = "FormattedStatus", orderable = false},
                 //new DataTableViewModel{title = "Units",data = "FormattedUnits"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
