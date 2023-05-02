@@ -90,7 +90,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
 
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
-                var userQueryable = GetPaginationDbSet(searchFilter);
+                var userQueryable = await GetPaginationDbSet(searchFilter);
 
                 var queryString = userQueryable.ToQueryString();
 
@@ -151,9 +151,9 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             }
         }
 
-        public IQueryable<ApproverDetailViewModel> GetPaginationDbSet(ApproverSearchViewModel search)
+        public async Task<IQueryable<ApproverDetailViewModel>> GetPaginationDbSet(ApproverSearchViewModel search)
         {
-            var empQueryable = (from user in _db.Users
+            var appQueryable = (from user in _db.Users
                                 join approverAssociation in _db.ApproverAssociations on user.Id equals approverAssociation.ApproverId into aal
                                 from approverAssociation in aal.DefaultIfEmpty()
                                 join userRole in _db.UserRoles on user.Id equals userRole.UserId
@@ -179,32 +179,43 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                 switch (search.LogType)
                 {
                     case FilterLogType.Override:
-                        empQueryable = JoinApproverWithLogs<OverrideLog>(empQueryable);
+                        appQueryable = JoinApproverWithLogs<OverrideLog>(appQueryable);
                         break;
                     case FilterLogType.TimeOnTools:
-                        empQueryable = JoinApproverWithLogs<TOTLog>(empQueryable);
+                        appQueryable = JoinApproverWithLogs<TOTLog>(appQueryable);
                         break;
                     case FilterLogType.WeldingRodRecord:
-                        empQueryable = JoinApproverWithLogs<WRRLog>(empQueryable);
+                        appQueryable = JoinApproverWithLogs<WRRLog>(appQueryable);
                         break;
                     case FilterLogType.All:
-                        empQueryable = JoinApproverWithLogs<OverrideLog>(empQueryable, true);
-                        empQueryable = JoinApproverWithLogs<TOTLog>(empQueryable, true);
-                        empQueryable = JoinApproverWithLogs<WRRLog>(empQueryable, true);
-                        break;
+                        return (from ap in appQueryable
+                                join tl in _db.TOTLogs on ap.Id equals tl.ApproverId into ttl
+                                from tl in ttl.DefaultIfEmpty()
+                                join wl in _db.WRRLogs on ap.Id equals wl.ApproverId into wwl
+                                from wl in wwl.DefaultIfEmpty()
+                                join ol in _db.OverrideLogs on ap.Id equals ol.ApproverId into ool
+                                from ol in ool.DefaultIfEmpty()
+                                where
+                                tl.IsDeleted == false
+                                &&
+                                wl.IsDeleted == false
+                                &&
+                                ol.IsDeleted == false
+                                group ap by ap.Id
+                                        ).Select(x => new ApproverDetailViewModel { Id = x.Key });
                 }
             }
-            return empQueryable
+            return appQueryable
                             .Select(x => new ApproverDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
                             .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
         }
-        private IQueryable<ToranceUser> JoinApproverWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId
+        private IQueryable<ToranceUser> JoinApproverWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IApproverId
         {
             if (isInnerJoin == false)
-                return userQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ol) => new { u, ol }).Select(x => x.u);
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.ApproverId, (u, l) => new { u, l }).Select(x => x.u);
             else
-                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ols) => new { u, ols })
+                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.ApproverId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
                     .Where(x => x.ol != null)
                     .Select(x => x.u);
@@ -221,7 +232,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         oldApproverUnit.IsDeleted = true;
                         _db.Entry(oldApproverUnit).State = EntityState.Modified;
                     }
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                 }
                 if (associations.Count() > 0)
                 {

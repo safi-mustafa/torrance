@@ -26,6 +26,7 @@ using ViewModels.Authentication.User;
 using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
+using ViewModels.Authentication.Approver;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService
 {
@@ -177,14 +178,15 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
             try
             {
                 var search = searchFilter as EmployeeSearchViewModel;
-                var filters = SetQueryFilter(search);
-                var result = await GetPaginationDbSet(search.IsSearchForm, search.LogType).Where(filters).Paginate(search);
+                var paginatedUserIdResult = await GetPaginationDbSet(search).Paginate(search);
+                var paginatedUserIds = paginatedUserIdResult.Items.Select(x => x.Id).ToList();
+                var result = await _db.Users.Where(x => paginatedUserIds.Contains(x.Id)).ToListAsync();
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
-                    paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
-                    paginatedResult._meta = result._meta;
-                    paginatedResult._links = result._links;
+                    paginatedResult.Items = _mapper.Map<List<M>>(result.ToList());
+                    paginatedResult._meta = paginatedUserIdResult._meta;
+                    paginatedResult._links = paginatedUserIdResult._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
                     return response;
                 }
@@ -197,31 +199,48 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                 return Response.BadRequestResponse(_response);
             }
         }
-        public IQueryable<ToranceUser> GetPaginationDbSet(bool isSearchForm, FilterLogType logType)
+        public IQueryable<EmployeeDetailViewModel> GetPaginationDbSet(EmployeeSearchViewModel search)
         {
+            var filters = SetQueryFilter(search);
+
             var empQueryable = (from user in _db.Users.Include(x => x.Company)
                                 join userRole in _db.UserRoles on user.Id equals userRole.UserId
                                 join r in _db.Roles on userRole.RoleId equals r.Id
                                 where r.Name == RolesCatalog.Employee.ToString()
-                                select user);
-            if (isSearchForm && logType != FilterLogType.None)
+                                select user).Where(filters);
+            if (search.IsSearchForm && search.LogType != FilterLogType.None)
             {
-                switch (logType)
+                switch (search.LogType)
                 {
                     case FilterLogType.Override:
-                        return JoinEmployeesWithLogs<OverrideLog>(empQueryable);
+                        empQueryable = JoinEmployeesWithLogs<OverrideLog>(empQueryable); break;
                     case FilterLogType.TimeOnTools:
-                        return JoinEmployeesWithLogs<TOTLog>(empQueryable);
+                        empQueryable = JoinEmployeesWithLogs<TOTLog>(empQueryable); break;
                     case FilterLogType.WeldingRodRecord:
-                        return JoinEmployeesWithLogs<WRRLog>(empQueryable);
+                        empQueryable = JoinEmployeesWithLogs<WRRLog>(empQueryable); break;
                     case FilterLogType.All:
-                        empQueryable = JoinEmployeesWithLogs<OverrideLog>(empQueryable, true);
-                        empQueryable = JoinEmployeesWithLogs<TOTLog>(empQueryable, true);
-                        empQueryable = JoinEmployeesWithLogs<WRRLog>(empQueryable, true);
-                        return empQueryable;
+                        return (
+                            from ap in empQueryable
+                            join tl in _db.TOTLogs on ap.Id equals tl.ApproverId into ttl
+                            from tl in ttl.DefaultIfEmpty()
+                            join wl in _db.WRRLogs on ap.Id equals wl.ApproverId into wwl
+                            from wl in wwl.DefaultIfEmpty()
+                            join ol in _db.OverrideLogs on ap.Id equals ol.ApproverId into ool
+                            from ol in ool.DefaultIfEmpty()
+                            where
+                            tl.IsDeleted == false
+                            &&
+                            wl.IsDeleted == false
+                            &&
+                            ol.IsDeleted == false
+                            group ap by ap.Id
+                                      ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }
             }
-            return empQueryable;
+            return empQueryable
+                            .Select(x => new EmployeeDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
+                            .Select(x => new EmployeeDetailViewModel { Id = x.Max(m => m.Id) })
+                            .AsQueryable();
         }
         private IQueryable<ToranceUser> JoinEmployeesWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId
         {
