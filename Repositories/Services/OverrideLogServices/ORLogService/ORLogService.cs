@@ -12,6 +12,7 @@ using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Pagination;
+using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
@@ -45,8 +46,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly long _loggedInUserId;
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPossibleApproverService _possibleApproverService;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -55,6 +57,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _userInfoService = userInfoService;
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
+            _possibleApproverService = possibleApproverService;
             _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
@@ -116,7 +119,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<OverrideLog>()
                     .Include(x => x.Unit)
-                    //.Include(x => x.Department)
+                    .Include(x => x.Department)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Shift)
                     //.Include(x => x.CraftSkill)
@@ -192,6 +195,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     mappedModel.ShiftDelay = mappedModel.ShiftDelay ?? new();
                     mappedModel.ReworkDelay = mappedModel.ReworkDelay ?? new();
                     mappedModel.StartOfWorkDelay = mappedModel.StartOfWorkDelay ?? new();
+                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<ORLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }

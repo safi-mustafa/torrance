@@ -57,23 +57,31 @@ namespace Web.Controllers
             var dataColumns = new List<DataTableViewModel>();
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-form-export", data = ""},//
+                new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
-                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
+                new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
+                new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
                 new DataTableViewModel{title = "Permit No",data = "PermitNo", orderable=true},
+                new DataTableViewModel{title = "Permit",data = "PermitType.Name", orderable=true},
+                new DataTableViewModel{title = "Description",data = "JobDescription",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "Company",data = "Company.Name",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "Foreman",data = "Foreman",className="exclude-form-table include-in-export"},
+                new DataTableViewModel{title = "TWR",data = "Twr",className="exclude-form-table include-in-export"},
                 //new DataTableViewModel{title = "Equip.",data = "EquipmentNo", orderable=true},
                 //new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
                 new DataTableViewModel{title = "Delay Type",data = "DelayType.Name", orderable=true},
-                new DataTableViewModel{title = "Permit",data = "PermitType.Name", orderable=true},
-                new DataTableViewModel{title = "Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
+                new DataTableViewModel{title = "Delay Reason",data = "DelayReason",className="exclude-form-table include-in-export"},
+                //new DataTableViewModel{title = "Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
                 new DataTableViewModel{title = "HC",data = "ManPowerAffected", orderable=true},
                 new DataTableViewModel{title = "MH",data = "ManHours", orderable=true},
                 new DataTableViewModel{title = "TH",data = "TotalHours", orderable=true},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Delay Description",data = "DelayDescription",className="exclude-form-table include-in-export"},
+
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
             });
             return dataColumns;
         }

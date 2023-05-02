@@ -11,6 +11,7 @@ using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using Pagination;
+using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
@@ -39,8 +40,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IUserInfoService _userInfoService;
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPossibleApproverService _possibleApproverService;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -49,6 +51,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             _userInfoService = userInfoService;
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
+            _possibleApproverService = possibleApproverService;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -129,6 +132,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
+                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
@@ -151,7 +155,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 var resultQuery = _db.Set<TOTLog>()
                     .Include(x => x.Unit)
                     .Include(x => x.DelayType)
+                    .Include(x => x.ReworkDelay)
+                    .Include(x => x.ShiftDelay)
+                    .Include(x => x.StartOfWorkDelay)
                     .Include(x => x.Shift)
+                    .Include(x => x.Department)
                     .Include(x => x.PermitType)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)

@@ -25,7 +25,7 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "Url",data = "Url", orderable = true},
                 new DataTableViewModel{title = "Status",data = "FormattedStatus", orderable = true},
-                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
             };
         }

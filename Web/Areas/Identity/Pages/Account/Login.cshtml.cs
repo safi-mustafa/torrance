@@ -158,22 +158,23 @@ namespace Web.Areas.Identity.Pages.Account
                             //    await _userManager.AddClaimAsync(user, new Claim("CompanyId", user.Company.Id.ToString()));
                             //    await _userManager.AddClaimAsync(user, new Claim("CompanyName", user.Company.Name.ToString()));
                             //}
-                            var signInResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                            if (signInResult.RequiresTwoFactor)
-                            {
-                                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                            }
-                            if (signInResult.IsLockedOut)
-                            {
-                                _logger.LogWarning("User account locked out.");
-                                return RedirectToPage("./Lockout");
-                            }
+                            await _signInManager.SignInAsync(user, Input.RememberMe, null);// (Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                                                                                           //if (signInResult.RequiresTwoFactor)
+                                                                                           //{
+                                                                                           //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                                                                                           //}
+                                                                                           //if (signInResult.IsLockedOut)
+                                                                                           //{
+                                                                                           //    _logger.LogWarning("User account locked out.");
+                                                                                           //    return RedirectToPage("./Lockout");
+                                                                                           //}
 
-                            if (signInResult.Succeeded)
-                            {
-                                var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()) };
-                                await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
-                            }
+                            //if (signInResult.Succeeded)
+                            //{
+                            var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()),
+                                new Claim(ClaimTypes.Email, user.Email) };
+                            await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
+                            //}
                             return LocalRedirect(url);
                         }
 

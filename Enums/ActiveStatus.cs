@@ -7,7 +7,7 @@ namespace Enums
     public enum ActiveStatus
     {
         Active = 1,
-        [Display(Name = "In active")]
+        [Display(Name = "Inactive")]
         Inactive = 2
     }
 }

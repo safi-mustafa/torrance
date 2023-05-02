@@ -97,5 +97,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+
+        public string PossibleApprovers { get; set; }
     }
 }

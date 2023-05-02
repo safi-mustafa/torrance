@@ -81,6 +81,7 @@ namespace Repositories.Shared
                     }
                     await _db.SaveChangesAsync();
                 }
+
             }
             catch (Exception ex)
             {
@@ -88,7 +89,7 @@ namespace Repositories.Shared
             }
         }
 
-        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid())
+        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string requestorEmail = "")
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
@@ -156,6 +157,19 @@ namespace Repositories.Shared
 
                             };
                             await _notificationService.Create(notification);
+                            var notificationToRequestor = new NotificationViewModel()
+                            {
+                                LogId = logRecord.Id,
+                                EntityId = logRecord.Id,
+                                EventType = eventType,
+                                Type = NotificationType.Push,
+                                EntityType = notificationEntityType,
+                                SendTo = requestorEmail ?? "",
+                                IdentifierKey = identifierKey,
+                                IdentifierValue = identifier
+
+                            };
+                            await _notificationService.Create(notificationToRequestor);
                             await transaction.CommitAsync();
                             return _response;
                         }

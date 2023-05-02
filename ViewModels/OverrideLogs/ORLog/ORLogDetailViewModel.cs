@@ -81,5 +81,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         [Display(Name = "Override Reason")]
         public string? Reason { get; set; }
+
+        public string PossibleApprovers { get; set; }
     }
 }

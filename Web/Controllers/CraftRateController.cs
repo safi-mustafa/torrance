@@ -23,7 +23,7 @@
 //            return new List<DataTableViewModel>()
 //            {
 //                new DataTableViewModel{title = "Rate",data = "Rate",orderable=true},
-//                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-form-export"}
+//                new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
 //            };
 //        }

@@ -88,10 +88,13 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Total Hours")]
-        public long TotalHours { get
+        public long TotalHours
+        {
+            get
             {
                 return ManPowerAffected * ManHours;
-            } }
+            }
+        }
         [Display(Name = "Equipment No")]
         public string EquipmentNo { get; set; }
 
@@ -112,9 +115,32 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
+
+        public string DelayReason
+        {
+            get
+            {
+                if (DelayType.Identifier == "StartOfWork")
+                {
+                    return StartOfWorkDelay?.Name;
+                }
+                else if (DelayType.Identifier == "ShiftDelay")
+                {
+                    return ShiftDelay?.Name;
+                }
+                else if (DelayType.Identifier == "ReworkDelay")
+                {
+                    return ReworkDelay?.Name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
-
+        public string PossibleApprovers { get; set; }
         public string Foreman { get; set; }
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
         public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();

@@ -52,6 +52,7 @@ using Repositories.Services.AppSettingServices.ForemanService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using Repositories.Services.AppSettingServices.AdministratorService;
 using ExcelReader.Repository;
+using Repositories.Services.CommonServices.PossibleApproverService;
 
 namespace Web.Extensions
 {
@@ -135,9 +136,11 @@ namespace Web.Extensions
             services.AddScoped(typeof(IForemanService<,,>), typeof(ForemanService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped<IPossibleApproverService, PossibleApproverService>();
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
             services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
+            
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
