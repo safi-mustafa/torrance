@@ -24,6 +24,8 @@ using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Linq.Dynamic.Core;
+
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -91,7 +93,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
                 var userQueryable = await GetPaginationDbSet(searchFilter);
-
+                searchFilter.OrderByColumn = "";
                 var queryString = userQueryable.ToQueryString();
 
                 var users = await userQueryable.Paginate(searchFilter);
@@ -205,7 +207,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                         ).Select(x => new ApproverDetailViewModel { Id = x.Key });
                 }
             }
-            return appQueryable
+            return appQueryable.OrderBy($"{search.OrderByColumn} ASC")
                             .Select(x => new ApproverDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
                             .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();

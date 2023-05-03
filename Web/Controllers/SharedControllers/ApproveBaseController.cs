@@ -35,7 +35,7 @@ namespace Web.Controllers
         private readonly IUserInfoService _userInfo;
         private readonly bool _useSameUpdateViews;
         private readonly IMapper _mapper;
-        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title,IUserInfoService userInfo, bool hideCreateButton = false, bool useSameUpdateViews = true) : base(service, logger, mapper, controllerName, title, hideCreateButton, useSameUpdateViews)
+        public ApproveBaseController(Service service, ILogger<Controller> logger, IMapper mapper, string controllerName, string title, IUserInfoService userInfo, bool hideCreateButton = false, bool useSameUpdateViews = true) : base(service, logger, mapper, controllerName, title, hideCreateButton, useSameUpdateViews)
         {
             _service = service;
             _logger = logger;
@@ -105,11 +105,11 @@ namespace Web.Controllers
 
         }
         [AllowAnonymous]
-        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId, string requestorEmail)
+        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId)
         {
             try
             {
-                var response = await _service.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId, requestorEmail);
+                var response = await _service.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.Now);

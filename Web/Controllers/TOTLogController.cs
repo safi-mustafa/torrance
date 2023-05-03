@@ -217,8 +217,6 @@ namespace Web.Controllers
             }
             return model;
         }
-
-
     }
 
 }

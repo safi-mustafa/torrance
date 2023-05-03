@@ -89,7 +89,7 @@ namespace Repositories.Shared
             }
         }
 
-        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string requestorEmail = "")
+        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid())
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
@@ -123,8 +123,6 @@ namespace Repositories.Shared
                                 identifierKey = "Permit#";
                                 identifier = (logRecord as TOTLog).PermitNo;
                                 notificationEntityType = NotificationEntityType.TOTLog;
-
-
                             }
                             else if (typeof(TEntity).IsAssignableFrom(typeof(OverrideLog)))
                             {
@@ -142,7 +140,7 @@ namespace Repositories.Shared
                             }
                             var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                             string notificationTitle = $"{type} Log {status}";
-                            string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
+                            //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                             var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
                             var notification = new NotificationViewModel()
                             {
@@ -157,19 +155,24 @@ namespace Repositories.Shared
 
                             };
                             await _notificationService.Create(notification);
-                            var notificationToRequestor = new NotificationViewModel()
+                            var requestorId = logRecord.EmployeeId.ToString();
+                            if (!string.IsNullOrEmpty(requestorId))
                             {
-                                LogId = logRecord.Id,
-                                EntityId = logRecord.Id,
-                                EventType = eventType,
-                                Type = NotificationType.Push,
-                                EntityType = notificationEntityType,
-                                SendTo = requestorEmail ?? "",
-                                IdentifierKey = identifierKey,
-                                IdentifierValue = identifier
-
-                            };
-                            await _notificationService.Create(notificationToRequestor);
+                                var notificationToRequestor = new NotificationViewModel()
+                                {
+                                    LogId = logRecord.Id,
+                                    EntityId = logRecord.Id,
+                                    EventType = eventType,
+                                    Subject = $"{type} log with {identifierKey}-{identifier} {eventType}",
+                                    Type = NotificationType.Email,
+                                    EntityType = notificationEntityType,
+                                    SendTo = requestorId,
+                                    IdentifierKey = identifierKey,
+                                    IdentifierValue = identifier,
+                                    User = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
+                                };
+                                await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.ApproverId ?? 0);
+                            }
                             await transaction.CommitAsync();
                             return _response;
                         }

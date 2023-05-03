@@ -7,6 +7,6 @@ namespace Repositories.Shared.Interfaces
     {
         Task<List<long>> GetApprovedRecordIds();
         Task ApproveRecords(List<long> ids, bool Status);
-        Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string requestorEmail = "");
+        Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid());
     }
 }

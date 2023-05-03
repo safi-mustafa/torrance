@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Helpers.Extensions;
+using Models;
 using Models.Common;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
@@ -9,16 +10,43 @@ namespace ViewModels.Notification
     public class LogEmailViewModel : EmailBaseModel
     {
         private readonly NotificationViewModel _notification;
+        private readonly ToranceUser _sentUser;
         private readonly ApproverAssociation? _approver;
         private readonly string _approvalLink;
+        public LogEmailViewModel()
+        {
 
-        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociation? approver,string approvalLink)
+        }
+        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociation? approver, string approvalLink)
         {
             _notification = notification;
             _approver = approver;
             _approvalLink = approvalLink;
             Subject = GetSubject();
             Body = GetEmailBody();
+        }
+        //To send Requestor email after log processing. SentEmailType is there for future email types
+        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociation? approver, SentEmailType emailType)
+        {
+            _notification = notification;
+            _approver = approver;
+            Subject = GetProcessedLogSubject();
+            Body = GetEmailBodyForProcessedLog();
+        }
+
+
+        public string GetEmailBodyForProcessedLog()
+        {
+            return $@"<div class=""container"">
+						<p>Dear {_notification.User},</p>
+						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_approver?.Approver?.FullName}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+						<p>Best regards,</p>
+						<p>BainBridge - Time on Tools</p>
+					</div>";
+        }
+        public string GetProcessedLogSubject()
+        {
+            return $"{_notification.EntityType.GetDisplayName()} log with {_notification.IdentifierKey}-{_notification.IdentifierValue} {_notification.EventType}";
         }
         public string GetSubject()
         {

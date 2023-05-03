@@ -38,10 +38,10 @@ function sendApproveAjax(status) {
     var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val().toLowerCase();
     var approverId = $("#approver-id").val();
     var notificationId = $("#notification-id").val();
-    var reqEmail = $("#log-requestor").val();
+    //var reqEmail = $("#log-requestor").val();
     debugger;
     var url = "/" + controller + "/ApproveStatus";
-    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId, requestorEmail: reqEmail };
+    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId };
 
     $.ajax({
         type: "Get",
@@ -61,7 +61,7 @@ function sendApproveAjax(status) {
                 }
                 window.location.href = window.location.href + "&message=" + statusMessage;
             }
-               
+
         }
     });
 }

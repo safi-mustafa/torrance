@@ -33,8 +33,6 @@ $(function () {
     });
 });
 
-
-
 function SendAjax(Ids, status) {
     $.ajax({
         url: "/" + controller + "/ApproveRecords",

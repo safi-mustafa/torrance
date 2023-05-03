@@ -49,7 +49,11 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var association = await GetLogUnitAndDepartment(model);
-                var approvers = await _db.ApproverAssociations.Include(x => x.Approver).Include(x => x.Department).Include(x => x.Unit).Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                var approvers = await _db.ApproverAssociations
+                    .Include(x => x.Approver)
+                    .Include(x => x.Department)
+                    .Include(x => x.Unit).
+                    Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
                 if (approvers != null && approvers.Count > 0)
                 {
                     List<Notification> notifications = new List<Notification>();
@@ -61,6 +65,29 @@ namespace Repositories.Shared.NotificationServices
                     _db.Set<Notification>().AddRange(notifications);
                     await _db.SaveChangesAsync();
                 }
+                var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception thrown in CreateLogNotification method of {typeof(Notification).FullName}");
+                return Response.BadRequestResponse(_response);
+            }
+        }
+
+        public async Task<IRepositoryResponse> CreateProcessedLogNotification(NotificationViewModel model, long approverId)
+        {
+            try
+            {
+                var association = await GetLogUnitAndDepartment(model);
+                var approver = await _db.ApproverAssociations.Include(x => x.Approver).Include(x => x.Department).Include(x => x.Unit)
+                    .Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.ActiveStatus == ActiveStatus.Active && x.ApproverId == approverId).FirstOrDefaultAsync();
+
+                List<Notification> notifications = new List<Notification>();
+                //SetProcessedLogPushNotification(model, notifications);
+                SendProcessedLogEmailNotification(model, notifications, approver);
+                _db.Set<Notification>().AddRange(notifications);
+                await _db.SaveChangesAsync();
                 var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
                 return response;
             }
@@ -86,12 +113,37 @@ namespace Repositories.Shared.NotificationServices
             notifications.Add(notificationMappedModel);
         }
 
+        private void SendProcessedLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        {
+            var notificationMappedModel = _mapper.Map<Notification>(model);
+            notificationMappedModel.Id = Guid.NewGuid();
+
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, SentEmailType.LogProcessed));
+            notificationMappedModel.SendTo = model.SendTo;
+            notificationMappedModel.Type = NotificationType.Email;
+            notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.IsSent = false;
+            notifications.Add(notificationMappedModel);
+        }
+
         private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
+            notificationMappedModel.Type = NotificationType.Push;
+            notificationMappedModel.CreatedOn = DateTime.Now;
+            //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
+            notifications.Add(notificationMappedModel);
+        }
+
+        private void SetProcessedLogPushNotification(NotificationViewModel model, List<Notification> notifications)
+        {
+            var notificationMappedModel = _mapper.Map<Notification>(model);
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
+            notificationMappedModel.Id = Guid.NewGuid();
+            notificationMappedModel.SendTo = model.SendTo;
             notificationMappedModel.Type = NotificationType.Push;
             notificationMappedModel.CreatedOn = DateTime.Now;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
@@ -170,7 +222,7 @@ namespace Repositories.Shared.NotificationServices
                     Unit = new UnitBriefViewModel()
                     {
                         Id = x.UnitId,
-                    }
+                    },
                 }).FirstOrDefaultAsync();
             }
             else if (viewModel.EntityType == NotificationEntityType.WRRLog)

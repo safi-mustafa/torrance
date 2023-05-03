@@ -384,6 +384,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 return Response.BadRequestResponse(_response);
             }
         }
+
         private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
         {
             string userFullName = "";
@@ -404,7 +405,5 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 User = userFullName
             };
         }
-
-
     }
 }

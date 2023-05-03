@@ -10,6 +10,7 @@ namespace Repositories.Shared.NotificationServices
     public interface INotificationService : IBaseSearch
     {
         Task<IRepositoryResponse> CreateLogNotification(NotificationViewModel model);
+        Task<IRepositoryResponse> CreateProcessedLogNotification(NotificationViewModel model, long approverId);
         Task<IRepositoryResponse> Create(NotificationViewModel model);
     }
 }
