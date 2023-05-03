@@ -21,6 +21,7 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 using ViewModels.Shared;
+using System.Linq.Dynamic.Core;
 
 namespace Repositories.Services.CommonServices.UnitService
 {
@@ -64,9 +65,9 @@ namespace Repositories.Services.CommonServices.UnitService
 
                 var unitQueryable = GetPaginationDbSet(searchFilters);
 
-                var crafts = await unitQueryable.Paginate(searchFilters);
+                var units = await unitQueryable.Paginate(searchFilters);
                 var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<UnitDetailViewModel>>();
-                responseModel.ReturnModel = crafts;
+                responseModel.ReturnModel = units;
                 return responseModel;
             }
             catch (Exception ex)
@@ -112,7 +113,7 @@ namespace Repositories.Services.CommonServices.UnitService
                         break;
                 }
             }
-            return unitQueryable.GroupBy(x => x.Id)
+            return unitQueryable.OrderBy($"{search.OrderByColumn} ASC").GroupBy(x => x.Id)
                             .Select(x => new UnitDetailViewModel
                             {
                                 Id = x.Key,
