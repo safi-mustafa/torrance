@@ -26,7 +26,7 @@
     <main>
 
         <h3 class="default-heading">
-            BainBridge Admin Dashboard
+            Torrance Admin Dashboard
         </h3>
         <br>
 
@@ -77,29 +77,29 @@
             </div>
         </div>
         @* <div id="progress-charts-container" class="row">
-        <div id="progress-chart-div"></div>
-        </div>*@
+            <div id="progress-chart-div"></div>
+            </div>*@
         <div class="row dashboard-filters-row">
 
             @* <div class="col-md-12">
-            <form id="dashboard-filter-form">
-            <p>Filter By:</p>
-            <div class="filter-select">
-            <div class="row">
-            <div class="col-md-4">
-            <div class="form-group">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
-            </div>
-            </div>
-            <div class="col-md-4">
-            <div class="form-group">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
-            </div>
-            </div>
-            </div>
-            </div>
-            </form>
-            </div>*@
+                <form id="dashboard-filter-form">
+                <p>Filter By:</p>
+                <div class="filter-select">
+                <div class="row">
+                <div class="col-md-4">
+                <div class="form-group">
+                <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
+                </div>
+                </div>
+                <div class="col-md-4">
+                <div class="form-group">
+                <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
+                </div>
+                </div>
+                </div>
+                </div>
+                </form>
+                </div>*@
             <partial name="_TOTStatusChart" />
             <partial name="_WRRStatusChart" />
             <partial name="_OverrideStatusChart" />
@@ -108,28 +108,28 @@
             <div class="row col-12">
                 <partial name="_TOTPieCharts" />
                 @*<div class="card w-100">
-                    <div class="card-body">
-                        <div class="content">
-                            <h5 class="card-title">TOT's</h5>
+                        <div class="card-body">
+                            <div class="content">
+                                <h5 class="card-title">TOT's</h5>
+                            </div>
+                            <div class="row col-12">
+
+                            </div>
                         </div>
-                        <div class="row col-12">
-                            
-                        </div>
-                    </div>
-                </div>*@
+                    </div>*@
             </div>
             <div class="row col-12">
                 <partial name="_OverridePieCharts" />
-              @*  <div class="card w-100">
-                    <div class="card-body">
-                        <div class="content">
-                            <h5 class="card-title">Overrides</h5>
+                @*  <div class="card w-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h5 class="card-title">Overrides</h5>
+                            </div>
+                            <div class="row col-12">
+                                <partial name="_OverridePieCharts" />
+                            </div>
                         </div>
-                        <div class="row col-12">
-                            <partial name="_OverridePieCharts" />
-                        </div>
-                    </div>
-                </div>*@
+                    </div>*@
             </div>
         </div>
     </main>
@@ -152,13 +152,12 @@
 
 <script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
 @*<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>*@
+    <script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>*@
 <script src="~/js/custom-scripts/dashboard/status-chart.js"></script>
 <script src="~/js/custom-scripts/dashboard/override-pie-chart.js"></script>
 <script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
 <!-- Chart code -->
-<script>
-    $(function () {
+<script>$(function () {
         GetStatusChartData("TOT", "tot-status");
         GetStatusChartData("WRR", "wrr-status");
         GetStatusChartData("Override", "override-status");

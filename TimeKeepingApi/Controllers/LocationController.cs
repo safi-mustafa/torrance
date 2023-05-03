@@ -1,4 +1,4 @@
-﻿using BainBridgeApi.Controllers;
+﻿using Torrance.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.WeldingRodRecord.Location;
 using Repositories.Services.AppSettingServices.LocationService;

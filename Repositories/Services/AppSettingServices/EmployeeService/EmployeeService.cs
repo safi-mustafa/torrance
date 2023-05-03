@@ -27,6 +27,7 @@ using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using ViewModels.Authentication.Approver;
+using System.Linq.Dynamic.Core;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService
 {
@@ -178,7 +179,9 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
             try
             {
                 var search = searchFilter as EmployeeSearchViewModel;
-                var paginatedUserIdResult = await GetPaginationDbSet(search).Paginate(search);
+                var paginatedDbSet = GetPaginationDbSet(search);
+                search.OrderByColumn = "";
+                var paginatedUserIdResult = await paginatedDbSet.Paginate(search);
                 var paginatedUserIds = paginatedUserIdResult.Items.Select(x => x.Id).ToList();
                 var result = await _db.Users.Where(x => paginatedUserIds.Contains(x.Id)).ToListAsync();
                 if (result != null)
@@ -237,7 +240,7 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                                       ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }
             }
-            return empQueryable
+            return empQueryable.OrderBy($"{search.OrderByColumn}")
                             .Select(x => new EmployeeDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
                             .Select(x => new EmployeeDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();

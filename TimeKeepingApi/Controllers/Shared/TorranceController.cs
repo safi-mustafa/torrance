@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ViewModels.Shared;
 
-namespace BainBridgeApi.Controllers
+namespace Torrance.Api.Controllers
 {
     [Authorize]
-    public class BainBridgeController : ControllerBase
+    public class TorranceController : ControllerBase
     {
         protected IActionResult ReturnProcessedResponse(IRepositoryResponse response)
         {

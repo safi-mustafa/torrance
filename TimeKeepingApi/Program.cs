@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text;
-using BainBridgeApi.Mapper;
+using Torrance.Api.Mapper;
 using Centangle.Common.RequestHelpers.SwaggerFilters;
 using Web.Extensions;
 
@@ -58,7 +58,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BainBridgeApi v1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Torrance.Api v1"));
 
 app.UseEndpoints(endpoints =>
 {

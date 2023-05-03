@@ -41,7 +41,7 @@ namespace ViewModels.Notification
 						<p>Dear {_notification.User},</p>
 						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_approver?.Approver?.FullName}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 						<p>Best regards,</p>
-						<p>BainBridge - Time on Tools</p>
+						<p>Torrance - Time on Tools</p>
 					</div>";
         }
         public string GetProcessedLogSubject()
@@ -59,7 +59,7 @@ namespace ViewModels.Notification
 						<p>A new <strong>{_notification.EntityType.GetDisplayName()}</strong> request is submitted by <strong>{_notification.User}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 						<p>Please click <a href=""{_approvalLink}"">here</a> to approve/reject this request. </p>
 						<p>Best regards,</p>
-						<p>BainBridge - Time on Tools</p>
+						<p>Torrance - Time on Tools</p>
 					</div>";
         }
 

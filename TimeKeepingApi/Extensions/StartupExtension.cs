@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text;
-using BainBridgeApi.Mapper;
+using Torrance.Api.Mapper;
 using Centangle.Common.RequestHelpers.SwaggerFilters;
 using Repositories.Services.CommonServices.ContractorService;
 using Repositories.Services.CommonServices.DepartmentService;
@@ -52,6 +52,7 @@ using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using ExcelReader.Repository;
+using Repositories.Services.CommonServices.PossibleApproverService;
 
 namespace Web.Extensions
 {
@@ -61,7 +62,7 @@ namespace Web.Extensions
         {
             services.AddDbContext<ToranceContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("BainBridgeConnection"), b => b.MigrationsAssembly("DataLibrary"))
+                options.UseSqlServer(configuration.GetConnectionString("TorranceConnection"), b => b.MigrationsAssembly("DataLibrary"))
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
             });
 
@@ -143,7 +144,7 @@ namespace Web.Extensions
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BainBridge API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Torrance API", Version = "v1" });
                 c.OperationFilter<SwaggerFileOperationFilter>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -218,6 +219,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
             services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
+            services.AddScoped(typeof(IPossibleApproverService), typeof(PossibleApproverService));
             services.AddScoped<IApprovalService, ApprovalService>();
             services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();

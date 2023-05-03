@@ -55,7 +55,7 @@ public class NotificationWorker : BackgroundService
             foreach (var email in emails)
             {
                 var sendToEmail = users.Where(x => x.Id.ToString() == email.SendTo).Select(x => x.Email).FirstOrDefault();
-                var baseModel= JsonConvert.DeserializeObject<EmailBaseModel>(email.Message);
+                var baseModel = JsonConvert.DeserializeObject<EmailBaseModel>(email.Message);
                 var emailResult = await _emailService.SendEmail(sendToEmail ?? "", appEmail ?? "", baseModel.Subject ?? "", baseModel.Body);
                 if (emailResult)
                 {
@@ -98,7 +98,6 @@ public class NotificationWorker : BackgroundService
                             notification.IsSent = false;
                             notification.ResendCount += 1;
                         }
-
                     }
                     else
                     {
@@ -107,7 +106,7 @@ public class NotificationWorker : BackgroundService
                     await _db.SaveChangesAsync();
                 }
             }
-            
+
 
 
             return true;

@@ -28,11 +28,11 @@ using Repositories.Services.AppSettingServices.CompanyManagerService;
 using ViewModels.AppSettings.CompanyManager;
 using Centangle.Common.ResponseHelpers.Error;
 
-namespace BainBridgeApi.Controllers
+namespace Torrance.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : BainBridgeController
+    public class AccountController : TorranceController
     {
         public IConfiguration _configuration;
         private readonly ToranceContext _db;

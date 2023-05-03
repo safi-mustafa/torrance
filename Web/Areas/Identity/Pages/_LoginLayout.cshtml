@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Welcome to BainBridge</title>
+    <title>Welcome to Torrance</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/style-new.css" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
@@ -22,12 +22,12 @@
     <div class="wrapper login-page">
         <div class="container-fluid d-flex flex-column justify-content-between">
             <nav class="navbar navbar-expand-lg navbar-light login-navbar">
-                <div class="navbar-brand"><img src="/img/trc-logo.png" alt="BainBridge" /></div>
+                <div class="navbar-brand"><img src="/img/trc-logo.png" alt="Torrance" /></div>
             </nav>
             @RenderBody()
 
             <footer>
-                <p class="footer-text">Copyright © 2023 BainBridge. All rights reserved.</p>
+                <p class="footer-text">Copyright © 2023 Torrance. All rights reserved.</p>
             </footer>
         </div>
     </div>
@@ -40,8 +40,7 @@
     <script src="/js/jquery.unobtrusive-ajax.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    <script>
-        (function (i, s, o, g, r, a, m) {
+    <script>(function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
             }, i[r].l = 1 * new Date(); a = s.createElement(o),
@@ -49,8 +48,7 @@
         })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-81847299-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+        ga('send', 'pageview');</script>
 
 </body>
 </html>

@@ -59,13 +59,12 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-center align-items-center">
                 @*<a href="#" class="footer-logo m-1"><img src="img/logo.png" alt=""></a>*@
-                <p class="copyright m-0 ps-3">Copyright © 2023 BainBridge Refining Company. All rights reserved.</p>
+                <p class="copyright m-0 ps-3">Copyright © 2023 Torrance Refining Company. All rights reserved.</p>
             </div>
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        // Currently this uses jQuery, but could be done without
+    <script>// Currently this uses jQuery, but could be done without
         // Pull Requests welcome! :P
         function setNavigation() {
             var path = window.location.pathname;
@@ -84,7 +83,6 @@
         $(function () {
             // when jquery is ready...
             setNavigation();
-        });
-    </script>
+        });</script>
 </body>
 </html>

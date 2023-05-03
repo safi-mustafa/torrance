@@ -37,7 +37,7 @@ using ViewModels.Authentication.User;
 using ViewModels.AppSettings.CompanyManager;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 
-namespace BainBridgeApi.Mapper
+namespace Torrance.Api.Mapper
 {
     public class Mapping : Profile
     {

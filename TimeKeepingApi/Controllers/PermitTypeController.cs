@@ -1,5 +1,5 @@
 ﻿using System;
-using BainBridgeApi.Controllers;
+using Torrance.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.TimeOnTools.PermitType;
 using Repositories.Services.TimeOnToolServices.PermitTypeService;
