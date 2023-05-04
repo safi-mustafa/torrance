@@ -81,8 +81,14 @@ namespace Repositories.Shared.NotificationServices
             {
                 var association = await GetLogUnitAndDepartment(model);
                 var approver = await _db.ApproverAssociations.Include(x => x.Approver).Include(x => x.Department).Include(x => x.Unit)
-                    .Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.ActiveStatus == ActiveStatus.Active && x.ApproverId == approverId).FirstOrDefaultAsync();
-
+                    .Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active && x.ApproverId == approverId).AsNoTracking().FirstOrDefaultAsync();
+                if (approver == null)
+                {
+                    approver = new ApproverAssociation();
+                    approver.Approver = await _db.Users.Where(x => x.Id == approverId).FirstOrDefaultAsync();
+                    approver.Unit = new Unit { Id = association.Unit?.Id ?? 0, Name = association.Unit?.Name };
+                    approver.Department = new Department { Id = association.Department?.Id ?? 0, Name = association.Department?.Name };
+                }
                 List<Notification> notifications = new List<Notification>();
                 //SetProcessedLogPushNotification(model, notifications);
                 SendProcessedLogEmailNotification(model, notifications, approver);
@@ -212,47 +218,53 @@ namespace Repositories.Shared.NotificationServices
             ApproverAssociationsViewModel association = new ApproverAssociationsViewModel();
             if (viewModel.EntityType == NotificationEntityType.TOTLog)
             {
-                association = await _db.TOTLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                association = await _db.TOTLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
                 new ApproverAssociationsViewModel
                 {
                     Department = new DepartmentBriefViewModel
                     {
                         Id = x.DepartmentId,
+                        Name = x.Department.Name
                     },
                     Unit = new UnitBriefViewModel()
                     {
                         Id = x.UnitId,
+                        Name = x.Unit.Name
                     },
                 }).FirstOrDefaultAsync();
             }
             else if (viewModel.EntityType == NotificationEntityType.WRRLog)
             {
-                association = await _db.WRRLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                association = await _db.WRRLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
                 new ApproverAssociationsViewModel
                 {
                     Department = new DepartmentBriefViewModel
                     {
                         Id = x.DepartmentId,
+                        Name = x.Department.Name
                     },
                     Unit = new UnitBriefViewModel()
                     {
                         Id = x.UnitId,
-                    }
+                        Name = x.Unit.Name
+                    },
                 }).FirstOrDefaultAsync();
             }
             else
             {
-                association = await _db.OverrideLogs.Where(x => x.Id == viewModel.EntityId).Select(x =>
+                association = await _db.OverrideLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
                 new ApproverAssociationsViewModel
                 {
                     Department = new DepartmentBriefViewModel
                     {
                         Id = x.DepartmentId,
+                        Name = x.Department.Name
                     },
                     Unit = new UnitBriefViewModel()
                     {
                         Id = x.UnitId,
-                    }
+                        Name = x.Unit.Name
+                    },
                 }).FirstOrDefaultAsync();
             }
             return association;
