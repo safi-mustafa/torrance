@@ -163,7 +163,7 @@ namespace Repositories.Shared
                                     LogId = logRecord.Id,
                                     EntityId = logRecord.Id,
                                     EventType = eventType,
-                                    Subject = $"{type} log with {identifierKey}-{identifier} {eventType}",
+                                    Subject = $"{type} with {identifierKey}-{identifier} {eventType}",
                                     Type = NotificationType.Email,
                                     EntityType = notificationEntityType,
                                     SendTo = requestorId,
