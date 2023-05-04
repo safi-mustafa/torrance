@@ -2,6 +2,7 @@
 using Pagination;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -19,7 +20,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
         [Display(Name = "Requestor")]
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel();
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
@@ -29,6 +30,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
     }
 
     public class WRRLogAPISearchViewModel : BaseSearchModel
@@ -37,13 +39,14 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public long DepartmentId { get; set; }
 
-        public long EmployeeId { get; set; }
+        public long RequestorId { get; set; }
 
         public long UnitId { get; set; }
 
         public long LocationId { get; set; }
 
         public Status? Status { get; set; } = null;
-
+        public long CompanyId { get; set; }
+        public long ApproverId { get; set; }
     }
 }

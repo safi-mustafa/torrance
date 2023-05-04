@@ -80,7 +80,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (searchFilters.DelayType.Id == null || searchFilters.DelayType.Id == 0 || x.DelayType.Id == searchFilters.DelayType.Id)
                             &&
-                            (searchFilters.Requester.Id == null || searchFilters.Requester.Id == 0 || x.Employee.Id == searchFilters.Requester.Id)
+                            (searchFilters.Requestor.Id == null || searchFilters.Requestor.Id == 0 || x.Employee.Id == searchFilters.Requestor.Id)
                             &&
                             (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&

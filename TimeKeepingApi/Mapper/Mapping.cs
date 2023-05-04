@@ -350,7 +350,7 @@ namespace Torrance.Api.Mapper
 
             //SearchModels
             CreateMap<WRRLogSearchViewModel, WRRLogAPISearchViewModel>()
-                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+                .ForMember(src => src.RequestorId, opt => opt.MapFrom(dest => dest.Requestor.Id))
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
                 .ForMember(src => src.LocationId, opt => opt.MapFrom(dest => dest.Location.Id))
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
@@ -359,7 +359,7 @@ namespace Torrance.Api.Mapper
                 //.ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ReverseMap();
             CreateMap<TOTLogSearchViewModel, TOTLogAPISearchViewModel>()
-                .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
+                .ForMember(src => src.RequestorId, opt => opt.MapFrom(dest => dest.Requestor.Id))
                 .ForMember(src => src.PermitTypeId, opt => opt.MapFrom(dest => dest.PermitType.Id))
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
@@ -368,7 +368,7 @@ namespace Torrance.Api.Mapper
                 .ReverseMap();
 
             CreateMap<ORLogSearchViewModel, ORLogAPISearchViewModel>()
-                .ForMember(src => src.RequesterId, opt => opt.MapFrom(dest => dest.Requester.Id))
+                .ForMember(src => src.RequestorId, opt => opt.MapFrom(dest => dest.Requestor.Id))
                 //.ForMember(src => src.OverrideTypeId, opt => opt.MapFrom(dest => dest.OverrideType.Id))
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))

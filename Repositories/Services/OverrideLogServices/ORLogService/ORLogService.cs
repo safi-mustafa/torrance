@@ -79,7 +79,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToString().Contains(searchFilters.Search.value.ToLower()))
                             &&
-                            (searchFilters.Requester.Id == null || searchFilters.Requester.Id == 0 || x.Employee.Id == searchFilters.Requester.Id)
+                            (searchFilters.Requestor.Id == null || searchFilters.Requestor.Id == 0 || x.Employee.Id == searchFilters.Requestor.Id)
                             &&
                             (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
                             &&
