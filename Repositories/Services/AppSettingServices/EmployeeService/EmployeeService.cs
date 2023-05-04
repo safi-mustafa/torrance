@@ -231,11 +231,11 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                             join ol in _db.OverrideLogs on ap.Id equals ol.EmployeeId into ool
                             from ol in ool.DefaultIfEmpty()
                             where
-                            tl != null
-                            ||
-                            wl != null
-                            ||
-                            ol != null
+                                 (tl != null && tl.Status != Status.Approved)
+                                 ||
+                                 (wl != null && wl.Status != Status.Approved)
+                                 ||
+                                 (ol != null && ol.Status != Status.Approved)
                             group ap by ap.Id
                                       ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }
@@ -245,10 +245,10 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                             .Select(x => new EmployeeDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
         }
-        private IQueryable<ToranceUser> JoinEmployeesWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId
+        private IQueryable<ToranceUser> JoinEmployeesWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IEmployeeId, IApprove
         {
             if (isInnerJoin == false)
-                return userQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ol) => new { u, ol }).Select(x => x.u);
+                return userQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ol) => new { u, ol }).Where(x => x.ol.Status != Status.Pending).Select(x => x.u);
             else
                 return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.EmployeeId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })

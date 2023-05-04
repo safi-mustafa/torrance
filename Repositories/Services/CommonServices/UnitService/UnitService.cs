@@ -22,6 +22,7 @@ using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 using ViewModels.Shared;
 using System.Linq.Dynamic.Core;
+using ViewModels.WeldingRodRecord.Employee;
 
 namespace Repositories.Services.CommonServices.UnitService
 {
@@ -107,10 +108,27 @@ namespace Repositories.Services.CommonServices.UnitService
                         unitQueryable = JoinUnitsWithLogs<WRRLog>(unitQueryable);
                         break;
                     case FilterLogType.All:
-                        unitQueryable = JoinUnitsWithLogs<OverrideLog>(unitQueryable, true);
-                        unitQueryable = JoinUnitsWithLogs<TOTLog>(unitQueryable, true);
-                        unitQueryable = JoinUnitsWithLogs<WRRLog>(unitQueryable, true);
-                        break;
+                        return (
+                             from u in unitQueryable
+                             join tl in _db.TOTLogs on u.Id equals tl.UnitId into ttl
+                             from tl in ttl.DefaultIfEmpty()
+                             join wl in _db.WRRLogs on u.Id equals wl.UnitId into wwl
+                             from wl in wwl.DefaultIfEmpty()
+                             join ol in _db.OverrideLogs on u.Id equals ol.UnitId into ool
+                             from ol in ool.DefaultIfEmpty()
+                             where
+                                 (tl != null && tl.Status != Status.Approved)
+                                 ||
+                                 (wl != null && wl.Status != Status.Approved)
+                                 ||
+                                 (ol != null && ol.Status != Status.Approved)
+                             group u by u.Id
+                            ).Select(x => new UnitDetailViewModel
+                            {
+                                Id = x.Key,
+                                Name = x.Max(m => m.Name),
+                                CostTrackerUnit = x.Max(m => m.CostTrackerUnit),
+                            });
                 }
             }
             return unitQueryable.OrderColumns(search).GroupBy(x => x.Id)
@@ -122,10 +140,10 @@ namespace Repositories.Services.CommonServices.UnitService
                             })
                             .AsQueryable();
         }
-        private IQueryable<Unit> JoinUnitsWithLogs<T>(IQueryable<Unit> unitQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IUnitId
+        private IQueryable<Unit> JoinUnitsWithLogs<T>(IQueryable<Unit> unitQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IUnitId, IApprove
         {
             if (isInnerJoin == false)
-                return unitQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.UnitId, (u, ol) => new { u, ol }).Select(x => x.u);
+                return unitQueryable.Join(_db.Set<T>(), ol => ol.Id, u => u.UnitId, (u, ol) => new { u, ol }).Where(x => x.ol.Status != Status.Pending).Select(x => x.u);
             else
                 return unitQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.UnitId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
