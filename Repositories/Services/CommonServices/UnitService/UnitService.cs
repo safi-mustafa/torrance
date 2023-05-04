@@ -113,7 +113,7 @@ namespace Repositories.Services.CommonServices.UnitService
                         break;
                 }
             }
-            return unitQueryable.OrderBy($"{search.OrderByColumn} ASC").GroupBy(x => x.Id)
+            return unitQueryable.OrderColumns(search).GroupBy(x => x.Id)
                             .Select(x => new UnitDetailViewModel
                             {
                                 Id = x.Key,
