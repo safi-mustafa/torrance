@@ -24,7 +24,6 @@ namespace ViewModels.OverrideLogs.ORLog
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
-        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
     }
 
     public class ORLogAPISearchViewModel : BaseSearchModel

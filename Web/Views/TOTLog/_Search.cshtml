@@ -3,10 +3,19 @@
 @using ViewModels.TimeOnTools.TOTLog;
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="EquipmentNo" class="control-label form-label fw-600"></label>
-            <input asp-for="EquipmentNo" type="search" class="form-control" placeholder="Search Equipment No" />
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
 
@@ -15,21 +24,19 @@
             <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requestor" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" }, { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
-        </div>
-    </div>
+
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
+        </div>
+    </div>
+   
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
@@ -40,16 +47,13 @@
             <partial name="~/Views/Shared/Select2/_PermitType.cshtml" for="PermitType" />
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="EquipmentNo" class="control-label form-label fw-600"></label>
+            <input asp-for="EquipmentNo" type="search" class="form-control" placeholder="Search Equipment No" />
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
-        </div>
-    </div>
+
     <div class="col-lg-4">
         <div class="form-group profile-input">
             <label asp-for="Status" class="control-label form-label fw-600"></label>
