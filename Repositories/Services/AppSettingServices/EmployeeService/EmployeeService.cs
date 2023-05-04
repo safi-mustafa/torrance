@@ -183,7 +183,7 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                 search.OrderByColumn = "";
                 var paginatedUserIdResult = await paginatedDbSet.Paginate(search);
                 var paginatedUserIds = paginatedUserIdResult.Items.Select(x => x.Id).ToList();
-                var result = await _db.Users.Where(x => paginatedUserIds.Contains(x.Id)).ToListAsync();
+                var result = await _db.Users.Include(x => x.Company).Where(x => paginatedUserIds.Contains(x.Id)).ToListAsync();
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();

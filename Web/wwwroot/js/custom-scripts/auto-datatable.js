@@ -305,6 +305,9 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 'colvis'
             ]
         },
+        "initComplete": function (settings, json) {
+            $('input[type="search"]').attr('autocomplete', 'off');
+        },
         "drawCallback": function (settings) {
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
@@ -521,6 +524,20 @@ function SearchDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns) {
 function DeleteItem(deleteObj) {
     $("#crudDeleteModal").modal("show");
     $("#user-password").val('');
+    $("#crudDeleteModalError").html("");
+    // Auto-focus on the password field when the modal is shown
+    $('#crudDeleteModal').on('shown.bs.modal', function () {
+        $("#user-password").focus();
+    });
+
+    // Submit the form when the user presses enter in the password field
+    $(document).off("keyup", '#validate-password');
+    $(document).on("keyup", '#validate-password', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $("#validate-password").click();
+        }
+    });
     $(document).off('click', '#validate-password');
     $(document).on('click', '#validate-password', function () {
         var password = $("#user-password").val();
@@ -531,7 +548,6 @@ function DeleteItem(deleteObj) {
                 data: { password: password },
                 success: function (response) {
                     if (response) {
-                        debugger;
                         DeleteCardItem(deleteObj.deleteUrl).then(function (ajaxResult) {
                             if (ajaxResult.Success) {
                                 $("#crudDeleteModal").modal("hide");
@@ -550,16 +566,16 @@ function DeleteItem(deleteObj) {
 
                             }
                             else {
-                                $("#crudDeleteModal").modal("hide");
+                                $("#crudDeleteModalError").html("<div class='alert alert-danger' role='alert'>Couldn't delete. Try again later.</div>");
                                 $("#user-password").val('');
-                                Swal.fire("Couldn't delete. Try again later.")
+                                $("#user-password").focus();
                             }
                         });
                     }
                     else {
-                        $("#crudDeleteModal").modal("hide");
+                        $("#crudDeleteModalError").html("<div class='alert alert-danger' role='alert'>You've entered a wrong password.</div>");
                         $("#user-password").val('');
-                        Swal.fire("You've entered a wrong password.")
+                        $("#user-password").focus();
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -568,7 +584,7 @@ function DeleteItem(deleteObj) {
             });
         }
         else {
-            Swal.fire("Please enter the password.")
+            $("#crudDeleteModalError").html("<div class='alert alert-danger' role='alert'>Please enter the password.</div>");
         }
 
     });
