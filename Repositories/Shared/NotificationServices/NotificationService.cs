@@ -53,7 +53,7 @@ namespace Repositories.Shared.NotificationServices
                     .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Unit).
-                    Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                    Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
                 if (approvers != null && approvers.Count > 0)
                 {
                     List<Notification> notifications = new List<Notification>();
