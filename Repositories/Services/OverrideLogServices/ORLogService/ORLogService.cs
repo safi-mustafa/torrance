@@ -89,6 +89,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             &&
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
+                            (searchFilters.Department.Id == null || searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
+                            &&
+                            (searchFilters.Shift.Id == null || searchFilters.Shift.Id == 0 || x.Shift.Id == searchFilters.Shift.Id)
+                            &&
                             (
                                 (_loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||

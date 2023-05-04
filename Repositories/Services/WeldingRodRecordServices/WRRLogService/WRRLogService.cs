@@ -98,6 +98,12 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (searchFilters.Location.Id == null || searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
                             &&
+                            (searchFilters.Requestor.Id == null || searchFilters.Requestor.Id == 0 || x.Employee.Id == searchFilters.Requestor.Id)
+                            &&
+                            (searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
+                            &&
+                            (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
+                            &&
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)

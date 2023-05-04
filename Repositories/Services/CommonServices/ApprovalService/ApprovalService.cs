@@ -60,6 +60,12 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      &&
                      (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                      &&
+                     (search.Department.Id == 0 || search.Department.Id == null || search.Department.Id == x.DepartmentId)
+                     &&
+                     (search.Unit.Id == 0 || search.Unit.Id == null || search.Unit.Id == x.UnitId)
+                     &&
+                     (search.Company.Id == 0 || search.Company.Id == null || search.Company.Id == x.CompanyId)
+                     &&
                      (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                      &&
                      (!isEmployee)

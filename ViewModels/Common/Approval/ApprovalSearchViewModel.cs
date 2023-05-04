@@ -2,6 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using Enums;
 using Pagination;
+using ViewModels.Common.Company;
+using ViewModels.Common.Department;
+using ViewModels.Common.Unit;
 using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.Common
@@ -16,6 +19,9 @@ namespace ViewModels.Common
 
         [Display(Name = "Requestor")]
         public EmployeeBriefViewModel Employee { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");
+        public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
+        public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
     }
 }
 

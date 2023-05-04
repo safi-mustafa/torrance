@@ -3,12 +3,29 @@
 @model ApprovalSearchViewModel
 
 <div class="row">
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "All" } }' />
+        </div>
+    </div>
 
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "All" } }' />
         </div>
     </div>
+
     <div class="col-lg-4">
         <div class="form-group profile-input">
             <label asp-for="Status" class="control-label form-label fw-600"></label>

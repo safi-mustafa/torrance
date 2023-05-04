@@ -88,6 +88,10 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
+                            (searchFilters.Department.Id == null || searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
+                            &&
+                            (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
+                            &&
                             (
                                 (loggedInUserRole == "SuperAdmin")
                                 ||

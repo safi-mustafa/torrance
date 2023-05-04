@@ -28,7 +28,6 @@ namespace ViewModels.TimeOnTools.TOTLog
         public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
-        public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }
 
