@@ -13,13 +13,7 @@ namespace Helpers.Extensions
             try
             {
                 PaginatedResultModel<T> searchResult = new PaginatedResultModel<T>();
-                if (!string.IsNullOrEmpty(search.OrderByColumn))
-                {
-                    if (search.OrderDir == PaginationOrderCatalog.Asc)
-                        query = query.OrderBy($"{search.OrderByColumn} ASC");
-                    else
-                        query = query.OrderBy($"{search.OrderByColumn} DESC");
-                }
+                query.OrderColumns(search);
 
                 try
                 {
@@ -50,6 +44,20 @@ namespace Helpers.Extensions
             }
 
         }
+
+        public static IQueryable<T> OrderColumns<T>(this IQueryable<T> query, IBaseSearchModel search)
+        {
+            if (!string.IsNullOrEmpty(search.OrderByColumn))
+            {
+                if (search.OrderDir == PaginationOrderCatalog.Asc)
+                    query = query.OrderBy($"{search.OrderByColumn} ASC");
+                else
+                    query = query.OrderBy($"{search.OrderByColumn} DESC");
+            }
+
+            return query;
+        }
+
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>
         (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {

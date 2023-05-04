@@ -240,7 +240,7 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                                       ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }
             }
-            return empQueryable.OrderBy($"{search.OrderByColumn}")
+            return empQueryable.OrderColumns(search)
                             .Select(x => new EmployeeDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
                             .Select(x => new EmployeeDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();

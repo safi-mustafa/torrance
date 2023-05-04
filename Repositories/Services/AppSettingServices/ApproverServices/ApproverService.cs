@@ -207,7 +207,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                         ).Select(x => new ApproverDetailViewModel { Id = x.Key });
                 }
             }
-            return appQueryable.OrderBy($"{search.OrderByColumn} ASC")
+            return appQueryable.OrderColumns(search)
                             .Select(x => new ApproverDetailViewModel { Id = x.Id }).GroupBy(x => x.Id)
                             .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
