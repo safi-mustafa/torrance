@@ -16,6 +16,8 @@ namespace ViewModels.Common.Department
 
         public UnitBriefViewModel Unit { get; set; } = new();
         public bool IsSearchForm { get; set; }
+
+        public bool ShowUnApproved { get; set; }
         public FilterLogType LogType { get; set; }
     }
 }

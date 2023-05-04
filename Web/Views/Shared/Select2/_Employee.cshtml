@@ -5,6 +5,7 @@
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "employee-id";
     var heading = ViewData["Heading"] != null && !string.IsNullOrEmpty(ViewData["Heading"].ToString()) ? ViewData["Heading"].ToString() : "Requestor";
     var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
+    var showUnApproved = ViewData["ShowUnApproved"] != null && !string.IsNullOrEmpty(ViewData["ShowUnApproved"].ToString()) ? bool.Parse(ViewData["ShowUnApproved"].ToString()) ? "true" : "false" : "false";
     var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
 }
 
@@ -42,7 +43,7 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
-                customParams:'{IsSearchForm:"@isSearchForm", LogType: "@logType"}'
+                customParams: '{IsSearchForm:"@isSearchForm", LogType: "@logType",ShowUnApproved: "@showUnApproved",}'
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select @heading");
