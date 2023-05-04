@@ -21,6 +21,11 @@ using ViewModels.OverrideLogs;
 using ViewModels.Authentication.Approver;
 using ViewModels;
 using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
+using Enums;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
+using Models.WeldingRodRecord;
+using Models;
 
 namespace Repositories.Services.CommonServices.CompanyService
 {
@@ -134,28 +139,10 @@ namespace Repositories.Services.CommonServices.CompanyService
 
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
-                var companiesQueryable = (from c in _db.Companies
-                                          join cc in _db.CompanyCrafts on c.Id equals cc.CompanyId into ccul
-                                          from cc in ccul.DefaultIfEmpty()
-                                          where
-                                          (
-                                             (
-                                                 string.IsNullOrEmpty(searchFilter.Search.value) || c.Name.ToLower().Contains(searchFilter.Search.value.ToLower())
-                                             )
-                                             &&
-                                             (searchFilter.CraftSkill.Id == null || searchFilter.CraftSkill.Id == 0 || cc.CraftSkillId == searchFilter.CraftSkill.Id)
-                                             &&
-                                             (
-                                                 string.IsNullOrEmpty(searchFilter.Name) || c.Name.ToLower().Contains(searchFilter.Name.ToLower())
-                                             )
-                                         )
-                                          select c
-                            ).GroupBy(x => x.Id)
-                            .Select(x => new CompanyDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
-                            .AsQueryable();
+                var companiesQueryable = await GetPaginationDbSet(searchFilter);
+                searchFilter.OrderByColumn = "";
                 var paginatedCompanies = await companiesQueryable.Paginate(searchFilter);
                 var filteredCompaniesIds = paginatedCompanies.Items.Select(x => x.Id);
-
 
                 var companiesCraftSkills = await _db.CompanyCrafts.Include(x => x.CraftSkill).Where(x => filteredCompaniesIds.Contains(x.CompanyId)).ToListAsync();
 
@@ -174,7 +161,72 @@ namespace Repositories.Services.CommonServices.CompanyService
             }
         }
 
-
+        public async Task<IQueryable<CompanyDetailViewModel>> GetPaginationDbSet(CompanySearchViewModel search)
+        {
+            var compQueryable = (from c in _db.Companies
+                                 join cc in _db.CompanyCrafts on c.Id equals cc.CompanyId into ccul
+                                 from cc in ccul.DefaultIfEmpty()
+                                 where
+                                 (
+                                    (
+                                        string.IsNullOrEmpty(search.Search.value) || c.Name.ToLower().Contains(search.Search.value.ToLower())
+                                    )
+                                    &&
+                                    (search.CraftSkill.Id == null || search.CraftSkill.Id == 0 || cc.CraftSkillId == search.CraftSkill.Id)
+                                    &&
+                                    (
+                                        string.IsNullOrEmpty(search.Name) || c.Name.ToLower().Contains(search.Name.ToLower())
+                                    )
+                                )
+                                 select c
+                            );
+            //select new ApproverDetailViewModel { Id = user.Id });
+            if (search.IsSearchForm && search.LogType != FilterLogType.None)
+            {
+                switch (search.LogType)
+                {
+                    case FilterLogType.Override:
+                        compQueryable = JoinCompanyWithLogs<OverrideLog>(compQueryable);
+                        break;
+                    case FilterLogType.TimeOnTools:
+                        compQueryable = JoinCompanyWithLogs<TOTLog>(compQueryable);
+                        break;
+                    case FilterLogType.WeldingRodRecord:
+                        compQueryable = JoinCompanyWithLogs<WRRLog>(compQueryable);
+                        break;
+                    case FilterLogType.All:
+                        return (from comp in compQueryable
+                                join tl in _db.TOTLogs on comp.Id equals tl.CompanyId into ttl
+                                from tl in ttl.DefaultIfEmpty()
+                                join wl in _db.WRRLogs on comp.Id equals wl.CompanyId into wwl
+                                from wl in wwl.DefaultIfEmpty()
+                                join ol in _db.OverrideLogs on comp.Id equals ol.CompanyId into ool
+                                from ol in ool.DefaultIfEmpty()
+                                where
+                                tl.IsDeleted == false
+                                &&
+                                wl.IsDeleted == false
+                                &&
+                                ol.IsDeleted == false
+                                group comp by comp.Id
+                                        ).Select(x => new CompanyDetailViewModel { Id = x.Key });
+                }
+            }
+            return compQueryable.OrderColumns(search)
+                            .GroupBy(x => x.Id)
+                            .Select(x => new CompanyDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
+                            .AsQueryable();
+        }
+        private IQueryable<Company> JoinCompanyWithLogs<T>(IQueryable<Company> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, ICompanyId
+        {
+            if (isInnerJoin == false)
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.CompanyId, (u, l) => new { u, l }).Select(x => x.u);
+            else
+                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.CompanyId, (u, ols) => new { u, ols })
+                    .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
+                    .Where(x => x.ol != null)
+                    .Select(x => x.u);
+        }
         public async Task<bool> SetCompanyCraftSkills(List<long> craftSkillIds, long companyId)
         {
             try

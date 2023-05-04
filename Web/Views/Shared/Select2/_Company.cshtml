@@ -3,6 +3,8 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "company-id";
+    var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
+    var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
 }
 
 
@@ -38,6 +40,10 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
+                customParams: JSON.stringify({
+                    IsSearchForm: "@isSearchForm",
+                    LogType: "@logType"
+                })
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Company");

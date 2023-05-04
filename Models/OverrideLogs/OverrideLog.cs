@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.OverrideLogs
 {
-    public class OverrideLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId
+    public class OverrideLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, ICompanyId, IDepartmentId
     {
         public DateTime WorkCompletedDate { get; set; }
         public string? WorkScope { get; set; }
@@ -26,8 +26,8 @@ namespace Models.OverrideLogs
         public Unit Unit { get; set; }
 
         [ForeignKey("Department")]
-        public long? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+        public long DepartmentId { get; set; }
+        public Department Department { get; set; }
 
         [ForeignKey("ReasonForRequest")]
         public long? ReasonForRequestId { get; set; }

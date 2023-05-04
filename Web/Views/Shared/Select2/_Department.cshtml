@@ -3,8 +3,9 @@
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "department-id";
+    var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
+    var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
 }
-
 
 <div class="form-group">
     <label class="form-label fw-600">Department</label>
@@ -38,6 +39,10 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
+                customParams: JSON.stringify({
+                    IsSearchForm: "@isSearchForm",
+                    LogType: "@logType"
+                })
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Department");

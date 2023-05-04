@@ -1,4 +1,5 @@
-﻿using Pagination;
+﻿using Enums;
+using Pagination;
 using ViewModels.Common.Unit;
 using ViewModels.OverrideLogs;
 
@@ -14,5 +15,7 @@ namespace ViewModels.Common.Department
         public string Name { get; set; }
 
         public UnitBriefViewModel Unit { get; set; } = new();
+        public bool IsSearchForm { get; set; }
+        public FilterLogType LogType { get; set; }
     }
 }

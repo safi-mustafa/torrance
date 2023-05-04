@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace Models.TimeOnTools
 {
-    public class TOTLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId
+    public class TOTLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, ICompanyId, IDepartmentId
     {
         public DateTime? Date { get; set; }
         public string Twr { get; set; }
@@ -31,8 +31,8 @@ namespace Models.TimeOnTools
         public Status Status { get; set; }
 
         [ForeignKey("Department")]
-        public long? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+        public long DepartmentId { get; set; }
+        public Department Department { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }

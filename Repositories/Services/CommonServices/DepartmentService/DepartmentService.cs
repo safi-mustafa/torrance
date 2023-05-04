@@ -2,11 +2,15 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using Enums;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common;
 using Models.Common.Interfaces;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
+using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
 using Repositories.Services.CommonServices.ValidationService.UniqueNameService;
@@ -120,25 +124,8 @@ namespace Repositories.Services.CommonServices.DepartmentService
 
                 searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
-                var departmentsQueryable = (from c in _db.Departments
-                                            join du in _db.DepartmentUnits on c.Id equals du.DepartmentId into dul
-                                            from du in dul.DefaultIfEmpty()
-                                            where
-                                            (
-                                               (
-                                                   string.IsNullOrEmpty(searchFilter.Search.value) || c.Name.ToLower().Contains(searchFilter.Search.value.ToLower())
-                                               )
-                                               &&
-                                               (searchFilter.Unit.Id == null || searchFilter.Unit.Id == 0 || du.UnitId == searchFilter.Unit.Id)
-                                               &&
-                                               (
-                                                   string.IsNullOrEmpty(searchFilter.Name) || c.Name.ToLower().Contains(searchFilter.Name.ToLower())
-                                               )
-                                           )
-                                            select c
-                            ).GroupBy(x => x.Id)
-                            .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
-                            .AsQueryable();
+                var departmentsQueryable = await GetPaginationDbSet(searchFilter);
+                searchFilter.OrderByColumn = "";
                 var paginatedDepartments = await departmentsQueryable.Paginate(searchFilter);
                 var filteredDepartmentIds = paginatedDepartments.Items.Select(x => x.Id);
 
@@ -160,6 +147,72 @@ namespace Repositories.Services.CommonServices.DepartmentService
             }
         }
 
+        public async Task<IQueryable<DepartmentDetailViewModel>> GetPaginationDbSet(DepartmentSearchViewModel search)
+        {
+            var compQueryable = (from c in _db.Departments
+                                 join du in _db.DepartmentUnits on c.Id equals du.DepartmentId into dul
+                                 from du in dul.DefaultIfEmpty()
+                                 where
+                                 (
+                                    (
+                                        string.IsNullOrEmpty(search.Search.value) || c.Name.ToLower().Contains(search.Search.value.ToLower())
+                                    )
+                                    &&
+                                    (search.Unit.Id == null || search.Unit.Id == 0 || du.UnitId == search.Unit.Id)
+                                    &&
+                                    (
+                                        string.IsNullOrEmpty(search.Name) || c.Name.ToLower().Contains(search.Name.ToLower())
+                                    )
+                                )
+                                 select c
+                            );
+            //select new ApproverDetailViewModel { Id = user.Id });
+            if (search.IsSearchForm && search.LogType != FilterLogType.None)
+            {
+                switch (search.LogType)
+                {
+                    case FilterLogType.Override:
+                        compQueryable = JoinDepartmentWithLogs<OverrideLog>(compQueryable);
+                        break;
+                    case FilterLogType.TimeOnTools:
+                        compQueryable = JoinDepartmentWithLogs<TOTLog>(compQueryable);
+                        break;
+                    case FilterLogType.WeldingRodRecord:
+                        compQueryable = JoinDepartmentWithLogs<WRRLog>(compQueryable);
+                        break;
+                    case FilterLogType.All:
+                        return (from comp in compQueryable
+                                join tl in _db.TOTLogs on comp.Id equals tl.CompanyId into ttl
+                                from tl in ttl.DefaultIfEmpty()
+                                join wl in _db.WRRLogs on comp.Id equals wl.CompanyId into wwl
+                                from wl in wwl.DefaultIfEmpty()
+                                join ol in _db.OverrideLogs on comp.Id equals ol.CompanyId into ool
+                                from ol in ool.DefaultIfEmpty()
+                                where
+                                tl.IsDeleted == false
+                                &&
+                                wl.IsDeleted == false
+                                &&
+                                ol.IsDeleted == false
+                                group comp by comp.Id
+                                        ).Select(x => new DepartmentDetailViewModel { Id = x.Key });
+                }
+            }
+            return compQueryable.OrderColumns(search)
+                            .GroupBy(x => x.Id)
+                            .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
+                            .AsQueryable();
+        }
+        private IQueryable<Department> JoinDepartmentWithLogs<T>(IQueryable<Department> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IDepartmentId
+        {
+            if (isInnerJoin == false)
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.DepartmentId, (u, l) => new { u, l }).Select(x => x.u);
+            else
+                return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.DepartmentId, (u, ols) => new { u, ols })
+                    .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
+                    .Where(x => x.ol != null)
+                    .Select(x => x.u);
+        }
         public async Task<bool> SetDepartmentUnits(List<long> unitIds, long departmentId)
         {
             try
