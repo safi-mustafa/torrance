@@ -198,11 +198,11 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                 join ol in _db.OverrideLogs on ap.Id equals ol.ApproverId into ool
                                 from ol in ool.DefaultIfEmpty()
                                 where
-                                tl.IsDeleted == false
-                                &&
-                                wl.IsDeleted == false
-                                &&
-                                ol.IsDeleted == false
+                                 (tl != null && tl.Status != Status.Approved)
+                                 ||
+                                 (wl != null && wl.Status != Status.Approved)
+                                 ||
+                                 (ol != null && ol.Status != Status.Approved)
                                 group ap by ap.Id
                                         ).Select(x => new ApproverDetailViewModel { Id = x.Key });
                 }
@@ -212,10 +212,10 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                             .Select(x => new ApproverDetailViewModel { Id = x.Max(m => m.Id) })
                             .AsQueryable();
         }
-        private IQueryable<ToranceUser> JoinApproverWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IApproverId
+        private IQueryable<ToranceUser> JoinApproverWithLogs<T>(IQueryable<ToranceUser> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IApproverId, IApprove
         {
             if (isInnerJoin == false)
-                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.ApproverId, (u, l) => new { u, l }).Select(x => x.u);
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.ApproverId, (u, l) => new { u, l }).Where(x => x.l.Status != Status.Pending).Select(x => x.u);
             else
                 return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.ApproverId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })

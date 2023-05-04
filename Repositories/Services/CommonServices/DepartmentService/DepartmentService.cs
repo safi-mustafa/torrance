@@ -182,20 +182,21 @@ namespace Repositories.Services.CommonServices.DepartmentService
                         break;
                     case FilterLogType.All:
                         return (from comp in compQueryable
-                                join tl in _db.TOTLogs on comp.Id equals tl.CompanyId into ttl
+                                join tl in _db.TOTLogs on comp.Id equals tl.DepartmentId into ttl
                                 from tl in ttl.DefaultIfEmpty()
-                                join wl in _db.WRRLogs on comp.Id equals wl.CompanyId into wwl
+                                join wl in _db.WRRLogs on comp.Id equals wl.DepartmentId into wwl
                                 from wl in wwl.DefaultIfEmpty()
-                                join ol in _db.OverrideLogs on comp.Id equals ol.CompanyId into ool
+                                join ol in _db.OverrideLogs on comp.Id equals ol.DepartmentId into ool
                                 from ol in ool.DefaultIfEmpty()
                                 where
-                                tl.IsDeleted == false
-                                &&
-                                wl.IsDeleted == false
-                                &&
-                                ol.IsDeleted == false
+                                 (tl != null && tl.Status != Status.Approved)
+                                 ||
+                                 (wl != null && wl.Status != Status.Approved)
+                                 ||
+                                 (ol != null && ol.Status != Status.Approved)
                                 group comp by comp.Id
-                                        ).Select(x => new DepartmentDetailViewModel { Id = x.Key });
+                                        )
+                            .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) });
                 }
             }
             return compQueryable.OrderColumns(search)
@@ -203,10 +204,10 @@ namespace Repositories.Services.CommonServices.DepartmentService
                             .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
                             .AsQueryable();
         }
-        private IQueryable<Department> JoinDepartmentWithLogs<T>(IQueryable<Department> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IDepartmentId
+        private IQueryable<Department> JoinDepartmentWithLogs<T>(IQueryable<Department> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, IDepartmentId, IApprove
         {
             if (isInnerJoin == false)
-                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.DepartmentId, (u, l) => new { u, l }).Select(x => x.u);
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.DepartmentId, (u, l) => new { u, l }).Where(x => x.l.Status != Status.Pending).Select(x => x.u);
             else
                 return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.DepartmentId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })

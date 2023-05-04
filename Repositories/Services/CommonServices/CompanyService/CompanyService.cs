@@ -203,13 +203,13 @@ namespace Repositories.Services.CommonServices.CompanyService
                                 join ol in _db.OverrideLogs on comp.Id equals ol.CompanyId into ool
                                 from ol in ool.DefaultIfEmpty()
                                 where
-                                tl.IsDeleted == false
-                                &&
-                                wl.IsDeleted == false
-                                &&
-                                ol.IsDeleted == false
+                                 (tl != null && tl.Status != Status.Approved)
+                                 ||
+                                 (wl != null && wl.Status != Status.Approved)
+                                 ||
+                                 (ol != null && ol.Status != Status.Approved)
                                 group comp by comp.Id
-                                        ).Select(x => new CompanyDetailViewModel { Id = x.Key });
+                                        ).Select(x => new CompanyDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) });
                 }
             }
             return compQueryable.OrderColumns(search)
@@ -217,10 +217,10 @@ namespace Repositories.Services.CommonServices.CompanyService
                             .Select(x => new CompanyDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
                             .AsQueryable();
         }
-        private IQueryable<Company> JoinCompanyWithLogs<T>(IQueryable<Company> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, ICompanyId
+        private IQueryable<Company> JoinCompanyWithLogs<T>(IQueryable<Company> userQueryable, bool isInnerJoin = false) where T : class, IBaseModel, ICompanyId, IApprove
         {
             if (isInnerJoin == false)
-                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.CompanyId, (u, l) => new { u, l }).Select(x => x.u);
+                return userQueryable.Join(_db.Set<T>(), l => l.Id, u => u.CompanyId, (u, l) => new { u, l }).Where(x => x.l.Status != Status.Pending).Select(x => x.u);
             else
                 return userQueryable.GroupJoin(_db.Set<T>(), ol => ol.Id, u => u.CompanyId, (u, ols) => new { u, ols })
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })

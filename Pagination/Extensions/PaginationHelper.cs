@@ -27,6 +27,7 @@ namespace Helpers.Extensions
                         query = query.Skip((search.CurrentPage - 1) * search.PerPage).Take(search.PerPage);
                     }
                     List<T> resultList = await query.ToListAsync();
+                    var check = query.ToQueryString();
                     searchResult.Items = resultList ?? new List<T>();
                     SetMeta(searchResult, search, totalCount);
                     //SetLinks(searchResult, search, totalCount);
