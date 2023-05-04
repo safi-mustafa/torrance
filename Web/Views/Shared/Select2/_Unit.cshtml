@@ -52,5 +52,10 @@
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Unit");
+        $(departmentId).on("change", function (e) {
+            if ($(id).length > 0) {
+                $(id).val(null).trigger('change');
+            }
+        });
     });
 </script>
