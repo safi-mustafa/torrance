@@ -5,12 +5,12 @@
 <div class="row">
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "TimeOnTools" } }' />
         </div>
     </div>
     <div class="col-lg-4">
