@@ -16,6 +16,8 @@ namespace ViewModels.Common.Company
         public string Name { get; set; }
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new();
         public bool IsSearchForm { get; set; }
+
+        public bool ShowUnApproved { get; set; }
         public FilterLogType LogType { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace ViewModels.Common.Unit
 
         public BaseBriefVM Department { get; set; } = new BaseBriefVM();
         public bool IsSearchForm { get; set; }
+
+        public bool ShowUnApproved { get; set; }
         public FilterLogType LogType { get; set; }
     }
 }

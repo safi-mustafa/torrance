@@ -5,6 +5,7 @@
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "unit-id";
     var departmentId = ViewData["DeparmentId"] != null && !string.IsNullOrEmpty(ViewData["DeparmentId"].ToString()) ? ViewData["DeparmentId"].ToString() : "department-id";
     var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
+    var showUnApproved = ViewData["ShowUnApproved"] != null && !string.IsNullOrEmpty(ViewData["ShowUnApproved"].ToString()) ? bool.Parse(ViewData["ShowUnApproved"].ToString()) ? "true" : "false" : "false";
     var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
 }
 
@@ -47,6 +48,7 @@
                         Id: $(departmentId).val(),
                     },
                     IsSearchForm: "@isSearchForm",
+                    ShowUnApproved: "@showUnApproved",
                     LogType: "@logType"
                 })
             };
