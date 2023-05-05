@@ -70,8 +70,7 @@ namespace Web.Areas.Identity.Pages.Account
 
                 if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
                 {
-                    ModelState.AddModelError(string.Empty, "Notification can not be generated for your account. Your status is inactive.");
-                    return Page();
+                    return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please
