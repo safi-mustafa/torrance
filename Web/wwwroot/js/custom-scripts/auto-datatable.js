@@ -306,7 +306,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             ]
         },
         "initComplete": function (settings, json) {
-            $('input[type="search"]').attr('autocomplete', 'off');
+            $('input[type="search"]').attr('autocomplete', 'new-password');
         },
         "drawCallback": function (settings) {
             $('#' + tableId).unblock();
