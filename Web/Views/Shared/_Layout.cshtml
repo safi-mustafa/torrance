@@ -74,8 +74,14 @@
 
             $(".nav-main-ul a").each(function () {
                 var href = $(this).attr('href');
-                if (path.substring(0, href.length) === href) {
-                    $(this).closest('li').addClass('active');
+                if (href === '/') {
+                    if (path === "") {
+                        $(this).closest('li').addClass('active');
+                    }
+                } else {
+                    if (path.substring(0, href.length) === href) {
+                        $(this).closest('li').addClass('active');
+                    }
                 }
             });
         }

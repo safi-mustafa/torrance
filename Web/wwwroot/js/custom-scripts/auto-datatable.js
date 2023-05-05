@@ -28,7 +28,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = true, selectableRow = false) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     var currentController = window.location.pathname.split('/')[1];

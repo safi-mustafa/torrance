@@ -43,6 +43,7 @@ namespace Web.Controllers.SharedControllers
             vm.DatatableColumns = GetColumns();
             vm.DisableSearch = false;
             vm.HideCreateButton = _hideCreateButton;
+            vm.IsResponsiveDatatable = false;
             vm.ControllerName = _controllerName;
             vm.DataUrl = $"/{_controllerName}/Search";
             vm.SearchViewPath = $"~/Views/{_controllerName}/_Search.cshtml";
