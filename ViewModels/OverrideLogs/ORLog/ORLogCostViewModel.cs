@@ -1,11 +1,5 @@
 ﻿using Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -21,5 +15,22 @@ namespace ViewModels.OverrideLogs.ORLog
         public OverrideTypeCatalog OverrideType { get; set; }
 
         public long OverrideLogId { get; set; }
+
+        public double Cost
+        {
+            get
+            {
+                var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
+                var totalCost = ((rate ?? 0) * OverrideHours * HeadCount);
+                return totalCost;
+            }
+        }
+        public string FormattedCost
+        {
+            get
+            {
+                return string.Format("{0:C}", Cost);
+            }
+        }
     }
 }

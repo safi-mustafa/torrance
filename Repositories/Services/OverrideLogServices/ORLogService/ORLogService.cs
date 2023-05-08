@@ -506,34 +506,41 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var workbook = new XLWorkbook();
 
                 // Add a new worksheet to the workbook and set its name
-                var worksheet1 = workbook.Worksheets.Add("Sheet1");
-                var worksheet2 = workbook.Worksheets.Add("Sheet2");
+                var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
+                var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
 
-                var costIndex = 0;
+                SetExcelHeaders(overrideLogSheet, overrideLogCostSheet);
 
+                var overrideIndex = 1;
+                var overrideCostIndex = 1;
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
-                    var logIndex = l + 1;
-                    worksheet1.Cell($"A{logIndex}").Value = logs.ReturnModel.Items[l].Department.Name;
-                    worksheet1.Cell($"B{logIndex}").Value = logs.ReturnModel.Items[l].Unit.Name;
-                    worksheet1.Cell($"C{logIndex}").Value = logs.ReturnModel.Items[l].Shift.Name;
-                    worksheet1.Cell($"D{logIndex}").Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
-                    worksheet1.Cell($"E{logIndex}").Value = logs.ReturnModel.Items[l].WorkScope;
-                    worksheet1.Cell($"F{logIndex}").Value = logs.ReturnModel.Items[l].Reason;
-                    worksheet1.Cell($"G{logIndex}").Value = logs.ReturnModel.Items[l].Employee.Name;
-                    worksheet1.Cell($"H{logIndex}").Value = logs.ReturnModel.Items[l].Company.Name;
-                    worksheet1.Cell($"I{logIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
-                    worksheet1.Cell($"J{logIndex}").Value = logs.ReturnModel.Items[l].Status;
-                    worksheet1.Cell($"K{logIndex}").Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
-                    worksheet1.Cell($"L{logIndex}").Value = logs.ReturnModel.Items[l].Approver.Name;
+                    overrideIndex = overrideIndex + 1;
+                    overrideLogSheet.Cell($"A{overrideIndex}").Value = logs.ReturnModel.Items[l].FormattedStatus;
+                    overrideLogSheet.Cell($"B{overrideIndex}").Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
+                    overrideLogSheet.Cell($"C{overrideIndex}").Value = logs.ReturnModel.Items[l].Employee.Name;
+                    overrideLogSheet.Cell($"D{overrideIndex}").Value = logs.ReturnModel.Items[l].Approver.Name;
+                    overrideLogSheet.Cell($"E{overrideIndex}").Value = logs.ReturnModel.Items[l].Department.Name;
+                    overrideLogSheet.Cell($"F{overrideIndex}").Value = logs.ReturnModel.Items[l].Unit.Name;
+                    overrideLogSheet.Cell($"G{overrideIndex}").Value = logs.ReturnModel.Items[l].Shift.Name;
+                    overrideLogSheet.Cell($"H{overrideIndex}").Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    overrideLogSheet.Cell($"I{overrideIndex}").Value = logs.ReturnModel.Items[l].WorkScope;
+                    overrideLogSheet.Cell($"J{overrideIndex}").Value = logs.ReturnModel.Items[l].Reason;
+                    overrideLogSheet.Cell($"K{overrideIndex}").Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell($"L{overrideIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
+                    overrideLogSheet.Cell($"M{overrideIndex}").Value = logs.ReturnModel.Items[l].TotalHours;
+                    overrideLogSheet.Cell($"N{overrideIndex}").Value = logs.ReturnModel.Items[l].TotalHeadCount;
+                    overrideLogSheet.Cell($"O{overrideIndex}").Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
+                    
                     for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
                     {
-                        costIndex = costIndex + 1;
-                        worksheet2.Cell($"A{costIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
-                        worksheet2.Cell($"B{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
-                        worksheet2.Cell($"C{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
-                        worksheet2.Cell($"D{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
-                        worksheet2.Cell($"E{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
+                        overrideCostIndex = overrideCostIndex + 1;
+                        overrideLogCostSheet.Cell($"A{overrideCostIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
+                        overrideLogCostSheet.Cell($"B{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
+                        overrideLogCostSheet.Cell($"C{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
+                        overrideLogCostSheet.Cell($"D{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
+                        overrideLogCostSheet.Cell($"E{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
+                        overrideLogCostSheet.Cell($"f{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].FormattedCost;
                     }
                 }
                 return workbook;
@@ -543,6 +550,32 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
             }
             return null;
+        }
+
+        private void SetExcelHeaders(IXLWorksheet overrideLogSheet, IXLWorksheet overrideLogCostSheet)
+        {
+            overrideLogSheet.Cell($"A1").Value = "Status";
+            overrideLogSheet.Cell($"B1").Value = "Submitted";
+            overrideLogSheet.Cell($"C1").Value = "Requester";
+            overrideLogSheet.Cell($"D1").Value = "Approver";
+            overrideLogSheet.Cell($"E1").Value = "Department";
+            overrideLogSheet.Cell($"F1").Value = "Unit";
+            overrideLogSheet.Cell($"G1").Value = "Shift";
+            overrideLogSheet.Cell($"H1").Value = "Work Date";
+            overrideLogSheet.Cell($"I1").Value = "Workscope";
+            overrideLogSheet.Cell($"J1").Value = "Override Reason";
+            overrideLogSheet.Cell($"K1").Value = "Company";
+            overrideLogSheet.Cell($"L1").Value = "PO Number";
+            overrideLogSheet.Cell($"M1").Value = "Total Hours";
+            overrideLogSheet.Cell($"N1").Value = "Total Head Count";
+            overrideLogSheet.Cell($"O1").Value = "Total Cost";
+
+            overrideLogCostSheet.Cell($"A1").Value = "PO Number";
+            overrideLogCostSheet.Cell($"B1").Value = "Override Type";
+            overrideLogCostSheet.Cell($"C1").Value = "Craft";
+            overrideLogCostSheet.Cell($"D1").Value = "Head Count";
+            overrideLogCostSheet.Cell($"E1").Value = "Hours";
+            overrideLogCostSheet.Cell($"F1").Value = "Cost";
         }
     }
 
