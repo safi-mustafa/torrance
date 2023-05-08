@@ -19,5 +19,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public CraftSkillBriefViewModel CraftSkill { get; set; } = new CraftSkillBriefViewModel();
 
         public OverrideTypeCatalog OverrideType { get; set; }
+
+        public long OverrideLogId { get; set; }
     }
 }

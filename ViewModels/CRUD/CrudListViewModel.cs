@@ -26,6 +26,7 @@ namespace ViewModels.CRUD
         public string DataTableHeaderHtml { get; set; }
 
         public bool IsResponsiveDatatable { get; set; } = true;
+        public bool IsExcelDownloadAjaxBased { get; set; } = false;
         public bool HideCreateButton { get; set; } = false;
         public bool HideSearchFiltersButton { get; set; } = false;
         public string CreateButtonAction { get; set; } = "Create";

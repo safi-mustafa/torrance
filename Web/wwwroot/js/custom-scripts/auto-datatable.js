@@ -3,6 +3,7 @@ var actionIcons = {};
 var showSelectedFilters = true;
 var isAjaxBasedCrud = true;
 var enableButtons = true;
+var isExcelDownloadAjaxBased = false;
 actionIcons["Update"] = "fa-solid fa-pen-to-square";
 actionIcons["Profile"] = "fa-solid fa-user-plus";
 actionIcons["Notes"] = "fa-solid fa-file";
@@ -28,9 +29,10 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
+    isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
     var currentController = window.location.pathname.split('/')[1];
     var dataAjaxUrl = dataUrl;
     if (dataAjaxUrl === "") {
@@ -282,7 +284,39 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     exportOptions: {
                         columns: getColumnsToExport,
                         page: 'current',
-                        orthogonal: "export"
+                        orthogonal: "export",
+                    },
+                    action: function (e, dt, button, config) {
+                        if (isExcelDownloadAjaxBased) {
+                            var controllerName = window.location.href.split("/")[3];
+                            var excelDataDownloaderUrl = '/' + controllerName + '/DownloadExcel';
+                            var excelDataFilters = dt.ajax.params();
+                            $.ajax({
+                                url: excelDataDownloaderUrl,
+                                type: 'GET',
+                                data: excelDataFilters,
+                                xhrFields: {
+                                    responseType: 'blob'
+                                },
+                                success: function (data) {
+                                    var blob = new Blob([data], {
+                                        type: 'application/vnd.ms-excel'
+                                    });
+                                    var link = document.createElement('a');
+                                    link.href = window.URL.createObjectURL(blob);
+                                    link.download = 'example.xlsx';
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                },
+                                error: function (xhr, textStatus, errorThrown) {
+                                    console.log('Error downloading Excel file: ' + errorThrown);
+                                }
+                            });
+                        } else {
+                            // Call the default behavior
+                            $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+                        }
                     }
                 },
                 //{

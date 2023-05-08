@@ -18,7 +18,7 @@ using ViewModels.TimeOnTools;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogDetailViewModel : LogCommonDetailViewModel
+    public class ORLogDetailViewModel : LogCommonDetailViewModel, IORLogCostDetailView
     {
         public long Id { get; set; }
 

@@ -138,6 +138,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    if (searchFilters.IsExcelDownload)
+                    {
+                        await SetOverrideLogCosts(paginatedResult.Items as List<ORLogDetailViewModel>);
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
@@ -448,6 +452,43 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 SendTo = model?.Approver?.Id.ToString(),
                 User = userFullName
             };
+        }
+
+        private async Task SetOverrideLogCosts(List<ORLogDetailViewModel> overrideLogs)
+        {
+            List<ORLogCostViewModel> overrideLogCosts = new List<ORLogCostViewModel>();
+            var batchSize = 500;
+            var batches = overrideLogs.Select(x => x.Id).Chunk(batchSize);
+            foreach (var batch in batches)
+            {
+                var costs = await (
+                    from olc in _db.OverrideLogCost
+                    join cs in _db.CraftSkills on olc.CraftSkillId equals cs.Id
+                    where batch.Contains(olc.OverrideLogId)
+                    select new ORLogCostViewModel
+                    {
+                        Id = olc.Id,
+                        OverrideLogId = olc.OverrideLogId,
+                        OverrideHours = olc.OverrideHours,
+                        HeadCount = olc.HeadCount,
+                        CraftSkill = new CraftSkillBriefViewModel()
+                        {
+                            Id = cs.Id,
+                            Name = cs.Name,
+                            STRate = cs.STRate,
+                            OTRate = cs.OTRate,
+                            DTRate = cs.DTRate
+                        },
+                        OverrideType = olc.OverrideType
+                    }).ToListAsync();
+
+                overrideLogCosts.AddRange(costs);
+
+            }
+            foreach (var overrideLog in overrideLogs)
+            {
+                overrideLog.Costs = overrideLogCosts.Where(x => x.OverrideLogId == overrideLog.Id).ToList();
+            }
         }
     }
 

@@ -46,7 +46,7 @@
                 $("#" + dataTableId).dataTable().fnDestroy();
                 $("#crud-list-table").addClass("dataTable");
             }
-            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())',true);
+            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())', true, '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())');
         }
         
     </script>

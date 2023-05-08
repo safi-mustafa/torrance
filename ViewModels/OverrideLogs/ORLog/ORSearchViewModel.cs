@@ -24,6 +24,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
+
+        public bool IsExcelDownload { get; set; } = false;
     }
 
     public class ORLogAPISearchViewModel : BaseSearchModel
