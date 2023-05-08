@@ -509,11 +509,32 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var worksheet1 = workbook.Worksheets.Add("Sheet1");
                 var worksheet2 = workbook.Worksheets.Add("Sheet2");
 
-                var costIndex = 0;
+
+                worksheet1.Cell($"A1").Value = "Department";
+                worksheet1.Cell($"B1").Value = "Unit";
+                worksheet1.Cell($"C1").Value = "Shift";
+                worksheet1.Cell($"D1").Value = "Date Of Work Completed";
+                worksheet1.Cell($"E1").Value = "Work Scope";
+                worksheet1.Cell($"F1").Value = "Reason";
+                worksheet1.Cell($"G1").Value = "Requester";
+                worksheet1.Cell($"H1").Value = "Company";
+                worksheet1.Cell($"I1").Value = "PO Number";
+                worksheet1.Cell($"J1").Value = "Status";
+                worksheet1.Cell($"K1").Value = "Submitted";
+                worksheet1.Cell($"L1").Value = "Approver";
+                worksheet2.Cell($"A1").Value = "PO Number";
+                worksheet2.Cell($"B1").Value = "Override Type";
+                worksheet2.Cell($"C1").Value = "Craft Skill";
+                worksheet2.Cell($"D1").Value = "Head Count";
+                worksheet2.Cell($"E1").Value = "Override Type";
+                worksheet2.Cell($"F1").Value = "Cost";
+
+                var costIndex = 1;
+                var logStartingIndex = 1;
 
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
-                    var logIndex = l + 1;
+                    var logIndex = l + 1 + logStartingIndex; 
                     worksheet1.Cell($"A{logIndex}").Value = logs.ReturnModel.Items[l].Department.Name;
                     worksheet1.Cell($"B{logIndex}").Value = logs.ReturnModel.Items[l].Unit.Name;
                     worksheet1.Cell($"C{logIndex}").Value = logs.ReturnModel.Items[l].Shift.Name;
@@ -534,6 +555,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         worksheet2.Cell($"C{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
                         worksheet2.Cell($"D{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
                         worksheet2.Cell($"E{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
+                        worksheet2.Cell($"F{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].Cost;
                     }
                 }
                 return workbook;
