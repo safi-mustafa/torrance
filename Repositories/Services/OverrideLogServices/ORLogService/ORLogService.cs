@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
+using ClosedXML.Excel;
 using DataLibrary;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Enums;
 using Helpers.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -489,6 +491,58 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 overrideLog.Costs = overrideLogCosts.Where(x => x.OverrideLogId == overrideLog.Id).ToList();
             }
+        }
+
+        public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<ORLogDetailViewModel>(searchModel);
+
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
+
+                // Create a new workbook
+                var workbook = new XLWorkbook();
+
+                // Add a new worksheet to the workbook and set its name
+                var worksheet1 = workbook.Worksheets.Add("Sheet1");
+                var worksheet2 = workbook.Worksheets.Add("Sheet2");
+
+                var costIndex = 0;
+
+                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
+                {
+                    var logIndex = l + 1;
+                    worksheet1.Cell($"A{logIndex}").Value = logs.ReturnModel.Items[l].Department.Name;
+                    worksheet1.Cell($"B{logIndex}").Value = logs.ReturnModel.Items[l].Unit.Name;
+                    worksheet1.Cell($"C{logIndex}").Value = logs.ReturnModel.Items[l].Shift.Name;
+                    worksheet1.Cell($"D{logIndex}").Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    worksheet1.Cell($"E{logIndex}").Value = logs.ReturnModel.Items[l].WorkScope;
+                    worksheet1.Cell($"F{logIndex}").Value = logs.ReturnModel.Items[l].Reason;
+                    worksheet1.Cell($"G{logIndex}").Value = logs.ReturnModel.Items[l].Employee.Name;
+                    worksheet1.Cell($"H{logIndex}").Value = logs.ReturnModel.Items[l].Company.Name;
+                    worksheet1.Cell($"I{logIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
+                    worksheet1.Cell($"J{logIndex}").Value = logs.ReturnModel.Items[l].Status;
+                    worksheet1.Cell($"K{logIndex}").Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
+                    worksheet1.Cell($"L{logIndex}").Value = logs.ReturnModel.Items[l].Approver.Name;
+                    for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
+                    {
+                        costIndex = costIndex + 1;
+                        worksheet2.Cell($"A{costIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
+                        worksheet2.Cell($"B{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
+                        worksheet2.Cell($"C{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
+                        worksheet2.Cell($"D{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
+                        worksheet2.Cell($"E{costIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
+                    }
+                }
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
         }
     }
 

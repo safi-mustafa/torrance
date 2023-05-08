@@ -124,50 +124,23 @@ namespace Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> DownloadExcel(ORLogSearchViewModel searchModel)
         {
-
-            searchModel.IsExcelDownload = true;
-            var response = await _overrideLogService.GetAll<ORLogDetailViewModel>(searchModel);
-            // Create a new workbook
-            var workbook = new XLWorkbook();
-
-            // Add a new worksheet to the workbook and set its name
-            var worksheet1 = workbook.Worksheets.Add("Sheet1");
-
-            // Add some data to the first worksheet
-            worksheet1.Cell("A1").Value = "Name";
-            worksheet1.Cell("B1").Value = "Age";
-            worksheet1.Cell("A2").Value = "John";
-            worksheet1.Cell("B2").Value = 30;
-            worksheet1.Cell("A3").Value = "Jane";
-            worksheet1.Cell("B3").Value = 25;
-
-            // Add another worksheet to the workbook and set its name
-            var worksheet2 = workbook.Worksheets.Add("Sheet2");
-
-            // Add some data to the second worksheet
-            worksheet2.Cell("A1").Value = "Product";
-            worksheet2.Cell("B1").Value = "Price";
-            worksheet2.Cell("A2").Value = "Product A";
-            worksheet2.Cell("B2").Value = 10.99;
-            worksheet2.Cell("A3").Value = "Product B";
-            worksheet2.Cell("B3").Value = 20.99;
-
+            var workBook = await _overrideLogService.DownloadExcel(searchModel);
             // Convert the workbook to a byte array
             byte[] fileBytes;
             using (var stream = new MemoryStream())
             {
-                workbook.SaveAs(stream);
+                workBook.SaveAs(stream);
                 fileBytes = stream.ToArray();
             }
 
             // Set the content type and file name for the Excel file
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = "example.xlsx";
+            string fileName = "override-logs.xlsx";
 
             // Return the Excel file as a FileStreamResult
             return File(new MemoryStream(fileBytes), contentType, fileName);
         }
-        public IActionResult _CostRow(ORLogCostViewModel model, int rowNumber)//
+        public IActionResult _CostRow(ORLogCostViewModel model, int rowNumber)
         {
             ViewData["RowNumber"] = rowNumber;
             return PartialView("_CostRow", model);

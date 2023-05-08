@@ -1,8 +1,10 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
+using ClosedXML.Excel;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Interfaces;
 using Repositories.Shared.Interfaces;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
@@ -12,6 +14,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
+        Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel);
         Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search);
     }
 }
