@@ -226,9 +226,8 @@
         var overrideType = $("#cost-override-type").val();
         var costHours = $("#cost-hours").val();
         var headCount = $("#head-count").val();
-        var costCraftId = $("#craft-skill-id").val();
-        var costCraftName = $("#craft-skill-id").text();
-        costCraftName = costCraftName.replace(/(\r\n|\n|\r)/gm, "");
+        var costCraftId = $('#craft-skill-id').select2('data')[0].id;
+        var costCraftName = $('#craft-skill-id').select2('data')[0].text;
         if (overrideType !== null && overrideType !== "" && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
             var rowNumber = $(".cost-row").length;
             var obj = {
