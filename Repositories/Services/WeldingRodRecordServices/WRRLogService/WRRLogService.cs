@@ -65,7 +65,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
-            searchFilters.OrderByColumn = "Status";
+            //searchFilters.OrderByColumn = "Status";
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();

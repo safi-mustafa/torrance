@@ -74,5 +74,7 @@ namespace Models.OverrideLogs
         public double TotalHeadCount { get; set; }
 
         public string? Reason { get; set; }
+
+        public string? EmployeeNames { get; set; }
     }
 }

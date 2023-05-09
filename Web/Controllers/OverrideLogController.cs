@@ -52,6 +52,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Override Reason",data = "Reason"},
                 new DataTableViewModel{title = "Company",data = "Company.Name"},
                 new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
+                new DataTableViewModel{title = "Employee Name(s)",data = "EmployeeNames", orderable=true},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},

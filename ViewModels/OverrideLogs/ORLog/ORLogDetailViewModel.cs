@@ -84,5 +84,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public string? Reason { get; set; }
 
         public string PossibleApprovers { get; set; }
+        [Display(Name = "Employee Name(s)")]
+        public string EmployeeNames { get; set; }
     }
 }

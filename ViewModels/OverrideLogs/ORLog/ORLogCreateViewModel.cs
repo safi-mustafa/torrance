@@ -30,7 +30,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
 
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
 
         public EmployeeBriefViewModel Employee { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new();
@@ -40,6 +40,10 @@ namespace ViewModels.OverrideLogs.ORLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
+
+        [Display(Name = "Employee Name(s)")]
+        [Required]
+        public string? EmployeeNames { get; set; }
 
 
         [Required]
