@@ -293,7 +293,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                             var excelDataFilters = dt.ajax.params();
                             $.ajax({
                                 url: excelDataDownloaderUrl,
-                                type: 'GET',
+                                type: 'POST',
                                 data: excelDataFilters,
                                 xhrFields: {
                                     responseType: 'blob'

@@ -23,16 +23,28 @@ namespace ViewModels.Notification
             EntityId = notification.LogId;
             EntityType = notification.EntityType.ToString();
             LogType = GetLogType(_notification.EntityType);
-            Title =  GetTitle();
-            Message = GetMessage();
+            Title = GetTitle();
+            if (notification.EventType == NotificationEventTypeCatalog.Created || notification.EventType == NotificationEventTypeCatalog.Updated)
+            {
+                Message = GetCreatedMessage();
+            }
+            else
+            {
+                Message = GetApproveOrRejectMessage();
+            }
+
         }
         public string GetTitle()
         {
             return $"{LogType.GetDisplayName()} {_notification.EventType.ToString().ToLower()}";
         }
-        public string GetMessage()
+        public string GetCreatedMessage()
         {
-            return $"{_notification.EntityType.GetDisplayName()} with {_notification.IdentifierKey} ({_notification.IdentifierValue}) has been {_notification.EventType.ToString().ToLower()}";
+            return $"{_notification.EntityType.GetDisplayName()} with {_notification.IdentifierKey} ({_notification.IdentifierValue}) has been {_notification.EventType.ToString().ToLower()}.";
+        }
+        public string GetApproveOrRejectMessage()
+        {
+            return $"Your {_notification.EntityType.GetDisplayName()} request for {_notification.IdentifierKey} ({_notification.IdentifierValue}) has been {_notification.EventType.ToString().ToLower()}.";
         }
 
         private LogType GetLogType(NotificationEntityType type)
