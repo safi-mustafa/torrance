@@ -232,7 +232,7 @@ namespace Web.Controllers
 
             // Set the content type and file name for the Excel file
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = "time-on-tool-logs.xlsx";
+            string fileName = "TimeOnTool Logs - Torrance.xlsx";
 
             // Return the Excel file as a FileStreamResult
             return File(new MemoryStream(fileBytes), contentType, fileName);

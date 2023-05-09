@@ -497,7 +497,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
             var row = worksheet.Row(1);
-            row.Style.Font.Bold = true; 
+            //row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             for (int i = 0; i < headers.Count; i++)
             {
                 row.Cell(i + 1).Value = headers[i];
