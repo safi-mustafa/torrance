@@ -55,6 +55,10 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
+        [Required]
+        [Display(Name = "Employee Name(s)")]
+        public string? EmployeeNames { get; set; }
+
 
         [Required]
         [Display(Name = "Override Reason")]

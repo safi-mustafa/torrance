@@ -67,7 +67,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         public override Expression<Func<OverrideLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as ORLogSearchViewModel;
-            searchFilters.OrderByColumn = "Status";
             var status = (Status?)((int?)searchFilters.Status);
             if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
             {

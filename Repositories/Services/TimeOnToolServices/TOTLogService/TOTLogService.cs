@@ -57,7 +57,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as TOTLogSearchViewModel;
-            //searchFilters.OrderByColumn = "Status";
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
