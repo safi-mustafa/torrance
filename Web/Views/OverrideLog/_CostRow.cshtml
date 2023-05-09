@@ -16,10 +16,6 @@
     var headCount = collectionType + "[" + rowNumber + "].HeadCount";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
 
-    var rate = (Model.OverrideType == OverrideTypeCatalog.ST ? Model.CraftSkill.STRate : (Model.OverrideType == OverrideTypeCatalog.OT ? Model.CraftSkill.OTRate : Model.CraftSkill.DTRate));
-    var totalCost = ((rate ?? 0) * Model.OverrideHours * Model.HeadCount);
-    var cost = String.Format("{0:C}", totalCost);
-
 }
 
 <tr class="cost-row" id="@rowId">
@@ -43,7 +39,7 @@
     @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
     {
         <td>
-            <span style=" text-align: initial !important;">@cost</span>
+            <span style=" text-align: initial !important;">@Model.FormattedCost</span>
         </td>
     }
     @if (isDetailPage == false)

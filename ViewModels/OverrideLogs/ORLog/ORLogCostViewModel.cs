@@ -25,6 +25,20 @@ namespace ViewModels.OverrideLogs.ORLog
                 return totalCost;
             }
         }
+        public double CraftRate
+        {
+            get
+            {
+                return (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate)) ?? 0;
+            }
+        }
+        public string FormattedCraftRate
+        {
+            get
+            {
+                return string.Format("{0:C}", CraftRate);
+            }
+        }
         public string FormattedCost
         {
             get
