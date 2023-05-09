@@ -40,7 +40,11 @@ namespace Web.Controllers
             filters.StatusNot = Enums.Status.Pending;
             return filters;
         }
-
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.IsExcelDownloadAjaxBased = true;
+            return base.OverrideCrudListVM(vm);
+        }
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
@@ -132,7 +136,6 @@ namespace Web.Controllers
             return model;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> DownloadExcel(WRRLogSearchViewModel searchModel)
         {
             var workBook = await _WRRLogService.DownloadExcel(searchModel);

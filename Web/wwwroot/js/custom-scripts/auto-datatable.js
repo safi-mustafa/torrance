@@ -304,7 +304,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                                     });
                                     var link = document.createElement('a');
                                     link.href = window.URL.createObjectURL(blob);
-                                    link.download = 'Override Logs - Torrance.xlsx';
+                                    link.download = controllerName + ' - Torrance.xlsx';
                                     document.body.appendChild(link);
                                     link.click();
                                     document.body.removeChild(link);

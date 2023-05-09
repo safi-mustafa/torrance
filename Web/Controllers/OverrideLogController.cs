@@ -122,7 +122,6 @@ namespace Web.Controllers
             return View("~/Views/OverrideLog/_Index.cshtml", vm);
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> DownloadExcel(ORLogSearchViewModel searchModel)
         {
             var workBook = await _overrideLogService.DownloadExcel(searchModel);

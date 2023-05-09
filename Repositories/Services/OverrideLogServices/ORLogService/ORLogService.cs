@@ -68,7 +68,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         {
             var searchFilters = filters as ORLogSearchViewModel;
             var status = (Status?)((int?)searchFilters.Status);
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
             }

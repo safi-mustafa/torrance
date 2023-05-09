@@ -63,7 +63,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
-            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
             }
@@ -473,7 +473,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Shift != null ? item.Shift.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.PermitNo;
-                worksheet.Cell(row, ++logIndex).Value = item.PermitType != null ? item.PermitType.Name : "-" ;
+                worksheet.Cell(row, ++logIndex).Value = item.PermitType != null ? item.PermitType.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.JobDescription;
                 worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Foreman;
@@ -504,6 +504,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-       
+
     }
 }

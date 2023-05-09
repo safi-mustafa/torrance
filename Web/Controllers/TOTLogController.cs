@@ -44,7 +44,11 @@ namespace Web.Controllers
             _loggedInUserRole = _userInfo.LoggedInUserRole();
         }
 
-
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.IsExcelDownloadAjaxBased = true;
+            return base.OverrideCrudListVM(vm);
+        }
 
         protected override TOTLogSearchViewModel SetDefaultFilters()
         {
@@ -218,7 +222,6 @@ namespace Web.Controllers
             return model;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> DownloadExcel(TOTLogSearchViewModel searchModel)
         {
             var workBook = await _TOTLogService.DownloadExcel(searchModel);
