@@ -47,7 +47,7 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},

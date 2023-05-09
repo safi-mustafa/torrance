@@ -246,7 +246,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
                 new DataTableViewModel{title = "Requester",data = "Requester", orderable=true},
