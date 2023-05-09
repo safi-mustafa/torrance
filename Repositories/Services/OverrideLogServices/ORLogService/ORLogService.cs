@@ -576,6 +576,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
         {
+           // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             overrideLogSheet.Cell(1, 1).Value = "Department";
             overrideLogSheet.Cell(1, 2).Value = "Unit";
             overrideLogSheet.Cell(1, 3).Value = "Shift";
