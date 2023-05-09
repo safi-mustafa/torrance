@@ -112,7 +112,7 @@ namespace Web.Controllers
                 var response = await _service.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.Now);
+                    _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.UtcNow);
                     return true;
                 }
                 return false;

@@ -88,7 +88,7 @@ namespace Web.Controllers
 
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    _logger.LogInformation($"Approval for LogType: {type.GetDisplayName()} Record with id: {id} Deleted  Successfully at " + DateTime.Now);
+                    _logger.LogInformation($"Approval for LogType: {type.GetDisplayName()} Record with id: {id} Deleted  Successfully at " + DateTime.UtcNow);
                     return Json(new
                     {
                         Success = true,

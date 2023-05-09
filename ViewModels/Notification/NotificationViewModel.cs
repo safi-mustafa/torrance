@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Helpers.Datetime;
 using Helpers.Models.Shared;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
@@ -28,7 +29,7 @@ namespace ViewModels.Notification
         public NotificationEventTypeCatalog EventType { get; set; }
         public NotificationEntityType EntityType { get; set; } // For Identifying DB Table. It has nothing to do with log 
         public DateTime CreatedOn { get; set; }
-        public string FormattedCreatedOn { get => CreatedOn.ToString("U"); }
+        public string FormattedCreatedOn { get => CreatedOn.FormatDateInPST(); }
 
 
 

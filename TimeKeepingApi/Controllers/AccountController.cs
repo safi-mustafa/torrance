@@ -288,7 +288,7 @@ namespace Torrance.Api.Controllers
                 (
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(12),
+                    expires: DateTime.Now.AddYears(1),
                     claims: claims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                );

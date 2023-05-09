@@ -14,6 +14,7 @@ using ViewModels.Common.Company;
 using ViewModels.OverrideLogs;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 using System.Reflection;
+using Helpers.Datetime;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -25,7 +26,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return Date.Date.ToString("MM/dd/yyyy");
+                return Date.Date.FormatDateInPST();
             }
         }
 
@@ -35,7 +36,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return CreatedOn.Date.ToString("MM/dd/yyyy");
+                return CreatedOn.Date.FormatDateInPST();
             }
         }
         [Display(Name = "Permit No")]
@@ -57,7 +58,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return StartOfWork.Date.ToString("MM/dd/yyyy");
+                return StartOfWork.Date.FormatDateInPST();
             }
         }
         [Display(Name = "Time Requested")]

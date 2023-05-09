@@ -1,5 +1,6 @@
 ﻿using System;
 using Enums;
+using Helpers.Datetime;
 using Helpers.Extensions;
 using Models;
 using Models.Common.Interfaces;
@@ -19,7 +20,7 @@ namespace ViewModels.Common
         public Status Status { get; set; }
         public string FormattedStatus { get => Status.GetDisplayName(); }
         public DateTime Date { get; set; }
-        public string FormattedDate { get => Date.ToString("MM/dd/yyyy HH:mm:ss"); }
+        public string FormattedDate { get => Date.FormatDateInPST(); }
         public LogType Type { get; set; }
         public string FormattedLogType { get => Type.GetDisplayName(); }
         public ToranceUser? Employee { get; set; }

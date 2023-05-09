@@ -15,6 +15,7 @@ using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.TimeOnTools;
+using Helpers.Datetime;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -28,17 +29,17 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                return CreatedOn.Date.ToString("MM/dd/yyyy");
+                return CreatedOn.Date.FormatDateInPST();
             }
         }
 
         [Display(Name = "Work Date")]
-        public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
+        public DateTime WorkCompletedDate { get; set; } = DateTime.UtcNow;
         public string FormattedDateOfWorkCompleted
         {
             get
             {
-                return WorkCompletedDate.Date.ToString("MM/dd/yyyy");
+                return WorkCompletedDate.Date.FormatDateInPST();
             }
         }
         public double TotalCost { get; set; }

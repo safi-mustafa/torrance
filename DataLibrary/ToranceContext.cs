@@ -90,8 +90,8 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
                 //((BaseDBModel)item.Entity).IsActive = true;
                 ((IBaseModel)item.Entity).CreatedBy = userIdParsed;
                 ((IBaseModel)item.Entity).UpdatedBy = userIdParsed;
-                ((IBaseModel)item.Entity).CreatedOn = DateTime.Now;
-                ((IBaseModel)item.Entity).UpdatedOn = DateTime.Now;
+                ((IBaseModel)item.Entity).CreatedOn = DateTime.UtcNow;
+                ((IBaseModel)item.Entity).UpdatedOn = DateTime.UtcNow;
             }
         }
         var updatedList = ChangeTracker.Entries().Where(m => (m.Entity is BaseDBModel || m.Entity is ToranceUser) && m.State == EntityState.Modified);
@@ -100,7 +100,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
             if (item.Entity is BaseDBModel)
             {
                 ((BaseDBModel)item.Entity).UpdatedBy = userIdParsed;
-                ((BaseDBModel)item.Entity).UpdatedOn = DateTime.Now;
+                ((BaseDBModel)item.Entity).UpdatedOn = DateTime.UtcNow;
             }
         }
     }

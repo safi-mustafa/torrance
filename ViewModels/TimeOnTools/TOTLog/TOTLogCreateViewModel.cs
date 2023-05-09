@@ -16,7 +16,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel
     {
-        public DateTime? Date { get; set; } = DateTime.Now;
+        public DateTime? Date { get; set; } = DateTime.UtcNow;
         public string? Twr
         {
             get
@@ -40,7 +40,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
         public long ManHours { get; set; }
         [Display(Name = "Start Date")]
-        public DateTime StartOfWork { get; set; } = DateTime.Now;
+        public DateTime StartOfWork { get; set; } = DateTime.UtcNow;
         [Display(Name = "Time Requested")]
         public TimeSpan? TimeRequested { get; set; } = TimeSpan.Zero;
         [Display(Name = "Time Signed")]

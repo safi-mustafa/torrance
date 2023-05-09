@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Helpers.Datetime;
 using Helpers.Extensions;
 using Models.Common.Interfaces;
 using Select2.Model;
@@ -32,7 +33,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CreatedOn.Date.ToString("MM/dd/yyyy");
+                return CreatedOn.Date.FormatDateInPST();
             }
         }
         public DateTime Date { get { return CreatedOn; } }
@@ -40,7 +41,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return Date.Date.ToString("MM/dd/yyyy");
+                return Date.Date.FormatDateInPST();
             }
         }
         [Display(Name = "Workscope")]
@@ -51,7 +52,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return DateRodReturned.Date.ToString("MM/dd/yyyy");
+                return DateRodReturned.Date.FormatDateInPST();
             }
         }
         [DisplayName("Calibration Date")]
@@ -60,7 +61,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CalibrationDate.Date.ToString("MM/dd/yyyy");
+                return CalibrationDate.Date.FormatDateInPST();
             }
         }
         [Required]
@@ -77,7 +78,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return RodCheckedOut.Date.ToString("MM/dd/yyyy");
+                return RodCheckedOut.Date.FormatDateInPST();
             }
         }
         [DisplayName("Rod Checked Out lbs")]

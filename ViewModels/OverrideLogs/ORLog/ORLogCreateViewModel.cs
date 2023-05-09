@@ -14,7 +14,7 @@ namespace ViewModels.OverrideLogs.ORLog
     {
 
         [Display(Name = "Work Date")]
-        public DateTime WorkCompletedDate { get; set; } = DateTime.Now;
+        public DateTime WorkCompletedDate { get; set; } = DateTime.UtcNow;
 
         [Display(Name = "PO Number")]
 

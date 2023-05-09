@@ -114,7 +114,7 @@ namespace Repositories.Shared.NotificationServices
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, approvalLink));
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Email;
-            notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.CreatedOn = DateTime.UtcNow;
             notificationMappedModel.IsSent = false;
             notifications.Add(notificationMappedModel);
         }
@@ -127,7 +127,7 @@ namespace Repositories.Shared.NotificationServices
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, SentEmailType.LogProcessed));
             notificationMappedModel.SendTo = model.SendTo;
             notificationMappedModel.Type = NotificationType.Email;
-            notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.CreatedOn = DateTime.UtcNow;
             notificationMappedModel.IsSent = false;
             notifications.Add(notificationMappedModel);
         }
@@ -139,7 +139,7 @@ namespace Repositories.Shared.NotificationServices
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = approver.ApproverId.ToString();
             notificationMappedModel.Type = NotificationType.Push;
-            notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.CreatedOn = DateTime.UtcNow;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
             notifications.Add(notificationMappedModel);
         }
@@ -151,7 +151,7 @@ namespace Repositories.Shared.NotificationServices
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = model.SendTo;
             notificationMappedModel.Type = NotificationType.Push;
-            notificationMappedModel.CreatedOn = DateTime.Now;
+            notificationMappedModel.CreatedOn = DateTime.UtcNow;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
             notifications.Add(notificationMappedModel);
         }
@@ -164,7 +164,7 @@ namespace Repositories.Shared.NotificationServices
                 if (string.IsNullOrEmpty(mappedModel.Message))
                     mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
                 mappedModel.Id = Guid.NewGuid();
-                mappedModel.CreatedOn = DateTime.Now;
+                mappedModel.CreatedOn = DateTime.UtcNow;
                 await _db.Set<Notification>().AddAsync(mappedModel);
                 await _db.SaveChangesAsync();
 

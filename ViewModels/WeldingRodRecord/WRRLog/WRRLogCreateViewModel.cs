@@ -19,8 +19,10 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove
     {
-        public DateTime DateRodReturned { get; set; } = DateTime.Now;
-        public DateTime CalibrationDate { get; set; } = DateTime.Now;
+        [Required]
+        public DateTime? DateRodReturned { get; set; }
+        [Required]
+        public DateTime? CalibrationDate { get; set; }
         [Required]
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
 
@@ -38,7 +40,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Display(Prompt = "Add Email")]
         //[Remote(action: "ValidateWRRLogEmail", controller: "WRRLog", AdditionalFields = "Id,Email", ErrorMessage = "Email already in use.")]
         public string? Email { get; set; }
-        public DateTime RodCheckedOut { get; set; } = DateTime.Now;
+        [Required]
+        public DateTime? RodCheckedOut { get; set; }
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Checked Out lbs must be greater than zero.")]
         public double RodCheckedOutLbs { get; set; }
         [Required]

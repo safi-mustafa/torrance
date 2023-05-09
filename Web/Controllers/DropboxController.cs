@@ -37,7 +37,7 @@ namespace Web.Controllers
                 var response = await _dropboxService.UpdateLinkStatus();
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    _logger.LogInformation($"Dropbox: Records altered Successfully at " + DateTime.Now);
+                    _logger.LogInformation($"Dropbox: Records altered Successfully at " + DateTime.UtcNow);
                     return Json(new
                     {
                         Success = true,

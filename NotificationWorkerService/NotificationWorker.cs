@@ -44,7 +44,7 @@ public class NotificationWorker : BackgroundService
     {
         try
         {
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.UtcNow;
             var notifications = await _db.Notifications.Where(x => x.ResendCount < 5 && x.SendTo != null && x.CreatedOn.Date <= currentDate.Date && x.IsSent == false).Skip(0).Take(5).ToListAsync();
             var emails = notifications.Where(x => x.Type == NotificationType.Email).ToList();
             var smss = notifications.Where(x => x.Type == NotificationType.Sms).ToList();

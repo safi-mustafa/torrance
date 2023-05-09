@@ -138,7 +138,7 @@ namespace Web.Controllers
         {
             if (id > 0)
             {
-                var successMessage = $"{_controllerName}: Record with id: {id}" + action + "d" + "Successfully at " + DateTime.Now;
+                var successMessage = $"{_controllerName}: Record with id: {id}" + action + "d" + "Successfully at " + DateTime.UtcNow;
                 _logger.LogInformation(successMessage);
                 if (Request.IsAjaxRequest())
                 {
@@ -180,7 +180,7 @@ namespace Web.Controllers
                 var response = await _service.Delete(id);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
-                    _logger.LogInformation($"{_controllerName}: Record with id: {id} Deleted  Successfully at " + DateTime.Now);
+                    _logger.LogInformation($"{_controllerName}: Record with id: {id} Deleted  Successfully at " + DateTime.UtcNow);
                     return Json(new
                     {
                         Success = true,
