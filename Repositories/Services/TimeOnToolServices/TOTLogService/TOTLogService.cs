@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
+using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
@@ -22,6 +23,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using ViewModels.Notification;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
@@ -409,5 +411,100 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 User = userFullName
             };
         }
+
+
+
+        public async Task<XLWorkbook> DownloadExcel(TOTLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<TOTLogDetailViewModel>(searchModel);
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<TOTLogDetailViewModel>>;
+
+                var workbook = new XLWorkbook();
+                var worksheet = workbook.Worksheets.Add("TimeOnToolLogs");
+
+                var columnHeaders = new List<string>
+                {
+                    "Department",
+                    "Unit",
+                    "Shift",
+                    "Permit No",
+                    "Permit Type",
+                    "Description",
+                    "Company",
+                    "Foreman",
+                    "Twr",
+                    "Reason",
+                    "DelayType",
+                    "Start Of Work Delay",
+                    "Shift Delay",
+                    "Rework Delay",
+                    "Head Count",
+                    "Hours",
+                    "Total Hours",
+                    "Delay Description",
+                    "Requestor",
+                    "Status",
+                    "Submitted",
+                    "Approver"
+                };
+                AddColumnHeaders(worksheet, columnHeaders);
+
+                AddDataRows(worksheet, logs.ReturnModel.Items);
+
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+                // handle exception
+                return null;
+            }
+        }
+
+        private void AddDataRows(IXLWorksheet worksheet, List<TOTLogDetailViewModel> items)
+        {
+            var row = 2;
+            foreach (var item in items)
+            {
+                var logIndex = 0;
+
+                worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Shift != null ? item.Shift.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.PermitNo;
+                worksheet.Cell(row, ++logIndex).Value = item.PermitType != null ? item.PermitType.Name : "-" ;
+                worksheet.Cell(row, ++logIndex).Value = item.JobDescription;
+                worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Foreman;
+                worksheet.Cell(row, ++logIndex).Value = item.Twr;
+                worksheet.Cell(row, ++logIndex).Value = item.ReasonForRequest != null ? item.ReasonForRequest.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.DelayType != null ? item.DelayType.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.StartOfWorkDelay != null ? item.StartOfWorkDelay.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.ShiftDelay != null ? item.ShiftDelay.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.ReworkDelay != null ? item.ReworkDelay.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.ManPowerAffected;
+                worksheet.Cell(row, ++logIndex).Value = item.ManHours;
+                worksheet.Cell(row, ++logIndex).Value = item.TotalHours;
+                worksheet.Cell(row, ++logIndex).Value = item.DelayDescription;
+                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
+                worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
+                row++;
+            }
+        }
+        private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
+        {
+            var row = worksheet.Row(1);
+            row.Style.Font.Bold = true; 
+            for (int i = 0; i < headers.Count; i++)
+            {
+                row.Cell(i + 1).Value = headers[i];
+            }
+        }
+
+       
     }
 }

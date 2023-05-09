@@ -20,7 +20,6 @@ namespace ViewModels.TimeOnTools.TOTLog
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
-
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(false);
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false);
@@ -29,6 +28,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+        public bool IsExcelDownload { get; set; }
     }
 
     public class TOTLogAPISearchViewModel : BaseSearchModel

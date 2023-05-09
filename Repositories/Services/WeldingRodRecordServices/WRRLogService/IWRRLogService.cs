@@ -1,7 +1,10 @@
-﻿using Models.Common.Interfaces;
+﻿using ClosedXML.Excel;
+using Models.Common.Interfaces;
 using Repositories.Interfaces;
 using Repositories.Shared.Interfaces;
 using ViewModels.Shared;
+using ViewModels.TimeOnTools.TOTLog;
+using ViewModels.WeldingRodRecord.WRRLog;
 
 namespace Repositories.Services.AppSettingServices.WRRLogService
 {
@@ -11,5 +14,6 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         Task<bool> IsWRRLogEmailUnique(int id, string email);
+        Task<XLWorkbook> DownloadExcel(WRRLogSearchViewModel searchModel);
     }
 }

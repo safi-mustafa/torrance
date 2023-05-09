@@ -1,21 +1,18 @@
 ﻿using Enums;
 using Pagination;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
-using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
-using ViewModels.WeldingRodRecord.RodType;
-using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogSearchViewModel : BaseSearchModel
     {
         public string Email { get; set; }
+        public bool IsExcelDownload { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
         [Display(Name = "Requestor")]

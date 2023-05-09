@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
+using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
@@ -277,6 +278,87 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 SendTo = model?.Approver?.Id.ToString(),
                 User = userFullName
             };
+        }
+
+        public async Task<XLWorkbook> DownloadExcel(WRRLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<WRRLogDetailViewModel>(searchModel);
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<WRRLogDetailViewModel>>;
+
+                var workbook = new XLWorkbook();
+                var worksheet = workbook.Worksheets.Add("WeldingRodRecordLogs");
+
+                var columnHeaders = new List<string>
+                {
+                    "Department",
+                    "Unit",
+                    "Company",
+                    "Calibration Date",
+                    "Fume Control Used",
+                    "Rod Type",
+                    "Twr",
+                    "Weld Method",
+                    "Checked Out",
+                    "Location",
+                    "Rod Checked Out lbs",
+                    "Rod Returned Waste lbs",
+                    "Returned",
+                    "Requestor",
+                    "Status",
+                    "Submitted",
+                    "Approver"
+                };
+                AddColumnHeaders(worksheet, columnHeaders);
+
+                AddDataRows(worksheet, logs.ReturnModel.Items);
+
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+                // handle exception
+                return null;
+            }
+        }
+
+        private void AddDataRows(IXLWorksheet worksheet, List<WRRLogDetailViewModel> items)
+        {
+            var row = 2;
+            foreach (var item in items)
+            {
+                var logIndex = 0;
+
+                worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCalibrationDate;
+                worksheet.Cell(row, ++logIndex).Value = item.FumeControlUsed;
+                worksheet.Cell(row, ++logIndex).Value = item.RodType != null ? item.RodType.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Twr;
+                worksheet.Cell(row, ++logIndex).Value = item.WeldMethod != null ? item.WeldMethod.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOut;
+                worksheet.Cell(row, ++logIndex).Value = item.Location != null ? item.Location.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOutLbs;
+                worksheet.Cell(row, ++logIndex).Value = item.RodReturnedWasteLbs;
+                worksheet.Cell(row, ++logIndex).Value = item.DateRodReturned;
+                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
+                worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
+                row++;
+            }
+        }
+        private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
+        {
+            var row = worksheet.Row(1);
+            row.Style.Font.Bold = true;
+            for (int i = 0; i < headers.Count; i++)
+            {
+                row.Cell(i + 1).Value = headers[i];
+            }
         }
     }
 }

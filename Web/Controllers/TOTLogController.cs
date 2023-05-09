@@ -217,6 +217,26 @@ namespace Web.Controllers
             }
             return model;
         }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> DownloadExcel(TOTLogSearchViewModel searchModel)
+        {
+            var workBook = await _TOTLogService.DownloadExcel(searchModel);
+            // Convert the workbook to a byte array
+            byte[] fileBytes;
+            using (var stream = new MemoryStream())
+            {
+                workBook.SaveAs(stream);
+                fileBytes = stream.ToArray();
+            }
+
+            // Set the content type and file name for the Excel file
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "time-on-tool-logs.xlsx";
+
+            // Return the Excel file as a FileStreamResult
+            return File(new MemoryStream(fileBytes), contentType, fileName);
+        }
     }
 
 }

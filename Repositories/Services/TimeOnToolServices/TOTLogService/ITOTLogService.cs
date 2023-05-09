@@ -1,9 +1,11 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
+using ClosedXML.Excel;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Interfaces;
 using Repositories.Shared.Interfaces;
 using ViewModels.Shared;
+using ViewModels.TimeOnTools.TOTLog;
 
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
@@ -16,5 +18,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         Task<IRepositoryResponse> GetTWRAphabeticValues<M>(IBaseSearchModel search);
 
         Task<IRepositoryResponse> GetDelayReason<BaseBriefVM>(IBaseSearchModel search);
+        Task<XLWorkbook> DownloadExcel(TOTLogSearchViewModel searchModel);
     }
 }
