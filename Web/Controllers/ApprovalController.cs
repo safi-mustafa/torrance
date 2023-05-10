@@ -249,7 +249,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
-                new DataTableViewModel{title = "Requester",data = "Requester", orderable=true},
+                new DataTableViewModel{title = "Requester",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
                 //new DataTableViewModel{title = "Approver",data = "Approver"},
                 new DataTableViewModel{title = "Department",data = "Department",orderable=true},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
