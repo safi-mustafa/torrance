@@ -13,7 +13,7 @@ namespace Helpers.Extensions
             try
             {
                 PaginatedResultModel<T> searchResult = new PaginatedResultModel<T>();
-                query.OrderColumns(search);
+                query = query.OrderColumns(search);
 
                 try
                 {

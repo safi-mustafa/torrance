@@ -58,6 +58,7 @@ namespace Pagination
         public bool DisablePagination { get; set; } = false;
         public virtual string OrderByColumn { get; set; }
         public PaginationOrderCatalog OrderDir { get; set; } = PaginationOrderCatalog.Asc;
+        public List<SortExpression> SortExpressions { get; set; }
         [IgnoreDataMember]
         public int Draw { get; set; }
         public DataTableSearchViewModel Search { get; set; }
@@ -67,5 +68,11 @@ namespace Pagination
     {
         public string value { get; set; }
         public string regex { get; set; }
+    }
+
+    public class SortExpression
+    {
+        public string Column { get; set; }
+        public string Direction { get; set; }
     }
 }

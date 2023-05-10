@@ -64,8 +64,8 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name", orderable=true},
-                new DataTableViewModel{title = "Approver",data = "Approver.Name", orderable=true},
+                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
                 new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
                 new DataTableViewModel{title = "Shift",data = "Shift.Name", orderable=true},
@@ -82,7 +82,7 @@ namespace Web.Controllers
                 //new DataTableViewModel{title = "Date",data = "FormattedStartOfWork", sortingColumn="StartOfWork", orderable=true},
                 new DataTableViewModel{title = "HC",data = "ManPowerAffected", orderable=true},
                 new DataTableViewModel{title = "MH",data = "ManHours", orderable=true},
-                new DataTableViewModel{title = "TH",data = "TotalHours", orderable=true},
+                new DataTableViewModel{title = "TH",data = "TotalHours", orderable=false},
                 new DataTableViewModel{title = "Delay Description",data = "DelayDescription",className="exclude-form-table include-in-export"},
 
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
