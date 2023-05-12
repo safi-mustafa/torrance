@@ -53,6 +53,7 @@ using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
+using Repositories.Shared.VersionService;
 
 namespace Web.Extensions
 {
@@ -225,6 +226,8 @@ namespace Web.Extensions
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IVersionService, VersionService>();
+
         }
     }
 }

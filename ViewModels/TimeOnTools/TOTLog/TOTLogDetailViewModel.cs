@@ -36,7 +36,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return CreatedOn.Date.FormatDateInPST();
+                return CreatedOn.FormatDateInPST();
             }
         }
         [Display(Name = "Permit No")]

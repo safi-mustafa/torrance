@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
 using Enums;
+using Expo.Server.Client;
+using Expo.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Newtonsoft.Json;
 using Repositories.Services.AppSettingServices.AdministratorService;
 using ViewModels.AppSettings.Administrator;
 using ViewModels.Authentication.User;
 using ViewModels.DataTable;
+using ViewModels.Notification;
 
 namespace Web.Controllers
 {
@@ -19,7 +23,7 @@ namespace Web.Controllers
         private readonly ILogger<AdministratorController> _logger;
         private readonly UserManager<ToranceUser> _userManager;
 
-        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> adminService, ILogger<AdministratorController> logger, IMapper mapper,UserManager<ToranceUser> userManager) : base(adminService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
+        public AdministratorController(IAdministratorService<AdministratorModifyViewModel, AdministratorModifyViewModel, AdministratorDetailViewModel> adminService, ILogger<AdministratorController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(adminService, logger, mapper, userManager, "Administrator", "Master Admin", RolesCatalog.Administrator)
         {
             _adminService = adminService;
             _logger = logger;
@@ -83,5 +87,8 @@ namespace Web.Controllers
             var response = await _adminService.ValidatePassword(password);
             return response;
         }
+
+
+        
     }
 }

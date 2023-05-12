@@ -1,30 +1,27 @@
-﻿using System;
-using DataLibrary;
+﻿using DataLibrary;
 using Expo.Server.Client;
 using Expo.Server.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Models;
-using Newtonsoft.Json;
-using NotificationWorkerService.Context;
-using NotificationWorkerService.Interface;
-using ViewModels.Notification;
 
-namespace NotificationWorkerService.Repository
+namespace Web.Controllers
 {
-    public class PushNotificationService : IPushNotification
+    public class NotificationController : Controller
     {
-        private readonly ILogger<PushNotificationService> _logger;
+        private readonly ToranceContext _db;
 
-        public PushNotificationService(ILogger<PushNotificationService> logger)
+        public NotificationController(ToranceContext db)
         {
-            _logger = logger;
+            _db = db;
         }
-        public async Task<bool> SendPushNotification(Notification notification, string deviceId)
+        public async Task<bool> SendBlankNotification()
         {
             try
             {
 
-                var notificationBody = JsonConvert.DeserializeObject<LogPushNotificationViewModel>(notification.Message);
+                var users = await _db.Users.Where(x => !string.IsNullOrEmpty(x.DeviceId)).ToListAsync();
+
+                var notificationBody = "";
 
                 var expoSDKClient = new PushApiClient();
                 var pushTicketReq = new PushTicketRequest()
@@ -36,10 +33,8 @@ namespace NotificationWorkerService.Repository
                 };
 
                 pushTicketReq.PushTo = new List<string>() { deviceId };
-                //pushTicketReq.PushTo = new List<string>() { "PRMSxIGfT1w_sWA9xXqK_9" };
 
                 var result = await expoSDKClient.PushSendAsync(pushTicketReq);
-                _logger.LogInformation($"Entity Id: {notification.EntityId}");
                 if (result == null || result?.PushTicketErrors?.Count() > 0)
                     return false;
                 foreach (var stat in result?.PushTicketStatuses)
@@ -55,6 +50,4 @@ namespace NotificationWorkerService.Repository
             }
         }
     }
-
 }
-

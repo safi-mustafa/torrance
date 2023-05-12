@@ -29,7 +29,16 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                return CreatedOn.Date.FormatDateInPST();
+                return CreatedOn.FormatDateInPST();
+            }
+        }
+
+        [Display(Name = "Submitted Time")]
+        public string FormattedCreatedTime
+        {
+            get
+            {
+                return CreatedOn.FormatTimeInPST();
             }
         }
 

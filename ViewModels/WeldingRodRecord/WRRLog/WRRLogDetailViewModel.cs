@@ -33,7 +33,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CreatedOn.Date.FormatDateInPST();
+                return CreatedOn.FormatDateInPST();
             }
         }
         public DateTime Date { get { return CreatedOn; } }

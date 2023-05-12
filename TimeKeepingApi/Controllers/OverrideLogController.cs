@@ -7,6 +7,7 @@ using Pagination;
 using Repositories.Services.CommonServices;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
+using Repositories.Shared.VersionService;
 using Select2.Model;
 using Torrance.Api.Controllers;
 using ViewModels.Common;
@@ -24,12 +25,19 @@ namespace API.Controllers
         private readonly IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> _oRLogService;
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
+        private readonly IVersionService _versionService;
 
-        public OverrideLogController(IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> oRLogService, IUserInfoService userInfoService, IMapper mapper) : base(oRLogService)
+        public OverrideLogController(
+            IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> oRLogService
+            , IUserInfoService userInfoService
+            , IMapper mapper
+            , IVersionService versionService
+            ) : base(oRLogService)
         {
             _oRLogService = oRLogService;
             _userInfoService = userInfoService;
             _mapper = mapper;
+            _versionService = versionService;
         }
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
@@ -42,6 +50,26 @@ namespace API.Controllers
         }
         public override Task<IActionResult> Post([FromBody] ORLogModifyViewModel model)
         {
+            ManagePostModelState();
+            return base.Post(model);
+        }
+
+        public override Task<IActionResult> Put([FromBody] ORLogModifyViewModel model)
+        {
+            ManagePutModelState();
+            return base.Put(model);
+        }
+
+        [HttpGet]
+        [Route("~/api/[controller]/GetOverrideTypes")]
+        public async Task<IActionResult> GetOverrideTypes([FromQuery] BaseSearchModel search)
+        {
+            var result = await _oRLogService.GetOverrideTypes<Select2ViewModel>(search);
+            return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
+        }
+
+        private void ManagePostModelState()
+        {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
@@ -52,28 +80,25 @@ namespace API.Controllers
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            return base.Post(model);
+            if (_versionService.GetVersionNumber().Equals("1.0"))
+            {
+                ModelState.Remove("EmployeeNames");
+            }
         }
-
-        public override Task<IActionResult> Put([FromBody] ORLogModifyViewModel model)
+        private void ManagePutModelState()
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
-               // ModelState.Remove("Approver.Name");
+                // ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            return base.Put(model);
-        }
-
-        [HttpGet]
-        [Route("~/api/[controller]/GetOverrideTypes")]
-        public async Task<IActionResult> GetOverrideTypes([FromQuery] BaseSearchModel search)
-        {
-            var result = await _oRLogService.GetOverrideTypes<Select2ViewModel>(search);
-            return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
+            if (_versionService.GetVersionNumber().Equals("1.0"))
+            {
+                ModelState.Remove("EmployeeNames");
+            }
         }
     }
 }

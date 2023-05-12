@@ -20,5 +20,12 @@ namespace Helpers.Datetime
             DateTime pstTime = TimeZoneInfo.ConvertTimeFromUtc(date, pstZone);
             return pstTime.ToString("MM/dd/yyyy");
         }
+
+        public static string FormatTimeInPST(this DateTime date)
+        {
+            TimeZoneInfo pstZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            DateTime pstTime = TimeZoneInfo.ConvertTimeFromUtc(date, pstZone);
+            return pstTime.ToString("hh:mm tt");
+        }
     }
 }

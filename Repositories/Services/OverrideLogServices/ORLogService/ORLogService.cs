@@ -515,16 +515,19 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
                     rowNumber = rowNumber + 1;
-
-                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Department.Name;
-                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Unit.Name;
-                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Shift.Name;
-                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
-                    overrideLogSheet.Cell(rowNumber, 5).Value = logs.ReturnModel.Items[l].WorkScope;
-                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].Reason;
-                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
+                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
+                    overrideLogSheet.Cell(rowNumber, 5).Value = logs.ReturnModel.Items[l].FormattedCreatedTime;
+                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
                     overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
-                    int currentColumn = 8;
+                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
+                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
+                    overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].EmployeeNames;
+                    int currentColumn = 12;
                     for (int i = 0; i < maxCostRows; i++)
                     {
                         if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
@@ -533,16 +536,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
                         }
                         else
                         {
-                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
                         }
                     }
 
@@ -550,8 +553,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Employee.Name;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
 
                     //for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
@@ -576,25 +577,31 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
         {
-           // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            overrideLogSheet.Cell(1, 1).Value = "Department";
-            overrideLogSheet.Cell(1, 2).Value = "Unit";
-            overrideLogSheet.Cell(1, 3).Value = "Shift";
-            overrideLogSheet.Cell(1, 4).Value = "Work Date";
-            overrideLogSheet.Cell(1, 5).Value = "Workscope";
-            overrideLogSheet.Cell(1, 6).Value = "Override Reason";
-            overrideLogSheet.Cell(1, 7).Value = "Company";
+            // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+            overrideLogSheet.Cell(1, 1).Value = "Company";
+            overrideLogSheet.Cell(1, 2).Value = "Department";
+            overrideLogSheet.Cell(1, 3).Value = "Requester";
+            overrideLogSheet.Cell(1, 4).Value = "Date Submitted";
+            overrideLogSheet.Cell(1, 5).Value = "Time Submitted";
+            overrideLogSheet.Cell(1, 6).Value = "Work Date";
+            overrideLogSheet.Cell(1, 7).Value = "Workscope";
             overrideLogSheet.Cell(1, 8).Value = "PO Number";
 
-            int currentColumn = 8;
+            overrideLogSheet.Cell(1, 9).Value = "Unit";
+            overrideLogSheet.Cell(1, 10).Value = "Shift";
+            overrideLogSheet.Cell(1, 11).Value = "Override Reason";
+            overrideLogSheet.Cell(1, 12).Value = "Employee Names";
+
+            int currentColumn = 12;
             for (int i = 0; i < maxCostRows; i++)
             {
                 //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft - {i + 1}";
+                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
                 overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Hours - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
+                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
+                overrideLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
+                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
+                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
             }
 
             currentColumn += 1;
@@ -602,8 +609,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             overrideLogSheet.Cell(1, currentColumn++).Value = "Total Head Count";
             overrideLogSheet.Cell(1, currentColumn++).Value = "Total Cost";
             overrideLogSheet.Cell(1, currentColumn++).Value = "Status";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Submitted";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Requester";
             overrideLogSheet.Cell(1, currentColumn++).Value = "Approver";
 
             //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
