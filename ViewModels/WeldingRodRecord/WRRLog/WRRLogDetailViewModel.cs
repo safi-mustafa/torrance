@@ -29,6 +29,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public long Id { get; set; }
         public DateTime CreatedOn { get; set; }
 
+        [Display(Name = "Submitted")]
         public string FormattedCreatedOn
         {
             get
@@ -36,12 +37,20 @@ namespace ViewModels.WeldingRodRecord.WRRLog
                 return CreatedOn.FormatDateInPST();
             }
         }
+        [Display(Name = "Submitted Time")]
+        public string FormattedCreatedTime
+        {
+            get
+            {
+                return CreatedOn.FormatTimeInPST();
+            }
+        }
         public DateTime Date { get { return CreatedOn; } }
         public string FormattedDate
         {
             get
             {
-                return Date.Date.FormatDateInPST();
+                return CreatedOn.FormatDateInPST();
             }
         }
         [Display(Name = "Workscope")]

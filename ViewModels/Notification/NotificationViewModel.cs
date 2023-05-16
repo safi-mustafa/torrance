@@ -29,7 +29,7 @@ namespace ViewModels.Notification
         public NotificationEventTypeCatalog EventType { get; set; }
         public NotificationEntityType EntityType { get; set; } // For Identifying DB Table. It has nothing to do with log 
         public DateTime CreatedOn { get; set; }
-        public string FormattedCreatedOn { get => CreatedOn.FormatDateInPST(); }
+        public string FormattedCreatedOn { get => CreatedOn.FormatDatetimeInPST(); }
 
 
 

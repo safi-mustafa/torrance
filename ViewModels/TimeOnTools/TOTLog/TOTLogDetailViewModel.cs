@@ -39,6 +39,14 @@ namespace ViewModels.TimeOnTools.TOTLog
                 return CreatedOn.FormatDateInPST();
             }
         }
+        [Display(Name = "Submitted Time")]
+        public string FormattedCreatedTime
+        {
+            get
+            {
+                return CreatedOn.FormatTimeInPST();
+            }
+        }
         [Display(Name = "Permit No")]
         public string? PermitNo { get; set; }
 

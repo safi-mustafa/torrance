@@ -293,9 +293,12 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
                 var columnHeaders = new List<string>
                 {
-                    "Department",
-                    "Unit",
                     "Company",
+                    "Department",
+                    "Requestor",
+                    "Submitted Date",
+                    "Submitted Time",
+                    "Unit",
                     "Calibration Date",
                     "Fume Control Used",
                     "Rod Type",
@@ -306,9 +309,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     "Rod Checked Out lbs",
                     "Rod Returned Waste lbs",
                     "Returned",
-                    "Requestor",
                     "Status",
-                    "Submitted",
                     "Approver"
                 };
                 AddColumnHeaders(worksheet, columnHeaders);
@@ -331,9 +332,12 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             {
                 var logIndex = 0;
 
-                worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
-                worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
+                worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
+                worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.FormattedCalibrationDate;
                 worksheet.Cell(row, ++logIndex).Value = item.FumeControlUsed;
                 worksheet.Cell(row, ++logIndex).Value = item.RodType != null ? item.RodType.Name : "-";
@@ -344,9 +348,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOutLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.RodReturnedWasteLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.DateRodReturned;
-                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Status;
-                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }

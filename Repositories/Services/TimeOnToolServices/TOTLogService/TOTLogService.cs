@@ -426,16 +426,19 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
                 var columnHeaders = new List<string>
                 {
+                    "Company",
                     "Department",
+                    "Requestor",
+                    "Submitted Date",
+                    "Submitted Time",
                     "Unit",
                     "Shift",
                     "Permit No",
                     "Permit Type",
                     "Description",
-                    "Company",
                     "Foreman",
                     "Twr",
-                    "Reason",
+                    //"Reason",
                     "DelayType",
                     "Start Of Work Delay",
                     "Shift Delay",
@@ -444,9 +447,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     "Hours",
                     "Total Hours",
                     "Delay Description",
-                    "Requestor",
                     "Status",
-                    "Submitted",
                     "Approver"
                 };
                 AddColumnHeaders(worksheet, columnHeaders);
@@ -469,16 +470,19 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             {
                 var logIndex = 0;
 
+                worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
+                worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
                 worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Shift != null ? item.Shift.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.PermitNo;
                 worksheet.Cell(row, ++logIndex).Value = item.PermitType != null ? item.PermitType.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.JobDescription;
-                worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Foreman;
                 worksheet.Cell(row, ++logIndex).Value = item.Twr;
-                worksheet.Cell(row, ++logIndex).Value = item.ReasonForRequest != null ? item.ReasonForRequest.Name : "-";
+                //worksheet.Cell(row, ++logIndex).Value = item.ReasonForRequest != null ? item.ReasonForRequest.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.DelayType != null ? item.DelayType.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.StartOfWorkDelay != null ? item.StartOfWorkDelay.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.ShiftDelay != null ? item.ShiftDelay.Name : "-";
@@ -487,9 +491,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 worksheet.Cell(row, ++logIndex).Value = item.ManHours;
                 worksheet.Cell(row, ++logIndex).Value = item.TotalHours;
                 worksheet.Cell(row, ++logIndex).Value = item.DelayDescription;
-                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Status;
-                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }

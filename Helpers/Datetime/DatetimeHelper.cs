@@ -12,7 +12,7 @@ namespace Helpers.Datetime
         {
             TimeZoneInfo pstZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             DateTime pstTime = TimeZoneInfo.ConvertTimeFromUtc(date, pstZone);
-            return pstTime.ToString("MM/dd/yyyy HH:mm:ss");
+            return pstTime.ToString("MM/dd/yyyy hh:mm tt");
         }
         public static string FormatDateInPST(this DateTime date)
         {
