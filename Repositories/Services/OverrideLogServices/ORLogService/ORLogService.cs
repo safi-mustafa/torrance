@@ -518,7 +518,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
                     overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
                     overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
-                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedOn;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
                     overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
                     overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
                     overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;

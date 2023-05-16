@@ -473,7 +473,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
-                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedOn;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedDate;
                 worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
                 worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Shift != null ? item.Shift.Name : "-";

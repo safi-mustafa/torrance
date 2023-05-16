@@ -20,7 +20,7 @@ namespace ViewModels.Common
         public Status Status { get; set; }
         public string FormattedStatus { get => Status.GetDisplayName(); }
         public DateTime Date { get; set; }
-        public string FormattedDate { get => Date.FormatDateInPST(); }
+        public string FormattedDate { get => Date.FormatDatetimeInPST(); }
         public LogType Type { get; set; }
         public string FormattedLogType { get => Type.GetDisplayName(); }
         public ToranceUser? Employee { get; set; }

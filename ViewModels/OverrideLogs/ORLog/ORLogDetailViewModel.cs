@@ -29,10 +29,9 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                return CreatedOn.FormatDateInPST();
+                return CreatedOn.FormatDatetimeInPST();
             }
         }
-
         [Display(Name = "Submitted Time")]
         public string FormattedCreatedTime
         {
@@ -42,13 +41,22 @@ namespace ViewModels.OverrideLogs.ORLog
             }
         }
 
+        [Display(Name = "Submitted Date")]
+        public string FormattedCreatedDate
+        {
+            get
+            {
+                return CreatedOn.FormatDateInPST();
+            }
+        }
+
         [Display(Name = "Work Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.UtcNow;
         public string FormattedDateOfWorkCompleted
         {
             get
             {
-                return WorkCompletedDate.Date.FormatDateInPST();
+                return WorkCompletedDate.FormatDateInPST();
             }
         }
         public double TotalCost { get; set; }

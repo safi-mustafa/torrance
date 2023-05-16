@@ -1,11 +1,8 @@
 ﻿using Enums;
 using Helpers.Datetime;
-using Helpers.Extensions;
 using Models.Common.Interfaces;
-using Select2.Model;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
@@ -13,7 +10,6 @@ using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools.TOTLog;
-using ViewModels.WeldingRodRecord.Employee;
 using ViewModels.WeldingRodRecord.Location;
 using ViewModels.WeldingRodRecord.RodType;
 using ViewModels.WeldingRodRecord.WeldMethod;
@@ -34,7 +30,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CreatedOn.FormatDateInPST();
+                return CreatedOn.FormatDatetimeInPST();
             }
         }
         [Display(Name = "Submitted Time")]
@@ -43,6 +39,15 @@ namespace ViewModels.WeldingRodRecord.WRRLog
             get
             {
                 return CreatedOn.FormatTimeInPST();
+            }
+        }
+
+        [Display(Name = "Submitted Date")]
+        public string FormattedCreatedDate
+        {
+            get
+            {
+                return CreatedOn.FormatDateInPST();
             }
         }
         public DateTime Date { get { return CreatedOn; } }
@@ -61,7 +66,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return DateRodReturned.Date.FormatDateInPST();
+                return DateRodReturned.FormatDateInPST();
             }
         }
         [DisplayName("Calibration Date")]
@@ -70,7 +75,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CalibrationDate.Date.FormatDateInPST();
+                return CalibrationDate.FormatDateInPST();
             }
         }
         [Required]
@@ -87,7 +92,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return RodCheckedOut.Date.FormatDateInPST();
+                return RodCheckedOut.FormatDateInPST();
             }
         }
         [DisplayName("Rod Checked Out lbs")]

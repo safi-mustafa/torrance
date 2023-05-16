@@ -26,7 +26,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return Date.Date.FormatDateInPST();
+                return Date.FormatDateInPST();
             }
         }
 
@@ -36,7 +36,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return CreatedOn.FormatDateInPST();
+                return CreatedOn.FormatDatetimeInPST();
             }
         }
         [Display(Name = "Submitted Time")]
@@ -45,6 +45,15 @@ namespace ViewModels.TimeOnTools.TOTLog
             get
             {
                 return CreatedOn.FormatTimeInPST();
+            }
+        }
+
+        [Display(Name = "Submitted Date")]
+        public string FormattedCreatedDate
+        {
+            get
+            {
+                return CreatedOn.FormatDateInPST();
             }
         }
         [Display(Name = "Permit No")]
@@ -66,7 +75,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return StartOfWork.Date.FormatDateInPST();
+                return StartOfWork.FormatDateInPST();
             }
         }
         [Display(Name = "Time Requested")]
