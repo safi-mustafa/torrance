@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IStartOfWorkDelayService<StartOfWorkDelayModifyViewModel, StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel> _StartOfWorkDelayService;
         private readonly ILogger<StartOfWorkDelayController> _logger;
 
-        public StartOfWorkDelayController(IStartOfWorkDelayService<StartOfWorkDelayModifyViewModel, StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel> StartOfWorkDelayService, ILogger<StartOfWorkDelayController> logger, IMapper mapper) : base(StartOfWorkDelayService, logger, mapper, "StartOfWorkDelay", "Shift Delays")
+        public StartOfWorkDelayController(IStartOfWorkDelayService<StartOfWorkDelayModifyViewModel, StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel> StartOfWorkDelayService, ILogger<StartOfWorkDelayController> logger, IMapper mapper) : base(StartOfWorkDelayService, logger, mapper, "StartOfWorkDelay", "Start Of Work Delays")
         {
             _StartOfWorkDelayService = StartOfWorkDelayService;
             _logger = logger;

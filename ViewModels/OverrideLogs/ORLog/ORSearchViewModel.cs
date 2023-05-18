@@ -26,6 +26,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public Status? StatusNot { get; set; } = null;
 
         public bool IsExcelDownload { get; set; } = false;
+
+        public List<string> SelectedIds { get; set; }
     }
 
     public class ORLogAPISearchViewModel : BaseSearchModel
@@ -38,5 +40,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public long DepartmentId { get; set; }
         public long ShiftId { get; set; }
         public long ContractorId { get; set; }
+
+        public List<string> SelectedIds { get; set; }
     }
 }

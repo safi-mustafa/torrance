@@ -5,6 +5,11 @@ namespace ViewModels.Authentication.User
 {
     public class UserSearchViewModel : BaseSearchModel
     {
+        public UserSearchViewModel()
+        {
+            OrderByColumn = "FullName";
+            OrderDir = PaginationOrderCatalog.Asc;
+        }
         public string? FullName { get; set; }
         public string? Type { get; set; }
         public string? Email { get; set; }

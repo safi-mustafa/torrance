@@ -137,10 +137,8 @@ namespace Repositories.Services.CommonServices.CompanyService
             {
                 var searchFilter = search as CompanySearchViewModel;
 
-                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
-
+                
                 var companiesQueryable = await GetPaginationDbSet(searchFilter);
-                searchFilter.OrderByColumn = "";
                 var paginatedCompanies = await companiesQueryable.Paginate(searchFilter);
                 var filteredCompaniesIds = paginatedCompanies.Items.Select(x => x.Id);
 

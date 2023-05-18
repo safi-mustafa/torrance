@@ -122,10 +122,8 @@ namespace Repositories.Services.CommonServices.DepartmentService
             {
                 var searchFilter = search as DepartmentSearchViewModel;
 
-                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
 
                 var departmentsQueryable = await GetPaginationDbSet(searchFilter);
-                searchFilter.OrderByColumn = "";
                 var paginatedDepartments = await departmentsQueryable.Paginate(searchFilter);
                 var filteredDepartmentIds = paginatedDepartments.Items.Select(x => x.Id);
 

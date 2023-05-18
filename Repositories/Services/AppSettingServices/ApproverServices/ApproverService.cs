@@ -89,13 +89,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             try
             {
                 var searchFilter = search as ApproverSearchViewModel;
-
-                searchFilter.OrderByColumn = string.IsNullOrEmpty(search.OrderByColumn) ? "Id" : search.OrderByColumn;
-
                 var userQueryable = await GetPaginationDbSet(searchFilter);
-                searchFilter.OrderByColumn = "";
-                var queryString = userQueryable.ToQueryString();
-
+                searchFilter.IgnoreOrdering = true;
                 var users = await userQueryable.Paginate(searchFilter);
                 var filteredUserIds = users.Items.Select(x => x.Id);
 
@@ -110,7 +105,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         AccessCode = x.AccessCode,
                         CanAddLogs = x.CanAddLogs,
                         ActiveStatus = x.ActiveStatus
-                    }).ToListAsync();
+                    }).OrderColumns(search).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
                               ur => ur.RoleId,
@@ -127,19 +122,12 @@ namespace Repositories.Services.AppSettingServices.ApproverService
 
                 //var approverUnits = await _db.ApproverAssociations.Where(x => filteredUserIds.Contains(x.ApproverId)).ToListAsync();
 
-                users.Items.ForEach(x =>
+                userList.ForEach(x =>
                 {
-                    x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
-                    x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
-                    x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
-                    x.FullName = userList.Where(a => a.Id == x.Id).Select(x => x.FullName).FirstOrDefault();
-                    x.AccessCode = userList.Where(a => a.Id == x.Id).Select(x => x.AccessCode).FirstOrDefault();
-                    x.CanAddLogs = userList.Where(a => a.Id == x.Id).Select(x => x.CanAddLogs).FirstOrDefault();
-                    x.ActiveStatus = userList.Where(a => a.Id == x.Id).Select(x => x.ActiveStatus).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                     //x.Associations = _mapper.Map<List<UnitBriefViewModel>>(approverUnits.Where(u => u.ApproverId == x.Id).Select(x => x.Unit).ToList());
                 });
-                var mappedUserList = users.Items as List<M>;
+                var mappedUserList = userList as List<M>;
                 var paginatedModel = new PaginatedResultModel<M> { Items = mappedUserList, _links = users._links, _meta = users._meta };
 
                 var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();

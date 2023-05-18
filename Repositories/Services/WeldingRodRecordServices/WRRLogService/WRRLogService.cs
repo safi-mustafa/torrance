@@ -105,6 +105,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
+                            (searchFilters.SelectedIds == null || searchFilters.SelectedIds.Count <= 0 || searchFilters.SelectedIds.Contains(x.Id.ToString()) || x.Status == Status.Pending)
+                            &&
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)

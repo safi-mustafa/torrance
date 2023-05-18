@@ -1166,6 +1166,15 @@ header {
     background-color: orange;
     vertical-align: middle;
 }
+.badge.Pending {
+    color: orange;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: orange;
+    vertical-align: middle;
+}
 
 .badge.Rejected {
     color: red;

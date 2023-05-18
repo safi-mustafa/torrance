@@ -104,6 +104,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                                 (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
+                            (searchFilters.SelectedIds == null || searchFilters.SelectedIds.Count <= 0 || searchFilters.SelectedIds.Contains(x.Id.ToString()) || x.Status == Status.Pending)
+                            &&
                             (status == null || status == x.Status)
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
@@ -132,7 +134,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.DelayType)
                     .Include(x => x.ReasonForRequest)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters();
-                var query = queryable.ToQueryString();
                 var dbModel = await queryable.FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

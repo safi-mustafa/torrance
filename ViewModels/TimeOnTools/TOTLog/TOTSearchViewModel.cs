@@ -29,6 +29,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public bool IsExcelDownload { get; set; }
+
+        public List<string> SelectedIds { get; set; }
     }
 
     public class TOTLogAPISearchViewModel : BaseSearchModel
@@ -43,6 +45,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public long CompanyId { get; set; }
         public long DepartmentId { get; set; }
         public long ContractorId { get; set; }
+
+        public List<string> SelectedIds { get; set; }
 
     }
 }

@@ -4,7 +4,7 @@ namespace Enums
 {
     public enum Status
     {
-        [Display(Name = "Submitted")]
+        [Display(Name = "Pending")]
         Pending,
         Approved,
         Rejected
@@ -12,7 +12,7 @@ namespace Enums
 
     public enum StatusSearchEnum
     {
-        Approved=1,
-        Rejected=2
+        Approved = 1,
+        Rejected = 2
     }
 }

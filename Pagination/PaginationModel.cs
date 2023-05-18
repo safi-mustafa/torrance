@@ -29,12 +29,15 @@ namespace Pagination
 
     public interface IBaseSearchModel
     {
+
         bool CalculateTotal { get; set; }
         int CurrentPage { get; set; }
         bool DisablePagination { get; set; }
         int Draw { get; set; }
         string OrderByColumn { get; set; }
         PaginationOrderCatalog OrderDir { get; set; }
+
+        bool IgnoreOrdering { get; set; }
         int PerPage { get; set; }
         DataTableSearchViewModel Search { get; set; }
     }
@@ -57,6 +60,8 @@ namespace Pagination
         public int CurrentPage { get; set; } = 1;
         public bool DisablePagination { get; set; } = false;
         public virtual string OrderByColumn { get; set; }
+
+        public bool IgnoreOrdering { get; set; } = false;
         public PaginationOrderCatalog OrderDir { get; set; } = PaginationOrderCatalog.Asc;
         public List<SortExpression> SortExpressions { get; set; }
         [IgnoreDataMember]

@@ -28,6 +28,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public List<string> SelectedIds { get; set; }
     }
 
     public class WRRLogAPISearchViewModel : BaseSearchModel
@@ -45,5 +46,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public Status? Status { get; set; } = null;
         public long CompanyId { get; set; }
         public long ApproverId { get; set; }
+        public List<string> SelectedIds { get; set; }
     }
 }

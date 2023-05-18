@@ -144,7 +144,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         "searching": true,
         "responsive": isResponsive,
         "ordering": true,
-        "order": GetColumnSortings(dtColumns),
+        "order": [],//GetColumnSortings(dtColumns),
         "pagingType": "full_numbers",
         "lengthMenu": [[10, 25, 50, 250], [10, 25, 50, 250]],
         //lBfrtipF
@@ -209,6 +209,11 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             "searchPlaceholder": "Search"
         },
         columns: dtColumns,
+        "rowCallback": function (row, data) {
+            if (data.hasOwnProperty('Id')) {
+                $(row).attr('id', data.Id);
+            }
+        },
         "columnDefs": [
             selectableRowObj,
             {
@@ -290,7 +295,15 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                         if (isExcelDownloadAjaxBased) {
                             var controllerName = window.location.href.split("/")[3];
                             var excelDataDownloaderUrl = '/' + controllerName + '/DownloadExcel';
+                            var selectedIds = [];
+
+                            $('tr.selected').each(function () {
+                                var id = $(this).attr('id');
+                                selectedIds.push(id);
+                            });
                             var excelDataFilters = dt.ajax.params();
+                            excelDataFilters.SelectedIds = selectedIds;
+                            excelDataFilters.DisablePagination = true;
                             $.ajax({
                                 url: excelDataDownloaderUrl,
                                 type: 'POST',
