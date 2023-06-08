@@ -66,7 +66,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return DateRodReturned.FormatDateInPST();
+                return DateRodReturned.FormatDate();
             }
         }
         [DisplayName("Calibration Date")]
@@ -75,7 +75,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return CalibrationDate.FormatDateInPST();
+                return CalibrationDate.FormatDate();
             }
         }
         [Required]
@@ -92,7 +92,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         {
             get
             {
-                return RodCheckedOut.FormatDateInPST();
+                return RodCheckedOut.FormatDate();
             }
         }
         [DisplayName("Rod Checked Out lbs")]

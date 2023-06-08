@@ -26,7 +26,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return Date.FormatDateInPST();
+                return Date.FormatDate();
             }
         }
 
@@ -75,7 +75,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         {
             get
             {
-                return StartOfWork.FormatDateInPST();
+                return StartOfWork.FormatDate();
             }
         }
         [Display(Name = "Time Requested")]

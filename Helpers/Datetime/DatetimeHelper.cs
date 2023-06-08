@@ -21,6 +21,11 @@ namespace Helpers.Datetime
             return pstTime.ToString("MM/dd/yyyy");
         }
 
+        public static string FormatDate(this DateTime date)
+        {
+            return date.ToString("MM/dd/yyyy");
+        }
+
         public static string FormatTimeInPST(this DateTime date)
         {
             TimeZoneInfo pstZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");

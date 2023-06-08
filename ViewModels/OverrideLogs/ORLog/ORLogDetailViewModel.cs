@@ -56,7 +56,7 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                return WorkCompletedDate.FormatDateInPST();
+                return WorkCompletedDate.FormatDate();
             }
         }
         public double TotalCost { get; set; }
