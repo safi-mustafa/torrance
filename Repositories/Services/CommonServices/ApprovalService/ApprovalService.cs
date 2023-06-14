@@ -102,6 +102,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
+                    x.IsDeleted == false
+                     &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
                          &&
                          (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)

@@ -83,6 +83,8 @@ namespace Web.Controllers
                     response = await _totService.Delete(id);
                 else if (type == LogType.WeldingRodRecord)
                     response = await _wrrService.Delete(id);
+                else if (type == LogType.Override)
+                    response = await _overrideLogService.Delete(id);
                 else
                     throw new Exception("Log type not found");
 
