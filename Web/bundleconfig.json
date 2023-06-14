@@ -79,6 +79,7 @@
     "outputFileName": "wwwroot/js/bundles/datatable.js",
     "inputFiles": [
       "wwwroot/js/datatables/datatables.min.js",
+      //"wwwroot/js/datatables/extensions/fixed_header.min.js",
       "wwwroot/js/datatables/extensions/responsive.min.js",
       "wwwroot/js/datatables/datatables_responsive.js",
       "wwwroot/js/datatables/extensions/select.min.js"

@@ -29,7 +29,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false,pageLength=25) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
@@ -117,9 +117,9 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
-    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow);
+    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength);
 }
-function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow) {
+function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength) {
     if (typeof isResponsive != "boolean") {
         isResponsive = isResponsive == "true";
     }
@@ -142,11 +142,13 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         "serverSide": true,
         "proccessing": true,
         "searching": true,
+        "fixedHeader": true,
+        "pageLength": pageLength,
         "responsive": isResponsive,
         "ordering": true,
         "order": [],//GetColumnSortings(dtColumns),
         "pagingType": "full_numbers",
-        "lengthMenu": [[10, 25, 50, 250], [10, 25, 50, 250]],
+        "lengthMenu": [[10, 25, 50, 250, 1000, 5000, -1], [10, 25, 50, 250, 1000, 5000, "All"]],
         //lBfrtipF
         "dom": "<'datatable-header'B<'float-right'l>f>" + // Remove B to remove buttons
             "<'datatable-scroll'tr>" +
@@ -182,10 +184,10 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                     });
                 }
                 if (searchParams.length === -1) {
-                    searchParams["Pagination"] = false;
+                    searchParams["DisablePagination"] = true;
                 }
                 else {
-                    searchParams["Pagination"] = true;
+                    searchParams["DisablePagination"] = false;
                 }
                 searchParams["CurrentPage"] = (searchParams.start / searchParams.length) + 1;
                 searchParams["PerPage"] = searchParams.length;
@@ -360,6 +362,9 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
         }
+    });
+    new $.fn.dataTable.FixedHeader(dataTable, {
+        // options
     });
     SetSearchFilters();
 }

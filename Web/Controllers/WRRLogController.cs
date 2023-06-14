@@ -113,6 +113,7 @@ namespace Web.Controllers
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" });
         }
 
         private async Task<WRRLogModifyViewModel> GetCreateViewModel()

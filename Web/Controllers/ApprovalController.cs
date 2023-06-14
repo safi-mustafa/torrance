@@ -111,7 +111,7 @@ namespace Web.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> ApproveByNotification(Guid id,string message="")
+        public async Task<IActionResult> ApproveByNotification(Guid id, string message = "")
         {
             var response = await _approvalService.GetLogIdAndTypeFromNotificationId(id);
 
@@ -121,7 +121,7 @@ namespace Web.Controllers
                 var responseModel = parsedModel?.ReturnModel;
                 try
                 {
-                    ViewBag.Message=message;
+                    ViewBag.Message = message;
                     return await SetDetailView(responseModel.LogId, responseModel.LogType, "~/Views/Approval/DetailForUnAuthenticatedApprove.cshtml", true, id, responseModel.ApproverId);
                 }
                 catch (Exception ex)
@@ -237,7 +237,7 @@ namespace Web.Controllers
             {
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/Approval/Detail?Id&Type"},
                     new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/Approval/Update?Id&Type"},
-                    //new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
+                    new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/Approval/Delete?Id&Type"},
                     //new DataTableActionViewModel() {Action="Approve",Title="Approve",Href=$"/Approval/Approve?Id&Type"},
             };
         }

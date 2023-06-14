@@ -6,6 +6,7 @@
 }
 <link href="~/css/bundles/datatable.css" rel="stylesheet" />
 <link href="~/css/bundles/datatable-buttons.css" rel="stylesheet" />
+<link href="~/css/datatable/extensions/fixed_header.min.css" rel="stylesheet" />
 <div class="row">
     <div class="col-md-6"><h1 class="model-title-heading">@Model.Title</h1></div>
 </div>
@@ -27,10 +28,31 @@
         @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Search.cshtml", Model)
     </div>
 </div>
-
+<div class="modal fade" id="crudDeleteModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Enter your password:</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div id="crudModalPanelBody" class="modal-body">
+                <div id="crudDeleteModalError">
+                </div>
+                <input name="Password" type="password" id="user-password" class="form-control" placeholder="Password" autocomplete="new-password" />
+                <br />
+                <div class="text-center">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn blue-btn" id="validate-password">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="~/js/bundles/datatable.js"></script>
     <script src="~/js/bundles/datatable-buttons.js"></script>
+    <script src="~/js/datatables/extensions/fixed_header.min.js"></script>
     <script src="~/js/bundles/custom-datatable.js"></script>
     <script src="~/js/crud/ajaxCrud.js"></script>
     <partial name="_ValidationScriptsPartial" />
@@ -46,9 +68,9 @@
                 $("#" + dataTableId).dataTable().fnDestroy();
                 $("#crud-list-table").addClass("dataTable");
             }
-            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())', true, '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())');
+            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())', true, '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())',-1);
         }
-        
+
     </script>
     <script src="~/js/custom-scripts/approval-script.js"></script>
 }

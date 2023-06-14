@@ -131,6 +131,7 @@ namespace Web.Controllers
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" });
         }
 
         public async Task<JsonResult> GetTWRNumericValues(string prefix, int pageSize, int pageNumber, string customParams)

@@ -63,18 +63,19 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            var actions = new List<DataTableActionViewModel>();
+            //var actions = new List<DataTableActionViewModel>();
             //if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin")|| User.IsInRole("Administrator"))
             //{
             //    actions.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id" });
             //    actions.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
             //}
-            actions.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/OverrideLog/Detail/Id" });
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/OverrideLog/Detail/Id" });
             if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
-            result.ActionsList = actions;
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
+            //result.ActionsList = actions;
         }
         protected override ORLogSearchViewModel SetDefaultFilters()
         {

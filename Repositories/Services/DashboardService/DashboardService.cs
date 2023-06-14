@@ -56,10 +56,10 @@ namespace Repositories.Services.DashboardService
               }).ToListAsync();
 
             model.RequestReason = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-              .Include(x => x.ReasonForRequest)
-              .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
+              .Include(x => x.DelayType)
+              .GroupBy(x => x.DelayTypeId).Select(x => new LogPieChartViewModel
               {
-                  Category = x.Max(y => y.ReasonForRequest.Name),
+                  Category = x.Max(y => y.DelayType.Name),
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
