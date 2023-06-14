@@ -134,3 +134,9 @@ table.dataTable thead th, table.dataTable tfoot th {
 .exclude-form-table {
     display: none !important;
 }
+
+.fixedHeader-floating thead {
+    color: white;
+    background: #0057AF;
+    border: none;
+}

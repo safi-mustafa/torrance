@@ -143,6 +143,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
         "proccessing": true,
         "searching": true,
         "fixedHeader": true,
+        scrollX: true,
         "pageLength": pageLength,
         "responsive": isResponsive,
         "ordering": true,
