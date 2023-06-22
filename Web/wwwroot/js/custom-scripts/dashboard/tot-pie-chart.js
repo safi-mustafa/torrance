@@ -10,6 +10,9 @@
             TOTUnitChart(data.Unit);
             TOTShiftChart(data.Shift);
             TOTRequestReasonChart(data.RequestReason);
+            TOTShiftDelayChart(data.ShiftDelay);
+            TOTReworkDelayChart(data.ReworkDelay);
+            TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
         },
         error: function () {
             console.log("Error occured!!")
@@ -29,4 +32,14 @@ function TOTShiftChart(seriesData) {
 }
 function TOTRequestReasonChart(seriesData) {
     GeneratePieChart("tot-request-reason", seriesData)
+}
+
+function TOTShiftDelayChart(seriesData) {
+    GeneratePieChart("tot-shift-delay", seriesData)
+}
+function TOTReworkDelayChart(seriesData) {
+    GeneratePieChart("tot-rework-delay", seriesData)
+}
+function TOTStartOfWorkDelayChart(seriesData) {
+    GeneratePieChart("tot-start-of-work-delay", seriesData)
 }
