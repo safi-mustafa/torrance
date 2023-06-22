@@ -63,6 +63,62 @@ namespace Repositories.Services.DashboardService
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
+            model.ShiftDelay = await (from s in _db.ShiftDelays
+                                      join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on s.Id equals tot.ShiftDelayId into totlog
+                                      from tot in totlog.DefaultIfEmpty()
+                                      select new
+                                      {
+                                          Id = s.Id,
+                                          Name = s.Name,
+                                          TOTLogCount = tot != null ? tot.Id : 0
+                                      }
+                                )
+                                .GroupBy(x => x.Id)
+                                .Select(x => new LogPieChartViewModel
+                                {
+                                    Category = x.Max(n => n.Name),
+                                    Value = x.Count(c => c.TOTLogCount != 0)
+
+                                })
+                                .ToListAsync();
+
+            model.ReworkDelay = await (from r in _db.ReworkDelays
+                                       join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on r.Id equals tot.ReworkDelayId into totlog
+                                       from tot in totlog.DefaultIfEmpty()
+                                       select new
+                                       {
+                                           Id = r.Id,
+                                           Name = r.Name,
+                                           TOTLogCount = tot != null ? tot.Id : 0
+                                       }
+                                )
+                                .GroupBy(x => x.Id)
+                                .Select(x => new LogPieChartViewModel
+                                {
+                                    Category = x.Max(n => n.Name),
+                                    Value = x.Count(c => c.TOTLogCount != 0)
+
+                                })
+                                .ToListAsync();
+
+            model.StartOfWorkDelay = await (from sow in _db.StartOfWorkDelays
+                                            join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on sow.Id equals tot.StartOfWorkDelayId into totlog
+                                            from tot in totlog.DefaultIfEmpty()
+                                            select new
+                                            {
+                                                Id = sow.Id,
+                                                Name = sow.Name,
+                                                TOTLogCount = tot != null ? tot.Id : 0
+                                            }
+                                )
+                                .GroupBy(x => x.Id)
+                                .Select(x => new LogPieChartViewModel
+                                {
+                                    Category = x.Max(n => n.Name),
+                                    Value = x.Count(c => c.TOTLogCount != 0)
+
+                                })
+                                .ToListAsync();
             return model;
 
         }
@@ -118,10 +174,21 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Status).ToString(),
                   Value = x.Count()
               }).ToListAsync();
-
             return model;
-
         }
+
+        public async Task GetShiftDelayTOTCount(TOTLogSearchViewModel search)
+        {
+            var model = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+              .GroupBy(x => x.StartOfWorkDelayId).Select(x => new
+              {
+                  DelayTypeName = x.Max(y => y.DelayType.Name).ToString(),
+                  StartOfWorkDelayName = x.Max(y => y.StartOfWorkDelay.Name),
+                  StartOfWorkDelay = x.Key,
+                  Value = x.Count()
+              }).ToListAsync();
+        }
+
 
         public async Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search)
         {
@@ -158,7 +225,7 @@ namespace Repositories.Services.DashboardService
             {
                 var dashboardData = new DashboardViewModel
                 {
-                    TotalORLogs = await _db.OverrideLogs.Where(x=>x.IsDeleted==false).CountAsync(),
+                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false).CountAsync(),
                     TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false).CountAsync(),
                     TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false).CountAsync()
                 };

@@ -12,6 +12,5 @@ namespace Repositories.Services.DashboardService
         Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search);
         Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search);
         Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search);
-
     }
 }
