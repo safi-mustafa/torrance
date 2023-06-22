@@ -11,6 +11,11 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogSearchViewModel : BaseSearchModel
     {
+        public WRRLogSearchViewModel()
+        {
+            OrderByColumn = "CreatedOn";
+            OrderDir = PaginationOrderCatalog.Desc;
+        }
         public string Email { get; set; }
         public bool IsExcelDownload { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();

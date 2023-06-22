@@ -22,7 +22,7 @@ namespace Models.OverrideLogs
         [ForeignKey("CraftSkill")]
         public long CraftSkillId { get; set; }
         public CraftSkill CraftSkill { get; set; }
-        public int OverrideHours { get; set; }
+        public double OverrideHours { get; set; }
 
 
     }

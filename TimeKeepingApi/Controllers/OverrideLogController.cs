@@ -50,13 +50,13 @@ namespace API.Controllers
         }
         public override Task<IActionResult> Post([FromBody] ORLogModifyViewModel model)
         {
-            ManagePostModelState();
+            ManagePostModelState(model);
             return base.Post(model);
         }
 
         public override Task<IActionResult> Put([FromBody] ORLogModifyViewModel model)
         {
-            ManagePutModelState();
+            ManagePutModelState(model);
             return base.Put(model);
         }
 
@@ -68,7 +68,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
 
-        private void ManagePostModelState()
+        private void ManagePostModelState(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
@@ -84,8 +84,12 @@ namespace API.Controllers
             {
                 ModelState.Remove("EmployeeNames");
             }
+            if (model.Costs.Count < 1)
+            {
+                ModelState.AddModelError("Costs.HeadCount","Please add atleast one cost row.");
+            }
         }
-        private void ManagePutModelState()
+        private void ManagePutModelState(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
@@ -98,6 +102,10 @@ namespace API.Controllers
             if (_versionService.GetVersionNumber().Equals("1.0"))
             {
                 ModelState.Remove("EmployeeNames");
+            }
+            if (model.Costs.Count < 1)
+            {
+                ModelState.AddModelError("Costs.HeadCount", "Please add atleast one cost row.");
             }
         }
     }

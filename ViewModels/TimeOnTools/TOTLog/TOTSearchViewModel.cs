@@ -15,6 +15,11 @@ namespace ViewModels.TimeOnTools.TOTLog
 {
     public class TOTLogSearchViewModel : BaseSearchModel
     {
+        public TOTLogSearchViewModel()
+        {
+            OrderByColumn = "CreatedOn";
+            OrderDir = PaginationOrderCatalog.Desc;
+        }
         [Display(Name = "Equipment No")]
         public string? EquipmentNo { get; set; }
         public StatusSearchEnum? Status { get; set; } = null;

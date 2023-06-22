@@ -14,6 +14,11 @@ namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogSearchViewModel : BaseSearchModel
     {
+        public ORLogSearchViewModel()
+        {
+            OrderByColumn = "CreatedOn";
+            OrderDir = PaginationOrderCatalog.Desc;
+        }
         public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
