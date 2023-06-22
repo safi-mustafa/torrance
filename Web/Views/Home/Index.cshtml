@@ -104,7 +104,19 @@
             <partial name="_WRRStatusChart" />
             <partial name="_OverrideStatusChart" />
             @* <partial name="_WrrPieCharts" />*@
-
+            <div class="row col-12">
+                <partial name="_OverridePieCharts" />
+                @*  <div class="card w-100">
+                <div class="card-body">
+                <div class="content">
+                <h5 class="card-title">Overrides</h5>
+                </div>
+                <div class="row col-12">
+                <partial name="_OverridePieCharts" />
+                </div>
+                </div>
+                </div>*@
+            </div>
             <div class="row col-12">
                 <partial name="_TOTPieCharts" />
                 @*<div class="card w-100">
@@ -118,19 +130,7 @@
                         </div>
                     </div>*@
             </div>
-            <div class="row col-12">
-                <partial name="_OverridePieCharts" />
-                @*  <div class="card w-100">
-                        <div class="card-body">
-                            <div class="content">
-                                <h5 class="card-title">Overrides</h5>
-                            </div>
-                            <div class="row col-12">
-                                <partial name="_OverridePieCharts" />
-                            </div>
-                        </div>
-                    </div>*@
-            </div>
+           
         </div>
     </main>
 </div>

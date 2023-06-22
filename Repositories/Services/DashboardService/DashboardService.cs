@@ -63,62 +63,29 @@ namespace Repositories.Services.DashboardService
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
 
-            model.ShiftDelay = await (from s in _db.ShiftDelays
-                                      join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on s.Id equals tot.ShiftDelayId into totlog
-                                      from tot in totlog.DefaultIfEmpty()
-                                      select new
+            model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                                      .Include(x => x.ShiftDelay)
+                                      .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
                                       {
-                                          Id = s.Id,
-                                          Name = s.Name,
-                                          TOTLogCount = tot != null ? tot.Id : 0
-                                      }
-                                )
-                                .GroupBy(x => x.Id)
-                                .Select(x => new LogPieChartViewModel
-                                {
-                                    Category = x.Max(n => n.Name),
-                                    Value = x.Count(c => c.TOTLogCount != 0)
+                                          Category = x.Max(y => y.ShiftDelay.Name)??"None",
+                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                      }).ToListAsync();
 
-                                })
-                                .ToListAsync();
+            model.ReworkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                                     .Include(x => x.ReworkDelay)
+                                     .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
+                                     {
+                                         Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
+                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                     }).ToListAsync();
 
-            model.ReworkDelay = await (from r in _db.ReworkDelays
-                                       join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on r.Id equals tot.ReworkDelayId into totlog
-                                       from tot in totlog.DefaultIfEmpty()
-                                       select new
-                                       {
-                                           Id = r.Id,
-                                           Name = r.Name,
-                                           TOTLogCount = tot != null ? tot.Id : 0
-                                       }
-                                )
-                                .GroupBy(x => x.Id)
-                                .Select(x => new LogPieChartViewModel
-                                {
-                                    Category = x.Max(n => n.Name),
-                                    Value = x.Count(c => c.TOTLogCount != 0)
-
-                                })
-                                .ToListAsync();
-
-            model.StartOfWorkDelay = await (from sow in _db.StartOfWorkDelays
-                                            join tot in GetFilteredTOTLogs(search).IgnoreQueryFilters() on sow.Id equals tot.StartOfWorkDelayId into totlog
-                                            from tot in totlog.DefaultIfEmpty()
-                                            select new
-                                            {
-                                                Id = sow.Id,
-                                                Name = sow.Name,
-                                                TOTLogCount = tot != null ? tot.Id : 0
-                                            }
-                                )
-                                .GroupBy(x => x.Id)
-                                .Select(x => new LogPieChartViewModel
-                                {
-                                    Category = x.Max(n => n.Name),
-                                    Value = x.Count(c => c.TOTLogCount != 0)
-
-                                })
-                                .ToListAsync();
+            model.StartOfWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                                     .Include(x => x.StartOfWorkDelay)
+                                     .GroupBy(x => x.StartOfWorkDelayId).Select(x => new LogPieChartViewModel
+                                     {
+                                         Category = x.Max(y => y.StartOfWorkDelay.Name) ?? "None",
+                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                     }).ToListAsync();
             return model;
 
         }

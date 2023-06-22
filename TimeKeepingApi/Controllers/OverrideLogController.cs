@@ -84,10 +84,10 @@ namespace API.Controllers
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (model.Costs.Count < 1)
-            {
-                ModelState.AddModelError("Costs.HeadCount","Please add atleast one cost row.");
-            }
+            //if (model.Costs.Count < 1)
+            //{
+            //    ModelState.AddModelError("Costs.HeadCount","Please add atleast one cost row.");
+            //}
         }
         private void ManagePutModelState(ORLogModifyViewModel model)
         {
@@ -103,10 +103,10 @@ namespace API.Controllers
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (model.Costs.Count < 1)
-            {
-                ModelState.AddModelError("Costs.HeadCount", "Please add atleast one cost row.");
-            }
+            //if (model.Costs.Count < 1)
+            //{
+            //    ModelState.AddModelError("Costs.HeadCount", "Please add atleast one cost row.");
+            //}
         }
     }
 }
