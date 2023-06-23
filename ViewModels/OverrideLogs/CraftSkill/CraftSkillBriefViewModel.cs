@@ -18,5 +18,20 @@ namespace ViewModels.OverrideLogs
 
         public double? DTRate { get; set; }
     }
+    public class CraftSkillForORLogBriefViewModel : BaseBriefVM, ISelect2Data
+    {
+        public CraftSkillForORLogBriefViewModel() : base(true, "The Craft Skill field is required.")
+        {
+
+        }
+        [DisplayName("Craft Skill")]
+        public override string? Name { get; set; }
+
+        public double? STRate { get; set; }
+
+        public double? OTRate { get; set; }
+
+        public double? DTRate { get; set; }
+    }
 
 }

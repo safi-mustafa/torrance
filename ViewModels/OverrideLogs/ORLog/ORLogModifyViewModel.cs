@@ -16,6 +16,7 @@ using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.TimeOnTools;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Helpers.Attributes;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
@@ -52,7 +53,7 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false, "");
 
-
+        [ListMinCount<ORLogCostViewModel>(1)]
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
         [Required]

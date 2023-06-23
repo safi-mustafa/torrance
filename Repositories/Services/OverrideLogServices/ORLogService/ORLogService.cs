@@ -193,7 +193,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                                    Id = olc.Id,
                                                    OverrideHours = olc.OverrideHours,
                                                    HeadCount = olc.HeadCount,
-                                                   CraftSkill = new CraftSkillBriefViewModel()
+                                                   CraftSkill = new CraftSkillForORLogBriefViewModel()
                                                    {
                                                        Id = cs.Id,
                                                        Name = cs.Name,
@@ -474,7 +474,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         OverrideLogId = olc.OverrideLogId,
                         OverrideHours = olc.OverrideHours,
                         HeadCount = olc.HeadCount,
-                        CraftSkill = new CraftSkillBriefViewModel()
+                        CraftSkill = new CraftSkillForORLogBriefViewModel()
                         {
                             Id = cs.Id,
                             Name = cs.Name,
