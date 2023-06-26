@@ -36,6 +36,7 @@ using ViewModels.Notification;
 using ViewModels.Authentication.User;
 using ViewModels.AppSettings.CompanyManager;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
+using ViewModels.TimeOnTools.OngoingWorkDelay;
 
 namespace Torrance.Api.Mapper
 {
@@ -130,6 +131,14 @@ namespace Torrance.Api.Mapper
             CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
             CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
+
+            //OngoingWorkDelay
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelay>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OngoingWorkDelayBriefViewModel>().ReverseMap();
+
 
             //Shift
             CreateMap<ShiftModifyViewModel, Shift>().ReverseMap();

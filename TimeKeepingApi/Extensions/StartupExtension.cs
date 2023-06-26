@@ -54,6 +54,7 @@ using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
+using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
 
 namespace Web.Extensions
 {
@@ -227,6 +228,7 @@ namespace Web.Extensions
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IVersionService, VersionService>();
+            services.AddScoped(typeof(IOngoingWorkDelayService<,,>), typeof(OngoingWorkDelayService<,,>));
 
         }
     }
