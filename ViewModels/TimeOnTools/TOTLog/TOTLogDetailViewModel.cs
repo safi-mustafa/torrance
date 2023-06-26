@@ -15,6 +15,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
 using System.Reflection;
 using Helpers.Datetime;
+using ViewModels.TimeOnTools.OngoingWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
@@ -125,6 +126,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
+        public OngoingWorkDelayBriefViewModel OngoingWorkDelay { get; set; } = new OngoingWorkDelayBriefViewModel();
         public ShiftDelayBriefViewModel ShiftDelay { get; set; } = new ShiftDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
@@ -149,6 +151,10 @@ namespace ViewModels.TimeOnTools.TOTLog
                 else if (DelayType.Identifier == "ReworkDelay")
                 {
                     return ReworkDelay?.Name;
+                }
+                else if (DelayType.Identifier == "OngoingWork")
+                {
+                    return OngoingWorkDelay?.Name;
                 }
                 else
                 {

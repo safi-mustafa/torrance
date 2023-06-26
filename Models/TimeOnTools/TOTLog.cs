@@ -55,6 +55,10 @@ namespace Models.TimeOnTools
         public long? ReworkDelayId { get; set; }
         public ReworkDelay? ReworkDelay { get; set; }
 
+        [ForeignKey("OngoingWorkDelay")]
+        public long? OngoingWorkDelayId { get; set; }
+        public OngoingWorkDelay? OngoingWorkDelay { get; set; }
+
         public string? PermitNo { get; set; }
 
         public string? DelayDescription { get; set; }

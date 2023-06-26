@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools;
+using ViewModels.TimeOnTools.OngoingWorkDelay;
 using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
@@ -18,14 +19,17 @@ namespace ViewModels.Shared
         public StartOfWorkDelayBriefViewModel StartOfWorkDelay { get; set; } = new StartOfWorkDelayBriefViewModel();
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
+        public OngoingWorkDelayBriefViewModel OngoingWorkDelay { get; set; } = new OngoingWorkDelayBriefViewModel();
         public void Validate(ModelStateDictionary modelState)
         {
             modelState.Remove("ShiftDelay");
             modelState.Remove("ReworkDelay");
             modelState.Remove("StartOfWorkDelay");
+            modelState.Remove("OngoingWorkDelay");
             modelState.Remove("ShiftDelay.Id");
             modelState.Remove("ReworkDelay.Id");
             modelState.Remove("StartOfWorkDelay.Id");
+            modelState.Remove("OngoingWorkDelay.Id");
             if (DelayType.Identifier == DelayReasonCatalog.ReworkDelay.ToString())
             {
                 if ((ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
@@ -47,6 +51,14 @@ namespace ViewModels.Shared
                 if ((StartOfWorkDelay == null || StartOfWorkDelay.Id == null || StartOfWorkDelay.Id < 1))
                 {
                     modelState.AddModelError("StartOfWorkDelay.Id", "The field Start Of Work is required.");
+                }
+
+            }
+            else if (DelayType.Identifier == DelayReasonCatalog.OngoingWork.ToString())
+            {
+                if ((OngoingWorkDelay == null || OngoingWorkDelay.Id == null || OngoingWorkDelay.Id < 1))
+                {
+                    modelState.AddModelError("OngoingWorkDelay.Id", "The field Ongoing Work is required.");
                 }
 
             }
