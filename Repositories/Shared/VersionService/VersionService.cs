@@ -23,5 +23,19 @@ namespace Repositories.Shared.VersionService
             }
             return _configuration.GetValue<string>("Version");
         }
+
+        public bool GetIsUpdateForcible()
+        {
+            var isUpdateForcible = _configuration.GetValue<bool>("IsUpdateForcible");
+            return isUpdateForcible;
+        }
+
+        public string GetLatestApiVersion()
+        {
+            var version = _configuration.GetValue<string>("LatestVersion");
+            if (string.IsNullOrEmpty(version))
+                return "";
+            return version;
+        }
     }
 }

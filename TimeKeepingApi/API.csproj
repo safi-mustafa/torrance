@@ -59,8 +59,10 @@
     <None Remove="Extensions\" />
     <None Remove="Microsoft.AspNetCore.Identity" />
     <None Remove="Microsoft.AspNetCore.Identity.UI" />
+    <None Remove="Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Helper\" />
   </ItemGroup>
 </Project>

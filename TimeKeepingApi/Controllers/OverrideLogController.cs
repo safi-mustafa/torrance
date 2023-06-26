@@ -1,8 +1,11 @@
 ﻿
 using System;
 using AutoMapper;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Helpers.ModelHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pagination;
 using Repositories.Services.CommonServices;
 using Repositories.Services.OverrideLogServices.ORLogService;
@@ -102,6 +105,11 @@ namespace API.Controllers
             if (_versionService.GetVersionNumber().Equals("1.0"))
             {
                 ModelState.Remove("EmployeeNames");
+            }
+            if (Version.Parse(_versionService.GetVersionNumber()) <= Version.Parse("1.0.1"))
+            {
+                ModelState.Remove("Costs");
+                //ModelStateHelper.RemoveModelStateErrorsRecursive(ModelState, model, "Costs");
             }
             //if (model.Costs.Count < 1)
             //{

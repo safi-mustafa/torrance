@@ -9,7 +9,7 @@ namespace ViewModels.TimeOnTools.OngoingWorkDelay
         {
 
         }
-        [DisplayName("Ongoing Work Delay")]
+        [DisplayName("OnGoing Work Delay")]
         public override string? Name { get; set; }
     }
 
