@@ -1,0 +1,45 @@
+﻿@using ViewModels.TimeOnTools.OngoingWorkDelay;
+@model OngoingWorkDelayBriefViewModel
+
+@{
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "ongoing-work-delay-id";
+}
+
+
+<div class="form-group">
+    <label class="form-label fw-600">Ongoing Work Delay</label>
+    @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
+    new SelectListItem()
+    {
+    Value = (Model!=null&&Model.Id > 0)?Model.Id.ToString():"",
+    Text = (Model!=null&&Model.Id > 0)?Model.Name:"",
+    Selected = (Model!=null&&Model.Id > 0)?true:false,
+    }},
+    new
+    {
+    @id = elementId,
+    @class = "form-control disable-field",
+    data_val_required = "The field Ongoing Work Delay is required.",
+    data_val = true
+    })
+    <input type="hidden" name="OngoingWorkDelay.Name" value="@Model?.Name" />
+    <span asp-validation-for="Id" class="validation-invalid-label"></span>
+</div>
+
+<script src="~/js/custom-scripts/Select2Methods.js"></script>
+<script>
+    $(function () {
+        var id = "#" + "@elementId";
+        var pageSize = 10;
+        var url = '/OngoingWorkDelay/Select2';
+        var dataArray = function (params) {
+            params.page = params.page || 1;
+            return {
+                prefix: params.term,
+                pageSize: pageSize,
+                pageNumber: params.page,
+            };
+        };
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Ongoing Work Delay");
+    });
+</script>

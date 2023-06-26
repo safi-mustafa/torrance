@@ -125,6 +125,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.ReworkDelay)
                     .Include(x => x.ShiftDelay)
                     .Include(x => x.StartOfWorkDelay)
+                    .Include(x => x.OngoingWorkDelay)
                     .Include(x => x.Shift)
                     .Include(x => x.PermitType)
                     .Include(x => x.Approver)
@@ -164,6 +165,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.ReworkDelay)
                     .Include(x => x.ShiftDelay)
                     .Include(x => x.StartOfWorkDelay)
+                    .Include(x => x.OngoingWorkDelay)
                     .Include(x => x.Shift)
                     .Include(x => x.Department)
                     .Include(x => x.PermitType)
@@ -275,16 +277,25 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.ReworkDelayId = null;
+                    mappedModel.OngoingWorkDelayId = null;
                 }
                 else if (delayType.DelayType.Identifier == DelayReasonCatalog.ShiftDelay.ToString())
                 {
                     mappedModel.StartOfWorkDelayId = null;
                     mappedModel.ReworkDelayId = null;
+                    mappedModel.OngoingWorkDelayId = null;
                 }
                 else if (delayType.DelayType.Identifier == DelayReasonCatalog.ReworkDelay.ToString())
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.StartOfWorkDelayId = null;
+                    mappedModel.OngoingWorkDelayId = null;
+                }
+                else if (delayType.DelayType.Identifier == DelayReasonCatalog.OngoingWork.ToString())
+                {
+                    mappedModel.ShiftDelayId = null;
+                    mappedModel.StartOfWorkDelayId = null;
+                    mappedModel.ReworkDelayId = null;
                 }
             }
             else
@@ -292,6 +303,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 mappedModel.ShiftDelayId = null;
                 mappedModel.StartOfWorkDelayId = null;
                 mappedModel.ReworkDelayId = null;
+                mappedModel.OngoingWorkDelayId = null;
             }
 
         }

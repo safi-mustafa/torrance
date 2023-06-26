@@ -59,6 +59,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<CompanyCraft> CompanyCrafts { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<ApproverAssociation> ApproverAssociations { get; set; }
+    public DbSet<OngoingWorkDelay> OngoingWorkDelays { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

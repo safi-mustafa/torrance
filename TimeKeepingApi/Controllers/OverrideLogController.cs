@@ -45,9 +45,6 @@ namespace API.Controllers
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
         {
-            if (Version.Parse(_versionService.GetVersionNumber()) <= Version.Parse("1.0.1"))
-            {
-            }
             search.OrderByColumn = "CreatedOn";
             search.OrderDir = PaginationOrderCatalog.Desc;
             var mappedSearchModel = _mapper.Map<ORLogSearchViewModel>(search);

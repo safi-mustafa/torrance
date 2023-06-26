@@ -9,6 +9,8 @@ namespace Enums
         [Display(Name = "Shift Delay")]
         ShiftDelay,
         [Display(Name = "Rework Delay")]
-        ReworkDelay
+        ReworkDelay,
+        [Display(Name = "Ongoing Work")]
+        OngoingWork,
     }
 }

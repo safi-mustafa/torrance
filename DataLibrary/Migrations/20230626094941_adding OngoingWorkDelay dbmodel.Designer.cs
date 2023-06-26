@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230626094941_adding OngoingWorkDelay dbmodel")]
+    partial class addingOngoingWorkDelaydbmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1332,9 +1335,6 @@ namespace DataLibrary.Migrations
                     b.Property<long>("ManPowerAffected")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("OngoingWorkDelayId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PermitNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -1400,8 +1400,6 @@ namespace DataLibrary.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("OngoingWorkDelayId");
 
                     b.HasIndex("PermitTypeId");
 
@@ -2139,10 +2137,6 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("Models.TimeOnTools.OngoingWorkDelay", "OngoingWorkDelay")
-                        .WithMany()
-                        .HasForeignKey("OngoingWorkDelayId");
-
                     b.HasOne("Models.TimeOnTools.PermitType", "PermitType")
                         .WithMany()
                         .HasForeignKey("PermitTypeId")
@@ -2192,8 +2186,6 @@ namespace DataLibrary.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("OngoingWorkDelay");
 
                     b.Navigation("PermitType");
 

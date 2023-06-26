@@ -127,6 +127,11 @@
                     <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
                 </div>
             </div>
+            <div class="col-lg-6" id="ongoing-work-delay-container">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_OngoingWorkDelay.cshtml" for="OngoingWorkDelay" />
+                </div>
+            </div>
 
             @* @if (isAdmin)
             {
@@ -289,15 +294,23 @@
         if (identifier === 'StartOfWork') {
             $('#shift-delay-container').hide();
             $('#rework-delay-container').hide();
+            $('#ongoing-work-delay-container').hide();
             $('#start-of-work-delay-container').show();
         } else if (identifier === 'ShiftDelay') {
             $('#shift-delay-container').show();
             $('#rework-delay-container').hide();
             $('#start-of-work-delay-container').hide();
+            $('#ongoing-work-delay-container').hide();
         } else if (identifier === 'ReworkDelay') {
             $('#shift-delay-container').hide();
             $('#rework-delay-container').show();
             $('#start-of-work-delay-container').hide();
+            $('#ongoing-work-delay-container').hide();
+        } else if(identifier === 'OnGoingWork'){
+            $('#shift-delay-container').hide();
+            $('#rework-delay-container').hide();
+            $('#start-of-work-delay-container').hide();
+            $('#ongoing-work-delay-container').show();
         }
     }
 

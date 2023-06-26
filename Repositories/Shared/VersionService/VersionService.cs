@@ -21,7 +21,7 @@ namespace Repositories.Shared.VersionService
             {
                 return _httpContextAccessor.HttpContext.Request.Headers[versionHeader];
             }
-            return _configuration.GetValue<string>("DefaultVersion");
+            return _configuration.GetValue<string>("Version");
         }
 
         public bool GetIsUpdateForcible()

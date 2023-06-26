@@ -4,6 +4,7 @@ var showSelectedFilters = true;
 var isAjaxBasedCrud = true;
 var enableButtons = true;
 var isExcelDownloadAjaxBased = false;
+var isScrollableFixedHeaderEventAdded = false;
 actionIcons["Update"] = "fa-solid fa-pen-to-square";
 actionIcons["Profile"] = "fa-solid fa-user-plus";
 actionIcons["Notes"] = "fa-solid fa-file";
@@ -45,6 +46,31 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
     //For Showing Loader
     $("#" + tableId).append("<button id='loader' style='display:none' type='button' class='btn bg-custom-dark btn-float rounded-round'><i class='icon-spinner4 spinner'></i></button>");
 
+
+    $(window).off('scroll');
+    $(window).on('scroll',function () {
+        var isFixhedHeaderVisible = $('.dtfh-floatingparent.dtfh-floatingparenthead').is(':visible');
+
+        if (isFixhedHeaderVisible) {
+            if (!isScrollableFixedHeaderEventAdded) {
+                // Add the code snippet here
+                $('.dtfh-floatingparent.dtfh-floatingparenthead').css({
+                    'overflow-x': 'scroll'
+                }).on('scroll', function (e) {
+                    var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
+                    scrollBody.scrollLeft = this.scrollLeft;
+                    $(scrollBody).trigger('scroll');
+                });
+
+                // Set the flag to true indicating that the code has been added
+                isScrollableFixedHeaderEventAdded = true;
+            }
+         
+        }
+        else {
+            isScrollableFixedHeaderEventAdded = false;
+        }
+    });
     $(document).off('click', '.clear-form-btn');
     $(document).on('click', '.clear-form-btn', function () {
         ClearDatatableSearch(dataAjaxUrl, tableId, formId, actionsList, dtColumns);
@@ -362,6 +388,16 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
+           
+            // Add scroll bar on top
+            $('.dataTables_scrollHead').off('scroll');
+            $('.dataTables_scrollHead').css({
+                'overflow-x': 'scroll'
+            }).on('scroll', function (e) {
+                var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
+                scrollBody.scrollLeft = this.scrollLeft;
+                $(scrollBody).trigger('scroll');
+            });
         }
     });
     new $.fn.dataTable.FixedHeader(dataTable, {

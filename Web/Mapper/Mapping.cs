@@ -22,6 +22,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools;
+using ViewModels.TimeOnTools.OngoingWorkDelay;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.TimeOnTools.PermitType;
 using ViewModels.TimeOnTools.ReworkDelay;
@@ -135,6 +136,14 @@ namespace Models.Mapper
             CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
             CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
+            
+            
+            //OngoingWorkDelay
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelay>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OngoingWorkDelayBriefViewModel>().ReverseMap();
 
             //Shift
             CreateMap<ShiftModifyViewModel, Shift>().ReverseMap();
@@ -250,6 +259,8 @@ namespace Models.Mapper
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
                 .ForMember(x => x.DelayType, opt => opt.Ignore())
                 .ForMember(x => x.Company, o => o.Ignore())
+                .ForMember(src => src.OngoingWorkDelayId, opt => opt.MapFrom(dest => dest.OngoingWorkDelay.Id))
+                .ForMember(x => x.OngoingWorkDelay, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<TOTLog, TOTLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
