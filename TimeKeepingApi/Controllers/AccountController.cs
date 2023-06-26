@@ -48,7 +48,6 @@ namespace Torrance.Api.Controllers
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _companyManagerService;
-        private readonly IVersionService _versionService;
 
         public AccountController
             (
@@ -63,8 +62,7 @@ namespace Torrance.Api.Controllers
                 IUserInfoService userInfoService,
                 IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
                 IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
-                ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService,
-                IVersionService versionService
+                ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService
             )
         {
             _configuration = configuration;
@@ -79,7 +77,6 @@ namespace Torrance.Api.Controllers
             _approverService = approverService;
             _employeeService = employeeService;
             _companyManagerService = companyManagerService;
-            this._versionService = versionService;
         }
 
 
