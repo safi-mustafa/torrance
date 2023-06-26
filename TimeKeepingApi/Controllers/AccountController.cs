@@ -27,6 +27,8 @@ using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using ViewModels.AppSettings.CompanyManager;
 using Centangle.Common.ResponseHelpers.Error;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Repositories.Shared.VersionService;
 
 namespace Torrance.Api.Controllers
 {
@@ -46,6 +48,7 @@ namespace Torrance.Api.Controllers
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _approverService;
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> _companyManagerService;
+        private readonly IVersionService _versionService;
 
         public AccountController
             (
@@ -60,7 +63,8 @@ namespace Torrance.Api.Controllers
                 IUserInfoService userInfoService,
                 IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
                 IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
-                ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService
+                ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService,
+                IVersionService versionService
             )
         {
             _configuration = configuration;
@@ -75,6 +79,17 @@ namespace Torrance.Api.Controllers
             _approverService = approverService;
             _employeeService = employeeService;
             _companyManagerService = companyManagerService;
+            this._versionService = versionService;
+        }
+
+        [HttpGet]
+        [Route("/api/Account/UpdateStatus")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateStatus()
+        {
+            var responseModel = new RepositoryResponseWithModel<UpdateStatusVM>();
+            responseModel.ReturnModel = new UpdateStatusVM { LatestVersion = _versionService.GetLatestApiVersion(), IsForcible = _versionService.GetIsUpdateForcible() };
+            return ReturnProcessedResponse<UpdateStatusVM>(responseModel);
         }
 
         [HttpPost]
