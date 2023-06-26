@@ -109,12 +109,14 @@ namespace API.Controllers
             if (Version.Parse(_versionService.GetVersionNumber()) <= Version.Parse("1.0.1"))
             {
                 ModelState.Remove("Costs");
+
+                var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[")).ToList();
+                foreach (var key in keysToRemove)
+                {
+                    ModelState.Remove(key);
+                }
                 //ModelStateHelper.RemoveModelStateErrorsRecursive(ModelState, model, "Costs");
             }
-            //if (model.Costs.Count < 1)
-            //{
-            //    ModelState.AddModelError("Costs.HeadCount", "Please add atleast one cost row.");
-            //}
         }
     }
 }
