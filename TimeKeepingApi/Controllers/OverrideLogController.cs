@@ -80,17 +80,7 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
-            ModelState.Remove("Company.Name");
-            ModelState.Remove("ReasonForRequest");
-            ModelState.Remove("DelayType");
-            if (_versionService.GetVersionNumber().Equals("1.0"))
-            {
-                ModelState.Remove("EmployeeNames");
-            }
-            //if (model.Costs.Count < 1)
-            //{
-            //    ModelState.AddModelError("Costs.HeadCount","Please add atleast one cost row.");
-            //}
+            ManageCommonModelState();
         }
         private void ManagePutModelState(ORLogModifyViewModel model)
         {
@@ -99,6 +89,11 @@ namespace API.Controllers
             {
                 // ModelState.Remove("Approver.Name");
             }
+            ManageCommonModelState();
+        }
+
+        private void ManageCommonModelState()
+        {
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
@@ -106,16 +101,14 @@ namespace API.Controllers
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (Version.Parse(_versionService.GetVersionNumber()) <= Version.Parse("1.0.1"))
+            if (Version.Parse(_versionService.GetVersionNumber()) < Version.Parse("1.0.1"))
             {
                 ModelState.Remove("Costs");
-
                 var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[")).ToList();
                 foreach (var key in keysToRemove)
                 {
                     ModelState.Remove(key);
                 }
-                //ModelStateHelper.RemoveModelStateErrorsRecursive(ModelState, model, "Costs");
             }
         }
     }
