@@ -86,6 +86,13 @@ namespace Repositories.Services.DashboardService
                                          Category = x.Max(y => y.StartOfWorkDelay.Name) ?? "None",
                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
                                      }).ToListAsync();
+            model.OngoingWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                                    .Include(x => x.OngoingWorkDelay)
+                                    .GroupBy(x => x.OngoingWorkDelayId).Select(x => new LogPieChartViewModel
+                                    {
+                                        Category = x.Max(y => y.OngoingWorkDelay.Name) ?? "None",
+                                        Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                    }).ToListAsync();
             return model;
 
         }

@@ -13,6 +13,7 @@
             TOTShiftDelayChart(data.ShiftDelay);
             TOTReworkDelayChart(data.ReworkDelay);
             TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
+            TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
         },
         error: function () {
             console.log("Error occured!!")
@@ -44,4 +45,7 @@ function TOTReworkDelayChart(seriesData) {
 }
 function TOTStartOfWorkDelayChart(seriesData) {
     GeneratePieChart("tot-start-of-work-delay", seriesData)
+}
+function TOTOngoingWorkDelayChart(seriesData) {
+    GeneratePieChart("tot-ongoing-work-delay", seriesData)
 }
