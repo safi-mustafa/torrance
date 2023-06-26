@@ -82,15 +82,7 @@ namespace Torrance.Api.Controllers
             this._versionService = versionService;
         }
 
-        [HttpGet]
-        [Route("/api/Account/UpdateStatus")]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateStatus()
-        {
-            var responseModel = new RepositoryResponseWithModel<UpdateStatusVM>();
-            responseModel.ReturnModel = new UpdateStatusVM { LatestVersion = _versionService.GetLatestApiVersion(), IsForcible = _versionService.GetIsUpdateForcible() };
-            return ReturnProcessedResponse<UpdateStatusVM>(responseModel);
-        }
+
 
         [HttpPost]
         [Route("/api/Account/LoginUsingPincode")]
