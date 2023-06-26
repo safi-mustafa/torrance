@@ -25,6 +25,7 @@ namespace ViewModels.Dashboard
         public List<LogPieChartViewModel> ShiftDelay { get; set; }
         public List<LogPieChartViewModel> ReworkDelay { get; set; }
         public List<LogPieChartViewModel> StartOfWorkDelay { get; set; }
+        public List<LogPieChartViewModel> OngoingWorkDelay { get; set; }
     }
 
 

@@ -1,22 +1,13 @@
-﻿
-using System;
-using AutoMapper;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Helpers.ModelHelpers;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pagination;
-using Repositories.Services.CommonServices;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
 using Repositories.Shared.VersionService;
 using Select2.Model;
 using Torrance.Api.Controllers;
-using ViewModels.Common;
 using ViewModels.OverrideLogs.ORLog;
-using ViewModels.TimeOnTools.TOTLog;
-using ViewModels.WeldingRodRecord;
 
 namespace API.Controllers
 {
