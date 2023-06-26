@@ -85,14 +85,15 @@ namespace API.Controllers
 
         private void ManageCommonModelState()
         {
+            var version = Version.Parse(_versionService.GetVersionNumber());
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            if (_versionService.GetVersionNumber().Equals("1.0"))
+            if (version<= Version.Parse("0.0.0"))
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (Version.Parse(_versionService.GetVersionNumber()) < Version.Parse("1.0.1"))
+            if (version < Version.Parse("1.0.1"))
             {
                 ModelState.Remove("Costs");
                 var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[")).ToList();
