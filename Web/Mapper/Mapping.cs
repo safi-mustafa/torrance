@@ -22,6 +22,7 @@ using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.TimeOnTools;
+using ViewModels.TimeOnTools.OngoingWorkDelay;
 using ViewModels.TimeOnTools.PermittingIssue;
 using ViewModels.TimeOnTools.PermitType;
 using ViewModels.TimeOnTools.ReworkDelay;
@@ -135,6 +136,14 @@ namespace Models.Mapper
             CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
             CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
+            
+            
+            //OngoingWorkDelay
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelay>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel>().ReverseMap();
+            CreateMap<OngoingWorkDelay, OngoingWorkDelayBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, OngoingWorkDelayBriefViewModel>().ReverseMap();
 
             //Shift
             CreateMap<ShiftModifyViewModel, Shift>().ReverseMap();
