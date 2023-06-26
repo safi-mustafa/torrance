@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230626115422_NullablesOverrideLogCost")]
+    partial class NullablesOverrideLogCost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -849,6 +852,7 @@ namespace DataLibrary.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long?>("CraftSkillId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<int?>("HeadCount")
@@ -2094,7 +2098,9 @@ namespace DataLibrary.Migrations
                 {
                     b.HasOne("Models.OverrideLogs.CraftSkill", "CraftSkill")
                         .WithMany()
-                        .HasForeignKey("CraftSkillId");
+                        .HasForeignKey("CraftSkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.OverrideLogs.OverrideLog", "OverrideLog")
                         .WithMany()

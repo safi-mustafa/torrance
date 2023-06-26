@@ -8,14 +8,16 @@ namespace ViewModels.OverrideLogs.ORLog
         public long Id { get; set; }
         [Display(Name = "Hours")]
         [Range(1, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
-        public double OverrideHours { get; set; }
+        [Required]
+        public double? OverrideHours { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "The field Head Count is required.")]
-        public int HeadCount { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "The field Head Count must be greater than zero.")]
+        [Required]
+        public int? HeadCount { get; set; }
         [RequiredNotNull]
         public CraftSkillForORLogBriefViewModel CraftSkill { get; set; } = new();
-
-        public OverrideTypeCatalog OverrideType { get; set; }
+        [Required]
+        public OverrideTypeCatalog? OverrideType { get; set; }
 
         public long OverrideLogId { get; set; }
 
@@ -24,7 +26,7 @@ namespace ViewModels.OverrideLogs.ORLog
             get
             {
                 var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
-                var totalCost = ((rate ?? 0) * OverrideHours * HeadCount);
+                var totalCost = ((rate ?? 0) * (OverrideHours ?? 0) * (HeadCount ?? 0));
                 return totalCost;
             }
         }

@@ -358,7 +358,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     {
                         OverrideLogCost dbCost = new OverrideLogCost();
                         dbCost.OverrideHours = cost.OverrideHours;
-                        dbCost.CraftSkillId = cost.CraftSkill.Id ?? 0;
+                        dbCost.CraftSkillId = cost.CraftSkill.Id;
                         dbCost.OverrideType = cost.OverrideType;
                         dbCost.HeadCount = cost.HeadCount;
                         dbCost.OverrideLogId = id;
@@ -411,7 +411,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     }
                 }
 
-                totalCost += cost.OverrideHours * cost.HeadCount * craftCost;
+                totalCost += (cost.OverrideHours ?? 0) * (cost.HeadCount ?? 0) * craftCost;
             }
             return totalCost;
 
@@ -423,7 +423,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 return 0;
             }
-            return overrideLogCost.Costs.Sum(x => x.OverrideHours);
+            return overrideLogCost.Costs.Sum(x => x.OverrideHours ?? 0);
 
         }
         private double CalculateTotalHeadCount(IORLogCost overrideLogCost)
@@ -432,7 +432,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 return 0;
             }
-            return overrideLogCost.Costs.Sum(x => x.HeadCount);
+            return overrideLogCost.Costs.Sum(x => x.HeadCount ?? 0);
 
         }
 

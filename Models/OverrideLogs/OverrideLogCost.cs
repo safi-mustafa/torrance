@@ -16,13 +16,13 @@ namespace Models.OverrideLogs
         public long OverrideLogId { get; set; }
         public OverrideLog OverrideLog { get; set; }
 
-        public int HeadCount { get; set; }
-        public OverrideTypeCatalog OverrideType { get; set; }
+        public int? HeadCount { get; set; }
+        public OverrideTypeCatalog? OverrideType { get; set; }
 
         [ForeignKey("CraftSkill")]
-        public long CraftSkillId { get; set; }
-        public CraftSkill CraftSkill { get; set; }
-        public double OverrideHours { get; set; }
+        public long? CraftSkillId { get; set; }
+        public CraftSkill? CraftSkill { get; set; }
+        public double? OverrideHours { get; set; }
 
 
     }
