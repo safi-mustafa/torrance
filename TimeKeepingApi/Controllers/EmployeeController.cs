@@ -60,6 +60,7 @@ namespace API.Controllers
                 {
                     mappedModel.Password = "TorrancePass";
                     mappedModel.ChangePassword = false;
+                    mappedModel.ActiveStatus=Enums.ActiveStatus.Active;
                     var data = await _employeeService.Create(mappedModel);
                     if (data.Status == HttpStatusCode.OK)
                     {
