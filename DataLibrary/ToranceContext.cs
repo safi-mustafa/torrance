@@ -41,10 +41,13 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<RodType> RodTypes { get; set; }
+    public DbSet<FCOType> FCOTypes { get; set; }
+    public DbSet<FCOReason> FCOReasons { get; set; }
     public DbSet<DelayType> DelayTypes { get; set; }
     public DbSet<WeldMethod> WeldMethods { get; set; }
     public DbSet<WRRLog> WRRLogs { get; set; }
     public DbSet<TOTLog> TOTLogs { get; set; }
+    public DbSet<FCOLog> FCOLogs { get; set; }
     public DbSet<Map> Maps { get; set; }
     public DbSet<Dropbox> Dropboxes { get; set; }
     public DbSet<PermittingIssue> PermittingIssues { get; set; }

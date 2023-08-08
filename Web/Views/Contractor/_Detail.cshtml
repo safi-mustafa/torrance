@@ -12,6 +12,10 @@
                     <label asp-for="Name" class="form-label fw-600"></label>
                     <div>@(string.IsNullOrEmpty(Model.Name) ? "-" : Model.Name)</div>
                 </div>
+                <div class="mb-3">
+                    <label asp-for="CompositeRate" class="form-label fw-600"></label>
+                    <div>@Model.CompositeRate</div>
+                </div>
             </div>
         </div>
     </div>

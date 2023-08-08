@@ -8,18 +8,19 @@ using ViewModels.Authentication;
 
 namespace API.Controllers
 {
-    public class StatusController : TorranceController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UpdateStatusController : TorranceController
     {
         private readonly IVersionService _versionService;
 
-        public StatusController(IVersionService versionService)
+        public UpdateStatusController(IVersionService versionService)
         {
             this._versionService = versionService;
         }
         [HttpGet]
-        [Route("/api/Account/UpdateStatus")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateStatus()
+        public async Task<IActionResult> Get()
         {
             var responseModel = new RepositoryResponseWithModel<UpdateStatusVM>();
             responseModel.ReturnModel = new UpdateStatusVM { LatestVersion = _versionService.GetLatestApiVersion(), IsForcible = _versionService.GetIsUpdateForcible() };

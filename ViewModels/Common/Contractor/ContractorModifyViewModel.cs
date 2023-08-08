@@ -11,5 +11,8 @@ namespace ViewModels.Common.Contractor
         [MaxLength(200)]
         [DisplayName("Name")]
         public string Name { get; set; }
+
+        [DisplayName("Composite Rate")]
+        public double CompositeRate { get; set; }
     }
 }

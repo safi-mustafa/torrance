@@ -9,5 +9,8 @@ namespace ViewModels.Common.Contractor
         public long? Id { get; set; }
         [DisplayName("Name")]
         public string Name { get; set; }
+
+        [DisplayName("Composite Rate")]
+        public double CompositeRate { get; set; }
     }
 }

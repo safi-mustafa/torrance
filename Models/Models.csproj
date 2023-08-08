@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Models.Common\Models.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="FCO\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FCO\" />
+  </ItemGroup>
 </Project>

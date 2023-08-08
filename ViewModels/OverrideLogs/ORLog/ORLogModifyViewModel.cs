@@ -22,8 +22,6 @@ namespace ViewModels.OverrideLogs.ORLog
 {
     public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
     {
-
-
         [Required]
         [Display(Name = "Work Date")]
         public DateTime? WorkCompletedDate { get; set; }

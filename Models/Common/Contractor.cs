@@ -7,5 +7,6 @@ namespace Models.Common
     {
         public string Name { get; set; }
         public LogType Type { get; set; }
+        public double CompositeRate { get; set; }
     }
 }
