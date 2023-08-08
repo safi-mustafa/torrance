@@ -87,6 +87,20 @@ namespace Models.Mapper
             CreateMap<RodType, RodTypeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, RodTypeBriefViewModel>().ReverseMap();
 
+            //FCOReason
+            CreateMap<FCOReasonModifyViewModel, FCOReason>().ReverseMap();
+            CreateMap<FCOReason, FCOReasonDetailViewModel>().ReverseMap();
+            CreateMap<FCOReasonModifyViewModel, FCOReasonDetailViewModel>().ReverseMap();
+            CreateMap<FCOReason, FCOReasonBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FCOReasonBriefViewModel>().ReverseMap();
+
+            //FCOType
+            CreateMap<FCOTypeModifyViewModel, FCOType>().ReverseMap();
+            CreateMap<FCOType, FCOTypeDetailViewModel>().ReverseMap();
+            CreateMap<FCOTypeModifyViewModel, FCOTypeDetailViewModel>().ReverseMap();
+            CreateMap<FCOType, FCOTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FCOTypeBriefViewModel>().ReverseMap();
+
             //Location
             CreateMap<LocationModifyViewModel, Location>().ReverseMap();
             CreateMap<Location, LocationDetailViewModel>().ReverseMap();
@@ -136,8 +150,8 @@ namespace Models.Mapper
             CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
             CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
-            
-            
+
+
             //OngoingWorkDelay
             CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelay>().ReverseMap();
             CreateMap<OngoingWorkDelay, OngoingWorkDelayDetailViewModel>().ReverseMap();

@@ -24,11 +24,17 @@
     <None Remove="Services\CommonServices\ApprovalService\" />
     <None Remove="Services\CommonServices\ApprovalService\Interface\" />
     <None Remove="Services\TimeOnToolServices\DelayTypeService\" />
+    <None Remove="Services\FCOService\" />
+    <None Remove="Services\FCOService\FCOTypeService\" />
+    <None Remove="Services\FCOService\FCOReasonService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\CommonServices\ApprovalService\" />
     <Folder Include="Services\CommonServices\ApprovalService\Interface\" />
     <Folder Include="Services\DashboardService\TOTService\" />
     <Folder Include="Services\TimeOnToolServices\DelayTypeService\" />
+    <Folder Include="Services\FCOService\" />
+    <Folder Include="Services\FCOService\FCOTypeService\" />
+    <Folder Include="Services\FCOService\FCOReasonService\" />
   </ItemGroup>
 </Project>

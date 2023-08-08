@@ -55,6 +55,9 @@ using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
+using Repositories.Services.AppSettingServices.FCOTypeService;
+using Repositories;
+using Repositories.Services.AppSettingServices.FCOReasonService;
 
 namespace Web.Extensions
 {
@@ -132,6 +135,8 @@ namespace Web.Extensions
             services.AddScoped(typeof(ILocationService<,,>), typeof(LocationService<,,>));
             services.AddScoped(typeof(IWeldMethodService<,,>), typeof(WeldMethodService<,,>));
             services.AddScoped(typeof(IRodTypeService<,,>), typeof(RodTypeService<,,>));
+            services.AddScoped(typeof(IFCOTypeService<,,>), typeof(FCOTypeService<,,>));
+            services.AddScoped(typeof(IFCOReasonService<,,>), typeof(FCOReasonService<,,>));
             services.AddScoped(typeof(IEmployeeService<,,>), typeof(EmployeeService<,,>));
             services.AddScoped(typeof(IAdministratorService<,,>), typeof(AdministratorService<,,>));
             services.AddScoped(typeof(ICompanyManagerService<,,>), typeof(CompanyManagerService<,,>));
@@ -142,7 +147,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
             services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
-            
+
             services.AddScoped(typeof(IFolderService<,,>), typeof(FolderService<,,>));
             services.AddScoped(typeof(IAttachmentService<,,>), typeof(AttachmentService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
