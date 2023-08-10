@@ -1,0 +1,56 @@
+﻿@model ViewModels.FCOSectionModifyViewModel;
+@using Enums;
+@using System.Globalization;
+@{
+    var collectionType = ViewData["CollectionType"] != null ? ViewData["CollectionType"].ToString() : "FCOSections";
+    var section = ViewData["RowClass"] != null ? ViewData["RowClass"].ToString() : "cost";
+    var rowClass = $"{section}-row";
+    var removeClass = "mx-1 datatable-action btn bg-custom-dark remove-" + rowClass;
+    var rowNumber = ViewData["RowNumber"] != null ? int.Parse(ViewData["RowNumber"].ToString()) : 0;
+    var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
+
+    var rowName = rowClass + "[" + rowNumber + "]";
+    var rowId = rowClass + "-" + rowNumber;
+
+    var sectionName = collectionType + "[" + rowNumber + "].Name";
+    var overrideHours = collectionType + "[" + rowNumber + "].DU";
+    var headCount = collectionType + "[" + rowNumber + "].MN";
+    var rate = collectionType + "[" + rowNumber + "].Rate";
+    var hiddenId = collectionType + "[" + rowNumber + "].Id";
+    var hiddenSectionType = collectionType + "[" + rowNumber + "].SectionType";
+}
+
+<tr class="@rowClass" id="@rowId">
+    <td>
+        <span style=" text-align: initial !important;">@Model.Name</span>
+        <input type="hidden" name="@sectionName" value="@Model.Name" />
+    </td>
+    <td>
+        <span style="text-align: initial !important;">@Model.MN</span>
+        <input type="hidden" name="@headCount" value="@Model.MN" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.DU</span>
+        <input type="hidden" name="@overrideHours" value="@Model.DU" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.Rate</span>
+        <input type="hidden" name="@rate" value="@Model.Rate" />
+    </td>
+    @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+    {
+        <td>
+            <span style=" text-align: initial !important;">@Model.FormattedEstimate</span>
+        </td>
+    }
+    @if (isDetailPage == false)
+    {
+        <td>
+            <a href="javascript:void(0)" class="@removeClass" data-toggle="tooltip" title="Delete Cost"><i class="icon-trash"></i></a>
+        </td>
+    }
+
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenSectionType" value="@Model.SectionType" />
+</tr>
+

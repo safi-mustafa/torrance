@@ -1,14 +1,13 @@
-﻿@using ViewModels.Common.Contractor;
-@model ContractorBriefViewModel
+﻿@using ViewModels;
+@model FCOTypeBriefViewModel
 
 @{
-    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "contractor-id";
-    var label = ViewData["Label"] != null && !string.IsNullOrEmpty(ViewData["Label"].ToString()) ? ViewData["Label"].ToString() : "Contractor";
+    var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "fco-type-id";
 }
 
 
 <div class="form-group">
-    <label class="form-label fw-600">@label</label>
+    <label class="form-label fw-600">FCO Type</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
     {
@@ -23,7 +22,7 @@
     data_val_required = Model.ErrorMessage,
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
-    <input type="hidden" name="Contractor.Name" value="@Model.Name" />
+    <input type="hidden" name="FCOType.Name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 
@@ -32,7 +31,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var pageSize = 10;
-        var url = '/Contractor/Select2';
+        var url = '/FCOType/Select2';
         var dataArray = function (params) {
             params.page = params.page || 1;
             return {
@@ -41,6 +40,6 @@
                 pageNumber: params.page,
             };
         };
-        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Contractor");
+        Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select FCO Type");
     });
 </script>

@@ -1,20 +1,21 @@
-﻿@model ViewModels.OverrideLogs.ORLog.ORLogCostViewModel;
+﻿@model ViewModels.FCOSectionModifyViewModel;
 @using Enums;
 @using System.Globalization;
 @{
-    var collectionType = "Costs";
+    var collectionType = "FCOSections";
     var rowNumber = ViewData["RowNumber"] != null ? int.Parse(ViewData["RowNumber"].ToString()) : 0;
     var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
 
-    var rowName = "cost-row[" + rowNumber + "]";
-    var rowId = "cost-row-" + rowNumber;
+    var rowName = "section-row[" + rowNumber + "]";
+    var rowId = "labour-section-row-" + rowNumber;
 
     var overrideType = collectionType + "[" + rowNumber + "].OverrideType";
     var craftId = collectionType + "[" + rowNumber + "].CraftSkill.Id";
     var craftName = collectionType + "[" + rowNumber + "].CraftSkill.Name";
-    var overrideHours = collectionType + "[" + rowNumber + "].OverrideHours";
-    var headCount = collectionType + "[" + rowNumber + "].HeadCount";
+    var overrideHours = collectionType + "[" + rowNumber + "].DU";
+    var headCount = collectionType + "[" + rowNumber + "].MN";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
+    var hiddenSectionType = collectionType + "[" + rowNumber + "].SectionType";
 
 }
 
@@ -29,26 +30,28 @@
         <input type="hidden" name="@craftName" value="@Model.CraftSkill.Name" />
     </td>
     <td>
-        <span style="text-align: initial !important;">@Model.HeadCount</span>
-        <input type="hidden" name="@headCount" value="@Model.HeadCount" />
+        <span style="text-align: initial !important;">@Model.MN</span>
+        <input type="hidden" name="@headCount" value="@Model.MN" />
     </td>
     <td>
-        <span style=" text-align: initial !important;">@Model.OverrideHours</span>
-        <input type="hidden" name="@overrideHours" value="@Model.OverrideHours" />
+        <span style=" text-align: initial !important;">@Model.DU</span>
+        <input type="hidden" name="@overrideHours" value="@Model.DU" />
     </td>
     @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
     {
         <td>
-            <span style=" text-align: initial !important;">@Model.FormattedCost</span>
+            <span style=" text-align: initial !important;">@Model.FormattedEstimate</span>
         </td>
     }
     @if (isDetailPage == false)
     {
         <td>
+
             <a href="javascript:void(0)" class="remove-cost mx-1 datatable-action btn bg-custom-dark" data-toggle="tooltip" title="Delete Cost"><i class="icon-trash"></i></a>
         </td>
     }
 
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenSectionType" value="@FCOSectionCatalog.Labour" />
 </tr>
 

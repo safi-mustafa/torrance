@@ -1,5 +1,5 @@
-﻿@using ViewModels.Authentication.User;
-@model ApproverBriefViewModel
+﻿@using ViewModels;
+@model IApproverBaseBriefViewModel
 
 @{
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "user-id";

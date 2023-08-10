@@ -5,7 +5,7 @@ namespace ViewModels
 {
     public class FCOReasonBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public FCOReasonBriefViewModel() : base(true, "The FCO Reason field is required.")
+        public FCOReasonBriefViewModel() : base(false, "The FCO Reason field is required.")
         {
 
         }

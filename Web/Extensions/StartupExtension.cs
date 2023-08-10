@@ -58,6 +58,7 @@ using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
 using Repositories.Services.AppSettingServices.FCOTypeService;
 using Repositories;
 using Repositories.Services.AppSettingServices.FCOReasonService;
+using Repositories.Services.AppSettingServices.FCOLogService;
 
 namespace Web.Extensions
 {
@@ -143,6 +144,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IForemanService<,,>), typeof(ForemanService<,,>));
             services.AddScoped(typeof(IWRRLogService<,,>), typeof(WRRLogService<,,>));
             services.AddScoped(typeof(ITOTLogService<,,>), typeof(TOTLogService<,,>));
+            services.AddScoped(typeof(IFCOLogService<,,>), typeof(FCOLogService<,,>));
             services.AddScoped<IPossibleApproverService, PossibleApproverService>();
             services.AddScoped(typeof(IMapService<,,>), typeof(MapService<,,>));
             services.AddScoped(typeof(IDropboxService<,,>), typeof(DropboxService<,,>));

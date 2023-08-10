@@ -13,9 +13,10 @@
     <None Remove="OverrideLogs\Interface\" />
     <None Remove="TimeOnTools\DelayType\" />
     <None Remove="FCO\" />
-    <None Remove="FCO\FCOLog\" />
     <None Remove="FCO\FCOReason\" />
     <None Remove="FCO\FCOType\" />
+    <None Remove="FCO\FCOLog\" />
+    <None Remove="FCO\FCOSection\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +29,10 @@
     <Folder Include="OverrideLogs\LeadPlanners\" />
     <Folder Include="OverrideLogs\OverrideType\" />
     <Folder Include="FCO\" />
-    <Folder Include="FCO\FCOLog\" />
     <Folder Include="FCO\FCOReason\" />
     <Folder Include="FCO\FCOType\" />
+    <Folder Include="FCO\FCOLog\" />
+    <Folder Include="FCO\FCOSection\" />
   </ItemGroup>
 
   <ItemGroup>

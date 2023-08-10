@@ -21,6 +21,7 @@
     <None Remove="Views\DelayType\" />
     <None Remove="Views\FCOType\" />
     <None Remove="Views\FCOReason\" />
+    <None Remove="Views\FCOLog\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,6 +123,7 @@
     <Folder Include="Views\DelayType\" />
     <Folder Include="Views\FCOType\" />
     <Folder Include="Views\FCOReason\" />
+    <Folder Include="Views\FCOLog\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,6 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
-using Enums;
 using Helpers.File;
 using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +10,8 @@ using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Common;
-using Repositories.Shared.AttachmentService;
 using System.Linq.Expressions;
 using ViewModels.Shared;
-using ViewModels.Shared.Folder;
 
 namespace Repositories.Services.FolderService
 {

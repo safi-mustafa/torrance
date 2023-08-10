@@ -10,7 +10,9 @@ namespace Enums
         [Display(Name = "Welding Rod Record Log")]
         WRRLog,
         [Display(Name = "Override Log")]
-        OverrideLog
+        OverrideLog,
+        [Display(Name = "Field Change Order Log")]
+        FCOLog
 
     }
 }

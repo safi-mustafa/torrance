@@ -27,6 +27,7 @@
     <None Remove="Services\FCOService\" />
     <None Remove="Services\FCOService\FCOTypeService\" />
     <None Remove="Services\FCOService\FCOReasonService\" />
+    <None Remove="Services\FCOService\FCOLogService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\CommonServices\ApprovalService\" />
@@ -36,5 +37,6 @@
     <Folder Include="Services\FCOService\" />
     <Folder Include="Services\FCOService\FCOTypeService\" />
     <Folder Include="Services\FCOService\FCOReasonService\" />
+    <Folder Include="Services\FCOService\FCOLogService\" />
   </ItemGroup>
 </Project>
