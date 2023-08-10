@@ -72,10 +72,14 @@ namespace ViewModels
         public DateTime? RLTMemberApproveDate { get; set; }
         public BTLBriefViewModel? BTLApprover { get; set; } = new(false);
         public DateTime? BTLApproveDate { get; set; }
+        public string BTLApproveDateFormatted { get => (BTLApproveDate == null ? "-" : BTLApproveDate?.FormatDatetimeInPST()); }
         public TELBriefViewModel? TELApprover { get; set; } = new(false);
         public DateTime? TELApprovalDate { get; set; }
+        public string TELApprovalDateFormatted { get => (TELApprovalDate == null ? "-" : TELApprovalDate?.FormatDatetimeInPST()); }
         public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
         public DateTime? MaintManagerApprovalDate { get; set; }
+        public string MaintManagerApprovalDateFormatted { get => (MaintManagerApprovalDate == null ? "-" : MaintManagerApprovalDate?.FormatDatetimeInPST()); }
+
 
         public double TotalCost { get; set; }
         public string TotalCostFormatted { get => string.Format("{0:C}", TotalCost); }

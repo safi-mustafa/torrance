@@ -22,8 +22,10 @@ namespace ViewModels
         [Display(Name = "Additional Information")]
         public string? AdditionalInformation { get; set; }
         [Display(Name = "Loop Identification # & Equipment Number")]
+        [Required]
         public string? EquipmentNumber { get; set; }
         [Display(Name = "Service/Location")]
+        [Required]
         public string? Location { get; set; }
         [Display(Name = "Shutdown Required")]
         public bool ShutdownRequired { get; set; }
@@ -43,15 +45,16 @@ namespace ViewModels
         public long DaysImpacted { get; set; }
         [Display(Name = "During Execution")]
         public DuringExecutionCatalog? DuringExecution { get; set; }
+        [Required]
         public DateTime? Date { get; set; }
 
         public ContractorBriefViewModel Contractor { get; set; } = new();
-        public CompanyBriefViewModel Company { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new(true, "The Company field is required.");
         public EmployeeBriefViewModel? Employee { get; set; } = new();
-        public DepartmentBriefViewModel Department { get; set; } = new();
-        public UnitBriefViewModel Unit { get; set; } = new();
-        public FCOTypeBriefViewModel? FCOType { get; set; } = new();
-        public FCOReasonBriefViewModel? FCOReason { get; set; } = new();
+        public DepartmentBriefViewModel Department { get; set; } = new(true);
+        public UnitBriefViewModel Unit { get; set; } = new(true);
+        public FCOTypeBriefViewModel? FCOType { get; set; } = new(true);
+        public FCOReasonBriefViewModel? FCOReason { get; set; } = new(true);
         public AuthorizeForImmediateStartBriefViewModel AuthorizerForImmediateStart { get; set; } = new(false);
         public DateTime AuthorizerForImmediateStartDate { get; set; }
         public ApproverBriefViewModel? Approver { get; set; } = new(false);

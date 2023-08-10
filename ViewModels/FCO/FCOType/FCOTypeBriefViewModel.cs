@@ -9,6 +9,10 @@ namespace ViewModels
         {
 
         }
+        public FCOTypeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The FCO Type field is required.")
+        {
+
+        }
         [DisplayName("FCO Type")]
         public override string Name { get; set; }
     }

@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IFCOReasonService<FCOReasonModifyViewModel, FCOReasonModifyViewModel, FCOReasonDetailViewModel> _FCOReasonService;
         private readonly ILogger<FCOReasonController> _logger;
 
-        public FCOReasonController(IFCOReasonService<FCOReasonModifyViewModel, FCOReasonModifyViewModel, FCOReasonDetailViewModel> FCOReasonService, ILogger<FCOReasonController> logger, IMapper mapper) : base(FCOReasonService, logger, mapper, "FCOReason", "Rod Types")
+        public FCOReasonController(IFCOReasonService<FCOReasonModifyViewModel, FCOReasonModifyViewModel, FCOReasonDetailViewModel> FCOReasonService, ILogger<FCOReasonController> logger, IMapper mapper) : base(FCOReasonService, logger, mapper, "FCOReason", "FCO Reason")
         {
             _FCOReasonService = FCOReasonService;
             _logger = logger;

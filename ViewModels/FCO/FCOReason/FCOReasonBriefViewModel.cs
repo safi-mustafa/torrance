@@ -9,6 +9,10 @@ namespace ViewModels
         {
 
         }
+        public FCOReasonBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The FCO Reason field is required.")
+        {
+
+        }
         [DisplayName("FCO Reason")]
         public override string? Name { get; set; }
     }

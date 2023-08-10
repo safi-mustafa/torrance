@@ -19,6 +19,7 @@ namespace ViewModels
         [Display(Name = "Additional Informationn")]
         public string AdditionalInformation { get; set; }
         [Display(Name = "Loop Identification # & Equipment Number")]
+        [Required]
         public string EquipmentNumber { get; set; }
         [Display(Name = "Location")]
         public string Location { get; set; }
@@ -38,6 +39,7 @@ namespace ViewModels
         public bool ScheduleImpact { get; set; }
         [Display(Name = "Days Impact")]
         public long DaysImpacted { get; set; }
+        [Required]
         public DateTime Date { get; set; }
         public ContractorBriefViewModel Contractor { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new();

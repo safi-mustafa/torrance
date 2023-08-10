@@ -291,12 +291,12 @@ namespace Models.Mapper
                 .ReverseMap();
 
             CreateMap<FCOLog, FCOLogDetailViewModel>()
-                .ForMember(dest => dest.FCOType, act => act.Condition(src => (src.FCOType != null)))
-                .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
-                .ForMember(x => x.FCOType, opt => opt.Ignore())
-                .ForMember(dest => dest.FCOReason, act => act.Condition(src => (src.FCOReason != null)))
-                .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
-                .ForMember(x => x.FCOReason, opt => opt.Ignore())
+                //.ForMember(dest => dest.FCOType, act => act.Condition(src => (src.FCOType != null)))
+                //.ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
+                //.ForMember(x => x.FCOType, opt => opt.Ignore())
+                //.ForMember(dest => dest.FCOReason, act => act.Condition(src => (src.FCOReason != null)))
+                //.ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
+                //.ForMember(x => x.FCOReason, opt => opt.Ignore())
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(src => src.Approver, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
