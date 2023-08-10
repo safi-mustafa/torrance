@@ -1,133 +1,226 @@
-﻿@using ViewModels.WeldingRodRecord.WRRLog;
-@model WRRLogDetailViewModel
+﻿@using ViewModels;
+@using Enums;
+@using Web.Extensions;
+
+@model FCOLogDetailViewModel
 @{
     Layout = null;
+
+    var labourSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).ToList();
+    var materialSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).ToList();
+    var equipmentSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).ToList();
+    var shopSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).ToList();
 }
+
 
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="Department" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Department.Name) ? "-" : Model.Department.Name)</div>
+                    <label asp-for="Date" class="form-label fw-600"></label>
+                    <input asp-for="Date" type="date" class="form-control" />
+                    <span asp-validation-for="Date" class="validation-invalid-label"></span>
                 </div>
             </div>
-
-
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="Unit" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Unit.Name) ? "-" : Model.Unit.Name)</div>
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Company" } }' />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="Company" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Company?.Name) ? "-" : Model.Company.Name)</div>
+                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Requestor Name/Contractor" } }' />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="CalibrationDate" class="form-label fw-600"></label>
-                    <div>@Model.FormattedCalibrationDate</div>
+                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Department/Extension" } }' />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="FumeControlUsed" class="form-label fw-600"></label>
-                    <div>@Model.FumeControlUsed</div>
+                    <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="RodType" class="form-label fw-600">Rod Type</label>
-                    <div>@(string.IsNullOrEmpty(Model.RodType.Name) ? "-" : Model.RodType.Name)</div>
+                    <label asp-for="EquipmentNumber" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentNumber" type="text" class="form-control" />
+                    <span asp-validation-for="EquipmentNumber" class="validation-invalid-label"></span>
                 </div>
             </div>
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Twr" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Twr) ? "-" : Model.Twr)</div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="WeldMethod" class="form-label fw-600">Weld Method</label>
-                    <div>@(string.IsNullOrEmpty(Model.WeldMethod.Name) ? "-" : Model.WeldMethod.Name)</div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="RodCheckedOut" class="form-label fw-600"></label>
-                    <div>@Model.FormattedRodCheckedOut</div>
-                </div>
-            </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="Location" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Location.Name) ? "-" : Model.Location.Name)</div>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="mb-3">
-                    <label asp-for="RodCheckedOutLbs" class="form-label fw-600"></label>
-                    <div>@Model.RodCheckedOutLbs</div>
+                    <label asp-for="DescriptionOfFinding" class="form-label fw-600"></label>
+                    <textarea asp-for="DescriptionOfFinding" type="text" class="form-control">@Model.DescriptionOfFinding</textarea>
+                    <span asp-validation-for="DescriptionOfFinding" class="validation-invalid-label"></span>
                 </div>
             </div>
-
-            <div class="col-lg-6">
+            <div class="col-lg-6" id="file-container">
+                <label asp-for="Attachment.File" class="form-label fw-600"></label>
+                <input type="file" id="file" asp-for="Attachment.File" class="form-control" />
+                <span asp-validation-for="Attachment.File" class="validation-invalid-label"></span>
+            </div>
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="RodReturnedWasteLbs" class="form-label fw-600"></label>
-                    <div>@Model.RodReturnedWasteLbs</div>
+                    <label class="form-label fw-600">Shutdown required?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="ShutdownRequired" value="true">
+                        <label class="form-check-label" asp-for="ShutdownRequired">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="ShutdownRequired" value="false">
+                        <label class="form-check-label" asp-for="ShutdownRequired">No</label>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="DateRodReturned" class="form-label fw-600"></label>
-                    <div>@Model.FormattedDateRodReturned</div>
+                    <label class="form-label fw-600">Scaffold Required?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="ScaffoldRequired" value="true">
+                        <label class="form-check-label" asp-for="ScaffoldRequired">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="ScaffoldRequired" value="false">
+                        <label class="form-check-label" asp-for="ScaffoldRequired">No</label>
+                    </div>
                 </div>
             </div>
-
-
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="mb-3">
-                    <label asp-for="Employee" class="form-label fw-600">Requestor</label>
-                    <div>@(string.IsNullOrEmpty(Model.Employee.Name) ? "-" : Model.Employee.Name)</div>
+                    <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
+                    <textarea asp-for="AdditionalInformation" type="text" class="form-control">@Model.AdditionalInformation</textarea>
+                    <span asp-validation-for="AdditionalInformation" class="validation-invalid-label"></span>
                 </div>
             </div>
+            <div class="table-responsive my-3" id="labour-table">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Craft</th>
+                            <th>MN</th>
+                            <th>DU</th>
+                            @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+                            {
+                                <th>Estimate</th>
+                            }
+                            <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody class="labour-tbody">
+                        @for (var i = 0; i < labourSection.Count(); i++)
+                        {
+                            @await Html.PartialAsync("~/Views/FCOLog/_LabourSectionRow.cshtml", labourSection[i], new ViewDataDictionary(ViewData) { { "RowNumber", i }, { "IsDetailPage", true } })
+                        }
+                    </tbody>
+                </table>
+            </div>
 
+            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", materialSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" }, { "IsDetailPage", true } })
+            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "equipment" }, { "SectionName", "Equipment" }, { "IsDetailPage", true } })
+            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", shopSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" }, { "IsDetailPage", true } })
 
-
-            <div class="col-lg-6">
+            <div class="col-lg-12">
+                <table class="table text-nowrap">
+                    <tbody>
+                        <tr>
+                            <th>Total:</th>
+                            <td></td>
+                            <td id="total-estimate-cell">$@Model.Total</td>
+                        </tr>
+                        <tr>
+                            <th>Contingency:</th>
+                            <td>10%</td>
+                            <td id="contingency-cell">$@Model.Contingency</td>
+                        </tr>
+                        <tr>
+                            <th>Total:</th>
+                            <td></td>
+                            <td id="sub-total-cell">$@Model.SubTotal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12">
+                <table class="table text-nowrap">
+                    <tbody>
+                        <tr>
+                            <th colspan="2"><h4>FCO Value Estimate</h4></th>
+                        </tr>
+                        <tr>
+                            <th>Labor:</th>
+                            <td id="total-labour-cell">$@Model.TotalLabor</td>
+                        </tr>
+                        <tr>
+                            <th>Material:</th>
+                            <td id="total-material-cell">$@Model.TotalMaterial</td>
+                        </tr>
+                        <tr>
+                            <th>Equipment:</th>
+                            <td id="total-equipment-cell">$@Model.TotalEquipment</td>
+                        </tr>
+                        <tr>
+                            <th>Shop:</th>
+                            <td id="total-shop-cell">$@Model.TotalShop</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL:</th>
+                            <td id="actual-total-cell">$@Model.SectionTotal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="Status" class="form-label fw-600"></label>
-                    <div>@Model.Status</div>
+                    <partial name="~/Views/Shared/Select2/_FCOType.cshtml" for="FCOType" />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="FormattedCreatedOn" class="form-label fw-600">Submitted</label>
-                    <div>@Model.FormattedCreatedOn</div>
+                    <partial name="~/Views/Shared/Select2/_FCOReason.cshtml" for="FCOReason" />
                 </div>
             </div>
-
-
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="Approver" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? Model.PossibleApprovers : Model.Approver.Name)</div>
+                    <label class="form-label fw-600">Others Documentation Required</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="AnalysisOfAlternatives">
+                        <label class="form-check-label" asp-for="AnalysisOfAlternatives"></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="EquipmentFailureReport">
+                        <label class="form-check-label" asp-for="EquipmentFailureReport"></label>
+                    </div>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label class="form-label fw-600" asp-for="DuringExecution"></label>
+                    <select asp-for="DuringExecution" asp-items="Html.GetEnumSelectList(typeof (DuringExecutionCatalog))" id="during-execution" class="form-control" data-placeholder="Select During Execution"><option></option></select>
+                    <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <input asp-for="Approver.Id" type="hidden" />
+
+            <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
+            <input type="hidden" id="log-requestor" value="@Model.Employee.Email" />
+            <input type="hidden" id="controller-name" value="FCOLog" />
+            <input type="hidden" id="approver-id" asp-for="Approver.Id" />
+            <input type="hidden" id="is-unauthenticated-approval" asp-for="IsUnauthenticatedApproval" />
+            <input type="hidden" id="notification-id" name="NotificationId" value="@Model.NotificationId" />
         </div>
     </div>
-    <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
-    <input type="hidden" id="log-requestor" value="@Model.Employee.Email" />
-    <input type="hidden" id="controller-name" value="WRRLog" />
-    <input type="hidden" id="approver-id" asp-for="Approver.Id" />
-    <input type="hidden" id="is-unauthenticated-approval" asp-for="IsUnauthenticatedApproval" />
-    <input type="hidden" id="notification-id" name="NotificationId" value="@Model.NotificationId" />
-
 </div>
-
+<script>$(function () {
+        $("#crudModalPanel :input:not(.form-btn)").prop("disabled", true);
+    })</script>

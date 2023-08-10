@@ -10,7 +10,9 @@ namespace Enums
         [Display(Name = "Welding Rod Record")]
         WeldingRodRecord,
         [Display(Name = "Override")]
-        Override
+        Override,
+        [Display(Name = "FCO")]
+        FCO
     }
     public enum FilterLogType
     {
@@ -21,6 +23,7 @@ namespace Enums
         WeldingRodRecord,
         [Display(Name = "Override")]
         Override,
+        FCO,
         All,
         None
     }

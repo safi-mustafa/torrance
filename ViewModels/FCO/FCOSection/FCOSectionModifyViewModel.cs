@@ -22,23 +22,30 @@ namespace ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "The field MN must be greater than zero.")]
         [Required]
         public int MN { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public FCOSectionCatalog SectionType { get; set; }
         private double? _rate;
-        public double? Rate { get => SectionType == FCOSectionCatalog.Labour ? (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate)) : _rate; set => _rate = value; }
+        public double? Rate
+        {
+            get
+            {
+                var result = SectionType == FCOSectionCatalog.Labour && (_rate == null || _rate < 1) ? (OverrideType == OverrideTypeCatalog.ST ? Craft.STRate : (OverrideType == OverrideTypeCatalog.OT ? Craft.OTRate : Craft.DTRate)) : _rate;
+                return result;
+            }
+            set => _rate = value;
+        }
         public double Estimate { get => DU * MN * Rate ?? 0; }
-        public long OverrideLogId { get; set; }
 
-        [RequiredNotNull]
-        public CraftSkillForORLogBriefViewModel CraftSkill { get; set; } = new();
-        [Required]
+        //[RequiredNotNull]
+        public CraftSkillForFCOLogBriefViewModel? Craft { get; set; } = new();
+        //[Required]
         public OverrideTypeCatalog? OverrideType { get; set; }
 
         public double CraftRate
         {
             get
             {
-                return (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate)) ?? 0;
+                return (OverrideType == OverrideTypeCatalog.ST ? Craft.STRate : (OverrideType == OverrideTypeCatalog.OT ? Craft.OTRate : Craft.DTRate)) ?? 0;
             }
         }
         public string FormattedCraftRate
@@ -57,8 +64,7 @@ namespace ViewModels
         }
 
         public ContractorBriefViewModel? Contractor { get; set; } = new();
-
-        public FCOLogBriefViewModel FCOLog { get; set; } = new();
+        public FCOLogBriefViewModel? FCOLog { get; set; } = new();
     }
 }
 

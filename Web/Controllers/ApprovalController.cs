@@ -23,6 +23,7 @@ using ViewModels.OverrideLogs.ORLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using static Repositories.Services.CommonServices.ApprovalService.ApprovalService;
 using ViewModels.Authentication.User;
+using ViewModels;
 
 namespace Web.Controllers
 {
@@ -33,6 +34,7 @@ namespace Web.Controllers
         private readonly ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> _totService;
         private readonly IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> _wrrService;
         private readonly IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> _overrideLogService;
+        private readonly IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> _fcoService;
         private readonly ILogger<ApprovalController> _logger;
         private readonly IMapper _mapper;
         private string _controllerName;
@@ -46,6 +48,7 @@ namespace Web.Controllers
             ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> totService,
             IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wrrService,
             IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> overrideLogService,
+            IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> fcoService,
             ILogger<ApprovalController> logger,
             IMapper mapper
             ) : base(approvaleService, logger, mapper, "Approval", "Approvals", true)
@@ -54,6 +57,7 @@ namespace Web.Controllers
             _totService = totService;
             _wrrService = wrrService;
             _overrideLogService = overrideLogService;
+            this._fcoService = fcoService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -325,6 +329,14 @@ namespace Web.Controllers
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
+            }
+            else if (type == LogType.FCO)
+            {
+                _detailViewPath = "~/Views/FCOLog/_Detail.cshtml";
+                response = await _fcoService.GetById(id);
+                var parsedModel = response as RepositoryResponseWithModel<FCOLogDetailViewModel>;
+                isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
+                return GetDetailView<FCOLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else
             {

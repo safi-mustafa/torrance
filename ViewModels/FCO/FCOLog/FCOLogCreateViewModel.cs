@@ -2,6 +2,7 @@
 using Models.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication.User;
+using ViewModels.Common.Company;
 using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -39,7 +40,7 @@ namespace ViewModels
         public long DaysImpacted { get; set; }
         public DateTime Date { get; set; }
         public ContractorBriefViewModel Contractor { get; set; } = new();
-        //public CompanyBriefViewModel Company { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new();
         public EmployeeBriefViewModel? Employee { get; set; } = new();
         public DepartmentBriefViewModel Department { get; set; } = new();
         public UnitBriefViewModel Unit { get; set; } = new();

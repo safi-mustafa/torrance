@@ -210,6 +210,100 @@ namespace Models.Mapper
 
             CreateMap<AdministratorDetailViewModel, AdministratorModifyViewModel>().ReverseMap();
 
+            //FCOSection
+            CreateMap<FCOSectionModifyViewModel, FCOSection>()
+                .ForMember(src => src.CraftId, opt => opt.MapFrom(dest => dest.Craft.Id))
+                .ForMember(x => x.Craft, opt => opt.Ignore())
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                //.ForMember(src => src., opt => opt.MapFrom(dest => dest.Contractor.Id))
+                //.ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(x => x.FCOLogId, opt => opt.Ignore())
+                .ForMember(x => x.FCOLog, opt => opt.Ignore())
+                .ReverseMap();
+
+
+            //FCOLog
+            CreateMap<FCOLogModifyViewModel, FCOLog>()
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(x => x.Department, opt => opt.Ignore())
+                .ForMember(src => src.AuthorizerForImmediateStart, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
+                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+                .ForMember(x => x.Employee, opt => opt.Ignore())
+                .ForMember(src => src.Company, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, opt => opt.Ignore())
+                .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
+                .ForMember(x => x.FCOType, opt => opt.Ignore())
+                .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
+                .ForMember(x => x.FCOReason, opt => opt.Ignore())
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.AuthorizerForImmediateStartId, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
+                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(src => src.RLTMemberId, opt => opt.MapFrom(dest => dest.RLTMember.Id))
+                .ForMember(x => x.RLTMember, opt => opt.Ignore())
+                .ForMember(src => src.BTLApproverId, opt => opt.MapFrom(dest => dest.BTLApprover.Id))
+                .ForMember(x => x.BTLApprover, opt => opt.Ignore())
+                .ForMember(src => src.TELApproverId, opt => opt.MapFrom(dest => dest.TELApprover.Id))
+                .ForMember(x => x.TELApprover, opt => opt.Ignore())
+                .ForMember(src => src.MaintManagerId, opt => opt.MapFrom(dest => dest.MaintManager.Id))
+                .ForMember(x => x.MaintManager, opt => opt.Ignore())
+                //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                //.ForMember(x => x.Company, o => o.Ignore())
+                .ReverseMap();
+
+            CreateMap<FCOLogCreateViewModel, FCOLog>()
+                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+                .ForMember(x => x.Department, opt => opt.Ignore())
+                .ForMember(src => src.AuthorizerForImmediateStart, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
+                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+                .ForMember(x => x.Employee, opt => opt.Ignore())
+                .ForMember(dest => dest.FCOType, act => act.Condition(src => (src.FCOType != null)))
+                .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
+                .ForMember(x => x.FCOType, opt => opt.Ignore())
+                .ForMember(dest => dest.FCOReason, act => act.Condition(src => (src.FCOReason != null)))
+                .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
+                .ForMember(x => x.FCOReason, opt => opt.Ignore())
+                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+                .ForMember(x => x.Contractor, opt => opt.Ignore())
+                .ForMember(src => src.AuthorizerForImmediateStartId, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
+                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(src => src.RLTMemberId, opt => opt.MapFrom(dest => dest.RLTMember.Id))
+                .ForMember(x => x.RLTMember, opt => opt.Ignore())
+                .ForMember(src => src.BTLApproverId, opt => opt.MapFrom(dest => dest.BTLApprover.Id))
+                .ForMember(x => x.BTLApprover, opt => opt.Ignore())
+                .ForMember(src => src.TELApproverId, opt => opt.MapFrom(dest => dest.TELApprover.Id))
+                .ForMember(x => x.TELApprover, opt => opt.Ignore())
+                .ForMember(src => src.MaintManagerId, opt => opt.MapFrom(dest => dest.MaintManager.Id))
+                .ForMember(x => x.MaintManager, opt => opt.Ignore())
+                .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+                .ForMember(x => x.Company, o => o.Ignore())
+                .ReverseMap();
+
+            CreateMap<FCOLog, FCOLogDetailViewModel>()
+                .ForMember(dest => dest.FCOType, act => act.Condition(src => (src.FCOType != null)))
+                .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
+                .ForMember(x => x.FCOType, opt => opt.Ignore())
+                .ForMember(dest => dest.FCOReason, act => act.Condition(src => (src.FCOReason != null)))
+                .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
+                .ForMember(x => x.FCOReason, opt => opt.Ignore())
+                .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
+                .ForMember(src => src.Approver, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>().ReverseMap();
+            CreateMap<FCOLog, FCOLogBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FCOLogBriefViewModel>().ReverseMap();
 
             //WRRLog
             CreateMap<WRRLogModifyViewModel, WRRLog>()
@@ -387,6 +481,8 @@ namespace Models.Mapper
 
             //CraftSkill
             CreateMap<CraftSkill, CraftSkillBriefViewModel>().ReverseMap();
+            CreateMap<CraftSkill, CraftSkillForFCOLogBriefViewModel>().ReverseMap();
+            CreateMap<CraftSkillBriefViewModel, CraftSkillForFCOLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, CraftSkillBriefViewModel>().ReverseMap();
             CreateMap<CraftSkillModifyViewModel, CraftSkill>().ReverseMap();
             CreateMap<CraftSkill, CraftSkillDetailViewModel>().ReverseMap();

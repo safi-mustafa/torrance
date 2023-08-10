@@ -9,6 +9,7 @@ using Helpers.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using Models;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
@@ -130,6 +131,13 @@ namespace Repositories.Shared
                                 identifierKey = "PO#";
                                 identifier = (logRecord as OverrideLog).PoNumber.ToString();
                                 notificationEntityType = NotificationEntityType.OverrideLog;
+                            }
+                            else if (typeof(TEntity).IsAssignableFrom(typeof(FCOLog)))
+                            {
+                                type = "FCO";
+                                identifierKey = "Equipment#";
+                                identifier = (logRecord as FCOLog).EquipmentNumber.ToString();
+                                notificationEntityType = NotificationEntityType.FCOLog;
                             }
                             else
                             {

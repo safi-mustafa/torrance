@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230810113505_Making name nullable inFCOSection")]
+    partial class MakingnamenullableinFCOSection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -614,9 +617,6 @@ namespace DataLibrary.Migrations
                     b.Property<long?>("BTLApproverId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CompanyId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ContractorId")
                         .HasColumnType("bigint");
 
@@ -730,8 +730,6 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("BTLApproverId");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("ContractorId");
 
                     b.HasIndex("DepartmentId");
@@ -765,9 +763,6 @@ namespace DataLibrary.Migrations
                         .HasColumnType("int");
 
                     b.Property<long?>("ContractorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CraftId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CreatedBy")
@@ -812,8 +807,6 @@ namespace DataLibrary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContractorId");
-
-                    b.HasIndex("CraftId");
 
                     b.HasIndex("FCOLogId");
 
@@ -2332,12 +2325,6 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("BTLApproverId");
 
-                    b.HasOne("Models.Common.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Common.Contractor", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorId");
@@ -2384,8 +2371,6 @@ namespace DataLibrary.Migrations
 
                     b.Navigation("BTLApprover");
 
-                    b.Navigation("Company");
-
                     b.Navigation("Contractor");
 
                     b.Navigation("Department");
@@ -2411,10 +2396,6 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("ContractorId");
 
-                    b.HasOne("Models.OverrideLogs.CraftSkill", "Craft")
-                        .WithMany()
-                        .HasForeignKey("CraftId");
-
                     b.HasOne("Models.FCOLog", "FCOLog")
                         .WithMany("FCOSections")
                         .HasForeignKey("FCOLogId")
@@ -2422,8 +2403,6 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("Contractor");
-
-                    b.Navigation("Craft");
 
                     b.Navigation("FCOLog");
                 });

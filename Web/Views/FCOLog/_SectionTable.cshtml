@@ -5,34 +5,38 @@
     var section = ViewData["Section"] != null ? ViewData["Section"].ToString() : "equipment";
     var sectionName = ViewData["SectionName"] != null ? ViewData["SectionName"].ToString() : "Equipment";
     var check = $"{section}-hours";
+    var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
+
 }
+@if (isDetailPage == false)
+{
+    <div class="col-md-12 mt-3">
+        <div class='@($"form-group {section}-inputs-container row")'>
+            <h4 class="col-md-12">@sectionName</h4>
+            <span class='@($"{section}-name-td col-md-3")'>
+                <label class="form-label fw-600">Type<span style="color:red"> *</span></label>
+                <input type="text" name='@($"{section}-name")' value="" id='@($"{section}-name")' class='@($"form-control {section}-hours {section}")' placeholder="Name" />
+            </span>
+            <span class='@($"{section}-head-count-td col-md-2")'>
+                <label class="form-label fw-600">MN<span style="color:red"> *</span></label>
+                <input type="number" name='@($"{section}-count")' value="" id='@($"{section}-head-count")' class='@($"form-control {section}-head-count {section}")' placeholder="Head Count" />
+            </span>
+            <span class='@($"{section}-hours-td col-md-2")'>
+                <label class="form-label fw-600">DU<span style="color:red"> *</span></label>
+                <input type="number" name='@($"{section}-hours")' value="" id='@($"{section}-hours")' class='@($"form-control {section}-hours {section}")' placeholder="Hours" />
+            </span>
+            <span class='@($"{section}-rate-td col-md-2")'>
+                <label class="form-label fw-600">Rate<span style="color:red"> *</span></label>
+                <input type="text" name='@($"{section}-rate")' value="" id='@($"{section}-rate")' class='@($"form-control {section}-rate {section} rate-input")' placeholder="$" />
+            </span>
 
-<div class="col-md-12 mt-3">
-    <div class='@($"form-group {section}-inputs-container row")'>
-        <h4 class="col-md-12">@sectionName</h4>
-        <span class='@($"{section}-name-td col-md-3")'>
-            <label class="form-label fw-600">Type<span style="color:red"> *</span></label>
-            <input type="text" name='@($"{section}-name")' value="" id='@($"{section}-name")' class='@($"form-control {section}-hours {section}")' placeholder="Name" />
-        </span>
-        <span class='@($"{section}-head-count-td col-md-2")'>
-            <label class="form-label fw-600">MN<span style="color:red"> *</span></label>
-            <input type="number" name='@($"{section}-count")' value="" id='@($"{section}-head-count")' class='@($"form-control {section}-head-count {section}")' placeholder="Head Count" />
-        </span>
-        <span class='@($"{section}-hours-td col-md-2")'>
-            <label class="form-label fw-600">DU<span style="color:red"> *</span></label>
-            <input type="number" name='@($"{section}-hours")' value="" id='@($"{section}-hours")' class='@($"form-control {section}-hours {section}")' placeholder="Hours" />
-        </span>
-        <span class='@($"{section}-rate-td col-md-2")'>
-            <label class="form-label fw-600">Rate<span style="color:red"> *</span></label>
-            <input type="number" name='@($"{section}-rate")' value="" id='@($"{section}-rate")' class='@($"form-control {section}-rate {section}")' placeholder="Rate" />
-        </span>
-
-        <span class="text-center col-md-2">
-            <label class="form-label fw-600 w-100">Add</label>
-            <button type="button" class='@($"add-{section} btn-circle btn-sm")' style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
-        </span>
+            <span class="text-center col-md-2">
+                <label class="form-label fw-600 w-100">Add</label>
+                <button type="button" class='@($"add-{section} btn-circle btn-sm")' style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
+            </span>
+        </div>
     </div>
-</div>
+}
 <div class="table-responsive my-3" id='@($"{section}-table")'>
     <table class="table text-nowrap">
         <thead>
@@ -61,7 +65,7 @@
     $(function(){
         $(document).off("click", '@($".add-{section}")');
         $(document).on("click", '@($".add-{section}")', function () {
-            AddSectionElement(this, '@(section)', '@(sectionName)', "/FCOLog/_SectionRow", '@($"{section}-table tbody")', ['@($".{section}-inputs-container")'], '@($"FCO{sectionName}")');
+            AddSectionElement(this, '@(section)', '@(sectionName)', "/FCOLog/_SectionRow", '@($"{section}-table tbody")', ['@($".{section}-inputs-container")'], '@($"FCO{sectionName}Sections")');
         });
         $(document).off("click", '@($".remove-{section}-row")');
         $(document).on("click", '@($".remove-{section}-row")', function () {

@@ -2,7 +2,7 @@
 @using Enums;
 @using System.Globalization;
 @{
-    var collectionType = "FCOSections";
+    var collectionType = "FCOLabourSections";
     var rowNumber = ViewData["RowNumber"] != null ? int.Parse(ViewData["RowNumber"].ToString()) : 0;
     var isDetailPage = ViewData["IsDetailPage"] != null ? bool.Parse(ViewData["IsDetailPage"].ToString()) : false;
 
@@ -16,6 +16,8 @@
     var headCount = collectionType + "[" + rowNumber + "].MN";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
     var hiddenSectionType = collectionType + "[" + rowNumber + "].SectionType";
+    var hiddenRate = collectionType + "[" + rowNumber + "].Rate";
+    var hiddenEstimate = collectionType + "[" + rowNumber + "].Estimate";
 
 }
 
@@ -25,9 +27,9 @@
         <input type="hidden" name="@overrideType" value="@Model.OverrideType" />
     </td>
     <td>
-        <span style=" text-align: initial !important;">@Model.CraftSkill.Name</span>
-        <input type="hidden" name="@craftId" value="@Model.CraftSkill.Id" />
-        <input type="hidden" name="@craftName" value="@Model.CraftSkill.Name" />
+        <span style=" text-align: initial !important;">@Model.Craft.Name</span>
+        <input type="hidden" name="@craftId" value="@Model.Craft.Id" />
+        <input type="hidden" name="@craftName" value="@Model.Craft.Name" />
     </td>
     <td>
         <span style="text-align: initial !important;">@Model.MN</span>
@@ -46,12 +48,13 @@
     @if (isDetailPage == false)
     {
         <td>
-
             <a href="javascript:void(0)" class="remove-cost mx-1 datatable-action btn bg-custom-dark" data-toggle="tooltip" title="Delete Cost"><i class="icon-trash"></i></a>
         </td>
     }
 
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenSectionType" value="@FCOSectionCatalog.Labour" />
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenRate" value="@Model.Rate" />
+    <input type="hidden" class="hidden-id tItem-range-hidden-fields labour-estimate" name="@hiddenEstimate" value="@Model.Estimate" />
 </tr>
 

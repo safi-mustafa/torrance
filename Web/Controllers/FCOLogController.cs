@@ -25,7 +25,7 @@ namespace Web.Controllers
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public FCOLogController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, ILogger<FCOLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(FCOLogService, logger, mapper, "FCOLog", "Welding Rod Record Logs", userInfo)
+        public FCOLogController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, ILogger<FCOLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(FCOLogService, logger, mapper, "FCOLog", "Field Change Order Logs", userInfo)
         {
             _FCOLogService = FCOLogService;
             _logger = logger;
@@ -51,24 +51,13 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
-                new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
-                new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
-                new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true,className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Company",data = "Company.Name",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Calibration Date",data = "FormattedCalibrationDate",sortingColumn="CalibrationDate", orderable = true},
-                new DataTableViewModel{title = "Fume Control Used",data = "FumeControlUsed", orderable = true},
-                new DataTableViewModel{title = "Rod Type",data = "RodType.Name",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Twr",data = "Twr", orderable = true},
-                new DataTableViewModel{title = "Weld Method",data = "WeldMethod.Name",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Checkout",data = "FormattedRodCheckedOut",sortingColumn="RodCheckedOut", orderable = true},
-                new DataTableViewModel{title = "Location",data = "Location.Name",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Rod Checked Out lbs",data = "RodCheckedOutLbs",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Rod Returned Waste lbs",data = "RodReturnedWasteLbs",className="exclude-form-table include-in-export"},
-                new DataTableViewModel{title = "Returned",data = "FormattedDateRodReturned",sortingColumn="DateRodReturned", orderable = true},
-                //new DataTableViewModel{title = "Email",data = "Email"},
-                //new DataTableViewModel{title = "Status",data = "Status"},
+                new DataTableViewModel{title = "FCO#",data = "SrNoFormatted",exportColumn="SrNoFormatted"},
+                new DataTableViewModel{title = "Type",data = "FCOType.Name", sortingColumn ="FCOType.Name", orderable = true},
+                new DataTableViewModel{title = "Reason",data = "FCOReason.Name",sortingColumn="FCOReason.Name", orderable=true},
+                new DataTableViewModel{title = "Detail",data = "DescriptionOfFinding",sortingColumn="DescriptionOfFinding", orderable=true},
+                new DataTableViewModel{title = "$ Impact",data = "TotalCostFormatted", orderable=true},
+                new DataTableViewModel{title = "Issued Date",data = "DateFormatted", orderable=true},
+                new DataTableViewModel{title = "Name",data = "Company.Name", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
             });
             return dataColumns;
@@ -94,6 +83,15 @@ namespace Web.Controllers
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            //model = new FCOLogModifyViewModel
+            //{
+            //    AdditionalInformation = "alksdjflkajdlkfjaldf",
+            //    AnalysisOfAlternatives = true,
+            //    Attachment = model.Attachment,
+            //    Contractor = model.Contractor,
+            //    Date = model.Date,
+
+            //};
             return base.Create(model);
         }
         public override ActionResult DataTableIndexView(CrudListViewModel vm)

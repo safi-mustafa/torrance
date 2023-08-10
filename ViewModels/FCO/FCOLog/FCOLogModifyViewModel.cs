@@ -8,10 +8,13 @@ using Enums;
 using ViewModels.Authentication.User;
 using ViewModels.WeldingRodRecord;
 using ViewModels.Common.Company;
+using Helpers.File;
+using Models.Common;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ViewModels
 {
-    public class FCOLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
+    public class FCOLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, ISrNo, IAttachment<AttachmentModifyViewModel>, IIdentitifier, IApprove
     {
         public Status Status { get; set; }
         [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
@@ -61,8 +64,17 @@ namespace ViewModels
         public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
         public DateTime? MaintManagerApprovalDate { get; set; }
 
-        public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
-        public List<AttachmentModifyViewModel>? Attachments { get; set; }
+        public double TotalCost { get => FCOSections.Sum(x => x.Estimate); }
+        public double TotalHours { get => FCOSections.Sum(x => x.DU); }
+        public double TotalHeadCount { get => FCOSections.Sum(x => x.MN); }
+
+        public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        [BindNever]
+        public List<FCOSectionModifyViewModel>? FCOSections { get => FCOLabourSections?.Concat(FCOMaterialSections?.Concat(FCOEquipmentSections?.Concat(FCOShopSections))).ToList() ?? new List<FCOSectionModifyViewModel>(); }
+        public AttachmentModifyViewModel? Attachment { get; set; } = new();
         public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
         public double Contingency { get => Total / 10; }
         [Display(Name = "Total")]

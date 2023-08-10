@@ -18,6 +18,8 @@
     var rate = collectionType + "[" + rowNumber + "].Rate";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
     var hiddenSectionType = collectionType + "[" + rowNumber + "].SectionType";
+    var hiddenEstimate = collectionType + "[" + rowNumber + "].Estimate";
+
 }
 
 <tr class="@rowClass" id="@rowId">
@@ -52,5 +54,7 @@
 
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenId" value="@Model.Id" />
     <input type="hidden" class="hidden-id tItem-range-hidden-fields" name="@hiddenSectionType" value="@Model.SectionType" />
+    <input type="hidden" class='@($"hidden-id tItem-range-hidden-fields {section}-estimate")' name="@hiddenEstimate" value="@Model.Estimate" />
+
 </tr>
 

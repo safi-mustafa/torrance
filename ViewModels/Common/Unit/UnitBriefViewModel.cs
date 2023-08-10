@@ -15,6 +15,8 @@ namespace ViewModels.Common.Unit
         }
         [DisplayName("Unit")]
         public override string? Name { get; set; }
+
+        public string? CostTrackerUnit { get; set; }
     }
 
 }

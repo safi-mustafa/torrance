@@ -6,7 +6,9 @@
     Layout = null;
     var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
     var labourSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).ToList();
+    var materialSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).ToList();
     var equipmentSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).ToList();
+    var shopSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).ToList();
 }
 <div class="row">
     <div class="col-lg-12">
@@ -16,6 +18,11 @@
                     <label asp-for="Date" class="form-label fw-600"></label>
                     <input asp-for="Date" type="date" class="form-control" />
                     <span asp-validation-for="Date" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Company" } }' />
                 </div>
             </div>
             <div class="col-lg-4">
@@ -55,9 +62,9 @@
                 </div>
             </div>
             <div class="col-lg-6" id="file-container">
-                <label asp-for="Attachments" class="form-label fw-600"></label>
-                <input type="file" id="file" asp-for="Attachments" class="form-control" />
-                <span asp-validation-for="Attachments" class="validation-invalid-label"></span>
+                <label asp-for="Attachment.File" class="form-label fw-600"></label>
+                <input type="file" id="file" asp-for="Attachment.File" class="form-control" />
+                <span asp-validation-for="Attachment.File" class="validation-invalid-label"></span>
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -108,7 +115,6 @@
                         <input type="number" name="labour-hours" value="" id="labour-hours" class="form-control labour-hours cost" placeholder="Hours" />
                     </span>
                     <span class="labour-craft-skill-td col-md-3">
-                        @*<partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" model='@(new ViewModels.OverrideLogs.CraftSkillBriefViewModel())' />*@
                         @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
                     </span>
 
@@ -141,11 +147,65 @@
                     </tbody>
                 </table>
             </div>
-            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" } })
+            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", materialSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" } })
             @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "equipment" }, { "SectionName", "Equipment" } })
-            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" } })
+            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", shopSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" } })
 
-
+            <div class="col-lg-12">
+                <table class="table text-nowrap">
+                    <tbody>
+                        <tr>
+                            <th>Total:</th>
+                            <td></td>
+                            <td id="total-estimate-cell">$@Model.Total</td>
+                        </tr>
+                        <tr>
+                            <th>Contingency:</th>
+                            <td>10%</td>
+                            <td id="contingency-cell">$@Model.Contingency</td>
+                        </tr>
+                        <tr>
+                            <th>Total:</th>
+                            <td></td>
+                            <td id="sub-total-cell">$@Model.SubTotal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12">
+                <table class="table text-nowrap">
+                    <tbody>
+                        <tr>
+                            <th colspan="2"><h4>FCO Value Estimate</h4></th>
+                        </tr>
+                        <tr>
+                            <th>Labor:</th>
+                            <td id="total-labour-cell">$@Model.TotalLabor</td>
+                        </tr>
+                        <tr>
+                            <th>Material:</th>
+                            <td id="total-material-cell">$@Model.TotalMaterial</td>
+                        </tr>
+                        <tr>
+                            <th>Equipment:</th>
+                            <td id="total-equipment-cell">$@Model.TotalEquipment</td>
+                        </tr>
+                        <tr>
+                            <th>Shop:</th>
+                            <td id="total-shop-cell">$@Model.TotalShop</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL:</th>
+                            <td id="actual-total-cell">$@Model.SectionTotal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_FCOType.cshtml" for="FCOType" />
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_FCOReason.cshtml" for="FCOReason" />
@@ -171,12 +231,6 @@
                     <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
                 </div>
             </div>
-
-            @*<div class="col-lg-6" id="link-container" style="display:none;">
-                    <label asp-for="Url" class="form-label fw-600">Link</label>
-                    <input type="url" id="url" asp-for="Url" class="form-control" />
-                    <span asp-validation-for="Url" class="validation-invalid-label"></span>
-                </div>*@
             <input asp-for="Approver.Id" type="hidden" />
         </div>
     </div>
@@ -220,15 +274,58 @@
     $(document).off("click", ".add-cost");
     $(document).on("click", ".add-cost", function () {
         AddCost(this);
+
     });
     $(document).off("click", ".remove-cost");
     $(document).on("click", ".remove-cost", function () {
         $(this).closest("tr").remove();
-        RefreshInputIndexes("#labour-table tr", "labour-row", "FCOSections");
+        RefreshInputIndexes("#labour-table tr", "labour-row", "FCOLabourSections");
+    });
+
+    $(document).on("input", ".rate-input", function () {
+        AppendSignInElement(this, "$");
     });
 
 });
 
+    function Calculate() {
+        debugger;
+        var labourEstimate = 0;
+        $(".labour-estimate").each(function (i, v) { labourEstimate += parseFloat($(v).val()); });
+        var materialEstimate = 0;
+        $(".material-estimate").each(function (i, v) { materialEstimate += parseFloat($(v).val()); });
+        var equipmentEstimate = 0;
+        $(".equipment-estimate").each(function (i, v) { equipmentEstimate += parseFloat($(v).val()); });
+        var shopEstimate = 0;
+        $(".shop-estimate").each(function (i, v) { shopEstimate += parseFloat($(v).val()); });
+
+        labourEstimate = parseFloat(labourEstimate.toFixed(2));
+        equipmentEstimate = parseFloat(equipmentEstimate.toFixed(2));
+        materialEstimate = parseFloat(materialEstimate.toFixed(2));
+        shopEstimate = parseFloat(shopEstimate.toFixed(2));
+        var labourContingency = parseFloat((labourEstimate / 10).toFixed(2));
+        var materialContingency = parseFloat((materialEstimate / 10).toFixed(2));
+        var equipmentContingency = parseFloat((equipmentEstimate / 10).toFixed(2));
+        var shopContingency = parseFloat((shopEstimate + (shopEstimate / 10)).toFixed(2));
+        var total = parseFloat((labourEstimate + materialEstimate + equipmentEstimate).toFixed(2));
+        var totalContingency = parseFloat((labourContingency + materialContingency + equipmentContingency).toFixed(2));
+        var subTotal = parseFloat((total + totalContingency).toFixed(2));
+
+        var totalWithContingency = parseFloat((subTotal + shopEstimate + shopContingency).toFixed(2));
+
+    //filling data in first table
+        $("#total-estimate-cell").html("$" + total);
+        $("#contingency-cell").html("$" + totalContingency);
+        $("#sub-total-cell").html("$" + subTotal);
+
+        //filling data in second table
+        $("#total-labour-cell").html("$" + (labourEstimate + labourContingency).toFixed(2));
+        $("#total-material-cell").html("$" + (materialEstimate + materialContingency).toFixed(2));
+        $("#total-equipment-cell").html("$" + (equipmentEstimate + equipmentContingency).toFixed(2));
+        $("#total-shop-cell").html("$" + (shopEstimate + shopContingency).toFixed(2));
+        $("#actual-total-cell").html("$" + totalWithContingency);
+
+    }
 
     function onAttachmentTypeChange(selectedValue){
         if (@((int)AttachmentTypeCatalog.File)== selectedValue) {
@@ -245,7 +342,8 @@
         var sectionName = $("#"+section+"-name").val();
         var costHours = $("#" + section +"-hours").val();
         var headCount = $("#" + section +"-head-count").val();
-        var rate = $("#" + section + "-rate").val();
+        var rate = parseFloat($("#" + section + "-rate").val().replace("$", ""));
+
         if (sectionName != null && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && rate != null && rate > 0) {
             var rowNumber = $("." + section + "-row").length;
             var obj = {
@@ -260,7 +358,7 @@
             ResetInputs(resetContainers, []);
         }
         else {
-            FireSwal("MN, DU are required fields.");
+            FireSwal("Name, MN, DU & Rate are required fields.");
         }
     }
     function AddCost(element) {
@@ -274,7 +372,7 @@
             var rowNumber = $(".labour-row").length;
             var obj = {
                 'OverrideType': overrideType,
-                'CraftSkill': {
+                'Craft': {
                     'Id': costCraftId,
                     'Name': costCraftName,
                     'STRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.STRate,
@@ -310,8 +408,8 @@
             $(selector).find(':input').val(null);
         });
         //to reset select 2 elements
-        $.each(containers, function (index, selector) {
-                $(selector).val('').trigger('change')
+        $.each(select2Elements, function (index, selector) {
+            $(selector).val('').trigger('change')
         });
     }
 
@@ -324,6 +422,7 @@
             success: function (response) {
                 console.log(response);
                 $('#' + tbodyId).append(response);
+                Calculate();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -352,4 +451,5 @@
                 rowIndex++;
             }
         });
+        Calculate();
     }</script>

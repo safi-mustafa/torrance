@@ -5,7 +5,7 @@ namespace ViewModels
 {
     public class FCOTypeBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public FCOTypeBriefViewModel() : base(true, "The FCO Type field is required.")
+        public FCOTypeBriefViewModel() : base(false, "The FCO Type field is required.")
         {
 
         }

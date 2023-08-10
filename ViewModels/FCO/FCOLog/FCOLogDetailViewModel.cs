@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Helpers.Datetime;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Models.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -17,44 +18,56 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels
 {
-    public class FCOLogDetailViewModel : LogCommonDetailViewModel, IApprove
+    public class FCOLogDetailViewModel : LogCommonDetailViewModel, IApprove, ISrNo
     {
+        public long Id { get; set; }
         public Status Status { get; set; }
-        [Display(Name = "Description Of Finding")]
-        public string DescriptionOfFinding { get; set; }
-        [Display(Name = "Additional Informationn")]
-        public string AdditionalInformation { get; set; }
+        [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
+        public string? DescriptionOfFinding { get; set; }
+        [Display(Name = "Additional Information")]
+        public string? AdditionalInformation { get; set; }
         [Display(Name = "Loop Identification # & Equipment Number")]
-        public string EquipmentNumber { get; set; }
-        [Display(Name = "Location")]
-        public string Location { get; set; }
+        public string? EquipmentNumber { get; set; }
+        [Display(Name = "Service/Location")]
+        public string? Location { get; set; }
         [Display(Name = "Shutdown Required")]
         public bool ShutdownRequired { get; set; }
         [Display(Name = "Scaffold Required")]
         public bool ScaffoldRequired { get; set; }
         [Display(Name = "FCO No.")]
         public long SrNo { get; set; }
-        [Display(Name = "P&ID Attached")]
-        public bool PAndIdAttached { get; set; }
-        [Display(Name = "ISO Attached")]
-        public bool ISOAttached { get; set; }
+        [Display(Name = "FCO No.")]
+        public string SrNoFormatted
+        {
+            get
+            {
+                var srNo = $"{Unit.CostTrackerUnit}-{SrNo.ToString().PadLeft(3, '0')}";
+                return srNo;
+            }
+        }
+        [Display(Name = "Analysis of alternatives / Mitigation Options (Y/N)")]
+        public bool AnalysisOfAlternatives { get; set; }
+        [Display(Name = "Equipment Failure Report")]
+        public bool EquipmentFailureReport { get; set; }
         [Display(Name = "Drawings Attached")]
         public bool DrawingsAttached { get; set; }
         [Display(Name = "Schedule Impact")]
         public bool ScheduleImpact { get; set; }
         [Display(Name = "Days Impact")]
         public long DaysImpacted { get; set; }
+        [Display(Name = "During Execution")]
+        public DuringExecutionCatalog? DuringExecution { get; set; }
         public DateTime Date { get; set; }
+        public string DateFormatted { get => Date.FormatDatetimeInPST(); }
         public ContractorBriefViewModel Contractor { get; set; } = new();
-        //public CompanyBriefViewModel Company { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new();
         public EmployeeBriefViewModel? Employee { get; set; } = new();
         public DepartmentBriefViewModel Department { get; set; } = new();
         public UnitBriefViewModel Unit { get; set; } = new();
-        public FCOTypeBriefViewModel FCOType { get; set; } = new();
-        public FCOReasonBriefViewModel FCOReason { get; set; } = new();
+        public FCOTypeBriefViewModel? FCOType { get; set; } = new();
+        public FCOReasonBriefViewModel? FCOReason { get; set; } = new();
         public AuthorizeForImmediateStartBriefViewModel AuthorizerForImmediateStart { get; set; } = new(false);
         public DateTime AuthorizerForImmediateStartDate { get; set; }
-        public ApproverBriefViewModel? Approver { get; set; } = new(false);
         public BTLBriefViewModel? RLTMember { get; set; } = new(false);
         public DateTime? RLTMemberApproveDate { get; set; }
         public BTLBriefViewModel? BTLApprover { get; set; } = new(false);
@@ -64,7 +77,18 @@ namespace ViewModels
         public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
         public DateTime? MaintManagerApprovalDate { get; set; }
 
-        public List<FCOSectionModifyViewModel> FCOSections { get; set; } = new();
+        public double TotalCost { get; set; }
+        public string TotalCostFormatted { get => string.Format("{0:C}", TotalCost); }
+        public double TotalHours { get; set; }
+        public double TotalHeadCount { get; set; }
+
+        public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
+        public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        [BindNever]
+        public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
+        public AttachmentModifyViewModel? Attachment { get; set; } = new();
         public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
         public double Contingency { get => Total / 10; }
         [Display(Name = "Total")]

@@ -53,13 +53,15 @@ namespace ViewModels.Shared
         public string? Url { get; set; } = "";
         private string? _type;
         public string Type { get => string.IsNullOrEmpty(_type) ? Path.GetExtension(File?.FileName) ?? "" : _type; set => _type = value; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public AttachmentEntityType FileType { get; set; }
         public AttachmentTypeCatalog AttachmentType { get; set; }
         public DateTime UploadDate { get; set; }
         public FolderBriefViewModel? Folder { get; set; } = new();
         public ActiveStatus ActiveStatus { get; set; }
         public DateTime CreatedOn { get; set; }
+        public long? EntityId { get; set; }
+        public AttachmentEntityType EntityType { get; set; }
 
         public string GetBaseFolder()
         {

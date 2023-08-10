@@ -173,10 +173,51 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         TotalHeadCount = x.TotalHeadCount
                     }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
 
+                var fcoQueryable = _db.FCOLogs
+                    .Include(x => x.Employee)
+                    .Include(x => x.Approver)
+                    .Include(x => x.FCOReason)
+                    .Include(x => x.Contractor)
+                    .Include(x => x.Unit)
+                    .Where(x =>
+                    x.IsDeleted == false
+                    &&
+                    (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                    &&
+                    (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
+                    &&
+                    (!isEmployee)
+                    &&
+                    (search.Type == null || search.Type == LogType.WeldingRodRecord)
+                    &&
+                    (search.Status == null || search.Status == x.Status)
+                    &&
+                    (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                    &&
+                    (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
+                    )
+                    .Select(x =>
+                    new ApprovalDetailViewModel
+                    {
+                        Id = x.Id,
+                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        TotalHours = x.TotalHours,
+                        Date = x.CreatedOn,
+                        Status = x.Status,
+                        Reason = x.FCOReason != null ? x.FCOReason.Name : "",
+                        Unit = x.Unit != null ? x.Unit.Name : "",
+                        Department = x.Department != null ? x.Department.Name : "",
+                        Type = LogType.FCO,
+                        Employee = x.Employee,
+                        TotalCost = x.TotalCost,
+                        TotalHeadCount = x.TotalHeadCount
+                    }).OrderByDescending(x => x.Id).IgnoreQueryFilters().AsQueryable();
+                var check = await fcoQueryable.ToListAsync();
                 var Ids = overrideLogsQueryable.Select(x => x.Id).ToList();
 
                 var logsQueryable = (totLogsQueryable.Concat(overrideLogsQueryable));
                 logsQueryable = logsQueryable.Concat(wrrLogsQueryable);
+                logsQueryable = logsQueryable.Concat(fcoQueryable);
                 logsQueryable = logsQueryable.OrderByDescending(x => x.Date).AsQueryable();
                 var result = await logsQueryable.Paginate(search);
                 if (result != null)

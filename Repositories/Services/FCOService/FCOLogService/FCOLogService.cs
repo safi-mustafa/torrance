@@ -5,10 +5,12 @@ using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Helpers.File;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
+using Models.Common;
 using Models.Common.Interfaces;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
@@ -16,6 +18,7 @@ using Pagination;
 using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
+using Repositories.Shared.AttachmentService;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using System.Data.Common;
@@ -30,8 +33,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
 {
     public class FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<FCOLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, ISrNo, IAttachment<AttachmentModifyViewModel>, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, ISrNo, IAttachment<AttachmentModifyViewModel>, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -41,6 +44,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> _attachmentService;
 
         public FCOLogService(
                 ToranceContext db,
@@ -50,7 +54,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 IUserInfoService userInfoService,
                 INotificationService notificationService,
                 IHttpContextAccessor httpContextAccessor,
-                IPossibleApproverService possibleApproverService
+                IPossibleApproverService possibleApproverService,
+                IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
             ) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
@@ -61,6 +66,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _attachmentService = attachmentService;
         }
 
         public override Expression<Func<FCOLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -117,17 +123,18 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 var dbModel = await _db.FCOLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
-                    .Include(x => x.Location)
                     .Include(x => x.Employee)
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
+                    .Include(x => x.Contractor)
+                    .Include(x => x.Approver)
+                    .Include(x => x.Company)
                     .Include(x => x.AuthorizerForImmediateStart)
                     .Include(x => x.BTLApprover)
                     .Include(x => x.RLTMember)
                     .Include(x => x.MaintManager)
                     .Include(x => x.Contractor)
-                    //.Include(x => x.Company)
-                    .Include(x => x.FCOSections)
+                    .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
                 if (dbModel != null)
@@ -151,22 +158,25 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
         {
             try
             {
+                //var check = await _db.FCOLogs.ToListAsync();
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<FCOLog>()
-                   .Include(x => x.Unit)
+                    .Include(x => x.Unit)
                     .Include(x => x.Department)
-                    .Include(x => x.Location)
                     .Include(x => x.Employee)
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
+                    .Include(x => x.Contractor)
+                    .Include(x => x.Approver)
+                    .Include(x => x.Company)
                     .Include(x => x.AuthorizerForImmediateStart)
                     .Include(x => x.BTLApprover)
                     .Include(x => x.RLTMember)
                     .Include(x => x.MaintManager)
                     .Include(x => x.Contractor)
-                    //.Include(x => x.Company)
-                    .Include(x => x.FCOSections)
-                    .Where(filters).IgnoreQueryFilters();
+                    .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
+                    .Where(filters)
+                    .IgnoreQueryFilters();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
@@ -193,11 +203,22 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 try
                 {
                     var mappedModel = _mapper.Map<FCOLog>(model);
+                    var srNo = await _db.FCOLogs.Where(x => x.UnitId == model.Unit.Id).CountAsync();
+                    mappedModel.SrNo = srNo;
+                    //setting requesterId
                     await SetRequesterId(mappedModel);
+                    //setting approverId
+                    //await SetApproverId(mappedModel);
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    await _notificationService.CreateLogNotification(notification);
+                    //saving Attachment
+                    model.Attachment.EntityId = mappedModel.Id;
+                    model.Attachment.EntityType = AttachmentEntityType.FCOLog;
+                    var attachmentResponse = await _attachmentService.Create(model.Attachment);
+
+
+                    //var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    //await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -257,6 +278,12 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 mappedModel.EmployeeId = long.Parse(_userInfoService.LoggedInUserId());
             }
 
+        }
+
+        private async Task SetApproverId(FCOLog mappedModel)
+        {
+            mappedModel.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
+            mappedModel.Status = Status.Approved;
         }
         public async Task<bool> IsFCOLogEmailUnique(int id, string email)
         {

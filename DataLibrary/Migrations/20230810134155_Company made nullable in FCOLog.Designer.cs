@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230810134155_Company made nullable in FCOLog")]
+    partial class CompanymadenullableinFCOLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -767,9 +770,6 @@ namespace DataLibrary.Migrations
                     b.Property<long?>("ContractorId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CraftId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
@@ -812,8 +812,6 @@ namespace DataLibrary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContractorId");
-
-                    b.HasIndex("CraftId");
 
                     b.HasIndex("FCOLogId");
 
@@ -2411,10 +2409,6 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("ContractorId");
 
-                    b.HasOne("Models.OverrideLogs.CraftSkill", "Craft")
-                        .WithMany()
-                        .HasForeignKey("CraftId");
-
                     b.HasOne("Models.FCOLog", "FCOLog")
                         .WithMany("FCOSections")
                         .HasForeignKey("FCOLogId")
@@ -2422,8 +2416,6 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("Contractor");
-
-                    b.Navigation("Craft");
 
                     b.Navigation("FCOLog");
                 });

@@ -6,11 +6,12 @@
     var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
     var showUnApproved = ViewData["ShowUnApproved"] != null && !string.IsNullOrEmpty(ViewData["ShowUnApproved"].ToString()) ? bool.Parse(ViewData["ShowUnApproved"].ToString()) ? "true" : "false" : "false";
     var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
+    var label = ViewData["Label"] != null && !string.IsNullOrEmpty(ViewData["Label"].ToString()) ? ViewData["Label"].ToString() : "Company";
 }
 
 
 <div class="form-group">
-    <label class="form-label fw-600">Company</label>
+    <label class="form-label fw-600">@label</label>
     @Html.DropDownListFor(model => model.Id, new List<SelectListItem>() {
     new SelectListItem()
     {
