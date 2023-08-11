@@ -113,6 +113,10 @@ namespace Repositories.Shared
                             {
                                 logRecord.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
                             }
+                            if (logRecord is IApprovalDate)
+                            {
+                                ((IApprovalDate)logRecord).ApprovalDate = DateTime.Now;
+                            }
                             await _db.SaveChangesAsync();
                             string type = "";
                             string identifier = "";

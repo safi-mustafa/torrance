@@ -34,6 +34,7 @@ namespace ViewModels
             }
             set => _rate = value;
         }
+        public string RateFormatted { get => string.Format("{0:C}", Rate); }
         public double Estimate { get => DU * MN * Rate ?? 0; }
 
         //[RequiredNotNull]

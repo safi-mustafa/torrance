@@ -58,7 +58,11 @@ namespace ViewModels
         [Display(Name = "During Execution")]
         public DuringExecutionCatalog? DuringExecution { get; set; }
         public DateTime Date { get; set; }
+        [Display(Name = "Date")]
+        public DateTime? ApprovalDate { get; set; }
         public string DateFormatted { get => Date.FormatDatetimeInPST(); }
+        [Display(Name = "Date")]
+        public string ApprovalDateFormatted { get => ApprovalDate?.FormatDatetimeInPST(); }
         public ContractorBriefViewModel Contractor { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new();
         public EmployeeBriefViewModel? Employee { get; set; } = new();
@@ -66,20 +70,17 @@ namespace ViewModels
         public UnitBriefViewModel Unit { get; set; } = new();
         public FCOTypeBriefViewModel? FCOType { get; set; } = new();
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new();
-        public AuthorizeForImmediateStartBriefViewModel AuthorizerForImmediateStart { get; set; } = new(false);
-        public DateTime AuthorizerForImmediateStartDate { get; set; }
-        public BTLBriefViewModel? RLTMember { get; set; } = new(false);
-        public DateTime? RLTMemberApproveDate { get; set; }
-        public BTLBriefViewModel? BTLApprover { get; set; } = new(false);
-        public DateTime? BTLApproveDate { get; set; }
-        public string BTLApproveDateFormatted { get => (BTLApproveDate == null ? "-" : BTLApproveDate?.FormatDatetimeInPST()); }
-        public TELBriefViewModel? TELApprover { get; set; } = new(false);
-        public DateTime? TELApprovalDate { get; set; }
-        public string TELApprovalDateFormatted { get => (TELApprovalDate == null ? "-" : TELApprovalDate?.FormatDatetimeInPST()); }
-        public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
-        public DateTime? MaintManagerApprovalDate { get; set; }
-        public string MaintManagerApprovalDateFormatted { get => (MaintManagerApprovalDate == null ? "-" : MaintManagerApprovalDate?.FormatDatetimeInPST()); }
+        [Display(Name = "Designated Coordinator")]
+        public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }
 
+        [Display(Name = "Authorized for Immediate Start")]
+        public string? AuthorizerForImmediateStart => Approver.Name;
+        [Display(Name = "Approved to Progress")]
+        public string? ApprovedToProgress => Approver.Name;
+        [Display(Name = "Endorsement – BTL")]
+        public string? BTLApprover => Approver.Name;
+        [Display(Name = "Endorsement – Unit Superintendent")]
+        public string? EndorsmentUnitManager => Approver.Name;
 
         public double TotalCost { get; set; }
         public string TotalCostFormatted { get => string.Format("{0:C}", TotalCost); }

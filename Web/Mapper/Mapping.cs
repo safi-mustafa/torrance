@@ -227,8 +227,8 @@ namespace Models.Mapper
             CreateMap<FCOLogModifyViewModel, FCOLog>()
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
                 .ForMember(x => x.Department, opt => opt.Ignore())
-                .ForMember(src => src.AuthorizerForImmediateStart, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
-                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                //.ForMember(src => src.DesignatedCoordinator, opt => opt.MapFrom(dest => dest.Designa.Id))
+                //.ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(src => src.Company, opt => opt.MapFrom(dest => dest.Company.Id))
@@ -241,18 +241,10 @@ namespace Models.Mapper
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
-                .ForMember(src => src.AuthorizerForImmediateStartId, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
-                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
-                .ForMember(src => src.RLTMemberId, opt => opt.MapFrom(dest => dest.RLTMember.Id))
-                .ForMember(x => x.RLTMember, opt => opt.Ignore())
-                .ForMember(src => src.BTLApproverId, opt => opt.MapFrom(dest => dest.BTLApprover.Id))
-                .ForMember(x => x.BTLApprover, opt => opt.Ignore())
-                .ForMember(src => src.TELApproverId, opt => opt.MapFrom(dest => dest.TELApprover.Id))
-                .ForMember(x => x.TELApprover, opt => opt.Ignore())
-                .ForMember(src => src.MaintManagerId, opt => opt.MapFrom(dest => dest.MaintManager.Id))
-                .ForMember(x => x.MaintManager, opt => opt.Ignore())
+                //.ForMember(src => src.De, opt => opt.MapFrom(dest => dest.MaintManager.Id))
+                .ForMember(x => x.DesignatedCoordinator, opt => opt.Ignore())
                 //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 //.ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
@@ -260,8 +252,8 @@ namespace Models.Mapper
             CreateMap<FCOLogCreateViewModel, FCOLog>()
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
                 .ForMember(x => x.Department, opt => opt.Ignore())
-                .ForMember(src => src.AuthorizerForImmediateStart, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
-                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
+                //.ForMember(src => src.DesignatedCoordinatorId, opt => opt.MapFrom(dest => dest.Desi.Id))
+                //.ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
                 .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
                 .ForMember(x => x.Employee, opt => opt.Ignore())
                 .ForMember(dest => dest.FCOType, act => act.Condition(src => (src.FCOType != null)))
@@ -274,18 +266,8 @@ namespace Models.Mapper
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
-                .ForMember(src => src.AuthorizerForImmediateStartId, opt => opt.MapFrom(dest => dest.AuthorizerForImmediateStart.Id))
-                .ForMember(x => x.AuthorizerForImmediateStart, opt => opt.Ignore())
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
-                .ForMember(src => src.RLTMemberId, opt => opt.MapFrom(dest => dest.RLTMember.Id))
-                .ForMember(x => x.RLTMember, opt => opt.Ignore())
-                .ForMember(src => src.BTLApproverId, opt => opt.MapFrom(dest => dest.BTLApprover.Id))
-                .ForMember(x => x.BTLApprover, opt => opt.Ignore())
-                .ForMember(src => src.TELApproverId, opt => opt.MapFrom(dest => dest.TELApprover.Id))
-                .ForMember(x => x.TELApprover, opt => opt.Ignore())
-                .ForMember(src => src.MaintManagerId, opt => opt.MapFrom(dest => dest.MaintManager.Id))
-                .ForMember(x => x.MaintManager, opt => opt.Ignore())
                 .ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 .ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
@@ -298,12 +280,14 @@ namespace Models.Mapper
                 //.ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
                 //.ForMember(x => x.FCOReason, opt => opt.Ignore())
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
-                .ForMember(src => src.Approver, opt => opt.MapFrom(dest => dest.Approver.Id))
+                .ForMember(src => src.Approver, opt => opt.MapFrom(dest => dest.Approver))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>().ReverseMap();
             CreateMap<FCOLog, FCOLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, FCOLogBriefViewModel>().ReverseMap();
+            CreateMap<DesignatedCoordinatorBriefViewModel, ToranceUser>().ReverseMap();
+
 
             //WRRLog
             CreateMap<WRRLogModifyViewModel, WRRLog>()
@@ -419,6 +403,7 @@ namespace Models.Mapper
             CreateMap<UserDetailViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
+            CreateMap<DesignatedCoordinatorBriefViewModel, ToranceUser>().ReverseMap();
 
 
 

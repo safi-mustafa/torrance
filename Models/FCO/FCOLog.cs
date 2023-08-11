@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Models
 {
-    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, IDepartmentId, ICompanyId
+    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, IDepartmentId, ICompanyId, IApprovalDate
     {
         public FCOLog()
         {
@@ -30,12 +30,17 @@ namespace Models
         public bool ScheduleImpact { get; set; }
         public long DaysImpacted { get; set; }
         public DateTime? Date { get; set; }
+        public DateTime? ApprovalDate { get; set; }
         public bool AnalysisOfAlternatives { get; set; }
         public bool EquipmentFailureReport { get; set; }
         public DuringExecutionCatalog? DuringExecution { get; set; }
         public double TotalCost { get; set; }
         public double TotalHours { get; set; }
         public double TotalHeadCount { get; set; }
+
+        [ForeignKey("DesignatedCoordinator")]
+        public long? DesignatedCoordinatorId { get; set; }
+        public ToranceUser? DesignatedCoordinator { get; set; }
 
         [ForeignKey("Employee")]
         public long? EmployeeId { get; set; }
@@ -65,38 +70,9 @@ namespace Models
         public long? FCOReasonId { get; set; }
         public FCOReason? FCOReason { get; set; }
 
-        //[ForeignKey("Company")]
-        //public long CompanyId { get; set; }
-        //public Company Company { get; set; }
-
         [ForeignKey("Approver")]
         public long? ApproverId { get; set; }
         public ToranceUser? Approver { get; set; }
-
-        [ForeignKey("AuthorizerForImmediateStart")]
-        public long? AuthorizerForImmediateStartId { get; set; }
-        public ToranceUser? AuthorizerForImmediateStart { get; set; }
-        public DateTime? AuthorizerForImmediateStartDate { get; set; }
-
-        [ForeignKey("RLTMember")]
-        public long? RLTMemberId { get; set; }
-        public ToranceUser? RLTMember { get; set; }
-        public DateTime? RLTMemberApproveDate { get; set; }
-
-        [ForeignKey("BTLApprover")]
-        public long? BTLApproverId { get; set; }
-        public ToranceUser? BTLApprover { get; set; }
-        public DateTime? BTLApproveDate { get; set; }
-
-        [ForeignKey("TELApprover")]
-        public long? TELApproverId { get; set; }
-        public ToranceUser? TELApprover { get; set; }
-        public DateTime? TELApprovalDate { get; set; }
-
-        [ForeignKey("MaintManager")]
-        public long? MaintManagerId { get; set; }
-        public ToranceUser? MaintManager { get; set; }
-        public DateTime? MaintManagerApprovalDate { get; set; }
 
         public List<FCOSection> FCOSections { get; set; }
 

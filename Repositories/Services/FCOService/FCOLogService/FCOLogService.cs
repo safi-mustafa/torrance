@@ -129,11 +129,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.Contractor)
                     .Include(x => x.Approver)
                     .Include(x => x.Company)
-                    .Include(x => x.AuthorizerForImmediateStart)
-                    .Include(x => x.BTLApprover)
-                    .Include(x => x.RLTMember)
-                    .Include(x => x.MaintManager)
                     .Include(x => x.Contractor)
+                    .Include(x => x.DesignatedCoordinator)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
@@ -169,11 +166,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.Contractor)
                     .Include(x => x.Approver)
                     .Include(x => x.Company)
-                    .Include(x => x.AuthorizerForImmediateStart)
-                    .Include(x => x.BTLApprover)
-                    .Include(x => x.RLTMember)
-                    .Include(x => x.MaintManager)
                     .Include(x => x.Contractor)
+                    .Include(x => x.DesignatedCoordinator)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(filters)
                     .IgnoreQueryFilters();
@@ -209,6 +203,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await SetRequesterId(mappedModel);
                     //setting approverId
                     //await SetApproverId(mappedModel);
+                    mappedModel.DesignatedCoordinatorId = long.Parse(_userInfoService.LoggedInUserId());
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     //saving Attachment

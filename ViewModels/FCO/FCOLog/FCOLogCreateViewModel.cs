@@ -48,8 +48,6 @@ namespace ViewModels
         public UnitBriefViewModel Unit { get; set; } = new();
         public FCOTypeBriefViewModel FCOType { get; set; } = new();
         public FCOReasonBriefViewModel FCOReason { get; set; } = new();
-        public AuthorizeForImmediateStartBriefViewModel AuthorizerForImmediateStart { get; set; } = new(false);
-        public DateTime AuthorizerForImmediateStartDate { get; set; }
         public ApproverBriefViewModel Approver { get; set; } = new(false);
         public BTLBriefViewModel RLTMember { get; set; } = new(false);
         public DateTime RLTMemberApproveDate { get; set; }

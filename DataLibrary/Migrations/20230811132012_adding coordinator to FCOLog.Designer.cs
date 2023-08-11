@@ -4,6 +4,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLibrary.Migrations
 {
     [DbContext(typeof(ToranceContext))]
-    partial class ToranceContextModelSnapshot : ModelSnapshot
+    [Migration("20230811132012_adding coordinator to FCOLog")]
+    partial class addingcoordinatortoFCOLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -599,10 +602,19 @@ namespace DataLibrary.Migrations
                     b.Property<bool>("AnalysisOfAlternatives")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("ApprovalDate")
+                    b.Property<long?>("ApproverId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("AuthorizerForImmediateStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("ApproverId")
+                    b.Property<long?>("AuthorizerForImmediateStartId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("BTLApproveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("BTLApproverId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CompanyId")
@@ -662,8 +674,20 @@ namespace DataLibrary.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("MaintManagerApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("MaintManagerId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("PAndIdAttached")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RLTMemberApproveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("RLTMemberId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("ScaffoldRequired")
                         .HasColumnType("bit");
@@ -679,6 +703,12 @@ namespace DataLibrary.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("TELApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("TELApproverId")
+                        .HasColumnType("bigint");
 
                     b.Property<double>("TotalCost")
                         .HasColumnType("float");
@@ -702,6 +732,10 @@ namespace DataLibrary.Migrations
 
                     b.HasIndex("ApproverId");
 
+                    b.HasIndex("AuthorizerForImmediateStartId");
+
+                    b.HasIndex("BTLApproverId");
+
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("ContractorId");
@@ -715,6 +749,12 @@ namespace DataLibrary.Migrations
                     b.HasIndex("FCOReasonId");
 
                     b.HasIndex("FCOTypeId");
+
+                    b.HasIndex("MaintManagerId");
+
+                    b.HasIndex("RLTMemberId");
+
+                    b.HasIndex("TELApproverId");
 
                     b.HasIndex("UnitId");
 
@@ -2292,6 +2332,14 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverId");
 
+                    b.HasOne("Models.ToranceUser", "AuthorizerForImmediateStart")
+                        .WithMany()
+                        .HasForeignKey("AuthorizerForImmediateStartId");
+
+                    b.HasOne("Models.ToranceUser", "BTLApprover")
+                        .WithMany()
+                        .HasForeignKey("BTLApproverId");
+
                     b.HasOne("Models.Common.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
@@ -2324,6 +2372,18 @@ namespace DataLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("FCOTypeId");
 
+                    b.HasOne("Models.ToranceUser", "MaintManager")
+                        .WithMany()
+                        .HasForeignKey("MaintManagerId");
+
+                    b.HasOne("Models.ToranceUser", "RLTMember")
+                        .WithMany()
+                        .HasForeignKey("RLTMemberId");
+
+                    b.HasOne("Models.ToranceUser", "TELApprover")
+                        .WithMany()
+                        .HasForeignKey("TELApproverId");
+
                     b.HasOne("Models.Common.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
@@ -2331,6 +2391,10 @@ namespace DataLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("Approver");
+
+                    b.Navigation("AuthorizerForImmediateStart");
+
+                    b.Navigation("BTLApprover");
 
                     b.Navigation("Company");
 
@@ -2345,6 +2409,12 @@ namespace DataLibrary.Migrations
                     b.Navigation("FCOReason");
 
                     b.Navigation("FCOType");
+
+                    b.Navigation("MaintManager");
+
+                    b.Navigation("RLTMember");
+
+                    b.Navigation("TELApprover");
 
                     b.Navigation("Unit");
                 });

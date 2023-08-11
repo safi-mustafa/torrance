@@ -30,16 +30,16 @@ namespace ViewModels.Authentication.User
         [DisplayName("Approver")]
         public string? Name { get; set; }
     }
-    public class AuthorizeForImmediateStartBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
+    public class DesignatedCoordinatorBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
-        public AuthorizeForImmediateStartBriefViewModel() : base(false, "")
+        public DesignatedCoordinatorBriefViewModel() : base(false, "")
         {
         }
-        public AuthorizeForImmediateStartBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Authorize For Immediate Start field is required.")
+        public DesignatedCoordinatorBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Authorize For Immediate Start field is required.")
         {
         }
 
-        [DisplayName("Authorized for Immediate Start")]
+        [DisplayName("Designated Coordinator")]
         public string? Name { get; set; }
     }
     public class RLTMemberBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
