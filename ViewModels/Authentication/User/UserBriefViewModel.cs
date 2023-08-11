@@ -28,7 +28,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Approver")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
     }
     public class DesignatedCoordinatorBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
@@ -40,7 +40,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Designated Coordinator")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
     }
     public class RLTMemberBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {

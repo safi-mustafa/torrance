@@ -280,13 +280,11 @@ namespace Models.Mapper
                 //.ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
                 //.ForMember(x => x.FCOReason, opt => opt.Ignore())
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
-                .ForMember(src => src.Approver, opt => opt.MapFrom(dest => dest.Approver))
-                .ForMember(x => x.Approver, opt => opt.Ignore())
+                .ForMember(dest => dest.DesignatedCoordinator, act => act.Condition(src => (src.DesignatedCoordinator != null)))
                 .ReverseMap();
             CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>().ReverseMap();
             CreateMap<FCOLog, FCOLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, FCOLogBriefViewModel>().ReverseMap();
-            CreateMap<DesignatedCoordinatorBriefViewModel, ToranceUser>().ReverseMap();
 
 
             //WRRLog
@@ -391,6 +389,9 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<UserUpdateViewModel, ToranceUser>()
               .ReverseMap();
+            CreateMap<ToranceUser, DesignatedCoordinatorBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+                .ReverseMap();
             CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();
             CreateMap<UserDetailViewModel, Employee>().ReverseMap();
             CreateMap<UserUpdateViewModel, UserDetailViewModel>().ReverseMap();
@@ -403,9 +404,6 @@ namespace Models.Mapper
             CreateMap<UserDetailViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>().ReverseMap();
-            CreateMap<DesignatedCoordinatorBriefViewModel, ToranceUser>().ReverseMap();
-
-
 
             //Folder
             CreateMap<Folder, BaseBriefVM>().ReverseMap();
