@@ -16,19 +16,29 @@
         Commented on
     </div>
 </div>
-
-@foreach (var item in Model)
+@if (Model != null && Model.Count > 0)
+{
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-lg-4 justify-content">
+                @item.Comment
+            </div>
+            <div class="col-lg-4">
+                @item.CommentedBy
+            </div>
+            <div class="col-lg-4">
+                @item.CommentedDate
+            </div>
+        </div>
+        <br />
+    }
+}
+else
 {
     <div class="row">
-        <div class="col-lg-4 justify-content">
-            @item.Comment
-        </div>
-        <div class="col-lg-4">
-            @item.CommentedBy
-        </div>
-        <div class="col-lg-4">
-            @item.CommentedDate
-        </div>
+        No Comments added.
     </div>
-    <br />
+
 }
+
