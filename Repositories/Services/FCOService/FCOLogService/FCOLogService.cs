@@ -412,5 +412,26 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             }
         }
 
+        public async Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId)
+        {
+            try
+            {
+                var comments = await (from c in _db.FCOComments
+                                      join u in _db.Users on c.CreatedBy equals u.Id
+                                      where c.FCOLogId == fcoId
+                                      select new FCOCommentsViewModel
+                                      {
+                                          Comment = c.Comment,
+                                          CommentedBy = u.FullName,
+                                          CommentedDate = c.CreatedOn
+                                      }).ToListAsync();
+                return comments;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetFCOComments method threw an exception.");
+            }
+            return null;
+        }
     }
 }
