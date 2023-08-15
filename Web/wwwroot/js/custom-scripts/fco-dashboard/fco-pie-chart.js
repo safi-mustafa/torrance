@@ -1,15 +1,16 @@
 ﻿function GetFCOChartData(formData = "") {
     $.ajax({
         type: "GET",
-        url: "/FCODashboard/Index",
+        url: "/FCODashboard/GetFCOChartsData",
         data: formData,
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
             FCOStatusChart(data.Status);
             FCORequestorChart(data.Requestor);
-            FCOApproverChart(data.Approver);
             FCOCompanyChart(data.Company);
+            FCOAreaExecutionLeadChart(data.AreaExecutionLead);
+            FCOBusinessTeamLeaderChart(data.BusinessTeamLeader);
         },
         error: function () {
             console.log("Error occured!!")
@@ -23,9 +24,12 @@ function FCOStatusChart(seriesData) {
 function FCORequestorChart(seriesData) {
     GeneratePieChart("fco-requestor", seriesData)
 }
-function FCOApproverChart(seriesData) {
-    GeneratePieChart("fco-approver", seriesData)
-}
 function FCOCompanyChart(seriesData) {
     GeneratePieChart("fco-company", seriesData)
+}
+function FCOAreaExecutionLeadChart(seriesData) {
+    GeneratePieChart("fco-area-execution-lead", seriesData)
+}
+function FCOBusinessTeamLeaderChart(seriesData) {
+    GeneratePieChart("fco-business-team-leader", seriesData)
 }

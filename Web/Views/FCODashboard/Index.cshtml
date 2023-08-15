@@ -1,10 +1,13 @@
 ﻿@using ViewModels.Dashboard;
 @using ViewModels.Common.Unit;
 @using ViewModels.Common.Department;
+@using ViewModels.FCODashboard;
 
-@model DashboardViewModel
+@model FCOPieChartViewModel
 @{
+    var model = Model;
     ViewData["Title"] = "Dashboard";
+
 }
 <style>
     *[class^='progress-done-'] {

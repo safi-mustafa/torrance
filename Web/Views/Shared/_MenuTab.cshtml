@@ -33,7 +33,18 @@
                 }
                 @if (User.IsInRole("SuperAdmin") || User.IsInRole("Approver") || User.IsInRole("Administrator"))
                 {
-                    <li class="nav-item"><a class="nav-link px-3" href="/FCOLog/Index">FCO Logs</a></li>
+                    @*<li class="nav-item"><a class="nav-link px-3" href="/FCOLog/Index">FCO Logs</a></li>*@
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            FCO
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item px-3" asp-controller="FCOLog" asp-action="Index">Logs</a>
+                            <a class="dropdown-item px-3" asp-controller="FCODashboard" asp-action="Index">Graphs</a>
+                        </div>
+                    </li>
+
                 }
 
 
