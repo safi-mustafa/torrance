@@ -96,8 +96,8 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
         [BindNever]
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
-        public AttachmentModifyViewModel? Photo { get; set; } = new();
-        public AttachmentModifyViewModel? File { get; set; } = new();
+        public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
+        public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
         public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate)), 2); }
         public double Contingency { get => Math.Round((Total / 10), 2); }
         [Display(Name = "Total")]

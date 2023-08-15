@@ -16,7 +16,7 @@ using ViewModels.OverrideLogs.ORLog;
 namespace Web.Controllers
 {
     [Authorize(Roles = "SuperAdmin,Administrator,Approver,Employee")]
-    public class FCOLogController : ApproveBaseController<IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel>, FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel, FCOLogDetailViewModel, FCOLogSearchViewModel>
+    public class FCOLogController : CrudBaseController<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel, FCOLogDetailViewModel, FCOLogSearchViewModel>
     {
         private readonly IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> _FCOLogService;
         private readonly ILogger<FCOLogController> _logger;
@@ -24,8 +24,7 @@ namespace Web.Controllers
         private readonly UserManager<ToranceUser> _userManager;
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
-
-        public FCOLogController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, ILogger<FCOLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(FCOLogService, logger, mapper, "FCOLog", "Field Change Order Logs", userInfo)
+        public FCOLogController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, ILogger<FCOLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(FCOLogService, logger, mapper, "FCOLog", "Field Change Order Logs")
         {
             _FCOLogService = FCOLogService;
             _logger = logger;

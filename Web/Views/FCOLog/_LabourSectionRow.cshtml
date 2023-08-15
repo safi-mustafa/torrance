@@ -10,8 +10,8 @@
     var rowId = "labour-section-row-" + rowNumber;
 
     var overrideType = collectionType + "[" + rowNumber + "].OverrideType";
-    var craftId = collectionType + "[" + rowNumber + "].CraftSkill.Id";
-    var craftName = collectionType + "[" + rowNumber + "].CraftSkill.Name";
+    var craftId = collectionType + "[" + rowNumber + "].Craft.Id";
+    var craftName = collectionType + "[" + rowNumber + "].Craft.Name";
     var overrideHours = collectionType + "[" + rowNumber + "].DU";
     var headCount = collectionType + "[" + rowNumber + "].MN";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
@@ -21,7 +21,7 @@
 
 }
 
-<tr class="cost-row" id="@rowId">
+<tr class="labour-section-row" id="@rowId">
     <td>
         <span style="text-align: initial !important;">@Model.OverrideType</span>
         <input type="hidden" name="@overrideType" value="@Model.OverrideType" />

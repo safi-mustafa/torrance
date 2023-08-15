@@ -55,7 +55,7 @@
         <tbody class='@($"{section}-tbody")'>
             @for (var i = 0; i < Model.Count(); i++)
             {
-                @await Html.PartialAsync("~/Views/FCOLog/_SectionRow.cshtml", Model[i], new ViewDataDictionary(ViewData) { { "RowNumber", i }, { "RowClass", section } })
+                @await Html.PartialAsync("~/Views/FCOLog/_SectionRow.cshtml", Model[i], new ViewDataDictionary(ViewData) { { "RowNumber", i }, { "RowClass", section }, { "CollectionType", $"FCO{sectionName}Sections" } })
             }
         </tbody>
     </table>

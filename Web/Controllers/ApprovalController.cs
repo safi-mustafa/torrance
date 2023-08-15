@@ -24,6 +24,8 @@ using Repositories.Services.OverrideLogServices.ORLogService;
 using static Repositories.Services.CommonServices.ApprovalService.ApprovalService;
 using ViewModels.Authentication.User;
 using ViewModels;
+using Models.Common.Interfaces;
+using Models.Common.Interfaces.Approval;
 
 namespace Web.Controllers
 {
@@ -158,6 +160,14 @@ namespace Web.Controllers
                     response = await _wrrService.GetById(id);
 
                     return GetUpdateView<WRRLogModifyViewModel, WRRLogDetailViewModel>(response, id, type, view);
+                }
+                else if (type == LogType.FCO)
+                {
+                    _controllerName = "FCOLog";
+                    _updateViewPath = "~/Views/FCOLog/_Update.cshtml";
+                    response = await _fcoService.GetById(id);
+
+                    return GetUpdateView<FCOLogModifyViewModel, FCOLogDetailViewModel>(response, id, type, view);
                 }
                 else
                 {

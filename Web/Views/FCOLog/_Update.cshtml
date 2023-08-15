@@ -10,6 +10,30 @@
     var equipmentSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).ToList();
     var shopSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).ToList();
 }
+<style>
+    .image-container {
+        position: relative;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .remove-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        background-color: #fff;
+        border-radius: 50%;
+        display: none;
+    }
+
+    .image-container:hover .remove-icon {
+        display: block;
+    }
+</style>
+
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
@@ -86,6 +110,7 @@
                 <label asp-for="Photo.File" class="form-label fw-600">Photo</label>
                 <input type="file" id="file" asp-for="Photo.File" class="form-control" />
                 <input type="hidden" id="photo-id" asp-for="Photo.Id" class="form-control" />
+                <input type="hidden" id="photo-entity-type" asp-for="Photo.EntityType" class="form-control" />
                 <span asp-validation-for="Photo.File" class="validation-invalid-label"></span>
             </div>
             <div class="col-lg-6">
@@ -106,7 +131,16 @@
                 <label asp-for="File.File" class="form-label fw-600"></label>
                 <input type="file" id="file" asp-for="File.File" class="form-control" />
                 <input type="hidden" id="file-id" asp-for="File.Id" class="form-control" />
+                <input type="hidden" id="file-entity-type" asp-for="File.EntityType" class="form-control" />
                 <span asp-validation-for="File.File" class="validation-invalid-label"></span>
+                @*<div class="image-container">
+                        <img src="@Model.File.Url" alt="Image">
+                        <div class="remove-icon" onclick="removeImage(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path d="M12 2c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm5 14.586l-1.414 1.414-4.586-4.586-4.586 4.586-1.414-1.414 4.586-4.586-4.586-4.586 1.414-1.414 4.586 4.586 4.586-4.586 1.414 1.414-4.586 4.586 4.586 4.586z" />
+                            </svg>
+                        </div>
+                    </div>*@
             </div>
 
             <div class="col-lg-4">
@@ -304,7 +338,7 @@
         $(document).off("click", ".remove-cost");
         $(document).on("click", ".remove-cost", function () {
             $(this).closest("tr").remove();
-            RefreshInputIndexes("#labour-table tr", "labour-row", "FCOLabourSections");
+            RefreshInputIndexes("#labour-table tr", "labour-section-row", "FCOLabourSections");
         });
 
         $(document).on("input", ".rate-input", function () {
@@ -394,7 +428,7 @@
         var costCraftId = $('#craft-skill-id').select2('data')[0].id;
         var costCraftName = $('#craft-skill-id').select2('data')[0].text;
         if (overrideType !== null && overrideType !== "" && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
-            var rowNumber = $(".labour-row").length;
+            var rowNumber = $(".labour-section-row").length;
             var obj = {
                 'OverrideType': overrideType,
                 'Craft': {
@@ -454,7 +488,10 @@
             }
         });
     }
-
+    function removeImage(icon) {
+        const imageContainer = icon.closest('.image-container');
+        imageContainer.remove();
+    }
     function RefreshInputIndexes(trSelector, rowPrefix, collectionName) {
         var rowIndex = 0;
         $.each($(trSelector), function () {

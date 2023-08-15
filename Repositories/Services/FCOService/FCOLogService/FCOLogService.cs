@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
+using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using Models;
 using Models.Common;
 using Models.Common.Interfaces;
 using Pagination;
+using Repositories.Common;
 using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
@@ -26,7 +28,7 @@ using ViewModels.Shared;
 
 namespace Repositories.Services.AppSettingServices.FCOLogService
 {
-    public class FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<FCOLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
+    public class FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<FCOLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, new()
@@ -51,7 +53,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 IHttpContextAccessor httpContextAccessor,
                 IPossibleApproverService possibleApproverService,
                 IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
-            ) : base(db, logger, mapper, response, userInfoService, notificationService)
+            ) : base(db, logger, mapper, response)
         {
             _db = db;
             _logger = logger;
@@ -122,7 +124,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
-                    .Include(x => x.Approver)
+                    //.Include(x => x.Approver)
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
@@ -135,8 +137,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     var attcs = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && (x.EntityType == AttachmentEntityType.FCOLogPhoto || x.EntityType == AttachmentEntityType.FCOLogFile)).Select(x => new { EntityType = x.EntityType, Id = x.Id, Url = x.Url }).ToListAsync();
                     var photo = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogPhoto).FirstOrDefault();
                     var file = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile).FirstOrDefault();
-                    mappedModel.Photo = new AttachmentModifyViewModel { Url = photo?.Url, Id = photo?.Id ?? 0 };
-                    mappedModel.File = new AttachmentModifyViewModel { Url = file?.Url, Id = file?.Id ?? 0 };
+                    mappedModel.Photo = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogPhoto, Url = photo?.Url, Id = photo?.Id ?? 0 };
+                    mappedModel.File = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogFile, Url = file?.Url, Id = file?.Id ?? 0 };
                     //mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<FCOLogDetailViewModel> { ReturnModel = mappedModel };
@@ -164,7 +166,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
-                    .Include(x => x.Approver)
+                    //.Include(x => x.Approver)
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
@@ -232,12 +234,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 var updateModel = model as FCOLogModifyViewModel;
                 if (updateModel != null)
                 {
-                    var record = await _db.Set<FCOLog>().FindAsync(updateModel?.Id);
+                    var record = await _db.Set<FCOLog>().Include(x => x.FCOSections).Where(x => x.Id == updateModel.Id).FirstOrDefaultAsync();
                     if (record != null)
                     {
-
+                        record.FCOSections?.Clear();
                         var dbModel = _mapper.Map(model, record);
-
                         //if (record.ApproverId != updateModel.Approver?.Id)
                         //{
                         //    var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
@@ -264,11 +265,15 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
 
         private async Task AddAttachment<T>(T model, long entityId) where T : AttachmentModifyViewModel
         {
-            if (model.Id < 1 && model.File != null)
+            if (model.File != null)
             {
                 var attc = await _db.Attachments.Where(x => x.EntityId == entityId && x.EntityType == model.EntityType).ToListAsync();
                 if (attc.Count > 0)
+                {
                     attc.ForEach(x => x.IsDeleted = true);
+                    await _db.SaveChangesAsync();
+                }
+                model.Id = default;
                 model.EntityId = entityId;
                 model.EntityType = model.EntityType;
                 model.Name = DateTime.Now.Ticks.ToString();
@@ -293,7 +298,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
 
         private async Task SetApproverId(FCOLog mappedModel)
         {
-            mappedModel.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
+            //mappedModel.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
             mappedModel.Status = Status.Approved;
         }
         public async Task<bool> IsFCOLogEmailUnique(int id, string email)
@@ -406,5 +411,6 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 row.Cell(i + 1).Value = headers[i];
             }
         }
+
     }
 }
