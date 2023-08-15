@@ -8,6 +8,7 @@
         VehiclePass,
         Parking,
         Dropbox,
-        FCOLog
+        FCOLogPhoto,
+        FCOLogFile
     }
 }

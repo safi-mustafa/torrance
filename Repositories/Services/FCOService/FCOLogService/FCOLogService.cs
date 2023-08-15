@@ -209,11 +209,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     //saving Attachment
-                    model.Attachment.EntityId = mappedModel.Id;
-                    model.Attachment.EntityType = AttachmentEntityType.FCOLog;
-                    model.Attachment.Name = DateTime.Now.Ticks.ToString();
-                    var attachmentResponse = await _attachmentService.Create(model.Attachment);
-
+                    await AddAttachment(model, mappedModel.Id, AttachmentEntityType.FCOLogPhoto);
 
                     //var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
                     //await _notificationService.CreateLogNotification(notification);
@@ -242,6 +238,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     {
 
                         var dbModel = _mapper.Map(model, record);
+
                         //if (record.ApproverId != updateModel.Approver?.Id)
                         //{
                         //    var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
@@ -249,6 +246,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         //}
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
+                        //update attachments
+                        await AddAttachment(model);
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                         return response;
                     }
@@ -260,6 +259,20 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             {
                 _logger.LogError(ex, $"Update() for {typeof(FCOLog).FullName} threw the following exception");
                 return Response.BadRequestResponse(_response);
+            }
+        }
+
+        private async Task AddAttachment<T>(T model, long modelId, AttachmentEntityType attachmentType) where T : IAttachment<AttachmentModifyViewModel>
+        {
+            if (model.Attachment.Id < 1)
+            {
+                var attc = await _db.Attachments.Where(x => x.EntityId == modelId && x.EntityType == attachmentType).ToListAsync();
+                if (attc.Count > 0)
+                    attc.ForEach(x => x.IsDeleted = true);
+                model.Attachment.EntityId = modelId;
+                model.Attachment.EntityType = attachmentType;
+                model.Attachment.Name = DateTime.Now.Ticks.ToString();
+                var attachmentResponse = await _attachmentService.Create(model.Attachment);
             }
         }
 
