@@ -22,7 +22,7 @@ namespace ViewModels
     public class FCOLogDetailViewModel : LogCommonDetailViewModel, IApprove, ISrNo
     {
         public long Id { get; set; }
-        public Status Status { get; set; }
+        //public Status Status { get; set; }
         [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
         public string? DescriptionOfFinding { get; set; }
         [Display(Name = "Additional Information")]
