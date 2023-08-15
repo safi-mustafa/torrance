@@ -83,6 +83,9 @@ a:focus {
         background-color: #5b9bd5;
         color: #fff;
     }
+.colorRed {
+    color: red;
+}
 
 /** Inner Page ---------**/
 /** Header **/

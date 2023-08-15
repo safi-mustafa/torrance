@@ -2,6 +2,7 @@
 using Helpers.Models.Shared;
 using Models.AppSettings;
 using Models.Common;
+using Models.FCO;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
@@ -100,6 +101,7 @@ namespace Models.Mapper
             CreateMap<FCOTypeModifyViewModel, FCOTypeDetailViewModel>().ReverseMap();
             CreateMap<FCOType, FCOTypeBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, FCOTypeBriefViewModel>().ReverseMap();
+
 
             //Location
             CreateMap<LocationModifyViewModel, Location>().ReverseMap();
@@ -221,6 +223,9 @@ namespace Models.Mapper
                 .ForMember(x => x.FCOLogId, opt => opt.Ignore())
                 .ForMember(x => x.FCOLog, opt => opt.Ignore())
                 .ReverseMap();
+
+            //FCOComment
+            CreateMap<FCOComment, FCOCommentsViewModel>().ReverseMap();
 
 
             //FCOLog

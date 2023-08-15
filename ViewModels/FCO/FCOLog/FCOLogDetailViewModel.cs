@@ -138,7 +138,16 @@ namespace ViewModels
         {
             get => Math.Round((TotalLabor + TotalMaterial + TotalEquipment + TotalShop), 2);
         }
+        public List<FCOCommentsViewModel> FCOComments { get; set; } = new List<FCOCommentsViewModel>();
 
+        public string FCOCommentsClass
+        {
+            get
+            {
+                return FCOComments.Count > 0 ? "colorRed" : "";
+            }
+
+        }
     }
 
     public class FCOCommentsViewModel

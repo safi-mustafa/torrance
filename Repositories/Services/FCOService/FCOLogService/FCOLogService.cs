@@ -128,6 +128,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
+                    .Include(x => x.FCOComments)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
@@ -161,6 +162,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<FCOLog>()
                     .Include(x => x.Unit)
+                    .Include(x => x.FCOComments)
                     .Include(x => x.Department)
                     .Include(x => x.Employee)
                     .Include(x => x.FCOType)

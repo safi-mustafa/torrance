@@ -30,7 +30,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false,pageLength=25) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false, pageLength = 25) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
@@ -48,7 +48,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
 
 
     $(window).off('scroll');
-    $(window).on('scroll',function () {
+    $(window).on('scroll', function () {
         var isFixhedHeaderVisible = $('.dtfh-floatingparent.dtfh-floatingparenthead').is(':visible');
 
         if (isFixhedHeaderVisible) {
@@ -65,7 +65,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
                 // Set the flag to true indicating that the code has been added
                 isScrollableFixedHeaderEventAdded = true;
             }
-         
+
         }
         else {
             isScrollableFixedHeaderEventAdded = false;
@@ -388,7 +388,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
-           
+
             // Add scroll bar on top
             $('.dataTables_scrollHead').off('scroll');
             $('.dataTables_scrollHead').css({
@@ -499,10 +499,15 @@ function GetHref(actionItem, cellData) {
             customAttributes += "attr-" + v.toLowerCase() + '="' + GetCellObjectValue(cellData, v) + '" ';
         });
     }
+    let cssClass = getFinalCellClasses(appendClass, cellData);
     if (isAjaxBasedCrud && actionItem.Title != "Delete") {
-        return `<a href="#" onclick="loadUpdateAndDetailModalPanel('${link}')" ${dataAttributes} class="datatable-action ${appendClass}" ${customAttributes}> <i class="${actionIcons[actionItem.Title]}"></i>${actionItem.LinkTitle}</a>`
+        return `<a href="#" onclick="loadUpdateAndDetailModalPanel('${link}')" ${dataAttributes} class="datatable-action ${cssClass}" ${customAttributes}> <i class="${actionIcons[actionItem.Title]}"></i>${actionItem.LinkTitle}</a>`
     }
-    return '<a href="' + link + '" ' + dataAttributes + ' class="datatable-action ' + appendClass + '" ' + customAttributes + '> <i class="' + actionIcons[actionItem.Title] + '"></i> ' + actionItem.LinkTitle + '</a > ';
+
+    return `
+    <a href="${link}" ${dataAttributes} class="datatable-action ${cssClass}" ${customAttributes}>
+        <i class="${actionIcons[actionItem.Title]}"></i> ${actionItem.LinkTitle}
+    </a>`;
 }
 
 function GetCellObjectValue(cellData, Prop) {
@@ -512,6 +517,24 @@ function GetCellObjectValue(cellData, Prop) {
     else {
         return cellData['' + Prop];
     }
+}
+function getFinalCellClasses(cssClass, cellData) {
+    if (cssClass != null) {
+        const placeholders = cssClass.match(/@(\w+)/g); // Extract all placeholders
+        if (placeholders) {
+            placeholders.forEach(placeholder => {
+                const propertyName = placeholder.slice(1); // Remove the "@" symbol
+                if (cellData.hasOwnProperty(propertyName)) {
+                    cssClass = cssClass.replace(new RegExp(placeholder, 'g'), cellData[propertyName]);
+                }
+            });
+        }
+        return cssClass;
+    }
+    else {
+        return "";
+    }
+
 }
 function RenderHtml(data, dtColumns, meta) {
     if (dtColumns[meta.col].formatValue === "checkbox") {
