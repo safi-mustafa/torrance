@@ -1,0 +1,65 @@
+﻿@using ViewModels.Dashboard;
+@using ViewModels.Common.Unit;
+@using ViewModels.Common.Department;
+@using ViewModels.FCODashboard;
+
+@model FCOPieChartViewModel
+@{
+    var model = Model;
+    ViewData["Title"] = "Dashboard";
+
+}
+<style>
+    *[class^='progress-done-'] {
+        height: 100%;
+        width: 0;
+        opacity: 0;
+        background: linear-gradient(to left, #f2709c,#ff9472);
+        color: #fff;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fac090;
+        box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+        transition: 1s ease;
+    }
+</style>
+<div class="container-fluid">
+    <main>
+
+        <h3 class="default-heading">
+            FCO Dashboard
+        </h3>
+        <br>
+        <div class="row dashboard-filters-row">
+            <div class="row col-12">
+                <partial name="_FCOPieCharts" />
+            </div>
+
+        </div>
+    </main>
+</div>
+<style>
+    .am-chart {
+        width: 100%;
+        height: 350px;
+    }
+
+    .am-pie-chart {
+        width: 100%;
+        height: 350px;
+    }
+</style>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
+<script src="~/js/custom-scripts/fco-dashboard/fco-pie-chart.js"></script>
+<!-- Chart code -->
+<script>
+    $(function () {
+        GetFCOChartData();
+    })</script>

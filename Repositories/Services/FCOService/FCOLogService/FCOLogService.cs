@@ -132,6 +132,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
+                    .Include(x => x.FCOComments)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
 
@@ -165,6 +166,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<FCOLog>()
                     .Include(x => x.Unit)
+                    .Include(x => x.FCOComments)
                     .Include(x => x.Department)
                     .Include(x => x.Employee)
                     .Include(x => x.FCOType)
@@ -578,5 +580,26 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             }
         }
 
+        public async Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId)
+        {
+            try
+            {
+                var comments = await (from c in _db.FCOComments
+                                      join u in _db.Users on c.CreatedBy equals u.Id
+                                      where c.FCOLogId == fcoId
+                                      select new FCOCommentsViewModel
+                                      {
+                                          Comment = c.Comment,
+                                          CommentedBy = u.FullName,
+                                          CommentedDate = c.CreatedOn
+                                      }).ToListAsync();
+                return comments;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetFCOComments method threw an exception.");
+            }
+            return null;
+        }
     }
 }

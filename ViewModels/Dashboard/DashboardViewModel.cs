@@ -45,8 +45,27 @@ namespace ViewModels.Dashboard
 
     public class LogPieChartViewModel
     {
+        private bool _isCurrencyValue { get; set; }
+        public LogPieChartViewModel()
+        {
+            _isCurrencyValue = false;
+        }
+        public LogPieChartViewModel(bool isCurrencyValue)
+        {
+            _isCurrencyValue = isCurrencyValue;
+        }
         public string Category { get; set; }
         public double Value { get; set; }
+
+        public string FormattedValue
+        {
+            get
+            {
+                if (_isCurrencyValue)
+                    return Value.ToString("C");
+                return Value.ToString("0.00") + "%";
+            }
+        }
     }
 
     public class BarChartViewModel

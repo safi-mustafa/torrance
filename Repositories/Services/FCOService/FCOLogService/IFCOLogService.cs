@@ -17,5 +17,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         Task<bool> IsFCOLogEmailUnique(int id, string email);
         Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel);
         Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string comment = "", ApproverType approverType = 0);
+        Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId);
+
     }
 }

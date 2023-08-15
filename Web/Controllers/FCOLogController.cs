@@ -144,6 +144,7 @@ namespace Web.Controllers
         {
             result.ActionsList = new List<DataTableActionViewModel>()
             {
+                    new DataTableActionViewModel() {Action="_GetFCOComments",Title="Comments",Href=$"/FCOLog/_GetFCOComments/Id",Class="@FCOCommentsClass"},
                     new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/FCOLog/Detail/Id"},
 
             };
@@ -206,6 +207,12 @@ namespace Web.Controllers
             ViewData["RowClass"] = rowClass;
             ViewData["CollectionType"] = collectionType;
             return PartialView("_SectionRow", model);
+        }
+
+        public async Task<IActionResult> _GetFCOComments(long Id)
+        {
+            var comments = await _fCOLogService.GetFCOComments(Id);
+            return View("_Comment", comments);
         }
     }
 }

@@ -1,0 +1,43 @@
+﻿@using ViewModels;
+@model List<FCOCommentsViewModel>
+@{
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="col-lg-4 form-label fw-600">
+        Comment
+    </div>
+    <div class="col-lg-4 form-label fw-600">
+        Commented by
+    </div>
+    <div class="col-lg-4 form-label fw-600">
+        Commented on
+    </div>
+</div>
+@if (Model != null && Model.Count > 0)
+{
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-lg-4 justify-content">
+                @item.Comment
+            </div>
+            <div class="col-lg-4">
+                @item.CommentedBy
+            </div>
+            <div class="col-lg-4">
+                @item.CommentedDate
+            </div>
+        </div>
+        <br />
+    }
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-4">No Comments added.</div>
+    </div>
+}
+

@@ -162,6 +162,7 @@ namespace Web.Extensions
             services.AddScoped(typeof(IORLogService<,,>), typeof(ORLogService<,,>));
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IFCODashboardService, FCODashboardService>();
             services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
             //services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdentityService, IdentityService>();
