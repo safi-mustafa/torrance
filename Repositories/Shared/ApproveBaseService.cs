@@ -136,13 +136,6 @@ namespace Repositories.Shared
                                 identifier = (logRecord as OverrideLog).PoNumber.ToString();
                                 notificationEntityType = NotificationEntityType.OverrideLog;
                             }
-                            else if (typeof(TEntity).IsAssignableFrom(typeof(FCOLog)))
-                            {
-                                type = "FCO";
-                                identifierKey = "Equipment#";
-                                identifier = (logRecord as FCOLog).EquipmentNumber.ToString();
-                                notificationEntityType = NotificationEntityType.FCOLog;
-                            }
                             else
                             {
                                 type = "WRR";

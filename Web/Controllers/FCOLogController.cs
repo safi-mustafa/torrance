@@ -18,7 +18,7 @@ namespace Web.Controllers
     [Authorize(Roles = "SuperAdmin,Administrator,Approver,Employee")]
     public class FCOLogController : CrudBaseController<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel, FCOLogDetailViewModel, FCOLogSearchViewModel>
     {
-        private readonly IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> _FCOLogService;
+        private readonly IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> _fCOLogService;
         private readonly ILogger<FCOLogController> _logger;
         private readonly IUserInfoService _userInfo;
         private readonly UserManager<ToranceUser> _userManager;
@@ -26,11 +26,57 @@ namespace Web.Controllers
         private readonly IBaseApprove _approveService;
         public FCOLogController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, ILogger<FCOLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(FCOLogService, logger, mapper, "FCOLog", "Field Change Order Logs")
         {
-            _FCOLogService = FCOLogService;
+            _fCOLogService = FCOLogService;
             _logger = logger;
             _userInfo = userInfo;
             _userManager = userManager;
             _loggedInUserRole = _userInfo.LoggedInUserRole();
+        }
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            var loggedInUserRole = _userInfo.LoggedInUserRole();
+            var html = "";
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>";
+            vm.DataTableHeaderHtml = html;
+            vm.IsResponsiveDatatable = false;
+            bool canAddLogs = false;
+            var canAddLogsClaim = User.FindFirst("CanAddLogs");
+            bool.TryParse(canAddLogsClaim?.Value, out canAddLogs);
+            vm.HideCreateButton = !(_userInfo.LoggedInUserRoles().Contains("Administrator") || _userInfo.LoggedInUserRoles().Contains("SuperAdmin") || _userInfo.LoggedInUserRoles().Contains("Employee") || canAddLogs);
+            return vm;
+        }
+
+        [AllowAnonymous]
+        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId, string comment, ApproverType approverType)
+        {
+            try
+            {
+                var response = await _fCOLogService.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId, comment, approverType);
+                if (response.Status == System.Net.HttpStatusCode.OK)
+                {
+                    _logger.LogInformation($"FCOLog: Record with id: {id} Approved Successfully at " + DateTime.UtcNow);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex) { _logger.LogError($"FCOLogController Approve method threw an exception for record with id: {id}, Message: {ex.Message}"); return false; }
         }
         protected override FCOLogSearchViewModel SetDefaultFilters()
         {
@@ -38,11 +84,7 @@ namespace Web.Controllers
             filters.StatusNot = Enums.Status.Pending;
             return filters;
         }
-        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
-        {
-            vm.IsExcelDownloadAjaxBased = true;
-            return base.OverrideCrudListVM(vm);
-        }
+
         public override List<DataTableViewModel> GetColumns()
         {
             var dataColumns = new List<DataTableViewModel>();
@@ -66,7 +108,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> ValidateFCOLogEmail(int id, string email)
         {
-            return Json(await _FCOLogService.IsFCOLogEmailUnique(id, email));
+            return Json(await _fCOLogService.IsFCOLogEmailUnique(id, email));
         }
 
         public override async Task<ActionResult> Create()
@@ -135,7 +177,7 @@ namespace Web.Controllers
 
         public async Task<IActionResult> DownloadExcel(FCOLogSearchViewModel searchModel)
         {
-            var workBook = await _FCOLogService.DownloadExcel(searchModel);
+            var workBook = await _fCOLogService.DownloadExcel(searchModel);
             // Convert the workbook to a byte array
             byte[] fileBytes;
             using (var stream = new MemoryStream())

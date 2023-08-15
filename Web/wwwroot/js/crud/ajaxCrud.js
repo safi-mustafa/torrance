@@ -24,6 +24,11 @@ function rejectRecord(element, modalPanelId = "crudModalPanel") {
     updateRecord(element, modalPanelId)
 }
 
+function approveFCOLogDetail(element) {
+    var approverType = $(element).attr("attr-approver-type");
+    sendApproveAjax(1, approverType);
+}
+
 function approveDetail(element) {
     sendApproveAjax(1);
 }
@@ -32,8 +37,9 @@ function rejectDetail(element) {
     sendApproveAjax(2);
 }
 
-function sendApproveAjax(status) {
+function sendApproveAjax(status, approverType = "") {
     var controller = $("#controller-name").val();
+    var comment = $("#fco-log-comment").val();
     var id = $("#log-id").val();
     var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val().toLowerCase();
     var approverId = $("#approver-id").val();
@@ -41,7 +47,7 @@ function sendApproveAjax(status) {
     //var reqEmail = $("#log-requestor").val();
     debugger;
     var url = "/" + controller + "/ApproveStatus";
-    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId };
+    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId, comment: comment, approverType: approverType };
 
     $.ajax({
         type: "Get",
@@ -104,6 +110,7 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
 
 }
 function disableControls(form) {
+    DisableProperty(form, ".approve-btns", true);
     DisableProperty(form, "#approve-btn", true);
     DisableProperty(form, "#reject-btn", true);
     DisableProperty(form, "#submit-btn", true, `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...`);

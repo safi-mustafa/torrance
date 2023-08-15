@@ -1,24 +1,38 @@
 ﻿@using ViewModels.CRUD
+@using ViewModels;
 @model CrudDetailViewModel
 @{
     ViewData["Title"] = Model.Title;
-
+    var isFCOLog = Model.DetailModel is FCOLogDetailViewModel;
 }
 <div class="card">
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                 @if(ViewBag.Message!=null && !string.IsNullOrEmpty(ViewBag.Message.ToString())){
-                    var className = ViewBag.Message.ToString().ToLower().Contains("rejected")?"danger":"success";
+                @if (ViewBag.Message != null && !string.IsNullOrEmpty(ViewBag.Message.ToString()))
+                {
+                    var className = ViewBag.Message.ToString().ToLower().Contains("rejected") ? "danger" : "success";
                     <div class="alert alert-@(className)" role="alert">
                         @ViewBag.Message.ToString()
                     </div>
-                 }
+                }
             </div>
             <div class="col-md-12">
                 @await Html.PartialAsync(Model.DetailViewPath, Model.DetailModel, new ViewDataDictionary(ViewData))
             </div>
-            @if (Model.IsApprovalForm)
+            @if (isFCOLog)
+            {
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="text-center">
+                            <button type="button" onclick="rejectDetail(this)" class="btn btn-danger form-btn" id="reject-btn">Reject</button>
+                            <button type="button" onclick="approveDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="AreaExecutionLead" id="approve-btn">Approve(Area Execution Lead)</button>
+                            <button type="button" onclick="approveDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="BusinessTeamLeader" id="approve-btn">Approve(Business Team Leader)</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.IsApprovalForm)
             {
                 <div class="col-md-12">
                     <div class="form-group">

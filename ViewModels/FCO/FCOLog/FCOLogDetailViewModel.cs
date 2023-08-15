@@ -3,6 +3,7 @@ using Helpers.Datetime;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Models.Common.Interfaces;
 using System.ComponentModel;
+using Helpers.Double;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
@@ -98,16 +99,24 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
-        public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate)), 2); }
-        public double Contingency { get => Math.Round((Total / 10), 2); }
+        public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate)), 2).FixNan(); }
+        public double Contingency { get; set; }
+        public double Contingencies
+        {
+            get
+            {
+                var cont = Math.Round((Total / Contingency), 2).FixNan();
+                return cont;
+            }
+        }
         [Display(Name = "Total")]
-        public double SubTotal { get => Math.Round((Total + Contingency), 2); }
+        public double SubTotal { get => Math.Round((Total + Contingencies), 2).FixNan(); }
         public double TotalLabor
         {
             get
             {
                 var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate);
-                return Math.Round((laborEstimate + (laborEstimate / 10)), 2);
+                return Math.Round((laborEstimate + (laborEstimate / Contingency)), 2).FixNan();
             }
         }
         public double TotalMaterial
@@ -115,7 +124,7 @@ namespace ViewModels
             get
             {
                 var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate);
-                return Math.Round((materialEstimate + (materialEstimate / 10)), 2);
+                return Math.Round((materialEstimate + (materialEstimate / Contingency)), 2).FixNan();
             }
         }
         public double TotalEquipment
@@ -123,7 +132,7 @@ namespace ViewModels
             get
             {
                 var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate);
-                return Math.Round((equipmentEstimate + (equipmentEstimate / 10)), 2);
+                return Math.Round((equipmentEstimate + (equipmentEstimate / Contingency)), 2).FixNan();
             }
         }
         public double TotalShop
@@ -131,12 +140,12 @@ namespace ViewModels
             get
             {
                 var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate);
-                return Math.Round((shopEstimate + (shopEstimate / 10)), 2);
+                return Math.Round((shopEstimate + (shopEstimate / Contingency)), 2).FixNan();
             }
         }
         public double SectionTotal
         {
-            get => Math.Round((TotalLabor + TotalMaterial + TotalEquipment + TotalShop), 2);
+            get => Math.Round((TotalLabor + TotalMaterial + TotalEquipment + TotalShop), 2).FixNan();
         }
 
     }

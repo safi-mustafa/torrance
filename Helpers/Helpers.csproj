@@ -17,8 +17,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="ModelHelpers\" />
+	  <None Remove="Double\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="ModelHelpers\" />
+	  <Folder Include="Double\" />
 	</ItemGroup>
 </Project>

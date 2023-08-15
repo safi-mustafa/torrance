@@ -53,7 +53,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 }
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
-                    .Include(x => x.Approver)
                     .Include(x => x.Unit)
                     .Where(x =>
                      x.IsDeleted == false
@@ -65,8 +64,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      (search.Unit.Id == 0 || search.Unit.Id == null || search.Unit.Id == x.UnitId)
                      &&
                      (search.Company.Id == 0 || search.Company.Id == null || search.Company.Id == x.CompanyId)
-                     &&
-                     (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                      &&
                      (!isEmployee)
                      &&
@@ -82,7 +79,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         new ApprovalDetailViewModel
                         {
                             Id = x.Id,
-                            Approver = x.Approver != null ? x.Approver.UserName : "",
+                            Approver = "",
                             TotalHours = x.ManHours ?? 0,
                             Date = x.CreatedOn,
                             Status = x.Status,
@@ -97,7 +94,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var wrrLogsQueryable = _db.WRRLogs
                     .Include(x => x.Employee)
-                    .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -105,8 +101,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     x.IsDeleted == false
                      &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                         &&
-                         (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                          &&
                          (search.Type == null || search.Type == LogType.WeldingRodRecord)
                          &&
@@ -120,7 +114,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = "",
                         TotalHours = 0,
                         Date = x.CreatedOn,
                         Status = x.Status,
@@ -135,7 +129,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var overrideLogsQueryable = _db.OverrideLogs
                     .Include(x => x.Employee)
-                    .Include(x => x.Approver)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -143,8 +136,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          x.IsDeleted == false
                          &&
                          (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                         &&
-                         (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                          &&
                          (!isEmployee)
                          &&
@@ -160,7 +151,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = "",
                         TotalHours = x.TotalHours,
                         Date = x.CreatedOn,
                         Status = x.Status,
@@ -175,7 +166,6 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var fcoQueryable = _db.FCOLogs
                     .Include(x => x.Employee)
-                    //.Include(x => x.Approver)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -183,14 +173,12 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     x.IsDeleted == false
                     &&
                     (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                    //&&
-                    //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                     &&
                     (!isEmployee)
                     &&
                     (search.Type == null || search.Type == LogType.WeldingRodRecord)
                     &&
-                    (search.Status == null || search.Status == x.Status)
+                    (search.Status == null || search.Status == x.Status || x.Status == Status.Partial)
                     &&
                     (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     &&
@@ -200,7 +188,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        //Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = "",
                         TotalHours = x.TotalHours,
                         Date = x.CreatedOn,
                         Status = x.Status,

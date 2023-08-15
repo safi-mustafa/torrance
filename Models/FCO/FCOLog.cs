@@ -42,6 +42,7 @@ namespace Models
         public double TotalHeadCount { get; set; }
         public double Contingency { get; set; }
 
+
         [ForeignKey("DesignatedCoordinator")]
         public long? DesignatedCoordinatorId { get; set; }
         public ToranceUser? DesignatedCoordinator { get; set; }
@@ -77,12 +78,17 @@ namespace Models
         [ForeignKey("AreaExecutionLead")]
         public long? AreaExecutionLeadId { get; set; }
         public ToranceUser? AreaExecutionLead { get; set; }
-        public DateTime AreaExecutionLeadApprovalDate { get; set; }
+        public DateTime? AreaExecutionLeadApprovalDate { get; set; }
 
         [ForeignKey("BusinessTeamLeader")]
         public long? BusinessTeamLeaderId { get; set; }
         public ToranceUser? BusinessTeamLeader { get; set; }
-        public DateTime BusinessTeamLeaderApprovalDate { get; set; }
+        public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
+
+        [ForeignKey("Rejecter")]
+        public long? RejecterId { get; set; }
+        public ToranceUser? Rejecter { get; set; }
+        public DateTime? RejecterDate { get; set; }
 
         public List<FCOSection> FCOSections { get; set; }
         public List<FCOComment> FCOComments { get; set; }

@@ -7,7 +7,8 @@ namespace Enums
         [Display(Name = "Pending")]
         Pending,
         Approved,
-        Rejected
+        Rejected,
+        Partial
     }
 
     public enum StatusSearchEnum

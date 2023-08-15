@@ -245,6 +245,7 @@ namespace Models.Mapper
                 //.ForMember(x => x.Approver, opt => opt.Ignore())
                 //.ForMember(src => src.De, opt => opt.MapFrom(dest => dest.MaintManager.Id))
                 .ForMember(x => x.DesignatedCoordinator, opt => opt.Ignore())
+                .ForMember(x => x.TotalCost, o => o.MapFrom(s => s.SectionTotal))
                 //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
                 //.ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
@@ -282,7 +283,9 @@ namespace Models.Mapper
                 //.ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
                 .ForMember(dest => dest.DesignatedCoordinator, act => act.Condition(src => (src.DesignatedCoordinator != null)))
                 .ReverseMap();
-            CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>().ReverseMap();
+            CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>()
+                .ForMember(x => x.TotalCost, o => o.MapFrom(s => s.SectionTotal))
+                .ReverseMap();
             CreateMap<FCOLog, FCOLogBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, FCOLogBriefViewModel>().ReverseMap();
 

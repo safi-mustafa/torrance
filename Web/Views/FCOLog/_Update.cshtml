@@ -241,8 +241,10 @@
                         </tr>
                         <tr>
                             <th>Contingency:</th>
-                            <td>10%</td>
-                            <td id="contingency-cell">$@Model.Contingency</td>
+                            <td>
+                                <input asp-for="Contingency" type="number" class="form-control" id="contingency" min="0" max="100" />
+                            </td>
+                            <td id="contingency-cell">$@Model.Contingencies</td>
                         </tr>
                         <tr>
                             <th>Total:</th>
@@ -335,6 +337,10 @@
             AddCost(this);
 
         });
+        $(document).off("change", "#contingency");
+        $(document).on("change", "#contingency", function () {
+            Calculate();
+        });
         $(document).off("click", ".remove-cost");
         $(document).on("click", ".remove-cost", function () {
             $(this).closest("tr").remove();
@@ -362,10 +368,12 @@
         equipmentEstimate = parseFloat(equipmentEstimate.toFixed(2));
         materialEstimate = parseFloat(materialEstimate.toFixed(2));
         shopEstimate = parseFloat(shopEstimate.toFixed(2));
-        var labourContingency = parseFloat((labourEstimate / 10).toFixed(2));
-        var materialContingency = parseFloat((materialEstimate / 10).toFixed(2));
-        var equipmentContingency = parseFloat((equipmentEstimate / 10).toFixed(2));
-        var shopContingency = parseFloat((shopEstimate + (shopEstimate / 10)).toFixed(2));
+        var contingency = parseFloat($("#contingency").val());
+        contingency = contingency < 1 ? 1 : contingency;
+        var labourContingency = parseFloat((labourEstimate / contingency).toFixed(2));
+        var materialContingency = parseFloat((materialEstimate / contingency).toFixed(2));
+        var equipmentContingency = parseFloat((equipmentEstimate / contingency).toFixed(2));
+        var shopContingency = parseFloat((shopEstimate + (shopEstimate / contingency)).toFixed(2));
         var total = parseFloat((labourEstimate + materialEstimate + equipmentEstimate).toFixed(2));
         var totalContingency = parseFloat((labourContingency + materialContingency + equipmentContingency).toFixed(2));
         var subTotal = parseFloat((total + totalContingency).toFixed(2));

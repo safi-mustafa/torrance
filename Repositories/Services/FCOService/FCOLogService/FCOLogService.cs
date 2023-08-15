@@ -12,6 +12,10 @@ using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
 using Models.Common.Interfaces;
+using Models.FCO;
+using Models.OverrideLogs;
+using Models.TimeOnTools;
+using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Common;
 using Repositories.Services.AppSettingServices.WRRLogService;
@@ -296,6 +300,57 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
 
         }
 
+        public async Task ApproveRecords(List<long> ids, bool Status, string comment, ApproverType approverType)
+        {
+            try
+            {
+                var logs = await _db.FCOLogs.Where(x => ids.Contains(x.Id)).ToListAsync();
+                if (logs != null && logs.Count > 0)
+                {
+                    if (Status)
+                    {
+                        foreach (var log in logs)
+                        {
+                            if (approverType == ApproverType.AreaExecutionLead)
+                            {
+                                log.AreaExecutionLeadId = long.Parse(_userInfoService.LoggedInUserId());
+                                log.AreaExecutionLeadApprovalDate = DateTime.Now;
+                            }
+                            else if (approverType == ApproverType.BusinessTeamLeader)
+                            {
+                                log.BusinessTeamLeaderId = long.Parse(_userInfoService.LoggedInUserId());
+                                log.BusinessTeamLeaderApprovalDate = DateTime.Now;
+                            }
+                            var approvedByAreaExecutionLead = log.AreaExecutionLeadId != null && log.AreaExecutionLeadId > 0;
+                            var approvedByBusinessTeamLeader = log.BusinessTeamLeaderId != null && log.BusinessTeamLeaderId > 0;
+                            if (approvedByAreaExecutionLead && approvedByBusinessTeamLeader)
+                            {
+                                log.Status = Enums.Status.Approved;
+                            }
+                            else if (approvedByAreaExecutionLead || approvedByBusinessTeamLeader)
+                            {
+                                log.Status = Enums.Status.Partial;
+                            }
+                            if (!string.IsNullOrEmpty(comment))
+                            {
+                                await _db.AddAsync(new FCOComment { Comment = comment, FCOLogId = log.Id });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        logs.ForEach(x => x.Status = Enums.Status.Rejected);
+                    }
+                    await _db.SaveChangesAsync();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"ApproveRecords method for FCOLogs threw an exception.");
+            }
+        }
+
         private async Task SetApproverId(FCOLog mappedModel)
         {
             //mappedModel.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
@@ -328,6 +383,117 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 User = userFullName
             };
         }
+        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string comment = "", ApproverType approverType = 0)
+        {
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var allowUnauthenticatedApproval = (isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid());
+                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
+
+                    if (isUnauthenticatedApproval == false || allowUnauthenticatedApproval)
+                    {
+                        var logRecord = await _db.FCOLogs.Where(x => x.Id == id).FirstOrDefaultAsync();
+                        if (logRecord != null)
+                        {
+                            if (status == Status.Approved)
+                            {
+
+                                if (approverType == ApproverType.AreaExecutionLead)
+                                {
+                                    logRecord.AreaExecutionLeadId = long.Parse(_userInfoService.LoggedInUserId());
+                                    logRecord.AreaExecutionLeadApprovalDate = DateTime.Now;
+                                }
+                                else if (approverType == ApproverType.BusinessTeamLeader)
+                                {
+                                    logRecord.BusinessTeamLeaderId = long.Parse(_userInfoService.LoggedInUserId());
+                                    logRecord.BusinessTeamLeaderApprovalDate = DateTime.Now;
+                                }
+                                var approvedByAreaExecutionLead = logRecord.AreaExecutionLeadId != null && logRecord.AreaExecutionLeadId > 0;
+                                var approvedByBusinessTeamLeader = logRecord.BusinessTeamLeaderId != null && logRecord.BusinessTeamLeaderId > 0;
+                                if (approvedByAreaExecutionLead && approvedByBusinessTeamLeader)
+                                {
+                                    logRecord.Status = Enums.Status.Approved;
+                                }
+                                else if (approvedByAreaExecutionLead || approvedByBusinessTeamLeader)
+                                {
+                                    logRecord.Status = Enums.Status.Partial;
+                                }
+                            }
+                            else
+                            {
+                                logRecord.RejecterId = long.Parse(_userInfoService.LoggedInUserId());
+                                logRecord.Status = Status.Rejected;
+                            }
+                            if (!string.IsNullOrEmpty(comment))
+                            {
+                                await _db.AddAsync(new FCOComment { Comment = comment, FCOLogId = logRecord.Id });
+                            }
+
+                            await _db.SaveChangesAsync();
+                            string type = "";
+                            string identifier = "";
+                            string identifierKey = "";
+                            NotificationEntityType notificationEntityType;
+
+                            type = "FCO";
+                            identifierKey = "FCO#";
+                            identifier = (logRecord as FCOLog).SrNo.ToString();
+                            notificationEntityType = NotificationEntityType.TOTLog;
+                            var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
+                            string notificationTitle = $"{type} Log {status}";
+                            //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
+                            var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
+                            var notification = new NotificationViewModel()
+                            {
+                                LogId = logRecord.Id,
+                                EntityId = logRecord.Id,
+                                EventType = eventType,
+                                Type = NotificationType.Push,
+                                EntityType = notificationEntityType,
+                                SendTo = userId.ToString() ?? "",
+                                IdentifierKey = identifierKey,
+                                IdentifierValue = identifier
+
+                            };
+                            await _notificationService.Create(notification);
+                            var requestorId = logRecord.EmployeeId.ToString();
+                            if (!string.IsNullOrEmpty(requestorId))
+                            {
+                                var notificationToRequestor = new NotificationViewModel()
+                                {
+                                    LogId = logRecord.Id,
+                                    EntityId = logRecord.Id,
+                                    EventType = eventType,
+                                    Subject = $"{type} with {identifierKey}-{identifier} {eventType}",
+                                    Type = NotificationType.Email,
+                                    EntityType = notificationEntityType,
+                                    SendTo = requestorId,
+                                    IdentifierKey = identifierKey,
+                                    IdentifierValue = identifier,
+                                    User = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
+                                };
+                                await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.AreaExecutionLeadId ?? logRecord.BusinessTeamLeaderId ?? 0);
+                            }
+                            await transaction.CommitAsync();
+                            return _response;
+                        }
+                        _logger.LogWarning($"No record found for id:{id} for FCOLog in SetApproveStatus()");
+
+                        await transaction.RollbackAsync();
+                    }
+                    return Response.NotFoundResponse(_response);
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(ex, $"ApproveRecords method for FCOLog threw an exception.");
+                    return Response.BadRequestResponse(_response);
+                }
+            }
+        }
+
 
         public async Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel)
         {

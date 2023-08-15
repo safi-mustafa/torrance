@@ -1,11 +1,14 @@
 ﻿@using ViewModels.CRUD
 @model CrudDetailViewModel
+@using ViewModels;
 @{
     ViewData["Title"] = Model.Title;
     if (ViewBag.IgnoreLayout != null && ViewBag.IgnoreLayout)
     {
         Layout = null;
     }
+    var isFCOLog = Model.DetailModel is FCOLogDetailViewModel;
+
 }
 <div class="card">
     <div class="card-body">
@@ -13,7 +16,19 @@
             <div class="col-md-12">
                 @await Html.PartialAsync(Model.DetailViewPath, Model.DetailModel, new ViewDataDictionary(ViewData))
             </div>
-            @if (Model.IsApprovalForm)
+            @if (isFCOLog && Model.IsApprovalForm)
+            {
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="text-center">
+                            <button type="button" onclick="rejectDetail(this)" class="btn btn-danger form-btn" id="reject-btn">Reject</button>
+                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="AreaExecutionLead" id="approve-btn">Approve(Area Execution Lead)</button>
+                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="BusinessTeamLeader" id="approve-btn">Approve(Business Team Leader)</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.IsApprovalForm)
             {
                 <div class="col-md-12">
                     <div class="form-group">

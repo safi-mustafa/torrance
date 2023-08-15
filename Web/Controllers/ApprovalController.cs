@@ -284,8 +284,12 @@ namespace Web.Controllers
         {
             vm.DataTableHeaderHtml = @"
                     <div class=""p-2 row"">
-                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""badge Pending m-1""> </span>
                         <span class=""stat-name"">Pending</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Partial m-1""> </span>
+                        <span class=""stat-name"">Partially Approved</span>
                     </div>";
             vm.IsResponsiveDatatable = false;
             return vm;

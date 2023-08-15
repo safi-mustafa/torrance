@@ -5,9 +5,11 @@
     margin: 0;
     box-sizing: border-box;
 }
-html{
-    overflow:visible !important;
+
+html {
+    overflow: visible !important;
 }
+
 body {
     font-family: "Poppins", sans-serif;
 }
@@ -292,7 +294,7 @@ header {
 }
 
     .card.datatable {
-        padding:10px !important;
+        padding: 10px !important;
     }
 
 .dt-currency {
@@ -1168,13 +1170,14 @@ header {
     background-color: orange;
     vertical-align: middle;
 }
+
 .badge.Pending {
-    color: orange;
+    color: #ffe000;
     display: inline-block;
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background-color: orange;
+    background-color: #ffe000;
     vertical-align: middle;
 }
 
@@ -1185,6 +1188,16 @@ header {
     height: 15px;
     border-radius: 50%;
     background-color: red;
+    vertical-align: middle;
+}
+
+.badge.Partial {
+    color: orange;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: orange;
     vertical-align: middle;
 }
 
@@ -1389,16 +1402,19 @@ header {
     overflow: auto;
 }
 
-.card-header{
+.card-header {
     padding: 0.5rem !important;
 }
+
 .select-all-checkbox {
     width: 18px;
     height: 18px;
 }
+
 .dt-currency {
     text-align: center !important;
 }
-.doc-icon{
-    height:50px;
+
+.doc-icon {
+    height: 50px;
 }
