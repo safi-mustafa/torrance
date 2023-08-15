@@ -12,6 +12,7 @@ using Models.Common;
 using Models.WeldingRodRecord;
 using Models.AppSettings;
 using Models.OverrideLogs;
+using Models.FCO;
 
 namespace DataLibrary;
 
@@ -43,6 +44,8 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<RodType> RodTypes { get; set; }
     public DbSet<FCOType> FCOTypes { get; set; }
     public DbSet<FCOReason> FCOReasons { get; set; }
+    public DbSet<FCOComment> FCOComments { get; set; }
+    public DbSet<FCOSection> FCOSections { get; set; }
     public DbSet<DelayType> DelayTypes { get; set; }
     public DbSet<WeldMethod> WeldMethods { get; set; }
     public DbSet<WRRLog> WRRLogs { get; set; }

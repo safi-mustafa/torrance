@@ -76,15 +76,25 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
         public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
         public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        private List<FCOSectionModifyViewModel>? _fCOSections;
         [BindNever]
-        public List<FCOSectionModifyViewModel>? FCOSections { get => FCOLabourSections?.Concat(FCOMaterialSections?.Concat(FCOEquipmentSections?.Concat(FCOShopSections))).ToList() ?? new List<FCOSectionModifyViewModel>(); }
+        public List<FCOSectionModifyViewModel>? FCOSections
+        {
+            get
+            {
+                if (_fCOSections == null || _fCOSections.Count < 1)
+                    return FCOLabourSections?.Concat(FCOMaterialSections?.Concat(FCOEquipmentSections?.Concat(FCOShopSections))).ToList() ?? new List<FCOSectionModifyViewModel>();
+                return _fCOSections;
+            }
+            set => _fCOSections = value;
+        }
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
 
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
-        public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
-        public double Contingency { get => Total / 10; }
+        public double Total { get => Math.Round(FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate), 2); }
+        public double Contingency { get => Math.Round((Total / 10), 2); }
         [Display(Name = "Total")]
-        public double SubTotal { get => Total + Contingency; }
+        public double SubTotal { get => Math.Round(Total + Contingency, 2); }
         public double TotalLabor { get { var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate); return laborEstimate + (laborEstimate / 10); } }
         public double TotalMaterial { get { var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate); return materialEstimate + (materialEstimate / 10); } }
         public double TotalEquipment { get { var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate); return equipmentEstimate + (equipmentEstimate / 10); } }

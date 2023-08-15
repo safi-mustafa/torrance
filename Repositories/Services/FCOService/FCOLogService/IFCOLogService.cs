@@ -7,7 +7,7 @@ using ViewModels;
 
 namespace Repositories.Services.AppSettingServices.WRRLogService
 {
-    public interface IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
+    public interface IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()

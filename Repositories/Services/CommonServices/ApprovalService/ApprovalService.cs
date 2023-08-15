@@ -175,7 +175,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
 
                 var fcoQueryable = _db.FCOLogs
                     .Include(x => x.Employee)
-                    .Include(x => x.Approver)
+                    //.Include(x => x.Approver)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
@@ -183,8 +183,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     x.IsDeleted == false
                     &&
                     (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                    &&
-                    (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
+                    //&&
+                    //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                     &&
                     (!isEmployee)
                     &&
@@ -200,7 +200,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        //Approver = x.Approver != null ? x.Approver.UserName : "",
                         TotalHours = x.TotalHours,
                         Date = x.CreatedOn,
                         Status = x.Status,

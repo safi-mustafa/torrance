@@ -7,10 +7,11 @@ using Models.Common.Interfaces;
 using Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using Models.FCO;
 
 namespace Models
 {
-    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, ICompanyId, IApprovalDate
+    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IUnitId, ICompanyId, IApprovalDate
     {
         public FCOLog()
         {
@@ -39,6 +40,7 @@ namespace Models
         public double TotalCost { get; set; }
         public double TotalHours { get; set; }
         public double TotalHeadCount { get; set; }
+        public double Contingency { get; set; }
 
         [ForeignKey("DesignatedCoordinator")]
         public long? DesignatedCoordinatorId { get; set; }
@@ -72,11 +74,18 @@ namespace Models
         public long? FCOReasonId { get; set; }
         public FCOReason? FCOReason { get; set; }
 
-        [ForeignKey("Approver")]
-        public long? ApproverId { get; set; }
-        public ToranceUser? Approver { get; set; }
+        [ForeignKey("AreaExecutionLead")]
+        public long? AreaExecutionLeadId { get; set; }
+        public ToranceUser? AreaExecutionLead { get; set; }
+        public DateTime AreaExecutionLeadApprovalDate { get; set; }
+
+        [ForeignKey("BusinessTeamLeader")]
+        public long? BusinessTeamLeaderId { get; set; }
+        public ToranceUser? BusinessTeamLeader { get; set; }
+        public DateTime BusinessTeamLeaderApprovalDate { get; set; }
 
         public List<FCOSection> FCOSections { get; set; }
+        public List<FCOComment> FCOComments { get; set; }
 
     }
 }
