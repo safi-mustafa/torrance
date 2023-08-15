@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\FCODashboardService\TOTService\**" />
+    <EmbeddedResource Remove="Services\FCODashboardService\TOTService\**" />
+    <None Remove="Services\FCODashboardService\TOTService\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataLibrary\DataLibrary.csproj" />
     <ProjectReference Include="..\Enums\Enums.csproj" />
     <ProjectReference Include="..\Pagination\Pagination.csproj" />
