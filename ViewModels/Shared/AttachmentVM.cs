@@ -46,6 +46,14 @@ namespace ViewModels.Shared
 
     public class AttachmentModifyViewModel : BaseUpdateVM, IFileModel, IAttachmentUrl, IBaseCrudViewModel, IIdentitifier
     {
+        public AttachmentModifyViewModel()
+        {
+
+        }
+        public AttachmentModifyViewModel(AttachmentEntityType fileType)
+        {
+            FileType = fileType;
+        }
         [DataType(DataType.Upload)]
         [MaxFileSize(25 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]

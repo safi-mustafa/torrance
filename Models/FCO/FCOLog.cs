@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Models
 {
-    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, IDepartmentId, ICompanyId, IApprovalDate
+    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, ICompanyId, IApprovalDate
     {
         public FCOLog()
         {
@@ -22,6 +22,8 @@ namespace Models
         public string? EquipmentNumber { get; set; }
         public string? Location { get; set; }
         public bool ShutdownRequired { get; set; }
+
+        public bool PreTA { get; set; }
         public bool ScaffoldRequired { get; set; }
         public long SrNo { get; set; }
         public bool PAndIdAttached { get; set; }
@@ -51,8 +53,8 @@ namespace Models
         public Company Company { get; set; }
 
         [ForeignKey("Department")]
-        public long DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public long? DepartmentId { get; set; }
+        public Department? Department { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ViewModels
 {
-    public class FCOLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, ISrNo, IAttachment<AttachmentModifyViewModel>, IIdentitifier, IApprove
+    public class FCOLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, IIdentitifier, IApprove
     {
         public Status Status { get; set; }
         [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
@@ -29,6 +29,9 @@ namespace ViewModels
         public string? Location { get; set; }
         [Display(Name = "Shutdown Required")]
         public bool ShutdownRequired { get; set; }
+
+        [Display(Name = "PreTA")]
+        public bool PreTA { get; set; }
         [Display(Name = "Scaffold Required")]
         public bool ScaffoldRequired { get; set; }
         [Display(Name = "FCO No.")]
@@ -51,7 +54,7 @@ namespace ViewModels
         public ContractorBriefViewModel Contractor { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new(true, "The Company field is required.");
         public EmployeeBriefViewModel? Employee { get; set; } = new();
-        public DepartmentBriefViewModel Department { get; set; } = new(true);
+        public DepartmentBriefViewModel Department { get; set; } = new();
         public UnitBriefViewModel Unit { get; set; } = new(true);
         public FCOTypeBriefViewModel? FCOType { get; set; } = new(true);
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new(true);
@@ -75,7 +78,9 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
         [BindNever]
         public List<FCOSectionModifyViewModel>? FCOSections { get => FCOLabourSections?.Concat(FCOMaterialSections?.Concat(FCOEquipmentSections?.Concat(FCOShopSections))).ToList() ?? new List<FCOSectionModifyViewModel>(); }
-        public AttachmentModifyViewModel? Attachment { get; set; } = new();
+        public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
+
+        public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
         public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
         public double Contingency { get => Total / 10; }
         [Display(Name = "Total")]

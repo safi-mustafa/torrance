@@ -208,22 +208,22 @@ namespace Torrance.Api.Mapper
                 //.ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
 
-            CreateMap<FCOLogCreateViewModel, FCOLog>()
-                .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
-                .ForMember(x => x.Department, opt => opt.Ignore())
-                .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
-                .ForMember(x => x.Employee, opt => opt.Ignore())
-                .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
-                .ForMember(x => x.FCOType, opt => opt.Ignore())
-                .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
-                .ForMember(x => x.FCOReason, opt => opt.Ignore())
-                .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
-                .ForMember(x => x.Unit, opt => opt.Ignore())
-                .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
-                .ForMember(x => x.Contractor, opt => opt.Ignore())
-                //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
-                //.ForMember(x => x.Company, o => o.Ignore())
-                .ReverseMap();
+            //CreateMap<FCOLogCreateViewModel, FCOLog>()
+            //    .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))
+            //    .ForMember(x => x.Department, opt => opt.Ignore())
+            //    .ForMember(src => src.EmployeeId, opt => opt.MapFrom(dest => dest.Employee.Id))
+            //    .ForMember(x => x.Employee, opt => opt.Ignore())
+            //    .ForMember(src => src.FCOType, opt => opt.MapFrom(dest => dest.FCOType.Id))
+            //    .ForMember(x => x.FCOType, opt => opt.Ignore())
+            //    .ForMember(src => src.FCOReason, opt => opt.MapFrom(dest => dest.FCOReason.Id))
+            //    .ForMember(x => x.FCOReason, opt => opt.Ignore())
+            //    .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
+            //    .ForMember(x => x.Unit, opt => opt.Ignore())
+            //    .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
+            //    .ForMember(x => x.Contractor, opt => opt.Ignore())
+            //    //.ForMember(src => src.CompanyId, opt => opt.MapFrom(dest => dest.Company.Id))
+            //    //.ForMember(x => x.Company, o => o.Ignore())
+            //    .ReverseMap();
 
             CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>().ReverseMap();
             CreateMap<FCOLog, FCOLogBriefViewModel>().ReverseMap();

@@ -20,31 +20,20 @@
                     <span asp-validation-for="Date" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-4">
+
+            @*  <div class="col-lg-4">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Company" } }' />
+                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Requestor Name/Contractor" } }' />
                 </div>
-            </div>
-            <div class="col-lg-4">
+                </div>*@
+            @* <div class="col-lg-4">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Requestor Name/Contractor" } }' />
+                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Department/Extension" } }' />
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Department/Extension" } }' />
-                </div>
-            </div>
+                </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label asp-for="EquipmentNumber" class="form-label fw-600"></label>
-                    <input asp-for="EquipmentNumber" type="text" class="form-control" />
-                    <span asp-validation-for="EquipmentNumber" class="validation-invalid-label"></span>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -54,17 +43,18 @@
                     <span asp-validation-for="Location" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-4">
                 <div class="mb-3">
-                    <label asp-for="DescriptionOfFinding" class="form-label fw-600"></label>
-                    <textarea asp-for="DescriptionOfFinding" type="text" class="form-control">@Model.DescriptionOfFinding</textarea>
-                    <span asp-validation-for="DescriptionOfFinding" class="validation-invalid-label"></span>
+                    <label class="form-label fw-600">Pre TA / TA</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="PreTA" value="true">
+                        <label class="form-check-label" asp-for="PreTA">Pre TA</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="PreTA" value="false">
+                        <label class="form-check-label" asp-for="PreTA">TA</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6" id="file-container">
-                <label asp-for="Attachment.File" class="form-label fw-600"></label>
-                <input type="file" id="file" asp-for="Attachment.File" class="form-control" />
-                <span asp-validation-for="Attachment.File" class="validation-invalid-label"></span>
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -92,11 +82,67 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-6" id="file-container">
+                <label asp-for="Photo.File" class="form-label fw-600">Photo</label>
+                <input type="file" id="file" asp-for="Photo.File" class="form-control" />
+                <input type="hidden" id="photo-id" asp-for="Photo.Id" class="form-control" />
+                <span asp-validation-for="Photo.File" class="validation-invalid-label"></span>
+            </div>
+            <div class="col-lg-6">
                 <div class="mb-3">
-                    <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
-                    <textarea asp-for="AdditionalInformation" type="text" class="form-control">@Model.AdditionalInformation</textarea>
-                    <span asp-validation-for="AdditionalInformation" class="validation-invalid-label"></span>
+                    <label asp-for="EquipmentNumber" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentNumber" type="text" class="form-control" />
+                    <span asp-validation-for="EquipmentNumber" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="DescriptionOfFinding" class="form-label fw-600"></label>
+                    <textarea asp-for="DescriptionOfFinding" type="text" class="form-control">@Model.DescriptionOfFinding</textarea>
+                    <span asp-validation-for="DescriptionOfFinding" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6" id="file-container">
+                <label asp-for="File.File" class="form-label fw-600"></label>
+                <input type="file" id="file" asp-for="File.File" class="form-control" />
+                <input type="hidden" id="file-id" asp-for="File.Id" class="form-control" />
+                <span asp-validation-for="File.File" class="validation-invalid-label"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_FCOType.cshtml" for="FCOType" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_FCOReason.cshtml" for="FCOReason" />
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label class="form-label fw-600">Others Documentation Required</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="AnalysisOfAlternatives">
+                        <label class="form-check-label" asp-for="AnalysisOfAlternatives"></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="EquipmentFailureReport">
+                        <label class="form-check-label" asp-for="EquipmentFailureReport"></label>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="col-lg-12">
+                <div class="mb-3">
+                <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
+                <textarea asp-for="AdditionalInformation" type="text" class="form-control">@Model.AdditionalInformation</textarea>
+                <span asp-validation-for="AdditionalInformation" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Company" } }' />
                 </div>
             </div>
             <div class="col-md-12 mt-3">
@@ -201,36 +247,14 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-4">
+            @*
+                <div class="col-lg-4">
                 <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_FCOType.cshtml" for="FCOType" />
+                <label class="form-label fw-600" asp-for="DuringExecution"></label>
+                <select asp-for="DuringExecution" asp-items="Html.GetEnumSelectList(typeof (DuringExecutionCatalog))" id="during-execution" class="form-control" data-placeholder="Select During Execution"><option></option></select>
+                <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <partial name="~/Views/Shared/Select2/_FCOReason.cshtml" for="FCOReason" />
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label class="form-label fw-600">Others Documentation Required</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" asp-for="AnalysisOfAlternatives">
-                        <label class="form-check-label" asp-for="AnalysisOfAlternatives"></label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" asp-for="EquipmentFailureReport">
-                        <label class="form-check-label" asp-for="EquipmentFailureReport"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label class="form-label fw-600" asp-for="DuringExecution"></label>
-                    <select asp-for="DuringExecution" asp-items="Html.GetEnumSelectList(typeof (DuringExecutionCatalog))" id="during-execution" class="form-control" data-placeholder="Select During Execution"><option></option></select>
-                    <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
-                </div>
-            </div>
+                </div>*@
             <input asp-for="Approver.Id" type="hidden" />
         </div>
     </div>
@@ -240,8 +264,9 @@
 <input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
-<script>$(function () {
-    //onAttachmentTypeChange($("#AttachmentType").val());
+<script>
+    $(function () {
+        //onAttachmentTypeChange($("#AttachmentType").val());
 
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
@@ -256,37 +281,37 @@
         //    onAttachmentTypeChange($(this).val());
         //});
 
-    $('#requester-id').off('change.select2');
-    $('#requester-id').on('change.select2', function (e) {
-        if ($(this).select2('data')[0] === undefined) {
-            $("#requestor-company").val("");
-            $("#company-id").val("");
-        }
-        else {
-            $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
-            $("#company-id").val($(this).select2('data')[0].additionalAttributesModel.Company.Id);
-        }
-    });
+        $('#requester-id').off('change.select2');
+        $('#requester-id').on('change.select2', function (e) {
+            if ($(this).select2('data')[0] === undefined) {
+                $("#requestor-company").val("");
+                $("#company-id").val("");
+            }
+            else {
+                $("#requestor-company").val($(this).select2('data')[0].additionalAttributesModel.Company.Name);
+                $("#company-id").val($(this).select2('data')[0].additionalAttributesModel.Company.Id);
+            }
+        });
 
-    $('#delay-reason').on('change', function () {
-        DelayReasonChanged();
-    });
-    $(document).off("click", ".add-cost");
-    $(document).on("click", ".add-cost", function () {
-        AddCost(this);
+        $('#delay-reason').on('change', function () {
+            DelayReasonChanged();
+        });
+        $(document).off("click", ".add-cost");
+        $(document).on("click", ".add-cost", function () {
+            AddCost(this);
+
+        });
+        $(document).off("click", ".remove-cost");
+        $(document).on("click", ".remove-cost", function () {
+            $(this).closest("tr").remove();
+            RefreshInputIndexes("#labour-table tr", "labour-row", "FCOLabourSections");
+        });
+
+        $(document).on("input", ".rate-input", function () {
+            AppendSignInElement(this, "$");
+        });
 
     });
-    $(document).off("click", ".remove-cost");
-    $(document).on("click", ".remove-cost", function () {
-        $(this).closest("tr").remove();
-        RefreshInputIndexes("#labour-table tr", "labour-row", "FCOLabourSections");
-    });
-
-    $(document).on("input", ".rate-input", function () {
-        AppendSignInElement(this, "$");
-    });
-
-});
 
     function Calculate() {
         debugger;
@@ -313,7 +338,7 @@
 
         var totalWithContingency = parseFloat((subTotal + shopEstimate + shopContingency).toFixed(2));
 
-    //filling data in first table
+        //filling data in first table
         $("#total-estimate-cell").html("$" + total);
         $("#contingency-cell").html("$" + totalContingency);
         $("#sub-total-cell").html("$" + subTotal);
@@ -327,7 +352,7 @@
 
     }
 
-    function onAttachmentTypeChange(selectedValue){
+    function onAttachmentTypeChange(selectedValue) {
         if (@((int)AttachmentTypeCatalog.File)== selectedValue) {
             $("#link-container").hide();
             $("#file-container").show();
@@ -339,9 +364,9 @@
     }
     function AddSectionElement(element, section, sectionType, ajaxUrl, tbodySelector, resetContainers, collectionType) {
         var thisElement = $(element);
-        var sectionName = $("#"+section+"-name").val();
-        var costHours = $("#" + section +"-hours").val();
-        var headCount = $("#" + section +"-head-count").val();
+        var sectionName = $("#" + section + "-name").val();
+        var costHours = $("#" + section + "-hours").val();
+        var headCount = $("#" + section + "-head-count").val();
         var rate = parseFloat($("#" + section + "-rate").val().replace("$", ""));
 
         if (sectionName != null && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && rate != null && rate > 0) {
@@ -413,7 +438,7 @@
         });
     }
 
-    function AddGridRow(obj, rowNumber, url, tbodyId, rowClass='', collectionType='') {
+    function AddGridRow(obj, rowNumber, url, tbodyId, rowClass = '', collectionType = '') {
         $.ajax({
             url: url,
             type: "post",
@@ -437,15 +462,15 @@
             if ($(this).find('input').length > 1) {
                 var id = $(this).attr("id");
                 if (id != null && id != "") {
-                    $(this).attr("id", rowPrefix +"-"+ rowIndex);
+                    $(this).attr("id", rowPrefix + "-" + rowIndex);
                 }
                 $.each($(this).find('input'), function () {
                     if ($(this).attr('name').split(".").length > 2) {
 
-                        $(this).attr("name", collectionName+"[" + rowIndex + "]." + $(this).attr('name').split(".")[1] + "." + $(this).attr('name').split(".")[2]);
+                        $(this).attr("name", collectionName + "[" + rowIndex + "]." + $(this).attr('name').split(".")[1] + "." + $(this).attr('name').split(".")[2]);
                     }
                     else {
-                        $(this).attr("name", collectionName+"[" + rowIndex + "]." + $(this).attr('name').split(".")[1]);
+                        $(this).attr("name", collectionName + "[" + rowIndex + "]." + $(this).attr('name').split(".")[1]);
                     }
                 });
                 rowIndex++;

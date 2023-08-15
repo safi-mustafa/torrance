@@ -5,15 +5,12 @@ using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
-using Helpers.File;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
 using Models.Common.Interfaces;
-using Models.TimeOnTools;
-using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Services.CommonServices.PossibleApproverService;
@@ -21,20 +18,18 @@ using Repositories.Shared;
 using Repositories.Shared.AttachmentService;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
-using System.Data.Common;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using ViewModels;
 using ViewModels.Notification;
 using ViewModels.Shared;
-using ViewModels.TimeOnTools.TOTLog;
 
 namespace Repositories.Services.AppSettingServices.FCOLogService
 {
     public class FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<FCOLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, ISrNo, IAttachment<AttachmentModifyViewModel>, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, ISrNo, IAttachment<AttachmentModifyViewModel>, new()
+        where CreateViewModel : class, IBaseCrudViewModel, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<FCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -137,8 +132,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<FCOLogDetailViewModel>(dbModel);
-                    var url = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && x.EntityType == AttachmentEntityType.FCOLog).Select(x => x.Url).FirstOrDefaultAsync();
-                    mappedModel.Attachment = new AttachmentModifyViewModel { Url = url };
+                    var attcs = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && (x.EntityType == AttachmentEntityType.FCOLogPhoto || x.EntityType == AttachmentEntityType.FCOLogFile)).Select(x => new { EntityType = x.EntityType, Id = x.Id, Url = x.Url }).ToListAsync();
+                    var photo = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogPhoto).FirstOrDefault();
+                    var file = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile).FirstOrDefault();
+                    mappedModel.Photo = new AttachmentModifyViewModel { Url = photo?.Url, Id = photo?.Id ?? 0 };
+                    mappedModel.File = new AttachmentModifyViewModel { Url = file?.Url, Id = file?.Id ?? 0 };
                     //mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<FCOLogDetailViewModel> { ReturnModel = mappedModel };
@@ -209,7 +207,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     //saving Attachment
-                    await AddAttachment(model, mappedModel.Id, AttachmentEntityType.FCOLogPhoto);
+                    await AddAttachment(model.Photo, mappedModel.Id);
+                    await AddAttachment(model.File, mappedModel.Id);
 
                     //var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
                     //await _notificationService.CreateLogNotification(notification);
@@ -247,7 +246,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
                         //update attachments
-                        await AddAttachment(model);
+                        await AddAttachment(model.Photo, model.Id);
+                        await AddAttachment(model.File, model.Id);
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
                         return response;
                     }
@@ -262,17 +262,17 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             }
         }
 
-        private async Task AddAttachment<T>(T model, long modelId, AttachmentEntityType attachmentType) where T : IAttachment<AttachmentModifyViewModel>
+        private async Task AddAttachment<T>(T model, long entityId) where T : AttachmentModifyViewModel
         {
-            if (model.Attachment.Id < 1)
+            if (model.Id < 1 && model.File != null)
             {
-                var attc = await _db.Attachments.Where(x => x.EntityId == modelId && x.EntityType == attachmentType).ToListAsync();
+                var attc = await _db.Attachments.Where(x => x.EntityId == entityId && x.EntityType == model.EntityType).ToListAsync();
                 if (attc.Count > 0)
                     attc.ForEach(x => x.IsDeleted = true);
-                model.Attachment.EntityId = modelId;
-                model.Attachment.EntityType = attachmentType;
-                model.Attachment.Name = DateTime.Now.Ticks.ToString();
-                var attachmentResponse = await _attachmentService.Create(model.Attachment);
+                model.EntityId = entityId;
+                model.EntityType = model.EntityType;
+                model.Name = DateTime.Now.Ticks.ToString();
+                var attachmentResponse = await _attachmentService.Create(model);
             }
         }
 

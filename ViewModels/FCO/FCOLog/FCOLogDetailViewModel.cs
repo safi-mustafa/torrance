@@ -30,7 +30,10 @@ namespace ViewModels
         public string? EquipmentNumber { get; set; }
         [Display(Name = "Service/Location")]
         public string? Location { get; set; }
+        [Display(Name = "PreTA")]
+        public bool PreTA { get; set; }
         [Display(Name = "Shutdown Required")]
+
         public bool ShutdownRequired { get; set; }
         [Display(Name = "Scaffold Required")]
         public bool ScaffoldRequired { get; set; }
@@ -93,16 +96,48 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
         [BindNever]
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
-        public AttachmentModifyViewModel? Attachment { get; set; } = new();
-        public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
-        public double Contingency { get => Total / 10; }
+        public AttachmentModifyViewModel? Photo { get; set; } = new();
+        public AttachmentModifyViewModel? File { get; set; } = new();
+        public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate)), 2); }
+        public double Contingency { get => Math.Round((Total / 10), 2); }
         [Display(Name = "Total")]
-        public double SubTotal { get => Total + Contingency; }
-        public double TotalLabor { get { var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate); return laborEstimate + (laborEstimate / 10); } }
-        public double TotalMaterial { get { var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate); return materialEstimate + (materialEstimate / 10); } }
-        public double TotalEquipment { get { var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate); return equipmentEstimate + (equipmentEstimate / 10); } }
-        public double TotalShop { get { var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate); return shopEstimate + (shopEstimate / 10); } }
-        public double SectionTotal { get => TotalLabor + TotalMaterial + TotalEquipment + TotalShop; }
+        public double SubTotal { get => Math.Round((Total + Contingency), 2); }
+        public double TotalLabor
+        {
+            get
+            {
+                var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate);
+                return Math.Round((laborEstimate + (laborEstimate / 10)), 2);
+            }
+        }
+        public double TotalMaterial
+        {
+            get
+            {
+                var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate);
+                return Math.Round((materialEstimate + (materialEstimate / 10)), 2);
+            }
+        }
+        public double TotalEquipment
+        {
+            get
+            {
+                var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate);
+                return Math.Round((equipmentEstimate + (equipmentEstimate / 10)), 2);
+            }
+        }
+        public double TotalShop
+        {
+            get
+            {
+                var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate);
+                return Math.Round((shopEstimate + (shopEstimate / 10)), 2);
+            }
+        }
+        public double SectionTotal
+        {
+            get => Math.Round((TotalLabor + TotalMaterial + TotalEquipment + TotalShop), 2);
+        }
 
     }
 }
