@@ -133,7 +133,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 {
                     var mappedModel = _mapper.Map<FCOLogDetailViewModel>(dbModel);
                     var url = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && x.EntityType == AttachmentEntityType.FCOLog).Select(x => x.Url).FirstOrDefaultAsync();
-                    mappedModel.Attachment = new AttachmentModifyViewModel { Url = url };
+                    mappedModel.Photo = new AttachmentModifyViewModel { Url = url };
                     //mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<FCOLogDetailViewModel> { ReturnModel = mappedModel };

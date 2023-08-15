@@ -94,11 +94,6 @@
                     <span asp-validation-for="EquipmentNumber" class="validation-invalid-label"></span>
                 </div>
             </div>
-            <div class="col-lg-6" id="file-container">
-                <label asp-for="File.File" class="form-label fw-600"></label>
-                <input type="file" id="file" asp-for="File.File" class="form-control" />
-                <span asp-validation-for="File.File" class="validation-invalid-label"></span>
-            </div>
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="DescriptionOfFinding" class="form-label fw-600"></label>
@@ -106,6 +101,12 @@
                     <span asp-validation-for="DescriptionOfFinding" class="validation-invalid-label"></span>
                 </div>
             </div>
+            <div class="col-lg-6" id="file-container">
+                <label asp-for="File.File" class="form-label fw-600"></label>
+                <input type="file" id="file" asp-for="File.File" class="form-control" />
+                <span asp-validation-for="File.File" class="validation-invalid-label"></span>
+            </div>
+
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_FCOType.cshtml" for="FCOType" />
