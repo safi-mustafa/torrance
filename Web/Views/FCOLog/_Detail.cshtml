@@ -285,64 +285,64 @@
                 </div>
             </div>
             @*<div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStart"></label>
-                        <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="AuthorizerForImmediateStart"></label>
+            <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
 
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
-                        <div>@(Model.AuthorizerForImmediateStartDate==null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
+            <div>@(Model.AuthorizerForImmediateStartDate==null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
 
-                    </div>
-                </div>
+            </div>
+            </div>
 
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="Approver"></label>
-                        <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="Approver"></label>
+            <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
 
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
-                        <div>@(Model.AuthorizerForImmediateStartDate == null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
+            <div>@(Model.AuthorizerForImmediateStartDate == null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
 
-                    </div>
-                </div>
+            </div>
+            </div>
 
-                 <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="BTLApprover"></label>
-                        <div>@(string.IsNullOrEmpty(Model.BTLApprover?.Name) ? "-" : Model.BTLApprover.Name)</div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="BTLApprover"></label>
+            <div>@(string.IsNullOrEmpty(Model.BTLApprover?.Name) ? "-" : Model.BTLApprover.Name)</div>
 
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="BTLApproveDate"></label>
-                        <div>@(Model.BTLApproveDate == null ? "-" : Model.BTLApproveDate)</div>
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="BTLApproveDate"></label>
+            <div>@(Model.BTLApproveDate == null ? "-" : Model.BTLApproveDate)</div>
 
-                    </div>
-                </div>
+            </div>
+            </div>
 
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStart"></label>
-                        <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="AuthorizerForImmediateStart"></label>
+            <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart?.Name) ? "-" : Model.AuthorizerForImmediateStart.Name)</div>
 
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
-                        <div>@(Model.AuthorizerForImmediateStartDate == null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="AuthorizerForImmediateStartDate"></label>
+            <div>@(Model.AuthorizerForImmediateStartDate == null ? "-" : Model.AuthorizerForImmediateStartDate)</div>
 
-                    </div>
-                </div>*@
+            </div>
+            </div>*@
             <input asp-for="Approver.Id" type="hidden" />
 
             <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
@@ -356,7 +356,8 @@
 </div>
 <div class="overlay"></div>
 <img src="" class="fullsize">
-<script>$(document).off("click", '.image-thumbnail')
+<script>
+    $(document).off("click", '.image-thumbnail')
     $(document).on("click", '.image-thumbnail', function () {
         $(".fullsize").attr("src", $(this).attr("src"));
         $('.overlay').fadeIn();

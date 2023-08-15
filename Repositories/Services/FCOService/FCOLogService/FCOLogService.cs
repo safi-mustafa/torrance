@@ -5,15 +5,12 @@ using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
 using Helpers.Extensions;
-using Helpers.File;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Common;
 using Models.Common.Interfaces;
-using Models.TimeOnTools;
-using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Services.AppSettingServices.WRRLogService;
 using Repositories.Services.CommonServices.PossibleApproverService;
@@ -21,13 +18,11 @@ using Repositories.Shared;
 using Repositories.Shared.AttachmentService;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
-using System.Data.Common;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using ViewModels;
 using ViewModels.Notification;
 using ViewModels.Shared;
-using ViewModels.TimeOnTools.TOTLog;
 
 namespace Repositories.Services.AppSettingServices.FCOLogService
 {
@@ -209,10 +204,10 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     //saving Attachment
-                    model.Attachment.EntityId = mappedModel.Id;
-                    model.Attachment.EntityType = AttachmentEntityType.FCOLog;
-                    model.Attachment.Name = DateTime.Now.Ticks.ToString();
-                    var attachmentResponse = await _attachmentService.Create(model.Attachment);
+                    model.Photo.EntityId = mappedModel.Id;
+                    model.Photo.EntityType = AttachmentEntityType.FCOLog;
+                    model.Photo.Name = DateTime.Now.Ticks.ToString();
+                    var attachmentResponse = await _attachmentService.Create(model.Photo);
 
 
                     //var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
