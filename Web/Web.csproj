@@ -123,7 +123,6 @@
     <Folder Include="Views\DelayType\" />
     <Folder Include="Views\FCOType\" />
     <Folder Include="Views\FCOReason\" />
-    <Folder Include="Views\FCOLog\" />
   </ItemGroup>
 
   <ItemGroup>

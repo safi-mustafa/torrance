@@ -14,5 +14,6 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
     {
         Task<bool> IsFCOLogEmailUnique(int id, string email);
         Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel);
+        Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId);
     }
 }
