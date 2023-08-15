@@ -26,7 +26,7 @@ namespace Repositories.Services.DashboardService
                 var model = new FCOPieChartViewModel();
 
                 model.Status = await GetFilteredFCOLogs(search).IgnoreQueryFilters()
-                  .GroupBy(x => x.Status).Select(x => new LogPieChartViewModel
+                  .GroupBy(x => x.Status).Select(x => new LogPieChartViewModel(true)
                   {
                       Category = x.Max(y => y.Status).ToString(),
                       Value = x.Sum(x => x.TotalCost)
@@ -34,7 +34,7 @@ namespace Repositories.Services.DashboardService
 
                 model.Requestor = await GetFilteredFCOLogs(search).IgnoreQueryFilters()
                   .Include(x => x.Employee)
-                  .GroupBy(x => x.EmployeeId).Select(x => new LogPieChartViewModel
+                  .GroupBy(x => x.EmployeeId).Select(x => new LogPieChartViewModel(true)
                   {
                       Category = x.Max(y => y.Employee.FullName ?? "Not Assigned"),
                       Value = x.Sum(x => x.TotalCost)
@@ -42,7 +42,7 @@ namespace Repositories.Services.DashboardService
 
                 model.Company = await GetFilteredFCOLogs(search).IgnoreQueryFilters()
                   .Include(x => x.Company)
-                  .GroupBy(x => x.CompanyId).Select(x => new LogPieChartViewModel
+                  .GroupBy(x => x.CompanyId).Select(x => new LogPieChartViewModel(true)
                   {
                       Category = x.Max(y => y.Company.Name?? "Not Assigned"),
                       Value = x.Sum(x => x.TotalCost)
@@ -50,7 +50,7 @@ namespace Repositories.Services.DashboardService
 
                 model.AreaExecutionLead = await GetFilteredFCOLogs(search).IgnoreQueryFilters()
                   .Include(x => x.AreaExecutionLead)
-                  .GroupBy(x => x.AreaExecutionLeadId).Select(x => new LogPieChartViewModel
+                  .GroupBy(x => x.AreaExecutionLeadId).Select(x => new LogPieChartViewModel(true)
                   {
                       Category = x.Max(y => y.AreaExecutionLead.FullName?? "Not Approved"),
                       Value = x.Sum(x => x.TotalCost)
@@ -58,7 +58,7 @@ namespace Repositories.Services.DashboardService
 
                 model.BusinessTeamLeader = await GetFilteredFCOLogs(search).IgnoreQueryFilters()
                   .Include(x => x.BusinessTeamLeader)
-                  .GroupBy(x => x.BusinessTeamLeaderId).Select(x => new LogPieChartViewModel
+                  .GroupBy(x => x.BusinessTeamLeaderId).Select(x => new LogPieChartViewModel(true)
                   {
                       Category = x.Max(y => y.BusinessTeamLeader.FullName?? "Not Approved"),
                       Value = x.Sum(x => x.TotalCost)

@@ -1,6 +1,5 @@
 ﻿var roots = [];
 function GeneratePieChart(id, seriesData) {
-    console.log(seriesData);
     am5.ready(function () {
         DisposeRoot(id);
         var root = am5.Root.new(id);
@@ -23,17 +22,22 @@ function GeneratePieChart(id, seriesData) {
                 valueField: "Value",
                 categoryField: "Category",
                 endAngle: 270,
-                alignLabels: false
+                 alignLabels: false
             })
         );
 
-        //series.labels.template.setAll({
-        //    maxWidth: 150,
-        //    oversizedBehavior: "truncate", // to truncate labels, use "truncate"
-        //    fontSize: 10,
-        //    textType: "circular", inside: true
-        //});
 
+        series.labels.template.setAll({
+            fontSize: 11,
+            text: "{category} : {FormattedValue}",
+            textType: "radial",
+            radius: 0,
+            centerX: am5.percent(100),
+            fill: am5.color(0xffffff)
+        });
+
+        series.slices.template.set("tooltipText", "{category}: {FormattedValue}");
+        /*series.slices.template.set("tooltipText", "{category}: [bold]{valuePercentTotal.formatNumber('0.00')}%[/] ({value})");*/
         series.states.create("hidden", {
             endAngle: -90
         });
@@ -41,16 +45,6 @@ function GeneratePieChart(id, seriesData) {
         // Set data
         // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
         series.data.setAll(seriesData);
-
-        series.labels.template.setAll({
-            fontSize: 11,
-            /* text: "{category}: [bold]{valuePercentTotal.formatNumber('0.00')}%[/] ({value})",*/
-            text: "{category}: {valuePercentTotal.formatNumber('0.00')}%[/]",
-            textType: "radial",
-            radius: 0,
-            centerX: am5.percent(100),
-            fill: am5.color(0xffffff)
-        })
 
         series.appear(1000, 100);
 
