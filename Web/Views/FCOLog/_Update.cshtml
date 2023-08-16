@@ -46,15 +46,15 @@
             </div>
 
             @*  <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Requestor Name/Contractor" } }' />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Requestor Name/Contractor" } }' />
+            </div>
+            </div>*@
             @* <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Department/Extension" } }' />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Department/Extension" } }' />
+            </div>
+            </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
@@ -134,13 +134,13 @@
                 <input type="hidden" id="file-entity-type" asp-for="File.EntityType" class="form-control" />
                 <span asp-validation-for="File.File" class="validation-invalid-label"></span>
                 @*<div class="image-container">
-                        <img src="@Model.File.Url" alt="Image">
-                        <div class="remove-icon" onclick="removeImage(this)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                <path d="M12 2c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm5 14.586l-1.414 1.414-4.586-4.586-4.586 4.586-1.414-1.414 4.586-4.586-4.586-4.586 1.414-1.414 4.586 4.586 4.586-4.586 1.414 1.414-4.586 4.586 4.586 4.586z" />
-                            </svg>
-                        </div>
-                    </div>*@
+                <img src="@Model.File.Url" alt="Image">
+                <div class="remove-icon" onclick="removeImage(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 2c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm5 14.586l-1.414 1.414-4.586-4.586-4.586 4.586-1.414-1.414 4.586-4.586-4.586-4.586 1.414-1.414 4.586 4.586 4.586-4.586 1.414 1.414-4.586 4.586 4.586 4.586z" />
+                </svg>
+                </div>
+                </div>*@
             </div>
 
             <div class="col-lg-4">
@@ -168,12 +168,12 @@
             </div>
 
             @* <div class="col-lg-12">
-                <div class="mb-3">
-                <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
-                <textarea asp-for="AdditionalInformation" type="text" class="form-control">@Model.AdditionalInformation</textarea>
-                <span asp-validation-for="AdditionalInformation" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
+            <textarea asp-for="AdditionalInformation" type="text" class="form-control">@Model.AdditionalInformation</textarea>
+            <span asp-validation-for="AdditionalInformation" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "Label", "Company" } }' />
@@ -227,9 +227,54 @@
                     </tbody>
                 </table>
             </div>
-            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", materialSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" } })
+            @* @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", materialSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" } })
             @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "equipment" }, { "SectionName", "Equipment" } })
             @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", shopSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" } })
+            *@
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="MaterialName" class="form-label fw-600"></label>
+                    <input asp-for="MaterialName" type="text" class="form-control" />
+                    <span asp-validation-for="MaterialName" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="MaterialRate" class="form-label fw-600"></label>
+                    <input asp-for="MaterialRate" type="number" min="0" class="form-control material-estimate est-rate" />
+                    <span asp-validation-for="MaterialRate" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="EquipmentName" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentName" type="text" class="form-control" />
+                    <span asp-validation-for="EquipmentName" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="EquipmentRate" class="form-label fw-600"></label>
+                    <input asp-for="EquipmentRate" type="number" min="0" class="form-control equipment-estimate est-rate" />
+                    <span asp-validation-for="EquipmentRate" class="validation-invalid-label"></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ShopName" class="form-label fw-600"></label>
+                    <input asp-for="ShopName" type="text" class="form-control" />
+                    <span asp-validation-for="ShopName" class="validation-invalid-label"></span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ShopRate" class="form-label fw-600"></label>
+                    <input asp-for="ShopRate" type="number" min="0" class="form-control shop-estimate est-rate" />
+                    <span asp-validation-for="ShopRate" class="validation-invalid-label"></span>
+                </div>
+            </div>
 
             <div class="col-lg-12">
                 <table class="table text-nowrap">
@@ -284,13 +329,13 @@
                 </table>
             </div>
             @*
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <label class="form-label fw-600" asp-for="DuringExecution"></label>
-                <select asp-for="DuringExecution" asp-items="Html.GetEnumSelectList(typeof (DuringExecutionCatalog))" id="during-execution" class="form-control" data-placeholder="Select During Execution"><option></option></select>
-                <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600" asp-for="DuringExecution"></label>
+            <select asp-for="DuringExecution" asp-items="Html.GetEnumSelectList(typeof (DuringExecutionCatalog))" id="during-execution" class="form-control" data-placeholder="Select During Execution"><option></option></select>
+            <span asp-validation-for="DuringExecution" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
             <input asp-for="Approver.Id" type="hidden" />
         </div>
     </div>
@@ -337,8 +382,8 @@
             AddCost(this);
 
         });
-        $(document).off("change", "#contingency");
-        $(document).on("change", "#contingency", function () {
+        $(document).off("change", "#contingency,.est-rate");
+        $(document).on("change", "#contingency, .est-rate", function () {
             Calculate();
         });
         $(document).off("click", ".remove-cost");
