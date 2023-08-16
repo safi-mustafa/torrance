@@ -93,7 +93,7 @@
             </div>
             <div class="col-lg-6" id="file-container">
                 <label asp-for="Photo.File" class="form-label fw-600">Photo</label>
-                <div class="mt-4"><img class="image-thumbnail rounded-circle" src="@Model.Photo?.Url" alt="" style="max-width:80px;display:block;margin-top:-25px;max-height:80px;"></div>
+                <div class="mt-4"><img class="image-thumbnail rounded-circle" src="@Model.Photo?.PreviewImgUrl" attr-data-src="@Model.Photo?.Url" alt="" style="max-width:80px;display:block;margin-top:-25px;max-height:80px;"></div>
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -111,7 +111,7 @@
             </div>
             <div class="col-lg-6" id="file-container">
                 <label asp-for="File.File" class="form-label fw-600"></label>
-                <div class="mt-4"><img class="image-thumbnail rounded-circle" src="@Model.File?.Url" alt="" style="max-width:80px;display:block;margin-top:-25px;max-height:80px;"></div>
+                <div class="mt-4"><img class="image-thumbnail rounded-circle" src="@Model.File?.PreviewImgUrl" attr-data-src="@Model.File?.Url" alt="" style="max-width:80px;display:block;margin-top:-25px;max-height:80px;"></div>
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -323,9 +323,19 @@
 <img src="" class="fullsize">
 <script>$(document).off("click", '.image-thumbnail')
     $(document).on("click", '.image-thumbnail', function () {
-        $(".fullsize").attr("src", $(this).attr("src"));
-        $('.overlay').fadeIn();
-        $('.fullsize').fadeIn();
+        const imageUrl = $(this).attr('attr-data-src');
+        if (imageUrl) {
+            const extension = imageUrl.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+
+                $(".fullsize").attr("src", $(this).attr("src"));
+                $('.overlay').fadeIn();
+                $('.fullsize').fadeIn();
+            } else {
+                // Open in a new tab
+                window.open(imageUrl, '_blank');
+            }
+        }
     });
 
     $(document).off("click", '.overlay')

@@ -1,21 +1,15 @@
-﻿using System;
-using Models.Common;
+﻿using Models.Common;
 using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations.Schema;
 using Helpers.Models.Shared;
 using Models.Common.Interfaces;
 using Enums;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using Models.FCO;
 
 namespace Models
 {
     public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IUnitId, ICompanyId, IApprovalDate
     {
-        public FCOLog()
-        {
-        }
 
         public Status Status { get; set; }
         public string? DescriptionOfFinding { get; set; }

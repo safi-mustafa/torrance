@@ -74,7 +74,7 @@ namespace Web.Controllers
         {
             try
             {
-                return await SetDetailView(id, type, "~/Views/Shared/Crud/DetailView/_DetailForm.cshtml", false);
+                return await SetDetailView(id, type, "~/Views/FCOLog/_DetailForm.cshtml", false);
             }
             catch (Exception ex) { _logger.LogError($"{_controllerName} Detail method threw an exception, Message: {ex.Message}"); }
             return RedirectToAction("Index");

@@ -59,6 +59,39 @@ namespace ViewModels.Shared
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]
         public IFormFile? File { get; set; }
         public string? Url { get; set; } = "";
+        public string PreviewImgUrl
+        {
+            get
+            {
+                var imgExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
+                var previewImgUrl = "";
+                if (imgExtensions.Contains(Type))
+                {
+                    return Url;
+                }
+                else if (Type == ".pdf")
+                {
+                    previewImgUrl = "/img/file-icons/pdf.png";
+                }
+                else if (Type == ".docx")
+                {
+                    previewImgUrl = "/img/file-icons/docx.png";
+                }
+                else if (Type == ".xlsx")
+                {
+                    previewImgUrl = "/img/file-icons/xlsx.png";
+                }
+                else if (Type == ".pptx")
+                {
+                    previewImgUrl = "/img/file-icons/pptx.png";
+                }
+                else
+                {
+                    previewImgUrl = "/img/file-icons/default.png";
+                }
+                return previewImgUrl;
+            }
+        }
         private string? _type;
         public string Type { get => string.IsNullOrEmpty(_type) ? Path.GetExtension(File?.FileName) ?? "" : _type; set => _type = value; }
         public string? Name { get; set; }

@@ -139,11 +139,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<FCOLogDetailViewModel>(dbModel);
-                    var attcs = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && (x.EntityType == AttachmentEntityType.FCOLogPhoto || x.EntityType == AttachmentEntityType.FCOLogFile)).Select(x => new { EntityType = x.EntityType, Id = x.Id, Url = x.Url }).ToListAsync();
+                    var attcs = await _db.Attachments.Where(x => x.EntityId == dbModel.Id && (x.EntityType == AttachmentEntityType.FCOLogPhoto || x.EntityType == AttachmentEntityType.FCOLogFile)).Select(x => new { EntityType = x.EntityType, Id = x.Id, Url = x.Url, Type = x.Type }).ToListAsync();
                     var photo = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogPhoto).FirstOrDefault();
                     var file = attcs.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile).FirstOrDefault();
-                    mappedModel.Photo = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogPhoto, Url = photo?.Url, Id = photo?.Id ?? 0 };
-                    mappedModel.File = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogFile, Url = file?.Url, Id = file?.Id ?? 0 };
+                    mappedModel.Photo = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogPhoto, Url = photo?.Url, Id = photo?.Id ?? 0, Type = photo?.Type ?? "" };
+                    mappedModel.File = new AttachmentModifyViewModel { EntityType = AttachmentEntityType.FCOLogFile, Url = file?.Url, Id = file?.Id ?? 0, Type = file?.Type ?? "" };
                     //mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<FCOLogDetailViewModel> { ReturnModel = mappedModel };
