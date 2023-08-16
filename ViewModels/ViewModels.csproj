@@ -28,10 +28,8 @@
     <Folder Include="OverrideLogs\CraftRates\" />
     <Folder Include="OverrideLogs\LeadPlanners\" />
     <Folder Include="OverrideLogs\OverrideType\" />
-    <Folder Include="FCO\" />
     <Folder Include="FCO\FCOReason\" />
     <Folder Include="FCO\FCOType\" />
-    <Folder Include="FCO\FCOLog\" />
     <Folder Include="FCO\FCOSection\" />
   </ItemGroup>
 

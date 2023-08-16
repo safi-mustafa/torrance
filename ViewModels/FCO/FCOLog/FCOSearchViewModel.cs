@@ -19,6 +19,7 @@ namespace ViewModels
         }
         public string Email { get; set; }
         public bool IsExcelDownload { get; set; }
+        public bool IsRawReport { get; set; } = false;
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
         [Display(Name = "Requestor")]

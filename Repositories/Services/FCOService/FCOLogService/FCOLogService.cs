@@ -166,6 +166,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             try
             {
                 //var check = await _db.FCOLogs.ToListAsync();
+
                 var filters = SetQueryFilter(search);
                 var resultQuery = _db.Set<FCOLog>()
                     .Include(x => x.Unit)
@@ -188,9 +189,17 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
+                 
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
+                    if (typeof(M).Equals(typeof(FCOLogRawReportViewModel)))
+                    {
+                        var maxCount = GetMaxSectionCount();
+                        var reportList = paginatedResult.Items as List<FCOLogRawReportViewModel>;
+                        reportList?.ForEach(x => x.SetSectionAsPerMaxCount(maxCount));
+                        paginatedResult.Items = reportList as List<M>;
+                    }
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
                     return response;
                 }
@@ -543,10 +552,10 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     overrideLogSheet.Cell(rowNumber, 16).Value = logs.ReturnModel.Items[l].ApprovalDateFormatted;
                     overrideLogSheet.Cell(rowNumber, 17).Value = logs.ReturnModel.Items[l].Contractor?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 18).Value = logs.ReturnModel.Items[l].Company?.Name ?? "-";
-                    overrideLogSheet.Cell(rowNumber, 19).Value = logs.ReturnModel.Items[l].Employee?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 19).Value = logs.ReturnModel.Items[l].Employee?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 20).Value = logs.ReturnModel.Items[l].Department?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 21).Value = logs.ReturnModel.Items[l].Unit?.Name ?? "-";
-                    overrideLogSheet.Cell(rowNumber, 22).Value = logs.ReturnModel.Items[l].FCOType?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 22).Value = logs.ReturnModel.Items[l].FCOType?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 23).Value = logs.ReturnModel.Items[l].FCOReason?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 24).Value = logs.ReturnModel.Items[l].DesignatedCoordinator?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 25).Value = logs.ReturnModel.Items[l].AreaExecutionLead?.Name ?? "-";
@@ -614,7 +623,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
         private void SetExcelHeaders(IXLWorksheet fcoLogSheet, long maxSectionRows)
         {
             // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            fcoLogSheet.Cell(1, 1).Value = "FCO No";
+            fcoLogSheet.Cell(1, 1).Value = "FCO#";
             fcoLogSheet.Cell(1, 2).Value = "Additional Information";
             fcoLogSheet.Cell(1, 3).Value = "Equipment Number";
             fcoLogSheet.Cell(1, 4).Value = "Location";
@@ -654,7 +663,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             fcoLogSheet.Cell(1, 38).Value = "Shop Name";
             fcoLogSheet.Cell(1, 39).Value = "Shop Rate";
 
-           
+
 
             int currentColumn = 39;
             for (int i = 0; i < maxSectionRows; i++)
@@ -700,6 +709,19 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 _logger.LogError(ex, "GetFCOComments method threw an exception.");
             }
             return null;
+        }
+
+        public long GetMaxSectionCount()
+        {
+            try
+            {
+                return _db.FCOSections.GroupBy(x => x.FCOLogId).ToList().Max(x => x.Count());
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return 0;
         }
     }
 }
