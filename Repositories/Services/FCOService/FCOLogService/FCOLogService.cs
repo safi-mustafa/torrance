@@ -28,6 +28,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using ViewModels;
 using ViewModels.Notification;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 
 namespace Repositories.Services.AppSettingServices.FCOLogService
@@ -510,76 +511,109 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             {
                 searchModel.IsExcelDownload = true;
                 var response = await GetAll<FCOLogDetailViewModel>(searchModel);
+
                 var logs = response as RepositoryResponseWithModel<PaginatedResultModel<FCOLogDetailViewModel>>;
 
+                // Create a new workbook
                 var workbook = new XLWorkbook();
-                var worksheet = workbook.Worksheets.Add("WeldingRodRecordLogs");
+                var maxSectionRows = logs.ReturnModel.Items.Max(x => x.FCOSections.Count);
+                // Add a new worksheet to the workbook and set its name
+                var overrideLogSheet = workbook.Worksheets.Add("FCOLogs");
 
-                var columnHeaders = new List<string>
+                SetExcelHeaders(overrideLogSheet, maxSectionRows);
+
+                var rowNumber = 1;
+                var overrideCostIndex = 1;
+                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
-                    "Company",
-                    "Department",
-                    "Requestor",
-                    "Submitted Date",
-                    "Submitted Time",
-                    "Unit",
-                    "Calibration Date",
-                    "Fume Control Used",
-                    "Rod Type",
-                    "Twr",
-                    "Weld Method",
-                    "Checked Out",
-                    "Location",
-                    "Rod Checked Out lbs",
-                    "Rod Returned Waste lbs",
-                    "Returned",
-                    "Status",
-                    "Approver"
-                };
-                AddColumnHeaders(worksheet, columnHeaders);
+                    rowNumber = rowNumber + 1;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].SrNoFormatted;
+                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].AdditionalInformation;
+                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].EquipmentNumber;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].Location;
+                    overrideLogSheet.Cell(rowNumber, 5).Value = logs.ReturnModel.Items[l].PreTA;
+                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].ShutdownRequired;
+                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].ScaffoldRequired;
+                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].DescriptionOfFinding;
+                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].AnalysisOfAlternatives;
+                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].EquipmentFailureReport;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].DrawingsAttached;
+                    overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].ScheduleImpact;
+                    overrideLogSheet.Cell(rowNumber, 13).Value = logs.ReturnModel.Items[l].DaysImpacted;
+                    overrideLogSheet.Cell(rowNumber, 14).Value = logs.ReturnModel.Items[l].DuringExecution;
+                    overrideLogSheet.Cell(rowNumber, 15).Value = logs.ReturnModel.Items[l].DateFormatted;
+                    overrideLogSheet.Cell(rowNumber, 16).Value = logs.ReturnModel.Items[l].ApprovalDateFormatted;
+                    overrideLogSheet.Cell(rowNumber, 17).Value = logs.ReturnModel.Items[l].Contractor?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 18).Value = logs.ReturnModel.Items[l].Company?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 19).Value = logs.ReturnModel.Items[l].Employee?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 20).Value = logs.ReturnModel.Items[l].Department?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 21).Value = logs.ReturnModel.Items[l].Unit?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 22).Value = logs.ReturnModel.Items[l].FCOType?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 23).Value = logs.ReturnModel.Items[l].FCOReason?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 24).Value = logs.ReturnModel.Items[l].DesignatedCoordinator?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 25).Value = logs.ReturnModel.Items[l].AreaExecutionLead?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 26).Value = logs.ReturnModel.Items[l].AreaExecutionLeadApprovalDate;
+                    overrideLogSheet.Cell(rowNumber, 27).Value = logs.ReturnModel.Items[l].BusinessTeamLeader?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 28).Value = logs.ReturnModel.Items[l].BusinessTeamLeaderApprovalDate;
+                    overrideLogSheet.Cell(rowNumber, 29).Value = logs.ReturnModel.Items[l].Rejecter?.Name ?? "-";
+                    overrideLogSheet.Cell(rowNumber, 30).Value = logs.ReturnModel.Items[l].RejecterDate;
+                    overrideLogSheet.Cell(rowNumber, 31).Value = logs.ReturnModel.Items[l].TotalCostFormatted;
+                    overrideLogSheet.Cell(rowNumber, 32).Value = logs.ReturnModel.Items[l].TotalHours;
+                    overrideLogSheet.Cell(rowNumber, 33).Value = logs.ReturnModel.Items[l].TotalHeadCount;
+                    overrideLogSheet.Cell(rowNumber, 34).Value = logs.ReturnModel.Items[l].MaterialName;
+                    overrideLogSheet.Cell(rowNumber, 35).Value = logs.ReturnModel.Items[l].MaterialRate;
+                    overrideLogSheet.Cell(rowNumber, 36).Value = logs.ReturnModel.Items[l].EquipmentName;
+                    overrideLogSheet.Cell(rowNumber, 37).Value = logs.ReturnModel.Items[l].EquipmentRate;
+                    overrideLogSheet.Cell(rowNumber, 38).Value = logs.ReturnModel.Items[l].ShopName;
+                    overrideLogSheet.Cell(rowNumber, 39).Value = logs.ReturnModel.Items[l].ShopRate;
 
-                AddDataRows(worksheet, logs.ReturnModel.Items);
+                    int currentColumn = 39;
+                    for (int i = 0; i < maxSectionRows; i++)
+                    {
+                        if (i > (logs.ReturnModel.Items[l].FCOSections.Count - 1))
+                        {
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                        }
+                        else
+                        {
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Name;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].MN;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].DU;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].OverrideType;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Craft.Name;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].RateFormatted;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Estimate;
+                        }
+                    }
 
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Total;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Contingency;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Contingencies;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].SubTotal.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalLabor;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalMaterial;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalEquipment;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalShop;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].SectionTotal;
+                }
                 return workbook;
             }
             catch (Exception ex)
             {
-                // handle exception
-                return null;
-            }
-        }
 
-        private void AddDataRows(IXLWorksheet worksheet, List<FCOLogDetailViewModel> items)
-        {
-            var row = 2;
-            foreach (var item in items)
-            {
-                var logIndex = 0;
-
-                //worksheet.Cell(row, ++logIndex).Value = item.Company != null ? item.Company.Name : "-";
-                worksheet.Cell(row, ++logIndex).Value = item.Department != null ? item.Department.Name : "-";
-                worksheet.Cell(row, ++logIndex).Value = item.Employee != null ? item.Employee.Name : "-";
-                //worksheet.Cell(row, ++logIndex).Value = item.FormattedCreatedDate;
-                //worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
-                //worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
-                //worksheet.Cell(row, ++logIndex).Value = item.FormattedCalibrationDate;
-                //worksheet.Cell(row, ++logIndex).Value = item.FumeControlUsed;
-                //worksheet.Cell(row, ++logIndex).Value = item.RodType != null ? item.RodType.Name : "-";
-                //worksheet.Cell(row, ++logIndex).Value = item.Twr;
-                //worksheet.Cell(row, ++logIndex).Value = item.WeldMethod != null ? item.WeldMethod.Name : "-";
-                //worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOut;
-                //worksheet.Cell(row, ++logIndex).Value = item.Location != null ? item.Location.Name : "-";
-                //worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOutLbs;
-                //worksheet.Cell(row, ++logIndex).Value = item.RodReturnedWasteLbs;
-                //worksheet.Cell(row, ++logIndex).Value = item.DateRodReturned;
-                worksheet.Cell(row, ++logIndex).Value = item.Status;
-                worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
-                row++;
             }
+            return null;
         }
 
 
-        private void SetExcelHeaders(IXLWorksheet fcoLogSheet, long maxCostRows)
+
+        private void SetExcelHeaders(IXLWorksheet fcoLogSheet, long maxSectionRows)
         {
             // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             fcoLogSheet.Cell(1, 1).Value = "FCO No";
@@ -594,45 +628,58 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             fcoLogSheet.Cell(1, 10).Value = "Equipment Failure Report";
             fcoLogSheet.Cell(1, 11).Value = "Drawings Attached";
             fcoLogSheet.Cell(1, 12).Value = "Schedule Impact";
-            fcoLogSheet.Cell(1, 13).Value = "Days Impacted";
+            fcoLogSheet.Cell(1, 13).Value = "Days Impact";
+            fcoLogSheet.Cell(1, 14).Value = "During Execution";
+            fcoLogSheet.Cell(1, 15).Value = "Date";
+            fcoLogSheet.Cell(1, 16).Value = "Approval Date";
+            fcoLogSheet.Cell(1, 17).Value = "Contractor";
+            fcoLogSheet.Cell(1, 18).Value = "Company";
+            fcoLogSheet.Cell(1, 19).Value = "Employee";
+            fcoLogSheet.Cell(1, 20).Value = "Department";
+            fcoLogSheet.Cell(1, 21).Value = "Unit";
+            fcoLogSheet.Cell(1, 22).Value = "FCO Type";
+            fcoLogSheet.Cell(1, 23).Value = "FCO Reason";
+            fcoLogSheet.Cell(1, 24).Value = "Designated Coordinator";
+            fcoLogSheet.Cell(1, 25).Value = "Area Execution Lead";
+            fcoLogSheet.Cell(1, 26).Value = "Area Execution Lead Approval Date";
+            fcoLogSheet.Cell(1, 27).Value = "Business Team Leader";
+            fcoLogSheet.Cell(1, 28).Value = "Business Team Leader Approval Date";
+            fcoLogSheet.Cell(1, 29).Value = "Rejecter";
+            fcoLogSheet.Cell(1, 30).Value = "Rejecter Date";
+            fcoLogSheet.Cell(1, 31).Value = "Total Cost";
+            fcoLogSheet.Cell(1, 32).Value = "Total Hours";
+            fcoLogSheet.Cell(1, 33).Value = "Total Head Count";
+            fcoLogSheet.Cell(1, 34).Value = "Material Name";
+            fcoLogSheet.Cell(1, 35).Value = "Material Rate";
+            fcoLogSheet.Cell(1, 36).Value = "Equipment Name";
+            fcoLogSheet.Cell(1, 37).Value = "Equipment Rate";
+            fcoLogSheet.Cell(1, 38).Value = "Shop Name";
+            fcoLogSheet.Cell(1, 39).Value = "Shop Rate";
 
-            int currentColumn = 12;
-            for (int i = 0; i < maxCostRows; i++)
+           
+
+            int currentColumn = 39;
+            for (int i = 0; i < maxSectionRows; i++)
             {
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
-                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
-                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
-                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
-                fcoLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Name - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"MN - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"DU - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Type - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Craft - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Rate - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Estimate - {i + 1}";
             }
 
             currentColumn += 1;
-            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Hours";
-            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Head Count";
-            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Cost";
-            fcoLogSheet.Cell(1, currentColumn++).Value = "Status";
-            fcoLogSheet.Cell(1, currentColumn++).Value = "Approver";
-
-            //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
-            //overrideLogCostSheet.Cell($"B1").Value = "Override Type";
-            //overrideLogCostSheet.Cell($"C1").Value = "Craft";
-            //overrideLogCostSheet.Cell($"D1").Value = "Head Count";
-            //overrideLogCostSheet.Cell($"E1").Value = "Hours";
-            //overrideLogCostSheet.Cell($"F1").Value = "Cost";
-
-        }
-
-
-        private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
-        {
-            var row = worksheet.Row(1);
-            //  row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            for (int i = 0; i < headers.Count; i++)
-            {
-                row.Cell(i + 1).Value = headers[i];
-            }
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Contingency";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Contingencies";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Sub Total";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Labor";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Material";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Equipment";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Shop";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Section Total";
         }
 
         public async Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId)
