@@ -385,7 +385,7 @@
         $(document).off("click", ".remove-cost");
         $(document).on("click", ".remove-cost", function () {
             $(this).closest("tr").remove();
-            RefreshInputIndexes("#labour-table tr", "labour-section-row", "FCOLabourSections");
+            RefreshInputIndexes("#labour-table tr", "labour-section-row", "FCOSections");
         });
 
         $(document).on("input", ".rate-input", function () {

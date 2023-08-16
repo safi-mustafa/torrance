@@ -38,7 +38,7 @@ namespace ViewModels
 
     public class FCOLogAPISearchViewModel : BaseSearchModel
     {
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         public long DepartmentId { get; set; }
 
@@ -51,6 +51,6 @@ namespace ViewModels
         public Status? Status { get; set; } = null;
         public long CompanyId { get; set; }
         public long ApproverId { get; set; }
-        public List<string> SelectedIds { get; set; }
+        public List<string>? SelectedIds { get; set; }
     }
 }

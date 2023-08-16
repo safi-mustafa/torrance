@@ -86,22 +86,13 @@ namespace ViewModels
         public double TotalHours { get => FCOSections.Sum(x => x.DU); }
         public double TotalHeadCount { get => FCOSections.Sum(x => x.MN); }
 
-        public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
-        private List<FCOSectionModifyViewModel>? _fCOSections;
-        [BindNever]
-        public List<FCOSectionModifyViewModel>? FCOSections
-        {
-            get
-            {
-                if (_fCOSections == null || _fCOSections.Count < 1)
-                    return FCOLabourSections?.Concat(FCOMaterialSections?.Concat(FCOEquipmentSections?.Concat(FCOShopSections))).ToList() ?? new List<FCOSectionModifyViewModel>();
-                return _fCOSections;
-            }
-            set => _fCOSections = value;
-        }
+        //public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        //private List<FCOSectionModifyViewModel>? _fCOSections;
+        //[BindNever]
+        public List<FCOSectionModifyViewModel>? FCOSections { get; set; }
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
 
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
