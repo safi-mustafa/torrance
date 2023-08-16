@@ -110,7 +110,7 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
-        public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate)), 2).FixNan(); }
+        public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate) + MaterialRate + EquipmentRate), 2).FixNan(); }
         public double Contingency { get; set; }
         public double Contingencies
         {
@@ -134,7 +134,7 @@ namespace ViewModels
         {
             get
             {
-                var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate);
+                var materialEstimate = MaterialRate;
                 return Math.Round((materialEstimate + (materialEstimate / Contingency)), 2).FixNan();
             }
         }
@@ -142,7 +142,7 @@ namespace ViewModels
         {
             get
             {
-                var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate);
+                var equipmentEstimate = EquipmentRate;
                 return Math.Round((equipmentEstimate + (equipmentEstimate / Contingency)), 2).FixNan();
             }
         }
@@ -150,7 +150,7 @@ namespace ViewModels
         {
             get
             {
-                var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate);
+                var shopEstimate = ShopRate;
                 return Math.Round((shopEstimate + (shopEstimate / Contingency)), 2).FixNan();
             }
         }
