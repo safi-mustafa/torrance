@@ -17,7 +17,7 @@ namespace ViewModels
     {
         public long Id { get; set; }
         //public Status Status { get; set; }
-        [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
+        [Display(Name = "Description")]
         public string? DescriptionOfFinding { get; set; }
         [Display(Name = "Additional Information")]
         public string? AdditionalInformation { get; set; }
@@ -66,7 +66,11 @@ namespace ViewModels
         public EmployeeBriefViewModel? Employee { get; set; } = new();
         public DepartmentBriefViewModel Department { get; set; } = new();
         public UnitBriefViewModel Unit { get; set; } = new();
+
+        [Display(Name = "FCO Type")]
         public FCOTypeBriefViewModel? FCOType { get; set; } = new();
+
+        [Display(Name = "FCO Reason")]
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new();
         [Display(Name = "Designated Coordinator")]
         public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }

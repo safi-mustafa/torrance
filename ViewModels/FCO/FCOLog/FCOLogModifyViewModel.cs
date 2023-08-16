@@ -19,7 +19,7 @@ namespace ViewModels
     public class FCOLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>, IIdentitifier, IApprove
     {
         public Status Status { get; set; }
-        [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
+        [Display(Name = "Description")]
         public string? DescriptionOfFinding { get; set; }
         [Display(Name = "Additional Information")]
         public string? AdditionalInformation { get; set; }
