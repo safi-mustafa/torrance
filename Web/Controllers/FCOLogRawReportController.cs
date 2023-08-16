@@ -53,11 +53,11 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total HeadCount",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Material Name",data = "MaterialName", orderable=true},
-                new DataTableViewModel{title = "Material Rate",data = "MaterialRate", orderable=true},
+                new DataTableViewModel{title = "Material Rate",data = "MaterialRate",className="dt-currency", orderable=true},
                 new DataTableViewModel{title = "Equipment Name",data = "EquipmentName", orderable=true},
-                new DataTableViewModel{title = "Equipment Rate",data = "EquipmentRate", orderable=true},
+                new DataTableViewModel{title = "Equipment Rate",data = "EquipmentRate",className="dt-currency", orderable=true},
                 new DataTableViewModel{title = "Shop Name",data = "ShopName", orderable=true},
-                new DataTableViewModel{title = "Shop Rate",data = "ShopRate", orderable=true},
+                new DataTableViewModel{title = "Shop Rate",data = "ShopRate",className="dt-currency", orderable=true},
             });
 
 
@@ -73,7 +73,7 @@ namespace Web.Controllers
                         new DataTableViewModel{title = $"DU - {i + 1}",data = $"FCOSections.{i}.DU"},
                         new DataTableViewModel{title = $"Type - {i + 1}",data = $"FCOSections.{i}.OverrideTypeFormatted"},
                         new DataTableViewModel{title = $"Craft - {i + 1}",data = $"FCOSections.{i}.CraftRateFormatted"},
-                        new DataTableViewModel{title = $"Rate - {i + 1}",data = $"FCOSections.{i}.Rate"},
+                        new DataTableViewModel{title = $"Rate - {i + 1}",data = $"FCOSections.{i}.Rate",className="dt-currency"},
                         new DataTableViewModel{title = $"Estimate - {i + 1}",data = $"FCOSections.{i}.Estimate"},
                     });
                 }
@@ -81,15 +81,15 @@ namespace Web.Controllers
 
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Total",data = "Total"},
+                new DataTableViewModel{title = "Total",data = "Total", className = "dt-currency"},
                 new DataTableViewModel{title = "Contingency",data = "Contingency"},
-                new DataTableViewModel{title = "Contingencies",data = "Contingencies", orderable=true},
-                new DataTableViewModel{title = "Sub Total",data = "SubTotal", orderable=true},
-                new DataTableViewModel{title = "Total Labor",data = "TotalLabor", orderable=true},
-                new DataTableViewModel{title = "Total Material",data = "TotalMaterial", orderable=true},
-                new DataTableViewModel{title = "Total Equipment",data = "TotalEquipment", orderable=true},
-                new DataTableViewModel{title = "Total Shop",data = "TotalShop",sortingColumn="DescriptionOfFinding", orderable=true},
-                new DataTableViewModel{title = "Section Total",data = "SectionTotal", orderable=true},
+                new DataTableViewModel{title = "Contingencies",data = "Contingencies",className="dt-currency", orderable=true},
+                new DataTableViewModel{title = "Sub Total",data = "SubTotal",className="dt-currency", orderable=true},
+                new DataTableViewModel{title = "Total Labor",data = "TotalLabor",className="dt-currency", orderable=true},
+                new DataTableViewModel{title = "Total Material",data = "TotalMaterial",className="dt-currency", orderable=true},
+                new DataTableViewModel{title = "Total Equipment",data = "TotalEquipment",className="dt-currency", orderable=true},
+                new DataTableViewModel{title = "Total Shop",data = "TotalShop",className="dt-currency",sortingColumn="DescriptionOfFinding", orderable=true},
+                new DataTableViewModel{title = "Section Total",data = "SectionTotal",className="dt-currency", orderable=true},
             });
 
 

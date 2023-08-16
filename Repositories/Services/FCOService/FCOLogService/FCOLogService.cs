@@ -555,10 +555,10 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     overrideLogSheet.Cell(rowNumber, 5).Value = logs.ReturnModel.Items[l].PreTA;
                     overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].ShutdownRequired;
                     overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].ScaffoldRequired;
-                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].Photo.Url;
+                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].Photo?.Url;
                     overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].EquipmentNumber;
                     overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].DescriptionOfFinding;
-                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].File.Url;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].File?.Url;
                     overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].FCOType?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 13).Value = logs.ReturnModel.Items[l].FCOReason?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 14).Value = logs.ReturnModel.Items[l].OtherDocumentionFormatted;
@@ -575,11 +575,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     overrideLogSheet.Cell(rowNumber, 25).Value = logs.ReturnModel.Items[l].TotalHours;
                     overrideLogSheet.Cell(rowNumber, 26).Value = logs.ReturnModel.Items[l].TotalHeadCount;
                     overrideLogSheet.Cell(rowNumber, 27).Value = logs.ReturnModel.Items[l].MaterialName;
-                    overrideLogSheet.Cell(rowNumber, 28).Value = logs.ReturnModel.Items[l].MaterialRate;
+                    overrideLogSheet.Cell(rowNumber, 28).Value = logs.ReturnModel.Items[l].MaterialRate.ToString("C");
                     overrideLogSheet.Cell(rowNumber, 29).Value = logs.ReturnModel.Items[l].EquipmentName;
-                    overrideLogSheet.Cell(rowNumber, 30).Value = logs.ReturnModel.Items[l].EquipmentRate;
+                    overrideLogSheet.Cell(rowNumber, 30).Value = logs.ReturnModel.Items[l].EquipmentRate.ToString("C");
                     overrideLogSheet.Cell(rowNumber, 31).Value = logs.ReturnModel.Items[l].ShopName;
-                    overrideLogSheet.Cell(rowNumber, 32).Value = logs.ReturnModel.Items[l].ShopRate;
+                    overrideLogSheet.Cell(rowNumber, 32).Value = logs.ReturnModel.Items[l].ShopRate.ToString("C");
 
                     int currentColumn = 39;
                     for (int i = 0; i < maxSectionRows; i++)
@@ -606,15 +606,15 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         }
                     }
 
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Total;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Total.ToString("C");
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Contingency;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Contingencies;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Contingencies.ToString("C");
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].SubTotal.ToString("C");
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalLabor;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalMaterial;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalEquipment;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalShop;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].SectionTotal;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalLabor.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalMaterial.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalEquipment.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalShop.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].SectionTotal.ToString("C");
                 }
                 return workbook;
             }

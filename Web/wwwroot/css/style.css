@@ -99,6 +99,9 @@ a:focus {
     border: 2px solid #ccc; /* Adjust the border color and thickness as needed */
     cursor: pointer;
 }
+.file-container {
+    cursor: pointer;
+}
 
 .rounded-image {
     display: block;
