@@ -11,10 +11,11 @@ using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord;
+using Models.Common;
 
 namespace ViewModels
 {
-    public class FCOLogRawReportViewModel : LogCommonDetailViewModel, IApprove, ISrNo
+    public class FCOLogRawReportViewModel : LogCommonDetailViewModel, IIdentitifier, IApprove, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>
     {
         public long Id { get; set; }
         //public Status Status { get; set; }

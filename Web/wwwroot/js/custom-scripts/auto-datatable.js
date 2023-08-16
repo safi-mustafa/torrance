@@ -144,6 +144,34 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
 
     });
 
+    $(document).off("click", '.image-container')
+    $(document).on("click", '.image-container', function () {
+        $(".fullsize").attr("src", $(this).find('.rounded-image').attr("src"));
+        $('.overlay').fadeIn();
+        $('.fullsize').fadeIn();
+    });
+    $(document).off("click", ".file-container");
+    $(document).on("click", ".file-container", function () {
+        var attachmentType = $(this).find('img').data("attachment-type");
+        var dataSrc = $(this).find('img').data("src");
+        var imageUrl = $(this).find('img').attr("src");
+
+        if (attachmentType === "file") {
+            // Open URL in new tab
+            window.open(dataSrc, "_blank");
+        } else if (attachmentType === "image") {
+            // Display image overlay
+            $(".fullsize").attr("src", imageUrl);
+            $('.overlay').fadeIn();
+            $('.fullsize').fadeIn();
+        }
+    });
+    $(document).off("click", '.overlay')
+    $(document).on("click", '.overlay', function () {
+        $('.overlay').fadeOut();
+        $('.fullsize').fadeOut();
+    });
+
     FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength);
 }
 function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength) {
@@ -255,7 +283,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                                 return row[dtColumns[meta.col].exportColumn];
                             }
                             else {
-                                return RenderHtml(data, dtColumns, meta);
+                                return RenderHtml(data, dtColumns, row, meta);
                             }
                         }
                         else if (dtColumns[meta.col].format === 'numeric') {
@@ -265,7 +293,13 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                             return '';
                         }
                         else {
-                            return data;
+                            if (data == undefined || data == null) {
+                                return "-";
+                            }
+                            else {
+                                return data;
+                            }
+                            
                         }
                     }
                     else {
@@ -537,7 +571,7 @@ function getFinalCellClasses(cssClass, cellData) {
     }
 
 }
-function RenderHtml(data, dtColumns, meta) {
+function RenderHtml(data, dtColumns, row, meta) {
     if (dtColumns[meta.col].formatValue === "checkbox") {
         return '<input type="checkbox" class="checkbox-items ' + dtColumns[meta.col].className + '" value="' + data + '" />';
     }
@@ -556,6 +590,16 @@ function RenderHtml(data, dtColumns, meta) {
     else if (dtColumns[meta.col].formatValue === "image") {
         if (data != "" && data != null && data != undefined)
             return '<div class="image-container"> <img src="' + data + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
+        else {
+            return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
+        }
+    }
+    else if (dtColumns[meta.col].formatValue === "file") {
+        let propertyName = dtColumns[meta.col].data.split(".")[0];
+        let imageUrl = row[propertyName]?.PreviewImgUrl;
+        let attachmentType = row[propertyName]?.AttachmentTypeStr;
+        if (data != "" && data != null && data != undefined)
+            return '<div class="file-container"> <img data-attachment-type="' + attachmentType + '" data-src="' + data + '" src="' + imageUrl + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
         else {
             return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
         }

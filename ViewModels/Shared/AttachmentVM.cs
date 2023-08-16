@@ -9,6 +9,7 @@ namespace ViewModels.Shared
 {
     public class AttachmentVM : BaseCreateVM, IFileModel, IAttachmentUrl, IBaseCrudViewModel
     {
+        
         [DataType(DataType.Upload)]
         [MaxFileSize(25 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".pptx", ".png", ".jpeg", ".pdf", ".docx", ".xlsx" })]
@@ -46,6 +47,7 @@ namespace ViewModels.Shared
 
     public class AttachmentModifyViewModel : BaseUpdateVM, IFileModel, IAttachmentUrl, IBaseCrudViewModel, IIdentitifier
     {
+        private List<string> _imgExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
         public AttachmentModifyViewModel()
         {
 
@@ -63,9 +65,8 @@ namespace ViewModels.Shared
         {
             get
             {
-                var imgExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
                 var previewImgUrl = "";
-                if (imgExtensions.Contains(Type))
+                if (_imgExtensions.Contains(Type))
                 {
                     return Url;
                 }
@@ -90,6 +91,19 @@ namespace ViewModels.Shared
                     previewImgUrl = "/img/file-icons/default.png";
                 }
                 return previewImgUrl;
+            }
+        }
+        public string AttachmentTypeStr
+        {
+            get
+            {
+                //used in datatable library
+                if (!_imgExtensions.Contains(Type))
+                {
+                    return "file";
+                }
+                return "image";
+                
             }
         }
         private string? _type;

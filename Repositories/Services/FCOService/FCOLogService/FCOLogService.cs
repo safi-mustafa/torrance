@@ -191,8 +191,16 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
-
+                    var attachments = await _db.Attachments.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile || x.EntityType == AttachmentEntityType.FCOLogPhoto)
+                          .ToListAsync();
+                    var mappedAttachments = _mapper.Map<List<AttachmentModifyViewModel>>(attachments);
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var paginatedItem in paginatedResult.Items)
+                    {
+                        var item = paginatedItem as IFCOLogAttachment<AttachmentModifyViewModel>;
+                        item.Photo = mappedAttachments.Where(x => x.EntityId == (paginatedItem as IIdentitifier).Id && x.EntityType == AttachmentEntityType.FCOLogPhoto).FirstOrDefault();
+                        item.File = mappedAttachments.Where(x => x.EntityId == (paginatedItem as IIdentitifier).Id && x.EntityType == AttachmentEntityType.FCOLogFile).FirstOrDefault();
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     if (typeof(M).Equals(typeof(FCOLogRawReportViewModel)))
@@ -231,6 +239,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await _db.Set<FCOLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     //saving Attachment
+                    model.Photo.EntityType = AttachmentEntityType.FCOLogPhoto;
+                    model.File.EntityType = AttachmentEntityType.FCOLogFile;
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
 
@@ -269,6 +279,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
                         //update attachments
+                        model.Photo.EntityType = AttachmentEntityType.FCOLogPhoto;
+                        model.File.EntityType = AttachmentEntityType.FCOLogFile;
                         await AddAttachment(model.Photo, model.Id);
                         await AddAttachment(model.File, model.Id);
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };

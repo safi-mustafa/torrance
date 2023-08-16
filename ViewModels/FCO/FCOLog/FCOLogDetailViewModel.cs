@@ -10,10 +10,11 @@ using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
 using ViewModels.WeldingRodRecord;
+using Models.Common;
 
 namespace ViewModels
 {
-    public class FCOLogDetailViewModel : LogCommonDetailViewModel, IApprove, ISrNo
+    public class FCOLogDetailViewModel : LogCommonDetailViewModel, IIdentitifier, IApprove, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>
     {
         public long Id { get; set; }
         //public Status Status { get; set; }
@@ -134,6 +135,8 @@ namespace ViewModels
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
+
+        public List<AttachmentModifyViewModel> Attachments { get; set; }
         public double Total { get => Math.Round((FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate) + MaterialRate + EquipmentRate), 2).FixNan(); }
         public double Contingency { get; set; }
         public double Contingencies
