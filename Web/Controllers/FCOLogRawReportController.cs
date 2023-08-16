@@ -79,7 +79,7 @@ namespace Web.Controllers
                         new DataTableViewModel{title = $"MN - {i + 1}",data = $"FCOSections.{i}.MN"},
                         new DataTableViewModel{title = $"DU - {i + 1}",data = $"FCOSections.{i}.DU"},
                         new DataTableViewModel{title = $"Type - {i + 1}",data = $"FCOSections.{i}.OverrideTypeFormatted"},
-                        new DataTableViewModel{title = $"Craft - {i + 1}",data = $"FCOSections.{i}.Craft.Name"},
+                        new DataTableViewModel{title = $"Craft - {i + 1}",data = $"FCOSections.{i}.CraftRateFormatted"},
                         new DataTableViewModel{title = $"Rate - {i + 1}",data = $"FCOSections.{i}.Rate"},
                         new DataTableViewModel{title = $"Estimate - {i + 1}",data = $"FCOSections.{i}.Estimate"},
                     });

@@ -10,9 +10,6 @@ using ViewModels.WeldingRodRecord;
 using ViewModels.Common.Company;
 using Helpers.Double;
 using Models.Common;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ViewModels
 {
@@ -77,7 +74,7 @@ namespace ViewModels
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new(true);
         public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
         public DateTime? AreaExecutionLeadApprovalDate { get; set; }
-        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public BusinessTeamLeaderBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
         public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
         public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
         public DateTime? RejecterDate { get; set; }
@@ -92,7 +89,7 @@ namespace ViewModels
         //public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
         //private List<FCOSectionModifyViewModel>? _fCOSections;
         //[BindNever]
-        public List<FCOSectionModifyViewModel>? FCOSections { get; set; }
+        public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
 
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);

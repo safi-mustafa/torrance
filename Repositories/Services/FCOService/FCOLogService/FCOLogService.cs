@@ -395,8 +395,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 EntityId = model.Id,
                 EventType = eventType,
                 EntityType = NotificationEntityType.FCOLog,
-                IdentifierKey = "TWR#",
-                //IdentifierValue = model.Twr,
+                IdentifierKey = "FCO#",
+                IdentifierValue = model.SrNo.ToString(),
                 //SendTo = model?.Approver?.Id.ToString(),
                 User = userFullName
             };
