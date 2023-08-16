@@ -10,8 +10,7 @@ using ViewModels.Common.Company;
 using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels;
-using Repositories.Services.AppSettingServices.WRRLogService;
-using ViewModels.OverrideLogs.ORLog;
+using Repositories.Services.AppSettingServices;
 
 namespace Web.Controllers
 {
@@ -215,6 +214,6 @@ namespace Web.Controllers
             return View("_Comment", comments);
         }
 
-      
+
     }
 }

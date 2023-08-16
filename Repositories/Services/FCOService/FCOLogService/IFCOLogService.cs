@@ -7,7 +7,7 @@ using ViewModels;
 using Enums;
 using Centangle.Common.ResponseHelpers.Models;
 
-namespace Repositories.Services.AppSettingServices.WRRLogService
+namespace Repositories.Services.AppSettingServices
 {
     public interface IFCOLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()

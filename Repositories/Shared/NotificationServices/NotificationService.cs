@@ -250,6 +250,23 @@ namespace Repositories.Shared.NotificationServices
                     },
                 }).FirstOrDefaultAsync();
             }
+            else if (viewModel.EntityType == NotificationEntityType.FCOLog)
+            {
+                association = await _db.FCOLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
+                new ApproverAssociationsViewModel
+                {
+                    Department = new DepartmentBriefViewModel
+                    {
+                        Id = x.DepartmentId,
+                        Name = x.Department.Name
+                    },
+                    Unit = new UnitBriefViewModel()
+                    {
+                        Id = x.UnitId,
+                        Name = x.Unit.Name
+                    },
+                }).FirstOrDefaultAsync();
+            }
             else
             {
                 association = await _db.OverrideLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>

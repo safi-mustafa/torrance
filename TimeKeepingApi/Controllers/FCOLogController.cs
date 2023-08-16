@@ -4,7 +4,7 @@ using AutoMapper;
 using Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Repositories.Shared.UserInfoServices;
-using Repositories.Services.AppSettingServices.WRRLogService;
+using Repositories.Services.AppSettingServices;
 using ViewModels;
 using Enums;
 using System.Net;
@@ -34,7 +34,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<FCOLogDetailViewModel>>(result);
         }
 
-        public override Task<IActionResult> Post([FromBody] FCOLogCreateViewModel model)
+        public override Task<IActionResult> Post([FromForm] FCOLogCreateViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
@@ -56,17 +56,17 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = ("Admin,SuperAdmin,Approver"))]
-        [HttpPut("{id}/{status}")]
+        [HttpPut("{id}/{status}/{approverId}/{comment}/{approverType}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public virtual async Task<IActionResult> Approve(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId, string comment, ApproverType approverType)
+        public virtual async Task<IActionResult> Approve(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid? notificationId, string? comment, ApproverType approverType)
         {
-            var result = await _fCOLogService.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId, comment, approverType);
+            var result = await _fCOLogService.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId ?? new Guid(), comment ?? "", approverType);
             return ReturnProcessedResponse(result);
         }
-        public override Task<IActionResult> Put([FromBody] FCOLogModifyViewModel model)
+        public override Task<IActionResult> Put([FromForm] FCOLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();

@@ -59,6 +59,7 @@ using Repositories.Services.AppSettingServices.FCOTypeService;
 using Repositories;
 using Repositories.Services.AppSettingServices.FCOReasonService;
 using Repositories.Services.AppSettingServices.FCOLogService;
+using Repositories.Services.AppSettingServices;
 
 namespace Web.Extensions
 {

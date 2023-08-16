@@ -450,7 +450,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             type = "FCO";
                             identifierKey = "FCO#";
                             identifier = (logRecord as FCOLog).SrNo.ToString();
-                            notificationEntityType = NotificationEntityType.TOTLog;
+                            notificationEntityType = NotificationEntityType.FCOLog;
                             var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                             string notificationTitle = $"{type} Log {status}";
                             //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
@@ -545,10 +545,10 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     overrideLogSheet.Cell(rowNumber, 16).Value = logs.ReturnModel.Items[l].ApprovalDateFormatted;
                     overrideLogSheet.Cell(rowNumber, 17).Value = logs.ReturnModel.Items[l].Contractor?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 18).Value = logs.ReturnModel.Items[l].Company?.Name ?? "-";
-                    overrideLogSheet.Cell(rowNumber, 19).Value = logs.ReturnModel.Items[l].Employee?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 19).Value = logs.ReturnModel.Items[l].Employee?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 20).Value = logs.ReturnModel.Items[l].Department?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 21).Value = logs.ReturnModel.Items[l].Unit?.Name ?? "-";
-                    overrideLogSheet.Cell(rowNumber, 22).Value = logs.ReturnModel.Items[l].FCOType?.Name?? "-";
+                    overrideLogSheet.Cell(rowNumber, 22).Value = logs.ReturnModel.Items[l].FCOType?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 23).Value = logs.ReturnModel.Items[l].FCOReason?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 24).Value = logs.ReturnModel.Items[l].DesignatedCoordinator?.Name ?? "-";
                     overrideLogSheet.Cell(rowNumber, 25).Value = logs.ReturnModel.Items[l].AreaExecutionLead?.Name ?? "-";
@@ -656,7 +656,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             fcoLogSheet.Cell(1, 38).Value = "Shop Name";
             fcoLogSheet.Cell(1, 39).Value = "Shop Rate";
 
-           
+
 
             int currentColumn = 39;
             for (int i = 0; i < maxSectionRows; i++)

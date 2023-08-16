@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
-using ViewModels.Authentication.Approver;
+﻿using Microsoft.AspNetCore.Authorization;
 using Web.Controllers.SharedControllers;
 using AutoMapper;
-using Repositories.Services.AppSettingServices.ApproverService;
 using ViewModels.DataTable;
 using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common;
@@ -13,7 +9,7 @@ using Enums;
 using Centangle.Common.ResponseHelpers.Models;
 using ViewModels.TimeOnTools.TOTLog;
 using Repositories.Services.TimeOnToolServices.TOTLogService;
-using Repositories.Services.AppSettingServices.WRRLogService;
+using Repositories.Services.AppSettingServices;
 using ViewModels.WeldingRodRecord.WRRLog;
 using Helpers.Extensions;
 using ViewModels.CRUD;
@@ -24,8 +20,7 @@ using Repositories.Services.OverrideLogServices.ORLogService;
 using static Repositories.Services.CommonServices.ApprovalService.ApprovalService;
 using ViewModels.Authentication.User;
 using ViewModels;
-using Models.Common.Interfaces;
-using Models.Common.Interfaces.Approval;
+using Repositories.Services.AppSettingServices.WRRLogService;
 
 namespace Web.Controllers
 {

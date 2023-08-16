@@ -268,6 +268,7 @@ namespace Models.Mapper
                 .ForMember(x => x.FCOReason, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(dest => dest.ContractorId, act => act.Condition(src => (src.Contractor.Id != 0)))
                 .ForMember(src => src.ContractorId, opt => opt.MapFrom(dest => dest.Contractor.Id))
                 .ForMember(x => x.Contractor, opt => opt.Ignore())
                 .ForMember(src => src.AreaExecutionLeadId, opt => opt.MapFrom(dest => dest.AreaExecutionLead.Id))
