@@ -14,6 +14,12 @@ namespace ViewModels
         public FCOSectionModifyViewModel()
         {
         }
+        public FCOSectionModifyViewModel(bool fixNullableProperties)
+        {
+            Name = "-";
+            Craft = new CraftSkillForFCOLogBriefViewModel { Name = "-" };
+            Rate = 0;
+        }
         [Display(Name = "DU")]
         [Range(1, double.MaxValue, ErrorMessage = "The field DU must be greater than zero.")]
         [Required]
