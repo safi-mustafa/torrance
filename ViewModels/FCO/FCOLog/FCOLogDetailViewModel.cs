@@ -78,10 +78,13 @@ namespace ViewModels
         public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }
 
         public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? AreaExecutionLeadApprovalDate { get; set; }
-        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public BusinessTeamLeaderBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
         public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? RejecterDate { get; set; }
 
         public double TotalCost { get; set; }

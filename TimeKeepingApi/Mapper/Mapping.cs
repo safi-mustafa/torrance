@@ -190,6 +190,20 @@ namespace Torrance.Api.Mapper
             //Company Manager
             CreateMap<ToranceUser, CompanyManagerDetailViewModel>().ReverseMap();
 
+            //FCOReason
+            CreateMap<FCOReasonModifyViewModel, FCOReason>().ReverseMap();
+            CreateMap<FCOReason, FCOReasonDetailViewModel>().ReverseMap();
+            CreateMap<FCOReasonModifyViewModel, FCOReasonDetailViewModel>().ReverseMap();
+            CreateMap<FCOReason, FCOReasonBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FCOReasonBriefViewModel>().ReverseMap();
+
+            //FCOType
+            CreateMap<FCOTypeModifyViewModel, FCOType>().ReverseMap();
+            CreateMap<FCOType, FCOTypeDetailViewModel>().ReverseMap();
+            CreateMap<FCOTypeModifyViewModel, FCOTypeDetailViewModel>().ReverseMap();
+            CreateMap<FCOType, FCOTypeBriefViewModel>().ReverseMap();
+            CreateMap<BaseBriefVM, FCOTypeBriefViewModel>().ReverseMap();
+
             //FCOLog
             CreateMap<FCOLogModifyViewModel, FCOLog>()
                 .ForMember(src => src.DepartmentId, opt => opt.MapFrom(dest => dest.Department.Id))

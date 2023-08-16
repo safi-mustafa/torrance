@@ -55,6 +55,10 @@ using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
+using Repositories;
+using Repositories.Services.AppSettingServices.FCOReasonService;
+using Repositories.Services.AppSettingServices.FCOTypeService;
+using Repositories.Services.AppSettingServices.FCOLogService;
 
 namespace Web.Extensions
 {
@@ -219,6 +223,9 @@ namespace Web.Extensions
             services.AddScoped(typeof(ILeadPlannerService<,,>), typeof(LeadPlannerService<,,>));
             services.AddScoped(typeof(IOverrideTypeService<,,>), typeof(OverrideTypeService<,,>));
             services.AddScoped(typeof(IReasonForRequestService<,,>), typeof(ReasonForRequestService<,,>));
+            services.AddScoped(typeof(IFCOTypeService<,,>), typeof(FCOTypeService<,,>));
+            services.AddScoped(typeof(IFCOReasonService<,,>), typeof(FCOReasonService<,,>));
+            services.AddScoped(typeof(IFCOLogService<,,>), typeof(FCOLogService<,,>));
             services.AddScoped(typeof(IDelayTypeService<,,>), typeof(DelayTypeService<,,>));
             services.AddScoped(typeof(IApproverService<,,>), typeof(ApproverService<,,>));
             services.AddScoped(typeof(IPossibleApproverService), typeof(PossibleApproverService));

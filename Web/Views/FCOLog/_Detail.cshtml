@@ -10,6 +10,9 @@
     var materialSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).ToList();
     var equipmentSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).ToList();
     var shopSection = Model.FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).ToList();
+
+    var isApprovedByAreaExecutionLead = Model.AreaExecutionLead?.Id > 0 ? true : false;
+    var isApprovedByBusinessTeamLeader = Model.BusinessTeamLeader?.Id > 0 ? true : false;
 }
 <style>
     .overlay {
@@ -284,45 +287,48 @@
                 <div>@(Model.DuringExecution == null ? "-" : Model.DuringExecution.ToString())</div>
                 </div>
                 </div>*@
-            @if (Model.Status == Status.Approved)
+            @if (isApprovedByAreaExecutionLead)
             {
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="AreaExecutionLead.Name"></label>
                         <div>@(string.IsNullOrEmpty(Model.AreaExecutionLead?.Name) ? "-" : Model.AreaExecutionLead.Name)</div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="ApprovalDateFormatted"></label>
-                        <div>@(Model.AreaExecutionLeadApprovalDate != null && Model.AreaExecutionLeadApprovalDate != new DateTime() ? "-" : Model.AreaExecutionLeadApprovalDate)</div>
+                        <div>@(Model.AreaExecutionLeadApprovalDate == null || Model.AreaExecutionLeadApprovalDate == new DateTime() ? "-" : Model.AreaExecutionLeadApprovalDate)</div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+            }
+            @if (isApprovedByBusinessTeamLeader)
+            {
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="BusinessTeamLeader.Name"></label>
                         <div>@(string.IsNullOrEmpty(Model.BusinessTeamLeader?.Name) ? "-" : Model.BusinessTeamLeader.Name)</div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="BusinessTeamLeaderApprovalDate"></label>
-                        <div>@(Model.BusinessTeamLeaderApprovalDate != null && Model.BusinessTeamLeaderApprovalDate != new DateTime() ? "-" : Model.BusinessTeamLeaderApprovalDate)</div>
+                        <div>@(Model.BusinessTeamLeaderApprovalDate == null || Model.BusinessTeamLeaderApprovalDate == new DateTime() ? "-" : Model.BusinessTeamLeaderApprovalDate)</div>
                     </div>
                 </div>
             }
-            else if (Model.Status == Status.Rejected)
+            @if (Model.Status == Status.Rejected)
             {
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="Rejecter.Name"></label>
                         <div>@(string.IsNullOrEmpty(Model.Rejecter?.Name) ? "-" : Model.Rejecter.Name)</div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="RejecterDate"></label>
-                        <div>@(Model.RejecterDate != null && Model.RejecterDate != new DateTime() ? "-" : Model.RejecterDate)</div>
+                        <div>@(Model.RejecterDate == null || Model.RejecterDate == new DateTime() ? "-" : Model.RejecterDate)</div>
                     </div>
                 </div>
             }
@@ -334,13 +340,16 @@
                 </div>
             </div>
 
+            @if (!(isApprovedByBusinessTeamLeader && isApprovedByAreaExecutionLead))
+            {
 
-            <div class="col-lg-12">
-                <div class="mb-3">
-                    <label class="form-label fw-600">Comment</label>
-                    <textarea type="text" class="form-control" id="fco-log-comment"></textarea>
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Comment</label>
+                        <textarea type="text" class="form-control" id="fco-log-comment"></textarea>
+                    </div>
                 </div>
-            </div>
+            }
 
             <input asp-for="Approver.Id" type="hidden" />
 
