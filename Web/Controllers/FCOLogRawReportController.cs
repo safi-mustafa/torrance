@@ -8,14 +8,14 @@ using Web.Controllers.SharedControllers;
 
 namespace Web.Controllers
 {
-    public class FCOLogRawController : DatatableBaseController<FCOLogRawReportViewModel, FCOLogSearchViewModel>
+    public class FCOLogRawReportController : DatatableBaseController<FCOLogRawReportViewModel, FCOLogSearchViewModel>
     {
         private readonly IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogRawReportViewModel> _service;
-        private readonly ILogger<FCOLogRawController> _logger;
+        private readonly ILogger<FCOLogRawReportController> _logger;
 
-        public FCOLogRawController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogRawReportViewModel> service, ILogger<FCOLogRawController> logger, IMapper mapper)
+        public FCOLogRawReportController(IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogRawReportViewModel> service, ILogger<FCOLogRawReportController> logger, IMapper mapper)
            :
-           base(service, logger, mapper, "FCOLog", "Field Change Order Logs", true, true)
+           base(service, logger, mapper, "FCOLogRawReport", "Field Change Order Logs", true, true)
         {
             _service = service;
             _logger = logger;
@@ -78,7 +78,7 @@ namespace Web.Controllers
                         new DataTableViewModel{title = $"Name - {i + 1}",data = $"FCOSections.{i}.Name"},
                         new DataTableViewModel{title = $"MN - {i + 1}",data = $"FCOSections.{i}.MN"},
                         new DataTableViewModel{title = $"DU - {i + 1}",data = $"FCOSections.{i}.DU"},
-                        new DataTableViewModel{title = $"Type - {i + 1}",data = $"FCOSections.{i}.Type"},
+                        new DataTableViewModel{title = $"Type - {i + 1}",data = $"FCOSections.{i}.OverrideTypeFormatted"},
                         new DataTableViewModel{title = $"Craft - {i + 1}",data = $"FCOSections.{i}.Craft.Name"},
                         new DataTableViewModel{title = $"Rate - {i + 1}",data = $"FCOSections.{i}.Rate"},
                         new DataTableViewModel{title = $"Estimate - {i + 1}",data = $"FCOSections.{i}.Estimate"},
@@ -93,7 +93,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Contingencies",data = "Contingencies", orderable=true},
                 new DataTableViewModel{title = "Sub Total",data = "SubTotal", orderable=true},
                 new DataTableViewModel{title = "Total Labor",data = "TotalLabor", orderable=true},
-                new DataTableViewModel{title = "Total Material",data = "Total Material", orderable=true},
+                new DataTableViewModel{title = "Total Material",data = "TotalMaterial", orderable=true},
                 new DataTableViewModel{title = "Total Equipment",data = "TotalEquipment", orderable=true},
                 new DataTableViewModel{title = "Total Shop",data = "TotalShop",sortingColumn="DescriptionOfFinding", orderable=true},
                 new DataTableViewModel{title = "Section Total",data = "SectionTotal", orderable=true},

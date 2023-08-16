@@ -168,7 +168,7 @@ namespace ViewModels
             var diff = maxCount - FCOSections?.Count();
             if (diff > 0)
             {
-                for (var i = 0; i <= diff; i++)
+                for (var i = 0; i < diff; i++)
                 {
                     FCOSections?.Add(new FCOSectionModifyViewModel(true));
                 }

@@ -286,6 +286,9 @@ namespace Models.Mapper
             CreateMap<FCOLog, FCOLogDetailViewModel>()
                 .ForMember(dest => dest.DesignatedCoordinator, act => act.Condition(src => (src.DesignatedCoordinator != null)))
                 .ReverseMap();
+            CreateMap<FCOLog, FCOLogRawReportViewModel>()
+                .ForMember(dest => dest.DesignatedCoordinator, act => act.Condition(src => (src.DesignatedCoordinator != null)))
+                .ReverseMap();
             CreateMap<FCOLogModifyViewModel, FCOLogDetailViewModel>()
                 .ForMember(x => x.TotalCost, o => o.MapFrom(s => s.SectionTotal))
                 .ReverseMap();

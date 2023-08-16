@@ -191,7 +191,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
-                 
+
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
