@@ -577,6 +577,54 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 row++;
             }
         }
+
+
+        private void SetExcelHeaders(IXLWorksheet fcoLogSheet, long maxCostRows)
+        {
+            // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+            fcoLogSheet.Cell(1, 1).Value = "FCO No";
+            fcoLogSheet.Cell(1, 2).Value = "Additional Information";
+            fcoLogSheet.Cell(1, 3).Value = "Equipment Number";
+            fcoLogSheet.Cell(1, 4).Value = "Location";
+            fcoLogSheet.Cell(1, 5).Value = "Pre TA";
+            fcoLogSheet.Cell(1, 6).Value = "Shutdown Required";
+            fcoLogSheet.Cell(1, 7).Value = "Scaffold Required";
+            fcoLogSheet.Cell(1, 8).Value = "Description Of Finding";
+            fcoLogSheet.Cell(1, 9).Value = "Analysis Of Alternatives";
+            fcoLogSheet.Cell(1, 10).Value = "Equipment Failure Report";
+            fcoLogSheet.Cell(1, 11).Value = "Drawings Attached";
+            fcoLogSheet.Cell(1, 12).Value = "Schedule Impact";
+            fcoLogSheet.Cell(1, 13).Value = "Days Impacted";
+
+            int currentColumn = 12;
+            for (int i = 0; i < maxCostRows; i++)
+            {
+                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
+                fcoLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
+                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
+                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
+            }
+
+            currentColumn += 1;
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Hours";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Head Count";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Total Cost";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Status";
+            fcoLogSheet.Cell(1, currentColumn++).Value = "Approver";
+
+            //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
+            //overrideLogCostSheet.Cell($"B1").Value = "Override Type";
+            //overrideLogCostSheet.Cell($"C1").Value = "Craft";
+            //overrideLogCostSheet.Cell($"D1").Value = "Head Count";
+            //overrideLogCostSheet.Cell($"E1").Value = "Hours";
+            //overrideLogCostSheet.Cell($"F1").Value = "Cost";
+
+        }
+
+
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
             var row = worksheet.Row(1);
