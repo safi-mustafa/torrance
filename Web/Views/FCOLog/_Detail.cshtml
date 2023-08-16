@@ -46,17 +46,17 @@
             </div>
 
             @*    <div class="col-lg-4">
-            <div class="mb-3">
-            <label asp-for="Contractor" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Contractor?.Name) ? "-" : Model.Contractor.Name)</div>
-            </div>
-            </div>
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label asp-for="Department" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Department?.Name) ? "-" : Model.Department.Name)</div>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Contractor" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.Contractor?.Name) ? "-" : Model.Contractor.Name)</div>
+                </div>
+                </div>
+                <div class="col-lg-4">
+                <div class="mb-3">
+                <label asp-for="Department" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.Department?.Name) ? "-" : Model.Department.Name)</div>
+                </div>
+                </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="Unit" class="form-label fw-600"></label>
@@ -141,12 +141,12 @@
             </div>
 
             @*  <div class="col-lg-12">
-            <div class="mb-3">
-            <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.AdditionalInformation) ? "-" : Model.AdditionalInformation)</div>
+                <div class="mb-3">
+                <label asp-for="AdditionalInformation" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.AdditionalInformation) ? "-" : Model.AdditionalInformation)</div>
 
-            </div>
-            </div>*@
+                </div>
+                </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="Company" class="form-label fw-600"></label>
@@ -161,6 +161,7 @@
                             <th>Craft</th>
                             <th>MN</th>
                             <th>DU</th>
+                            <th>Rate</th>
                             @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
                             {
                                 <th>Estimate</th>
@@ -178,8 +179,8 @@
             </div>
 
             @* @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", materialSection, new ViewDataDictionary(ViewData) { { "Section", "material" }, { "SectionName", "Material" }, { "IsDetailPage", true } })
-            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "equipment" }, { "SectionName", "Equipment" }, { "IsDetailPage", true } })
-            @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", shopSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" }, { "IsDetailPage", true } })
+                @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", equipmentSection, new ViewDataDictionary(ViewData) { { "Section", "equipment" }, { "SectionName", "Equipment" }, { "IsDetailPage", true } })
+                @await Html.PartialAsync("~/Views/FCOLog/_SectionTable.cshtml", shopSection, new ViewDataDictionary(ViewData) { { "Section", "shop" }, { "SectionName", "Shop" }, { "IsDetailPage", true } })
             *@
 
             <div class="col-lg-6">
@@ -278,35 +279,35 @@
             </div>
 
             @*       <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label fw-600" asp-for="DuringExecution"></label>
-            <div>@(Model.DuringExecution == null ? "-" : Model.DuringExecution.ToString())</div>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label class="form-label fw-600" asp-for="DuringExecution"></label>
+                <div>@(Model.DuringExecution == null ? "-" : Model.DuringExecution.ToString())</div>
+                </div>
+                </div>*@
             @if (Model.Status == Status.Approved)
             {
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="AuthorizerForImmediateStart"></label>
-                        <div>@(string.IsNullOrEmpty(Model.AuthorizerForImmediateStart) ? "-" : Model.AuthorizerForImmediateStart)</div>
+                        <label class="form-label fw-600" asp-for="AreaExecutionLead.Name"></label>
+                        <div>@(string.IsNullOrEmpty(Model.AreaExecutionLead?.Name) ? "-" : Model.AreaExecutionLead.Name)</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="mb-3">
                         <label class="form-label fw-600" asp-for="ApprovalDateFormatted"></label>
-                        <div>@(string.IsNullOrEmpty(Model.ApprovalDateFormatted) ? "-" : Model.ApprovalDateFormatted)</div>
+                        <div>@(Model.AreaExecutionLeadApprovalDate != null && Model.AreaExecutionLeadApprovalDate != new DateTime() ? "-" : Model.AreaExecutionLeadApprovalDate)</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="ApprovedToProgress"></label>
-                        <div>@(string.IsNullOrEmpty(Model.ApprovedToProgress) ? "-" : Model.ApprovedToProgress)</div>
+                        <label class="form-label fw-600" asp-for="BusinessTeamLeader.Name"></label>
+                        <div>@(string.IsNullOrEmpty(Model.BusinessTeamLeader?.Name) ? "-" : Model.BusinessTeamLeader.Name)</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="ApprovalDateFormatted"></label>
-                        <div>@(string.IsNullOrEmpty(Model.ApprovalDateFormatted) ? "-" : Model.ApprovalDateFormatted)</div>
+                        <label class="form-label fw-600" asp-for="BusinessTeamLeaderApprovalDate"></label>
+                        <div>@(Model.BusinessTeamLeaderApprovalDate != null && Model.BusinessTeamLeaderApprovalDate != new DateTime() ? "-" : Model.BusinessTeamLeaderApprovalDate)</div>
                     </div>
                 </div>
             }
@@ -314,26 +315,14 @@
             {
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="BTLApprover"></label>
-                        <div>@(string.IsNullOrEmpty(Model.BTLApprover) ? "-" : Model.BTLApprover)</div>
+                        <label class="form-label fw-600" asp-for="Rejecter.Name"></label>
+                        <div>@(string.IsNullOrEmpty(Model.Rejecter?.Name) ? "-" : Model.Rejecter.Name)</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="ApprovalDateFormatted"></label>
-                        <div>@(string.IsNullOrEmpty(Model.ApprovalDateFormatted) ? "-" : Model.ApprovalDateFormatted)</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="EndorsmentUnitManager"></label>
-                        <div>@(string.IsNullOrEmpty(Model.EndorsmentUnitManager) ? "-" : Model.EndorsmentUnitManager)</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-600" asp-for="ApprovalDateFormatted"></label>
-                        <div>@(string.IsNullOrEmpty(Model.ApprovalDateFormatted) ? "-" : Model.ApprovalDateFormatted)</div>
+                        <label class="form-label fw-600" asp-for="RejecterDate"></label>
+                        <div>@(Model.RejecterDate != null && Model.RejecterDate != new DateTime() ? "-" : Model.RejecterDate)</div>
                     </div>
                 </div>
             }
@@ -366,8 +355,7 @@
 </div>
 <div class="overlay"></div>
 <img src="" class="fullsize">
-<script>
-    $(document).off("click", '.image-thumbnail')
+<script>$(document).off("click", '.image-thumbnail')
     $(document).on("click", '.image-thumbnail', function () {
         const imageUrl = $(this).attr('attr-data-src');
         if (imageUrl) {

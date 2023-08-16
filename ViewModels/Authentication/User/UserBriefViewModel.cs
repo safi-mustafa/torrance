@@ -30,7 +30,7 @@ namespace ViewModels.Authentication.User
         [DisplayName("Approver")]
         public override string? Name { get; set; }
     }
-    public class DesignatedCoordinatorBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
+    public class DesignatedCoordinatorBriefViewModel : BaseBriefVM
     {
         public DesignatedCoordinatorBriefViewModel() : base(false, "")
         {
@@ -42,52 +42,40 @@ namespace ViewModels.Authentication.User
         [DisplayName("Designated Coordinator")]
         public override string? Name { get; set; }
     }
-    public class RLTMemberBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
+    public class AreaExecutionLeadBriefViewModel : BaseBriefVM
     {
-        public RLTMemberBriefViewModel() : base(false, "")
+        public AreaExecutionLeadBriefViewModel() : base(false, "")
         {
         }
-        public RLTMemberBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The RLT Member field is required.")
+        public AreaExecutionLeadBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Area Execution Lead field is required.")
         {
         }
 
-        [DisplayName("Endorse: RLT Member")]
+        [DisplayName("Area Execution Lead")]
         public string? Name { get; set; }
     }
-    public class BTLBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
+    public class BusinessTeamLeaderBriefViewModel : BaseBriefVM
     {
-        public BTLBriefViewModel() : base(false, "")
+        public BusinessTeamLeaderBriefViewModel() : base(false, "")
         {
         }
-        public BTLBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The BTL field is required.")
+        public BusinessTeamLeaderBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Business Team Leader field is required.")
         {
         }
 
-        [DisplayName("Endorse: BTL")]
+        [DisplayName("Business Team Leader")]
         public string? Name { get; set; }
     }
-    public class TELBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
+    public class RejecterBriefViewModel : BaseBriefVM
     {
-        public TELBriefViewModel() : base(false, "")
+        public RejecterBriefViewModel() : base(false, "")
         {
         }
-        public TELBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The TEL field is required.")
+        public RejecterBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Rejecter field is required.")
         {
         }
 
-        [DisplayName("Approver: TEL (Turnaround Event Lead)")]
-        public string? Name { get; set; }
-    }
-    public class MaintManagerBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
-    {
-        public MaintManagerBriefViewModel() : base(false, "")
-        {
-        }
-        public MaintManagerBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Maint Manager field is required.")
-        {
-        }
-
-        [DisplayName("Approver: (Maint Manager)")]
+        [DisplayName("Rejecter")]
         public string? Name { get; set; }
     }
 

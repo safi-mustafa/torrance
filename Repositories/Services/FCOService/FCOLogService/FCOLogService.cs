@@ -128,10 +128,12 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
-                    //.Include(x => x.Approver)
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
+                    .Include(x => x.AreaExecutionLead)
+                    .Include(x => x.BusinessTeamLeader)
+                    .Include(x => x.Rejecter)
                     .Include(x => x.FCOComments)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
@@ -172,10 +174,12 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.FCOType)
                     .Include(x => x.FCOReason)
                     .Include(x => x.Contractor)
-                    //.Include(x => x.Approver)
                     .Include(x => x.Company)
                     .Include(x => x.Contractor)
                     .Include(x => x.DesignatedCoordinator)
+                    .Include(x => x.AreaExecutionLead)
+                    .Include(x => x.BusinessTeamLeader)
+                    .Include(x => x.Rejecter)
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(filters)
                     .IgnoreQueryFilters();
@@ -426,6 +430,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             else
                             {
                                 logRecord.RejecterId = long.Parse(_userInfoService.LoggedInUserId());
+                                logRecord.RejecterDate = DateTime.Now;
                                 logRecord.Status = Status.Rejected;
                             }
                             if (!string.IsNullOrEmpty(comment))

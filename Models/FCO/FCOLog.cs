@@ -35,11 +35,11 @@ namespace Models
         public double TotalHours { get; set; }
         public double TotalHeadCount { get; set; }
         public double Contingency { get; set; }
-        public string MaterialName { get; set; }
+        public string? MaterialName { get; set; }
         public double MaterialRate { get; set; }
-        public string EquipmentName { get; set; }
+        public string? EquipmentName { get; set; }
         public double EquipmentRate { get; set; }
-        public string ShopName { get; set; }
+        public string? ShopName { get; set; }
         public double ShopRate { get; set; }
 
         [ForeignKey("DesignatedCoordinator")]

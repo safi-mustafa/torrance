@@ -11,6 +11,8 @@ using ViewModels.Common.Company;
 using Helpers.Double;
 using Models.Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ViewModels
 {
@@ -52,16 +54,17 @@ namespace ViewModels
         public DateTime? Date { get; set; }
         [Display(Name = "Contingency (%)")]
         public double Contingency { get; set; } = 10;
+
         [Display(Name = "Material Name")]
-        public string MaterialName { get; set; }
+        public string? MaterialName { get; set; }
         [Display(Name = "Material Rate")]
         public double MaterialRate { get; set; }
         [Display(Name = "Equipment Name")]
-        public string EquipmentName { get; set; }
+        public string? EquipmentName { get; set; }
         [Display(Name = "Equipment Rate")]
         public double EquipmentRate { get; set; }
         [Display(Name = "Shop Name")]
-        public string ShopName { get; set; }
+        public string? ShopName { get; set; }
         [Display(Name = "Shop Rate")]
         public double ShopRate { get; set; }
 
@@ -72,15 +75,12 @@ namespace ViewModels
         public UnitBriefViewModel Unit { get; set; } = new(true);
         public FCOTypeBriefViewModel? FCOType { get; set; } = new(true);
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new(true);
-        public ApproverBriefViewModel? Approver { get; set; } = new(false);
-        public BTLBriefViewModel? RLTMember { get; set; } = new(false);
-        public DateTime? RLTMemberApproveDate { get; set; }
-        public BTLBriefViewModel? BTLApprover { get; set; } = new(false);
-        public DateTime? BTLApproveDate { get; set; }
-        public TELBriefViewModel? TELApprover { get; set; } = new(false);
-        public DateTime? TELApprovalDate { get; set; }
-        public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
-        public DateTime? MaintManagerApprovalDate { get; set; }
+        public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
+        public DateTime? AreaExecutionLeadApprovalDate { get; set; }
+        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
+        public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
+        public DateTime? RejecterDate { get; set; }
 
         public double TotalCost { get => FCOSections.Sum(x => x.Estimate); }
         public double TotalHours { get => FCOSections.Sum(x => x.DU); }
@@ -105,7 +105,7 @@ namespace ViewModels
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
 
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
-        public double Total { get => Math.Round(FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate) + MaterialRate + EquipmentRate, 2).FixNan(); }
+        public double Total { get => Math.Round(FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate), 2).FixNan(); }
         public double Contingencies
         {
             get
@@ -116,9 +116,9 @@ namespace ViewModels
         [Display(Name = "Total")]
         public double SubTotal { get => Math.Round(Total + Contingencies, 2).FixNan(); }
         public double TotalLabor { get { var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate); return laborEstimate + (laborEstimate / Contingency).FixNan(); } }
-        public double TotalMaterial { get { var materialEstimate = MaterialRate; return materialEstimate + (materialEstimate / Contingency).FixNan(); } }
-        public double TotalEquipment { get { var equipmentEstimate = EquipmentRate; return equipmentEstimate + (equipmentEstimate / Contingency).FixNan(); } }
-        public double TotalShop { get { var shopEstimate = ShopRate; return shopEstimate + (shopEstimate / Contingency).FixNan(); } }
+        public double TotalMaterial { get { var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate); return materialEstimate + (materialEstimate / Contingency).FixNan(); } }
+        public double TotalEquipment { get { var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate); return equipmentEstimate + (equipmentEstimate / Contingency).FixNan(); } }
+        public double TotalShop { get { var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate); return shopEstimate + (shopEstimate / Contingency).FixNan(); } }
         public double SectionTotal { get => TotalLabor + TotalMaterial + TotalEquipment + TotalShop; }
 
     }
