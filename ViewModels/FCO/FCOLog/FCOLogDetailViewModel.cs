@@ -91,6 +91,19 @@ namespace ViewModels
         public double TotalHours { get; set; }
         public double TotalHeadCount { get; set; }
 
+        [Display(Name = "Material Name")]
+        public string MaterialName { get; set; }
+        [Display(Name = "Material Rate")]
+        public double MaterialRate { get; set; }
+        [Display(Name = "Equipment Name")]
+        public string EquipmentName { get; set; }
+        [Display(Name = "Equipment Rate")]
+        public double EquipmentRate { get; set; }
+        [Display(Name = "Shop Name")]
+        public string ShopName { get; set; }
+        [Display(Name = "Shop Rate")]
+        public double ShopRate { get; set; }
+
         public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
         public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
         public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
