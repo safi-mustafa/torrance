@@ -143,6 +143,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
+
     FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength);
 }
 function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength) {
@@ -553,7 +554,11 @@ function RenderHtml(data, dtColumns, meta) {
         return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
     }
     else if (dtColumns[meta.col].formatValue === "image") {
-        return ' <img src="' + data + '" class="rounded" alt="Image">';
+        if (data != "" && data != null && data != undefined)
+            return '<div class="image-container"> <img src="' + data + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
+        else {
+            return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
+        }
     }
     else if (dtColumns[meta.col].formatValue === "status") {
         return '<span class="badge ' + data + '"></span>';

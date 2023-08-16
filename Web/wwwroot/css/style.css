@@ -88,6 +88,23 @@ a:focus {
 .colorRed {
     color: red;
 }
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #ccc; /* Adjust the border color and thickness as needed */
+    cursor: pointer;
+}
+
+.rounded-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
 
 /** Inner Page ---------**/
 /** Header **/

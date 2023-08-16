@@ -14,7 +14,7 @@ namespace Centangle.Common.ResponseHelpers.Models
         {
             Status = HttpStatusCode.OK;
         }
-        public HttpStatusCode Status { get; set; } 
+        public HttpStatusCode Status { get; set; }
         public string Message { get; set; }
     }
 

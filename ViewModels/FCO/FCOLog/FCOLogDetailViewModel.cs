@@ -70,7 +70,7 @@ namespace ViewModels
         [Display(Name = "FCO Type")]
         public FCOTypeBriefViewModel? FCOType { get; set; } = new();
 
-        [Display(Name = "FCO Reason")]
+        [Display(Name = "Reason For Change")]
         public FCOReasonBriefViewModel? FCOReason { get; set; } = new();
         [Display(Name = "Designated Coordinator")]
         public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }
@@ -102,6 +102,29 @@ namespace ViewModels
         public string ShopName { get; set; }
         [Display(Name = "Shop Rate")]
         public double ShopRate { get; set; }
+
+        public string OtherDocumentionFormatted
+        {
+            get
+            {
+                var otherDocumentation = "";
+
+                if (AnalysisOfAlternatives && EquipmentFailureReport)
+                {
+                    otherDocumentation = "Analysis of alternatives / Mitigation Options (Y/N), Equipment Failure Report";
+                }
+                else if (AnalysisOfAlternatives)
+                {
+                    otherDocumentation = "Analysis of alternatives / Mitigation Options (Y/N)";
+                }
+                else if (EquipmentFailureReport)
+                {
+                    otherDocumentation = "Equipment Failure Report";
+                }
+                return otherDocumentation;
+
+            }
+        }
 
         //public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
         //public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();

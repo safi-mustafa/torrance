@@ -91,13 +91,15 @@ namespace Web.Controllers
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Date",data = "DateFormatted", orderable=true},
+                new DataTableViewModel{title = "Photo",data = "Photo.Url", format = "html", formatValue="image", className = "image-thumbnail"},
                 new DataTableViewModel{title = "FCO#",data = "SrNoFormatted",exportColumn="SrNoFormatted"},
                 new DataTableViewModel{title = "Type",data = "FCOType.Name", sortingColumn ="FCOType.Name", orderable = true},
                 new DataTableViewModel{title = "Reason",data = "FCOReason.Name",sortingColumn="FCOReason.Name", orderable=true},
-                new DataTableViewModel{title = "Detail",data = "DescriptionOfFinding",sortingColumn="DescriptionOfFinding", orderable=true},
                 new DataTableViewModel{title = "$ Impact",data = "TotalCostFormatted", orderable=true},
-                new DataTableViewModel{title = "Issued Date",data = "DateFormatted", orderable=true},
-                new DataTableViewModel{title = "Name",data = "Company.Name", orderable=true},
+                new DataTableViewModel{title = "Designated Coordinator",data = "DesignatedCoordinator.Name", orderable=true},
+                new DataTableViewModel{title = "Area Execution Lead",data = "AreaExecutionLead.Name", orderable=true},
+                new DataTableViewModel{title = "Business Team Leader",data = "BusinessTeamLeader.Name", orderable=true},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
             });
             return dataColumns;

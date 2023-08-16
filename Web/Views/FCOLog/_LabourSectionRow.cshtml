@@ -40,7 +40,7 @@
         <input type="hidden" name="@overrideHours" value="@Model.DU" />
     </td>
     <td>
-        <span style=" text-align: initial !important;">@Model.Rate</span>
+        <span style=" text-align: initial !important;">$@Model.Rate</span>
     </td>
     @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
     {
