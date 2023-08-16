@@ -114,6 +114,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             &&
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
                             &&
+                            x.Status != Status.Partial
+                            &&
                             x.IsDeleted == false
             ;
         }

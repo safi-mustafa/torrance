@@ -9,7 +9,8 @@
     }
     var isFCOLog = Model.DetailModel is FCOLogDetailViewModel;
     var model = Model.DetailModel as FCOLogDetailViewModel;
-    //var isApprovedByAreaExecutionLead = model.
+    var isApprovedByAreaExecutionLead = model?.AreaExecutionLead?.Id > 0 ? true : false;
+    var isApprovedByBusinessTeamLeader = model?.BusinessTeamLeader?.Id > 0 ? true : false;
 
 }
 <div class="card">
@@ -20,12 +21,14 @@
             </div>
             @if (isFCOLog && Model.IsApprovalForm)
             {
+
+
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="text-center">
                             <button type="button" onclick="rejectDetail(this)" class="btn btn-danger form-btn" id="reject-btn">Reject</button>
-                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="AreaExecutionLead" id="approve-btn">Approve(Area Execution Lead)</button>
-                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="BusinessTeamLeader" id="approve-btn">Approve(Business Team Leader)</button>
+                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="AreaExecutionLead" id="approve-btn" @(isApprovedByAreaExecutionLead ? "disabled" : "")>Approve(Area Execution Lead)</button>
+                            <button type="button" onclick="approveFCOLogDetail(this)" class="btn blue-btn form-btn approve-btns" attr-approver-type="BusinessTeamLeader" id="approve-btn" @(isApprovedByBusinessTeamLeader ? "disabled" : "")>Approve(Business Team Leader)</button>
                         </div>
                     </div>
                 </div>

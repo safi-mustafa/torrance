@@ -1,8 +1,6 @@
 ﻿using Enums;
 using Helpers.Datetime;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Models.Common.Interfaces;
-using System.ComponentModel;
 using Helpers.Double;
 using System.ComponentModel.DataAnnotations;
 using ViewModels.Authentication.User;
@@ -11,11 +9,7 @@ using ViewModels.Common.Contractor;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
 using ViewModels.Shared;
-using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord;
-using ViewModels.WeldingRodRecord.Location;
-using ViewModels.WeldingRodRecord.RodType;
-using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels
 {
@@ -78,10 +72,13 @@ namespace ViewModels
         public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }
 
         public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? AreaExecutionLeadApprovalDate { get; set; }
-        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public BusinessTeamLeaderBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
         public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
+        [Display(Name = "Date")]
         public DateTime? RejecterDate { get; set; }
 
         public double TotalCost { get; set; }
@@ -102,11 +99,11 @@ namespace ViewModels
         [Display(Name = "Shop Rate")]
         public double ShopRate { get; set; }
 
-        public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
-        public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
-        [BindNever]
+        //public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        //[BindNever]
         public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);

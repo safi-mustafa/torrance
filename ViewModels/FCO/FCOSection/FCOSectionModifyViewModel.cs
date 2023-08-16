@@ -35,7 +35,7 @@ namespace ViewModels
         {
             get
             {
-                var result = SectionType == FCOSectionCatalog.Labour && (_rate == null || _rate < 1) ? (OverrideType == OverrideTypeCatalog.ST ? Craft.STRate : (OverrideType == OverrideTypeCatalog.OT ? Craft.OTRate : Craft.DTRate)) : _rate;
+                var result = SectionType == FCOSectionCatalog.Labour && (_rate == null || _rate < 1) ? (OverrideType == OverrideTypeCatalog.ST ? Craft?.STRate : (OverrideType == OverrideTypeCatalog.OT ? Craft?.OTRate : Craft?.DTRate)) : _rate;
                 return result;
             }
             set => _rate = value;

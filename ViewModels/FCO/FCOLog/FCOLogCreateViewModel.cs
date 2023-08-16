@@ -1,73 +1,115 @@
-﻿//using Enums;
-//using Models.Common.Interfaces;
-//using System.ComponentModel.DataAnnotations;
-//using ViewModels.Authentication.User;
-//using ViewModels.Common.Company;
-//using ViewModels.Common.Contractor;
-//using ViewModels.Common.Department;
-//using ViewModels.Common.Unit;
-//using ViewModels.Shared;
-//using ViewModels.WeldingRodRecord;
+﻿using Enums;
+using Helpers.Double;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Models.Common;
+using Models.Common.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using ViewModels.Authentication.User;
+using ViewModels.Common.Company;
+using ViewModels.Common.Contractor;
+using ViewModels.Common.Department;
+using ViewModels.Common.Unit;
+using ViewModels.Shared;
+using ViewModels.WeldingRodRecord;
 
-//namespace ViewModels
-//{
-//    public class FCOLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove
-//    {
-//        public Status Status { get; set; }
-//        [Display(Name = "Description Of Finding")]
-//        public string DescriptionOfFinding { get; set; }
-//        [Display(Name = "Additional Informationn")]
-//        public string AdditionalInformation { get; set; }
-//        [Display(Name = "Loop Identification # & Equipment Number")]
-//        [Required]
-//        public string EquipmentNumber { get; set; }
-//        [Display(Name = "Location")]
-//        public string Location { get; set; }
-//        [Display(Name = "FCO No.")]
-//        public long SrNo { get; set; }
-//        [Display(Name = "P&ID Attached")]
-//        public bool PAndIdAttached { get; set; }
-//        [Display(Name = "ISO Attached")]
-//        public bool ISOAttached { get; set; }
-//        [Display(Name = "Shutdown Required")]
-//        public bool ShutdownRequired { get; set; }
-//        [Display(Name = "Scaffold Required")]
-//        public bool ScaffoldRequired { get; set; }
-//        [Display(Name = "Drawings Attached")]
-//        public bool DrawingsAttached { get; set; }
-//        [Display(Name = "Schedule Impact")]
-//        public bool ScheduleImpact { get; set; }
-//        [Display(Name = "Days Impact")]
-//        public long DaysImpacted { get; set; }
-//        [Required]
-//        public DateTime Date { get; set; }
-//        public ContractorBriefViewModel Contractor { get; set; } = new();
-//        public CompanyBriefViewModel Company { get; set; } = new();
-//        public EmployeeBriefViewModel? Employee { get; set; } = new();
-//        public DepartmentBriefViewModel Department { get; set; } = new();
-//        public UnitBriefViewModel Unit { get; set; } = new();
-//        public FCOTypeBriefViewModel FCOType { get; set; } = new();
-//        public FCOReasonBriefViewModel FCOReason { get; set; } = new();
-//        public ApproverBriefViewModel Approver { get; set; } = new(false);
-//        public BTLBriefViewModel RLTMember { get; set; } = new(false);
-//        public DateTime RLTMemberApproveDate { get; set; }
-//        public BTLBriefViewModel? BTLApprover { get; set; } = new(false);
-//        public DateTime BTLApproveDate { get; set; }
-//        public TELBriefViewModel? TELApprover { get; set; } = new(false);
-//        public DateTime TELApprovalDate { get; set; }
-//        public MaintManagerBriefViewModel? MaintManager { get; set; } = new(false);
-//        public DateTime MaintManagerApprovalDate { get; set; }
-//        public List<AttachmentModifyViewModel> Attachments { get; set; } = new();
-//        public List<FCOSectionModifyViewModel> FCOSections { get; set; } = new();
-//        public double Total { get => FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate); }
-//        public double Contingency { get => Total / 10; }
-//        [Display(Name = "Total")]
-//        public double SubTotal { get => Total + Contingency; }
-//        public double TotalLabor { get { var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate); return laborEstimate + (laborEstimate / 10); } }
-//        public double TotalMaterial { get { var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate); return materialEstimate + (materialEstimate / 10); } }
-//        public double TotalEquipment { get { var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate); return equipmentEstimate + (equipmentEstimate / 10); } }
-//        public double TotalShop { get { var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate); return shopEstimate + (shopEstimate / 10); } }
-//        public double SectionTotal { get => TotalLabor + TotalMaterial + TotalEquipment + TotalShop; }
+namespace ViewModels
+{
+    public class FCOLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove, ISrNo, IFCOLogAttachment<AttachmentModifyViewModel>
+    {
+        public Status Status { get; set; }
+        [Display(Name = "Description of Finding (Attach marked-up P&ID or iso / Sketch)")]
+        public string? DescriptionOfFinding { get; set; }
+        [Display(Name = "Additional Information")]
+        public string? AdditionalInformation { get; set; }
+        [Display(Name = "Loop Identification # & Equipment Number")]
+        [Required]
+        public string? EquipmentNumber { get; set; }
+        [Display(Name = "Service/Location")]
+        [Required]
+        public string? Location { get; set; }
+        [Display(Name = "Shutdown Required")]
+        public bool ShutdownRequired { get; set; }
 
-//    }
-//}
+        [Display(Name = "PreTA")]
+        public bool PreTA { get; set; }
+        [Display(Name = "Scaffold Required")]
+        public bool ScaffoldRequired { get; set; }
+        [Display(Name = "FCO No.")]
+        public long SrNo { get; set; }
+        [Display(Name = "Analysis of alternatives / Mitigation Options (Y/N)")]
+        public bool AnalysisOfAlternatives { get; set; }
+        [Display(Name = "Equipment Failure Report")]
+        public bool EquipmentFailureReport { get; set; }
+        [Display(Name = "Drawings Attached")]
+        public bool DrawingsAttached { get; set; }
+        [Display(Name = "Schedule Impact")]
+        public bool ScheduleImpact { get; set; }
+        [Display(Name = "Days Impact")]
+        public long DaysImpacted { get; set; }
+        [Display(Name = "During Execution")]
+        public DuringExecutionCatalog? DuringExecution { get; set; }
+        [Required]
+        public DateTime? Date { get; set; }
+        [Display(Name = "Contingency (%)")]
+        public double Contingency { get; set; } = 10;
+
+        [Display(Name = "Material Name")]
+        public string? MaterialName { get; set; }
+        [Display(Name = "Material Rate")]
+        public double MaterialRate { get; set; }
+        [Display(Name = "Equipment Name")]
+        public string? EquipmentName { get; set; }
+        [Display(Name = "Equipment Rate")]
+        public double EquipmentRate { get; set; }
+        [Display(Name = "Shop Name")]
+        public string? ShopName { get; set; }
+        [Display(Name = "Shop Rate")]
+        public double ShopRate { get; set; }
+
+        public ContractorBriefViewModel Contractor { get; set; } = new();
+        public CompanyBriefViewModel Company { get; set; } = new(true, "The Company field is required.");
+        public EmployeeBriefViewModel? Employee { get; set; } = new();
+        public DepartmentBriefViewModel Department { get; set; } = new();
+        public UnitBriefViewModel Unit { get; set; } = new(true);
+        public FCOTypeBriefViewModel? FCOType { get; set; } = new(true);
+        public FCOReasonBriefViewModel? FCOReason { get; set; } = new(true);
+        public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
+        public DateTime? AreaExecutionLeadApprovalDate { get; set; }
+        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
+        public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
+        public DateTime? RejecterDate { get; set; }
+
+        public double TotalCost { get => FCOSections?.Sum(x => x.Estimate) ?? 0; }
+        public double TotalHours { get => FCOSections?.Sum(x => x.DU) ?? 0; }
+        public double TotalHeadCount { get => FCOSections?.Sum(x => x.MN) ?? 0; }
+
+        //public List<FCOSectionModifyViewModel>? FCOLabourSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOMaterialSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOEquipmentSections { get; set; } = new();
+        //public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
+        //private List<FCOSectionModifyViewModel>? _fCOSections;
+        //[BindNever]
+        public List<FCOSectionModifyViewModel>? FCOSections { get; set; }
+        public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
+
+        public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);
+        public double Total { get => Math.Round(FCOSections.Where(x => x.SectionType != FCOSectionCatalog.Shop).Sum(x => x.Estimate), 2).FixNan(); }
+        public double Contingencies
+        {
+            get
+            {
+                return Math.Round((Total / Contingency), 2).FixNan();
+            }
+        }
+        [Display(Name = "Total")]
+        public double SubTotal { get => Math.Round(Total + Contingencies, 2).FixNan(); }
+        public double TotalLabor { get { var laborEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate); return laborEstimate + (laborEstimate / Contingency).FixNan(); } }
+        public double TotalMaterial { get { var materialEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Material).Sum(x => x.Estimate); return materialEstimate + (materialEstimate / Contingency).FixNan(); } }
+        public double TotalEquipment { get { var equipmentEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Equipment).Sum(x => x.Estimate); return equipmentEstimate + (equipmentEstimate / Contingency).FixNan(); } }
+        public double TotalShop { get { var shopEstimate = FCOSections.Where(x => x.SectionType == FCOSectionCatalog.Shop).Sum(x => x.Estimate); return shopEstimate + (shopEstimate / Contingency).FixNan(); } }
+        public double SectionTotal { get => TotalLabor + TotalMaterial + TotalEquipment + TotalShop; }
+
+    }
+
+}
