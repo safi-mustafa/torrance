@@ -77,14 +77,12 @@ namespace ViewModels
         [Display(Name = "Designated Coordinator")]
         public DesignatedCoordinatorBriefViewModel? DesignatedCoordinator { get; set; }
 
-        [Display(Name = "Authorized for Immediate Start")]
-        public string? AuthorizerForImmediateStart => Approver.Name;
-        [Display(Name = "Approved to Progress")]
-        public string? ApprovedToProgress => Approver.Name;
-        [Display(Name = "Endorsement – BTL")]
-        public string? BTLApprover => Approver.Name;
-        [Display(Name = "Endorsement – Unit Superintendent")]
-        public string? EndorsmentUnitManager => Approver.Name;
+        public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
+        public DateTime? AreaExecutionLeadApprovalDate { get; set; }
+        public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
+        public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
+        public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
+        public DateTime? RejecterDate { get; set; }
 
         public double TotalCost { get; set; }
         public string TotalCostFormatted { get => string.Format("{0:C}", TotalCost); }

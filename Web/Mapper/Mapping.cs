@@ -377,8 +377,6 @@ namespace Models.Mapper
             CreateMap<BaseBriefVM, TOTLogBriefViewModel>().ReverseMap();
 
             //User
-
-
             CreateMap<ToranceUser, EmployeeBriefViewModel>()
               .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
               .ReverseMap();
@@ -398,6 +396,15 @@ namespace Models.Mapper
             CreateMap<UserUpdateViewModel, ToranceUser>()
               .ReverseMap();
             CreateMap<ToranceUser, DesignatedCoordinatorBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+                .ReverseMap();
+            CreateMap<ToranceUser, AreaExecutionLeadBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+                .ReverseMap();
+            CreateMap<ToranceUser, BusinessTeamLeaderBriefViewModel>()
+                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
+                .ReverseMap();
+            CreateMap<ToranceUser, RejecterBriefViewModel>()
                 .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                 .ReverseMap();
             CreateMap<UserDetailViewModel, ToranceUser>().ReverseMap();

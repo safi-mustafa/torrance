@@ -1,21 +1,15 @@
-﻿using System;
-using Models.Common;
+﻿using Models.Common;
 using Models.WeldingRodRecord;
 using System.ComponentModel.DataAnnotations.Schema;
 using Helpers.Models.Shared;
 using Models.Common.Interfaces;
 using Enums;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using Models.FCO;
 
 namespace Models
 {
     public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IUnitId, ICompanyId, IApprovalDate
     {
-        public FCOLog()
-        {
-        }
 
         public Status Status { get; set; }
         public string? DescriptionOfFinding { get; set; }
@@ -41,11 +35,11 @@ namespace Models
         public double TotalHours { get; set; }
         public double TotalHeadCount { get; set; }
         public double Contingency { get; set; }
-        public string MaterialName { get; set; }
+        public string? MaterialName { get; set; }
         public double MaterialRate { get; set; }
-        public string EquipmentName { get; set; }
+        public string? EquipmentName { get; set; }
         public double EquipmentRate { get; set; }
-        public string ShopName { get; set; }
+        public string? ShopName { get; set; }
         public double ShopRate { get; set; }
 
         [ForeignKey("DesignatedCoordinator")]
