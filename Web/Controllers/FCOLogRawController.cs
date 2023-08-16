@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Services.AppSettingServices.WRRLogService;
+using Repositories.Services.AppSettingServices;
 using ViewModels;
 using ViewModels.DataTable;
 using Web.Controllers.SharedControllers;
