@@ -92,7 +92,7 @@ namespace ViewModels
         //public List<FCOSectionModifyViewModel>? FCOShopSections { get; set; } = new();
         //private List<FCOSectionModifyViewModel>? _fCOSections;
         //[BindNever]
-        public List<FCOSectionModifyViewModel>? FCOSections { get; set; }
+        public List<FCOSectionModifyViewModel>? FCOSections { get; set; } = new();
         public AttachmentModifyViewModel? Photo { get; set; } = new(AttachmentEntityType.FCOLogPhoto);
 
         public AttachmentModifyViewModel? File { get; set; } = new(AttachmentEntityType.FCOLogFile);

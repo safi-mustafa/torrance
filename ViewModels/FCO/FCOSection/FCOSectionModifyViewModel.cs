@@ -45,6 +45,9 @@ namespace ViewModels
 
         //[RequiredNotNull]
         public CraftSkillForFCOLogBriefViewModel? Craft { get; set; } = new();
+
+        public string CraftRateFormatted { get => Craft != null && !string.IsNullOrEmpty(Craft?.Name) ? Craft?.Name : "-"; }
+
         //[Required]
         public OverrideTypeCatalog? OverrideType { get; set; }
         public string OverrideTypeFormatted { get => OverrideType != null ? OverrideType.ToString() : "-"; }

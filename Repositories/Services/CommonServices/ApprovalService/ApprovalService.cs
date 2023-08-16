@@ -139,7 +139,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                          &&
                          (!isEmployee)
                          &&
-                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
+                         (search.Type == null || search.Type == LogType.Override)
                          &&
                          (search.Status == null || search.Status == x.Status)
                          &&
@@ -176,11 +176,9 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     &&
                     (!isEmployee)
                     &&
-                    (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                    &&
-                    (search.Status == null || search.Status == x.Status)
-                    &&
-                    x.Status == Status.Partial
+                    (search.Type == null || search.Type == LogType.FCO)
+                     &&
+                    (search.Status == null || search.Status == x.Status || x.Status == Status.Partial)
                     &&
                     (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     &&
