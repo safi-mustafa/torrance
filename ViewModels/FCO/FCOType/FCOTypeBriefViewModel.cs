@@ -14,7 +14,7 @@ namespace ViewModels
 
         }
         [DisplayName("FCO Type")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }
