@@ -517,6 +517,13 @@ namespace Torrance.Api.Mapper
                .ForMember(d => d.Folder, s => s.Ignore())
                .ReverseMap();
             CreateMap<AttachmentResponseVM, Attachment>().ReverseMap();
+            CreateMap<AttachmentModifyViewModel, Attachment>()
+                .ForMember(dest => dest.Url, act => act.Condition(src => (!string.IsNullOrEmpty(src.Url))))
+                .ForMember(dest => dest.Type, act => act.Condition(src => (!string.IsNullOrEmpty(src.Type))))
+                .ForMember(d => d.FolderId, d => d.MapFrom(x => x.Folder.Id))
+                .ForMember(dest => dest.FolderId, act => act.Condition(src => src.Folder != null))
+                .ForMember(d => d.Folder, s => s.Ignore())
+                .ReverseMap();
 
             //CraftRate
             //CreateMap<CraftRate, CraftRateBriefViewModel>().ReverseMap();
