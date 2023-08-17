@@ -53,10 +53,10 @@ namespace Repositories.Shared.NotificationServices
                     .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Unit).
-                    Where(x => x.UnitId == association.Unit.Id && (association.Department.Id == 0 || x.DepartmentId == association.Department.Id) && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
-                approvers = approvers.GroupBy(x => x.ApproverId).Select(x => x.First()).ToList();
+                    Where(x => x.UnitId == association.Unit.Id && (model.EntityType == NotificationEntityType.FCOLog || x.DepartmentId == association.Department.Id) && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
                 if (model.EntityType == NotificationEntityType.FCOLog)
                 {
+                    approvers = approvers.GroupBy(x => x.ApproverId).Select(x => x.First()).ToList();
                     approvers.ForEach(x => x.Department = new Department { Id = 0, Name = "-" });
                 }
                 if (approvers != null && approvers.Count > 0)

@@ -245,8 +245,9 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 try
                 {
                     var mappedModel = _mapper.Map<FCOLog>(model);
-                    var srNo = await _db.FCOLogs.Where(x => x.UnitId == model.Unit.Id).CountAsync();
+                    var srNo = await _db.FCOLogs.Where(x => x.UnitId == model.Unit.Id).CountAsync() + 1;
                     mappedModel.SrNo = srNo;
+                    var costTrackerUnit = await _db.Units.Where(x => x.Id == model.Unit.Id).Select(x => x.CostTrackerUnit).FirstOrDefaultAsync();
                     //setting requesterId
                     await SetRequesterId(mappedModel);
                     //setting approverId
@@ -260,7 +261,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
 
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, $"{costTrackerUnit}-{srNo}");
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -409,7 +410,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             return true;
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(FCOLog model, NotificationEventTypeCatalog eventType)
+        private async Task<NotificationViewModel> GetNotificationModel(FCOLog model, NotificationEventTypeCatalog eventType, string srNo)
         {
             string userFullName = "";
             string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -424,7 +425,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 EventType = eventType,
                 EntityType = NotificationEntityType.FCOLog,
                 IdentifierKey = "FCO#",
-                IdentifierValue = model.SrNo.ToString(),
+                IdentifierValue = srNo,
                 User = userFullName
             };
         }
