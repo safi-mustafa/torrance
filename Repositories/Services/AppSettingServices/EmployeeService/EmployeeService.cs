@@ -232,7 +232,7 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                             from wl in wwl.DefaultIfEmpty()
                             join ol in _db.OverrideLogs on ap.Id equals ol.EmployeeId into ool
                             from ol in ool.DefaultIfEmpty()
-                            join fco in _db.OverrideLogs on ap.Id equals fco.EmployeeId into fcol
+                            join fco in _db.FCOLogs on ap.Id equals fco.EmployeeId into fcol
                             from fco in fcol.DefaultIfEmpty()
                             where
                                  (tl != null && tl.Status != Status.Approved)

@@ -181,6 +181,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         appQueryable = JoinApproverWithFCOLogs(appQueryable, search.ApproverType);
                         break;
                     case FilterLogType.All:
+
                         return (from ap in appQueryable
                                 join tl in _db.TOTLogs on ap.Id equals tl.ApproverId into ttl
                                 from tl in ttl.DefaultIfEmpty()
