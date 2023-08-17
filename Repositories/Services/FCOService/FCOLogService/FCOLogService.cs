@@ -260,8 +260,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
 
-                    //var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    //await _notificationService.CreateLogNotification(notification);
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
+                    await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -425,7 +425,6 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 EntityType = NotificationEntityType.FCOLog,
                 IdentifierKey = "FCO#",
                 IdentifierValue = model.SrNo.ToString(),
-                //SendTo = model?.Approver?.Id.ToString(),
                 User = userFullName
             };
         }

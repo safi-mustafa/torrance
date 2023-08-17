@@ -10,5 +10,6 @@ namespace ViewModels.Authentication.Approver
 
         public bool IsSearchForm { get; set; }
         public FilterLogType LogType { get; set; }
+        public ApproverType? ApproverType { get; set; }
     }
 }
