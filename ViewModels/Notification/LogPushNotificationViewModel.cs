@@ -49,7 +49,14 @@ namespace ViewModels.Notification
 
         private LogType GetLogType(NotificationEntityType type)
         {
-            return type == NotificationEntityType.TOTLog ? LogType.TimeOnTools : type == NotificationEntityType.OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
+            switch (type)
+            {
+                case NotificationEntityType.WRRLog: return LogType.WeldingRodRecord;
+                case NotificationEntityType.TOTLog: return LogType.TimeOnTools;
+                case NotificationEntityType.OverrideLog: return LogType.Override;
+                case NotificationEntityType.FCOLog: return LogType.FCO;
+                default: return 0;
+            }
         }
     }
 }
