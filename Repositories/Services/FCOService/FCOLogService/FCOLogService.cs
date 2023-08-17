@@ -7,6 +7,7 @@ using Enums;
 using Helpers.Extensions;
 using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
@@ -191,8 +192,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
-                    var attachments = await _db.Attachments.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile || x.EntityType == AttachmentEntityType.FCOLogPhoto)
-                          .ToListAsync();
+                    var attachments = await GetFCOAttachments(result);
                     var mappedAttachments = _mapper.Map<List<AttachmentModifyViewModel>>(attachments);
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
                     foreach (var paginatedItem in paginatedResult.Items)
@@ -221,6 +221,20 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 _logger.LogError(ex, $"GetAll() method for {typeof(FCOLog).FullName} threw an exception.");
                 return Response.BadRequestResponse(_response);
             }
+        }
+
+        private async Task<List<Attachment>> GetFCOAttachments(PaginatedResultModel<FCOLog> paginatedLogs)
+        {
+
+
+            var attachments = _db.Attachments.Where(x => x.EntityType == AttachmentEntityType.FCOLogFile || x.EntityType == AttachmentEntityType.FCOLogPhoto).AsQueryable();
+
+            if (paginatedLogs.Items.Count < 1500)
+            {
+                var entityIds = paginatedLogs.Items.Select(item => item.Id).ToList();
+                attachments = attachments.Where(x => entityIds.Contains(x.EntityId ?? 0));
+            }
+            return await attachments.ToListAsync();
         }
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
