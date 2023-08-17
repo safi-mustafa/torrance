@@ -608,6 +608,9 @@ namespace Torrance.Api.Mapper
 
             //Notification
             CreateMap<Notification, NotificationViewModel>().ReverseMap();
+
+            //ApproverAssociation
+            CreateMap<ApproverAssociationNotificationViewModel, ApproverAssociation>().ReverseMap();
         }
     }
 }

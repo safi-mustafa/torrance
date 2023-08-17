@@ -247,7 +247,6 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     var mappedModel = _mapper.Map<FCOLog>(model);
                     var srNo = await _db.FCOLogs.Where(x => x.UnitId == model.Unit.Id).CountAsync() + 1;
                     mappedModel.SrNo = srNo;
-                    var costTrackerUnit = await _db.Units.Where(x => x.Id == model.Unit.Id).Select(x => x.CostTrackerUnit).FirstOrDefaultAsync();
                     //setting requesterId
                     await SetRequesterId(mappedModel);
                     //setting approverId
@@ -261,7 +260,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
 
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, $"{costTrackerUnit}-{srNo}");
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, await GetFCONumber((long)model.Unit.Id, model.SrNo));
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -275,7 +274,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 }
             }
         }
-
+        private async Task<string> GetFCONumber(long unitId, long srNo)
+        {
+            var costTrackerUnit = await _db.Units.Where(x => x.Id == unitId).Select(x => x.CostTrackerUnit).FirstOrDefaultAsync();
+            return $"{costTrackerUnit}-{srNo}";
+        }
         public async override Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
             try
@@ -443,6 +446,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         var logRecord = await _db.FCOLogs.Where(x => x.Id == id).FirstOrDefaultAsync();
                         if (logRecord != null)
                         {
+                            
                             if (status == Status.Approved)
                             {
 
@@ -486,7 +490,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
 
                             type = "FCO";
                             identifierKey = "FCO#";
-                            identifier = (logRecord as FCOLog).SrNo.ToString();
+                            identifier = await GetFCONumber((long)logRecord.UnitId, logRecord.SrNo);
                             notificationEntityType = NotificationEntityType.FCOLog;
                             var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                             string notificationTitle = $"{type} Log {status}";

@@ -4,6 +4,7 @@ using Models;
 using Models.Common;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
+using ViewModels.Authentication.Approver;
 
 namespace ViewModels.Notification
 {
@@ -11,13 +12,13 @@ namespace ViewModels.Notification
     {
         private readonly NotificationViewModel _notification;
         private readonly ToranceUser _sentUser;
-        private readonly ApproverAssociation? _approver;
+        private readonly ApproverAssociationNotificationViewModel? _approver;
         private readonly string _approvalLink;
         public LogEmailViewModel()
         {
 
         }
-        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociation? approver, string approvalLink)
+        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociationNotificationViewModel? approver, string approvalLink)
         {
             _notification = notification;
             _approver = approver;
@@ -26,7 +27,7 @@ namespace ViewModels.Notification
             Body = GetEmailBody();
         }
         //To send Requestor email after log processing. SentEmailType is there for future email types
-        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociation? approver, SentEmailType emailType)
+        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociationNotificationViewModel? approver, SentEmailType emailType)
         {
             _notification = notification;
             _approver = approver;
@@ -39,7 +40,7 @@ namespace ViewModels.Notification
         {
             return $@"<div class=""container"">
 						<p>Dear {_notification.User},</p>
-						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_approver?.Approver?.FullName}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_approver?.Approver?.Name}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 					</div>";
             //         <p>Best regards,</p>
             //<p>Torrance</p>
@@ -55,7 +56,7 @@ namespace ViewModels.Notification
         public string GetEmailBody()
         {
             return $@"<div class=""container"">
-						<p>Dear {_approver?.Approver?.FullName},</p>
+						<p>Dear {_approver?.Approver?.Name},</p>
 						<p>A new <strong>{_notification.EntityType.GetDisplayName()}</strong> request is submitted by <strong>{_notification.User}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 						<p>Please click <a href=""{_approvalLink}"">here</a> to approve/reject this request. </p>
 					</div>";

@@ -49,15 +49,16 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var association = await GetLogUnitAndDepartment(model);
-                var approvers = await _db.ApproverAssociations
+                var associatedApprovers = await _db.ApproverAssociations
                     .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Unit).
                     Where(x => x.UnitId == association.Unit.Id && (model.EntityType == NotificationEntityType.FCOLog || x.DepartmentId == association.Department.Id) && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                var approvers = _mapper.Map<List<ApproverAssociationNotificationViewModel>>(associatedApprovers);
                 if (model.EntityType == NotificationEntityType.FCOLog)
                 {
-                    approvers = approvers.GroupBy(x => x.ApproverId).Select(x => x.First()).ToList();
-                    approvers.ForEach(x => x.Department = new Department { Id = 0, Name = "-" });
+                    approvers = approvers.GroupBy(x => x.Approver.Id).Select(x => x.First()).ToList();
+                    approvers.ForEach(x => x.Department = new DepartmentBriefViewModel { Id = 0, Name = "-" });
                 }
                 if (approvers != null && approvers.Count > 0)
                 {
@@ -96,7 +97,8 @@ namespace Repositories.Shared.NotificationServices
                 }
                 List<Notification> notifications = new List<Notification>();
                 //SetProcessedLogPushNotification(model, notifications);
-                SendProcessedLogEmailNotification(model, notifications, approver);
+                var associatedApprover = _mapper.Map<ApproverAssociationNotificationViewModel>(approver);
+                SendProcessedLogEmailNotification(model, notifications, associatedApprover);
                 _db.Set<Notification>().AddRange(notifications);
                 await _db.SaveChangesAsync();
                 var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
@@ -109,7 +111,7 @@ namespace Repositories.Shared.NotificationServices
             }
         }
 
-        private void SendLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private void SendLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociationNotificationViewModel? approver)
         {
 
             var notificationMappedModel = _mapper.Map<Notification>(model);
@@ -117,14 +119,14 @@ namespace Repositories.Shared.NotificationServices
             var domain = _configuration["WebUrl"];
             var approvalLink = $"{domain}/Approval/ApproveByNotification?id={notificationMappedModel.Id}";
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, approvalLink));
-            notificationMappedModel.SendTo = approver.ApproverId.ToString();
+            notificationMappedModel.SendTo = approver.Approver.Id.ToString();
             notificationMappedModel.Type = NotificationType.Email;
             notificationMappedModel.CreatedOn = DateTime.UtcNow;
             notificationMappedModel.IsSent = false;
             notifications.Add(notificationMappedModel);
         }
 
-        private void SendProcessedLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private void SendProcessedLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociationNotificationViewModel? approver)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Id = Guid.NewGuid();
@@ -137,12 +139,12 @@ namespace Repositories.Shared.NotificationServices
             notifications.Add(notificationMappedModel);
         }
 
-        private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociationNotificationViewModel? approver)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
             notificationMappedModel.Id = Guid.NewGuid();
-            notificationMappedModel.SendTo = approver.ApproverId.ToString();
+            notificationMappedModel.SendTo = approver.Approver.Id.ToString();
             notificationMappedModel.Type = NotificationType.Push;
             notificationMappedModel.CreatedOn = DateTime.UtcNow;
             //notificationMappedModel.SendTo = model.Type == NotificationType.Email ? approver.Approver?.Email ?? "" : approver.ApproverId.ToString();
