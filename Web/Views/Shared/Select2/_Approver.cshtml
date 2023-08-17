@@ -10,6 +10,7 @@
     var label = "Select " + title;
     var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
     var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
+    var approverType = ViewData["ApproverType"] != null && !string.IsNullOrEmpty(ViewData["ApproverType"].ToString()) ? ViewData["ApproverType"].ToString() : "None";
 }
 
 
@@ -52,7 +53,8 @@
                         Id: $(unitId).val()
                     },
                     IsSearchForm: "@isSearchForm",
-                    LogType: "@logType"
+                    LogType: "@logType",
+                    ApproverType: "@approverType"
                 })
 
             };

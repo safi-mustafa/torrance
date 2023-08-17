@@ -25,13 +25,13 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="BusinessTeamLeader" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Business Team Leader"}, {"Id", "business-team-leader"} }' />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="BusinessTeamLeader" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Business Team Leader"}, {"Id", "business-team-leader"}, { "ApproverType", "BusinessTeamLeader" } }' />
         </div>
     </div>
 
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="AreaExecutionLead" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Area Execution Lead"} ,{"Id", "area-execution-lead"} }' />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="AreaExecutionLead" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Area Execution Lead"} ,{"Id", "area-execution-lead"}, {"ApproverType", "AreaExecutionLead"} }' />
         </div>
     </div>
 
