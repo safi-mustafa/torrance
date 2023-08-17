@@ -42,7 +42,7 @@ namespace ViewModels.Authentication.User
         [DisplayName("Designated Coordinator")]
         public override string? Name { get; set; }
     }
-    public class AreaExecutionLeadBriefViewModel : BaseBriefVM
+    public class AreaExecutionLeadBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
         public AreaExecutionLeadBriefViewModel() : base(false, "")
         {
@@ -54,7 +54,7 @@ namespace ViewModels.Authentication.User
         [DisplayName("Area Execution Lead")]
         public string? Name { get; set; }
     }
-    public class BusinessTeamLeaderBriefViewModel : BaseBriefVM
+    public class BusinessTeamLeaderBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
         public BusinessTeamLeaderBriefViewModel() : base(false, "")
         {

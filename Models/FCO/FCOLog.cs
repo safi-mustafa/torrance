@@ -8,7 +8,7 @@ using Models.FCO;
 
 namespace Models
 {
-    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IUnitId, ICompanyId, IApprovalDate
+    public class FCOLog : BaseDBModel, IApprove, IEmployeeId, IUnitId, ICompanyId, IApprovalDate, IDepartmentId
     {
 
         public Status Status { get; set; }

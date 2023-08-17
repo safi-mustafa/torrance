@@ -104,10 +104,12 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             (string.IsNullOrEmpty(searchFilters.Location) || x.Location.Trim().ToLower().Contains(searchFilters.Location.ToLower().Trim()))
                             &&
                             (searchFilters.Requestor.Id == null || searchFilters.Requestor.Id == 0 || x.Employee.Id == searchFilters.Requestor.Id)
-                            //&&
-                            //(searchFilters.Approver.Id == null || searchFilters.Approver.Id == 0 || x.Approver.Id == searchFilters.Approver.Id)
-                            //&&
-                            //(searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
+                            &&
+                            (searchFilters.BusinessTeamLeader.Id == null || searchFilters.BusinessTeamLeader.Id == 0 || x.BusinessTeamLeader.Id == searchFilters.BusinessTeamLeader.Id)
+                             &&
+                            (searchFilters.AreaExecutionLead.Id == null || searchFilters.AreaExecutionLead.Id == 0 || x.AreaExecutionLead.Id == searchFilters.AreaExecutionLead.Id)
+                            &&
+                            (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (searchFilters.SelectedIds == null || searchFilters.SelectedIds.Count <= 0 || searchFilters.SelectedIds.Contains(x.Id.ToString()) || x.Status == Status.Pending)
                             &&
@@ -733,7 +735,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
         {
             try
             {
-                return _db.FCOSections.GroupBy(x => x.FCOLogId).ToList().Max(x => x.Count());
+                var fcoSections = _db.FCOSections.GroupBy(x => x.FCOLogId).ToList();
+                return fcoSections.Count > 0 ? fcoSections.Max(x => x.Count()) : 0;
             }
             catch (Exception ex)
             {

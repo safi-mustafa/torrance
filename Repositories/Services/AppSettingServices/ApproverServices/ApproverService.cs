@@ -177,6 +177,9 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     case FilterLogType.WeldingRodRecord:
                         appQueryable = JoinApproverWithLogs<WRRLog>(appQueryable);
                         break;
+                    case FilterLogType.FCO:
+                        appQueryable = JoinApproverWithLogs<FCOLog>(appQueryable);
+                        break;
                     case FilterLogType.All:
                         return (from ap in appQueryable
                                 join tl in _db.TOTLogs on ap.Id equals tl.ApproverId into ttl

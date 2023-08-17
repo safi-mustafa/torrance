@@ -75,10 +75,13 @@ namespace ViewModels
 
         public AreaExecutionLeadBriefViewModel? AreaExecutionLead { get; set; } = new(false);
         public DateTime? AreaExecutionLeadApprovalDate { get; set; }
+        public string AreaExecutionLeadApprovalDateFormatted { get => AreaExecutionLeadApprovalDate?.FormatDatetimeInPST(); }
         public RejecterBriefViewModel? BusinessTeamLeader { get; set; } = new(false);
         public DateTime? BusinessTeamLeaderApprovalDate { get; set; }
+        public string BusinessTeamLeaderApprovalDateFormatted { get => BusinessTeamLeaderApprovalDate?.FormatDatetimeInPST(); }
         public RejecterBriefViewModel? Rejecter { get; set; } = new(false);
         public DateTime? RejecterDate { get; set; }
+        public string RejecterDateFormatted { get => RejecterDate?.FormatDatetimeInPST(); }
 
         public double TotalCost { get; set; }
         public string TotalCostFormatted { get => string.Format("{0:C}", TotalCost); }

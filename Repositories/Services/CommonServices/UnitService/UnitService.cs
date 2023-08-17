@@ -107,6 +107,9 @@ namespace Repositories.Services.CommonServices.UnitService
                     case FilterLogType.WeldingRodRecord:
                         unitQueryable = JoinUnitsWithLogs<WRRLog>(unitQueryable);
                         break;
+                    case FilterLogType.FCO:
+                        unitQueryable = JoinUnitsWithLogs<FCOLog>(unitQueryable);
+                        break;
                     case FilterLogType.All:
                         return (
                              from u in unitQueryable
@@ -116,12 +119,16 @@ namespace Repositories.Services.CommonServices.UnitService
                              from wl in wwl.DefaultIfEmpty()
                              join ol in _db.OverrideLogs on u.Id equals ol.UnitId into ool
                              from ol in ool.DefaultIfEmpty()
+                             join fco in _db.FCOLogs on u.Id equals fco.UnitId into fcol
+                             from fco in fcol.DefaultIfEmpty()
                              where
                                  (tl != null && tl.Status != Status.Approved)
                                  ||
                                  (wl != null && wl.Status != Status.Approved)
                                  ||
                                  (ol != null && ol.Status != Status.Approved)
+                                 ||
+                                 (fco != null && fco.Status != Status.Approved)
                              group u by u.Id
                             ).Select(x => new UnitDetailViewModel
                             {

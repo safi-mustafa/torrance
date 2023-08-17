@@ -6,6 +6,7 @@ using Enums;
 using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Models;
 using Models.Common;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
@@ -147,7 +148,7 @@ namespace Repositories.Services.CommonServices.DepartmentService
 
         public async Task<IQueryable<DepartmentDetailViewModel>> GetPaginationDbSet(DepartmentSearchViewModel search)
         {
-            var compQueryable = (from c in _db.Departments
+            var deptQueryable = (from c in _db.Departments
                                  join du in _db.DepartmentUnits on c.Id equals du.DepartmentId into dul
                                  from du in dul.DefaultIfEmpty()
                                  where
@@ -170,34 +171,41 @@ namespace Repositories.Services.CommonServices.DepartmentService
                 switch (search.LogType)
                 {
                     case FilterLogType.Override:
-                        compQueryable = JoinDepartmentWithLogs<OverrideLog>(compQueryable);
+                        deptQueryable = JoinDepartmentWithLogs<OverrideLog>(deptQueryable);
                         break;
                     case FilterLogType.TimeOnTools:
-                        compQueryable = JoinDepartmentWithLogs<TOTLog>(compQueryable);
+                        deptQueryable = JoinDepartmentWithLogs<TOTLog>(deptQueryable);
                         break;
                     case FilterLogType.WeldingRodRecord:
-                        compQueryable = JoinDepartmentWithLogs<WRRLog>(compQueryable);
+                        deptQueryable = JoinDepartmentWithLogs<WRRLog>(deptQueryable);
+                        break;
+                    case FilterLogType.FCO:
+                        deptQueryable = JoinDepartmentWithLogs<FCOLog>(deptQueryable);
                         break;
                     case FilterLogType.All:
-                        return (from comp in compQueryable
-                                join tl in _db.TOTLogs on comp.Id equals tl.DepartmentId into ttl
+                        return (from dept in deptQueryable
+                                join tl in _db.TOTLogs on dept.Id equals tl.DepartmentId into ttl
                                 from tl in ttl.DefaultIfEmpty()
-                                join wl in _db.WRRLogs on comp.Id equals wl.DepartmentId into wwl
+                                join wl in _db.WRRLogs on dept.Id equals wl.DepartmentId into wwl
                                 from wl in wwl.DefaultIfEmpty()
-                                join ol in _db.OverrideLogs on comp.Id equals ol.DepartmentId into ool
+                                join ol in _db.OverrideLogs on dept.Id equals ol.DepartmentId into ool
                                 from ol in ool.DefaultIfEmpty()
+                                join fco in _db.FCOLogs on dept.Id equals fco.DepartmentId into fcol
+                                from fco in fcol.DefaultIfEmpty()
                                 where
                                  (tl != null && tl.Status != Status.Approved)
                                  ||
                                  (wl != null && wl.Status != Status.Approved)
                                  ||
                                  (ol != null && ol.Status != Status.Approved)
-                                group comp by comp.Id
+                                 ||
+                                 (fco != null && fco.Status != Status.Approved)
+                                group dept by dept.Id
                                         )
                             .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) });
                 }
             }
-            return compQueryable.OrderColumns(search)
+            return deptQueryable.OrderColumns(search)
                             .GroupBy(x => x.Id)
                             .Select(x => new DepartmentDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) })
                             .AsQueryable();

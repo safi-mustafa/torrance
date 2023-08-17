@@ -221,6 +221,8 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                         empQueryable = JoinEmployeesWithLogs<TOTLog>(empQueryable); break;
                     case FilterLogType.WeldingRodRecord:
                         empQueryable = JoinEmployeesWithLogs<WRRLog>(empQueryable); break;
+                    case FilterLogType.FCO:
+                        empQueryable = JoinEmployeesWithLogs<FCOLog>(empQueryable); break;
                     case FilterLogType.All:
                         return (
                             from ap in empQueryable
@@ -230,12 +232,16 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
                             from wl in wwl.DefaultIfEmpty()
                             join ol in _db.OverrideLogs on ap.Id equals ol.EmployeeId into ool
                             from ol in ool.DefaultIfEmpty()
+                            join fco in _db.OverrideLogs on ap.Id equals fco.EmployeeId into fcol
+                            from fco in fcol.DefaultIfEmpty()
                             where
                                  (tl != null && tl.Status != Status.Approved)
                                  ||
                                  (wl != null && wl.Status != Status.Approved)
                                  ||
                                  (ol != null && ol.Status != Status.Approved)
+                                 ||
+                                 (fco != null && fco.Status != Status.Approved)
                             group ap by ap.Id
                                       ).Select(x => new EmployeeDetailViewModel { Id = x.Key });
                 }

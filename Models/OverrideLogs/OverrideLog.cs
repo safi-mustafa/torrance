@@ -26,8 +26,8 @@ namespace Models.OverrideLogs
         public Unit Unit { get; set; }
 
         [ForeignKey("Department")]
-        public long DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public long? DepartmentId { get; set; }
+        public Department? Department { get; set; }
 
         [ForeignKey("ReasonForRequest")]
         public long? ReasonForRequestId { get; set; }

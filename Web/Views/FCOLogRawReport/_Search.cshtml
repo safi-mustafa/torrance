@@ -5,27 +5,33 @@
 <div class="row">
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
+            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" },{"Label","Contractor"} }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
+            <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requestor" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requestor" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" } }' />
         </div>
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "WeldingRodRecord" } }' />
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="BusinessTeamLeader" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Business Team Leader"}, {"Id", "business-team-leader"} }' />
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="AreaExecutionLead" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "FCO" }, {"UserTitle","Area Execution Lead"} ,{"Id", "area-execution-lead"} }' />
         </div>
     </div>
 

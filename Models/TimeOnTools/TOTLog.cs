@@ -31,8 +31,8 @@ namespace Models.TimeOnTools
         public Status Status { get; set; }
 
         [ForeignKey("Department")]
-        public long DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public long? DepartmentId { get; set; }
+        public Department? Department { get; set; }
 
         [ForeignKey("Unit")]
         public long UnitId { get; set; }

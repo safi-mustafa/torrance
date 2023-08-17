@@ -192,6 +192,9 @@ namespace Repositories.Services.CommonServices.CompanyService
                     case FilterLogType.WeldingRodRecord:
                         compQueryable = JoinCompanyWithLogs<WRRLog>(compQueryable);
                         break;
+                    case FilterLogType.FCO:
+                        compQueryable = JoinCompanyWithLogs<FCOLog>(compQueryable);
+                        break;
                     case FilterLogType.All:
                         return (from comp in compQueryable
                                 join tl in _db.TOTLogs on comp.Id equals tl.CompanyId into ttl
@@ -200,12 +203,16 @@ namespace Repositories.Services.CommonServices.CompanyService
                                 from wl in wwl.DefaultIfEmpty()
                                 join ol in _db.OverrideLogs on comp.Id equals ol.CompanyId into ool
                                 from ol in ool.DefaultIfEmpty()
+                                join fco in _db.FCOLogs on comp.Id equals fco.CompanyId into fcol
+                                from fco in fcol.DefaultIfEmpty()
                                 where
                                  (tl != null && tl.Status != Status.Approved)
                                  ||
                                  (wl != null && wl.Status != Status.Approved)
                                  ||
                                  (ol != null && ol.Status != Status.Approved)
+                                 ||
+                                 (fco != null && fco.Status != Status.Approved)
                                 group comp by comp.Id
                                         ).Select(x => new CompanyDetailViewModel { Id = x.Key, Name = x.Max(m => m.Name) });
                 }

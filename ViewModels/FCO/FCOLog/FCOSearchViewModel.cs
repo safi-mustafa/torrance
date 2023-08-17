@@ -33,7 +33,8 @@ namespace ViewModels
 
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public AreaExecutionLeadBriefViewModel AreaExecutionLead { get; set; } = new(false);
+        public BusinessTeamLeaderBriefViewModel BusinessTeamLeader { get; set; } = new(false);
         public List<string> SelectedIds { get; set; }
     }
 
