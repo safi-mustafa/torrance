@@ -53,7 +53,12 @@ namespace Repositories.Shared.NotificationServices
                     .Include(x => x.Approver)
                     .Include(x => x.Department)
                     .Include(x => x.Unit).
-                    Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                    Where(x => x.UnitId == association.Unit.Id && (association.Department.Id == 0 || x.DepartmentId == association.Department.Id) && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                approvers = approvers.GroupBy(x => x.ApproverId).Select(x => x.First()).ToList();
+                if (model.EntityType == NotificationEntityType.FCOLog)
+                {
+                    approvers.ForEach(x => x.Department = new Department { Id = 0, Name = "-" });
+                }
                 if (approvers != null && approvers.Count > 0)
                 {
                     List<Notification> notifications = new List<Notification>();
@@ -81,7 +86,7 @@ namespace Repositories.Shared.NotificationServices
             {
                 var association = await GetLogUnitAndDepartment(model);
                 var approver = await _db.ApproverAssociations.Include(x => x.Approver).Include(x => x.Department).Include(x => x.Unit)
-                    .Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active && x.ApproverId == approverId).AsNoTracking().FirstOrDefaultAsync();
+                    .Where(x => x.UnitId == association.Unit.Id && (association.Department.Id == 0 || x.DepartmentId == association.Department.Id) && x.Approver.ActiveStatus == ActiveStatus.Active && x.ApproverId == approverId).AsNoTracking().FirstOrDefaultAsync();
                 if (approver == null)
                 {
                     approver = new ApproverAssociation();
@@ -252,13 +257,13 @@ namespace Repositories.Shared.NotificationServices
             }
             else if (viewModel.EntityType == NotificationEntityType.FCOLog)
             {
-                association = await _db.FCOLogs.Include(x => x.Department).Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
+                association = await _db.FCOLogs.Include(x => x.Unit).Where(x => x.Id == viewModel.EntityId).Select(x =>
                 new ApproverAssociationsViewModel
                 {
                     Department = new DepartmentBriefViewModel
                     {
-                        Id = x.DepartmentId,
-                        Name = x.Department.Name
+                        Id = 0,
+                        Name = "-"
                     },
                     Unit = new UnitBriefViewModel()
                     {
