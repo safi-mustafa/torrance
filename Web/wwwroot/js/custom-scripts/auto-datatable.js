@@ -299,7 +299,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                             else {
                                 return data;
                             }
-                            
+
                         }
                     }
                     else {
@@ -596,13 +596,14 @@ function RenderHtml(data, dtColumns, row, meta) {
     }
     else if (dtColumns[meta.col].formatValue === "file") {
         let propertyName = dtColumns[meta.col].data.split(".")[0];
-        let imageUrl = row[propertyName]?.PreviewImgUrl;
-        let attachmentType = row[propertyName]?.AttachmentTypeStr;
+        let imageUrl = row[propertyName] && row[propertyName].PreviewImgUrl;
+        let attachmentType = row[propertyName] && row[propertyName].AttachmentTypeStr;
         if (data != "" && data != null && data != undefined)
             return '<div class="file-container"> <img data-attachment-type="' + attachmentType + '" data-src="' + data + '" src="' + imageUrl + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
         else {
             return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
         }
+        return "";
     }
     else if (dtColumns[meta.col].formatValue === "status") {
         return '<span class="badge ' + data + '"></span>';
@@ -843,7 +844,6 @@ function customizePdfExport(doc) {
                 colCount.push('*');
             }
         }
-
     });
     if (colCount.length < 8)// Cuts columns for table with more than 8 columns
         doc.content[1].table.widths = colCount;

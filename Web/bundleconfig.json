@@ -84,7 +84,6 @@
             "wwwroot/js/datatables/extensions/responsive.min.js",
             "wwwroot/js/datatables/datatables_responsive.js",
             "wwwroot/js/datatables/extensions/select.min.js"
-
         ],
         // Optionally specify minification options
         "minify": {
