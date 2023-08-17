@@ -178,7 +178,7 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                         appQueryable = JoinApproverWithLogs<WRRLog>(appQueryable);
                         break;
                     case FilterLogType.FCO:
-                        appQueryable = JoinApproverWithLogs<FCOLog>(appQueryable);
+                        appQueryable = JoinApproverWithFCOLogs(appQueryable, search.ApproverType);
                         break;
                     case FilterLogType.All:
                         return (from ap in appQueryable
@@ -212,6 +212,25 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     .SelectMany(x => x.ols.DefaultIfEmpty(), (u, ol) => new { u = u.u, ol = ol })
                     .Where(x => x.ol != null)
                     .Select(x => x.u);
+        }
+        private IQueryable<ToranceUser> JoinApproverWithFCOLogs(IQueryable<ToranceUser> userQueryable, ApproverType? approverType)
+        {
+            if (approverType == ApproverType.AreaExecutionLead)
+            {
+                return userQueryable.GroupJoin(_db.FCOLogs, u => u.Id, fl => fl.AreaExecutionLeadId, (u, fls) => new { u, fls })
+                    .SelectMany(x => x.fls.DefaultIfEmpty(), (u, fl) => new { u = u.u, fl = fl })
+                    .Where(x => x.fl != null)
+                    .Select(x => x.u);
+            }
+            else if (approverType == ApproverType.BusinessTeamLeader)
+            {
+                return userQueryable.GroupJoin(_db.FCOLogs, u => u.Id, fl => fl.BusinessTeamLeaderId, (u, fls) => new { u, fls })
+                    .SelectMany(x => x.fls.DefaultIfEmpty(), (u, fl) => new { u = u.u, fl = fl })
+                    .Where(x => x.fl != null)
+                    .Select(x => x.u);
+            }
+            else
+                return userQueryable;
         }
         public async Task<bool> SetApproverAssociations(List<ApproverAssociationsViewModel> associations, long approverId)
         {
