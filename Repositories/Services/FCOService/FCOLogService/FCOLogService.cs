@@ -260,7 +260,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
 
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, await GetFCONumber((long)model.Unit.Id, model.SrNo));
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, await GetFCONumber((long)model.Unit.Id, mappedModel.SrNo));
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };

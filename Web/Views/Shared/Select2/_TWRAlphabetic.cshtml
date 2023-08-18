@@ -20,11 +20,8 @@
     {
     @id = elementId,
     @class = "form-control",
-    //data_val_required = Model.ErrorMessage,
-    //data_val = Model.IsValidationEnabled.ToString().ToLower()
-    //data_val_required = "Required",
-    //data_val =  "true"
-
+    data_val_required = "The field is required.",
+    data_val = true,
     })
     <input type="hidden" name="TWRModel.AlphabeticPart.Name" value="@Model.text" />
     <span asp-validation-for="id" class="validation-invalid-label"></span>
