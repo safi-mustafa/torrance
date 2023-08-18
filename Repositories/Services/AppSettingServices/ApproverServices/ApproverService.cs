@@ -189,12 +189,20 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                 from wl in wwl.DefaultIfEmpty()
                                 join ol in _db.OverrideLogs on ap.Id equals ol.ApproverId into ool
                                 from ol in ool.DefaultIfEmpty()
+                                join fl in _db.FCOLogs on ap.Id equals fl.AreaExecutionLeadId into ffl
+                                from fl in ool.DefaultIfEmpty()
+                                join fl1 in _db.FCOLogs on ap.Id equals fl1.AreaExecutionLeadId into ff1l
+                                from f1l in ool.DefaultIfEmpty()
                                 where
                                  (tl != null && tl.Status != Status.Approved)
                                  ||
                                  (wl != null && wl.Status != Status.Approved)
                                  ||
                                  (ol != null && ol.Status != Status.Approved)
+                                 ||
+                                 (fl != null && fl.Status != Status.Approved)
+                                 ||
+                                 (f1l != null && f1l.Status != Status.Approved)
                                 group ap by ap.Id
                                         ).Select(x => new ApproverDetailViewModel { Id = x.Key });
                 }
@@ -231,7 +239,17 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                     .Select(x => x.u);
             }
             else
-                return userQueryable;
+            {
+                return (from u in _db.Users
+                        join fl in _db.FCOLogs on u.Id equals fl.AreaExecutionLeadId into fll
+                        from fl in fll.DefaultIfEmpty()
+                        join fl1 in _db.FCOLogs on u.Id equals fl1.BusinessTeamLeaderId into fl1l
+                        from fl1 in fl1l.DefaultIfEmpty()
+                        where fl != null && fl1 != null
+                        select u
+                        );
+
+            }
         }
         public async Task<bool> SetApproverAssociations(List<ApproverAssociationsViewModel> associations, long approverId)
         {
