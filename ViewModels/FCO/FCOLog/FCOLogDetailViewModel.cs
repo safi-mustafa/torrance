@@ -161,24 +161,21 @@ namespace ViewModels
         {
             get
             {
-                var materialEstimate = MaterialRate;
-                return Math.Round((materialEstimate + (materialEstimate / Contingency)), 2).FixNan();
+                return Math.Round((MaterialRate + (MaterialRate / Contingency)), 2).FixNan();
             }
         }
         public double TotalEquipment
         {
             get
             {
-                var equipmentEstimate = EquipmentRate;
-                return Math.Round((equipmentEstimate + (equipmentEstimate / Contingency)), 2).FixNan();
+                return Math.Round((EquipmentRate + (EquipmentRate / Contingency)), 2).FixNan();
             }
         }
         public double TotalShop
         {
             get
             {
-                var shopEstimate = ShopRate;
-                return Math.Round((shopEstimate + (shopEstimate / Contingency)), 2).FixNan();
+                return Math.Round((ShopRate + (ShopRate / Contingency)), 2).FixNan();
             }
         }
         public double SectionTotal

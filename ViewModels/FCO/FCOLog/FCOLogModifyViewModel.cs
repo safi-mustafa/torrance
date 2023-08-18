@@ -104,9 +104,9 @@ namespace ViewModels
         [Display(Name = "Total")]
         public double SubTotal { get => Math.Round(Total + Contingencies, 2).FixNan(); }
         public double TotalLabor { get { var laborEstimate = FCOSections?.Where(x => x.SectionType == FCOSectionCatalog.Labour).Sum(x => x.Estimate) ?? 0; return laborEstimate + (laborEstimate / Contingency).FixNan(); } }
-        public double TotalMaterial { get { var materialEstimate = MaterialRate; return materialEstimate + (materialEstimate / Contingency).FixNan(); } }
-        public double TotalEquipment { get { var equipmentEstimate = EquipmentRate; return equipmentEstimate + (equipmentEstimate / Contingency).FixNan(); } }
-        public double TotalShop { get { var shopEstimate = ShopRate; return shopEstimate + (shopEstimate / Contingency).FixNan(); } }
+        public double TotalMaterial { get { return MaterialRate + (MaterialRate / Contingency).FixNan(); } }
+        public double TotalEquipment { get { return EquipmentRate + (EquipmentRate / Contingency).FixNan(); } }
+        public double TotalShop { get { return ShopRate + (ShopRate / Contingency).FixNan(); } }
         public double SectionTotal { get => TotalLabor + TotalMaterial + TotalEquipment + TotalShop; }
 
     }

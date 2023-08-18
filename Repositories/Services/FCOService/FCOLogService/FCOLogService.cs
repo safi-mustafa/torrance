@@ -80,6 +80,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
+            List<Status> statusNotList = new();
+
             if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
@@ -88,6 +90,11 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             {
                 searchFilters.StatusNot = Status.Pending;
             }
+            if (searchFilters.StatusNot != null)
+                statusNotList.Add(searchFilters.StatusNot.Value);
+            if (status != Status.Archived)
+                statusNotList.Add(Status.Archived);
+            statusNotList.Add(Status.Partial);
             return x =>
                             (searchFilters.Department.Id == null || searchFilters.Department.Id == 0 || x.Department.Id == searchFilters.Department.Id)
                             &&
@@ -115,9 +122,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
-                            &&
-                            x.Status != Status.Partial
+                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
                             &&
                             x.IsDeleted == false
             ;
@@ -166,6 +171,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 return Response.BadRequestResponse(_response);
             }
         }
+
         public override async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
             try
@@ -238,6 +244,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             }
             return await attachments.ToListAsync();
         }
+
         public async override Task<IRepositoryResponse> Create(CreateViewModel model)
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
@@ -274,11 +281,13 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 }
             }
         }
+
         private async Task<string> GetFCONumber(long unitId, long srNo)
         {
             var costTrackerUnit = await _db.Units.Where(x => x.Id == unitId).Select(x => x.CostTrackerUnit).FirstOrDefaultAsync();
             return $"{costTrackerUnit}-{srNo}";
         }
+
         public async override Task<IRepositoryResponse> Update(UpdateViewModel model)
         {
             try
@@ -406,6 +415,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             //mappedModel.ApproverId = long.Parse(_userInfoService.LoggedInUserId());
             mappedModel.Status = Status.Approved;
         }
+
         public async Task<bool> IsFCOLogEmailUnique(int id, string email)
         {
             //var check = await _db.FCOLogs.Where(x => x.Email == email && x.Id != id).CountAsync();
@@ -432,6 +442,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 User = userFullName
             };
         }
+
         public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string comment = "", ApproverType approverType = 0)
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
@@ -446,7 +457,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                         var logRecord = await _db.FCOLogs.Where(x => x.Id == id).FirstOrDefaultAsync();
                         if (logRecord != null)
                         {
-                            
+
                             if (status == Status.Approved)
                             {
 
@@ -544,7 +555,6 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 }
             }
         }
-
 
         public async Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel)
         {
@@ -644,8 +654,6 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             }
             return null;
         }
-
-
 
         private void SetExcelHeaders(IXLWorksheet fcoLogSheet, long maxSectionRows)
         {

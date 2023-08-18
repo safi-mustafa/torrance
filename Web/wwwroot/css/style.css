@@ -85,9 +85,11 @@ a:focus {
         background-color: #5b9bd5;
         color: #fff;
     }
+
 .colorRed {
     color: red;
 }
+
 .image-container {
     display: flex;
     justify-content: center;
@@ -99,6 +101,7 @@ a:focus {
     border: 2px solid #ccc; /* Adjust the border color and thickness as needed */
     cursor: pointer;
 }
+
 .file-container {
     cursor: pointer;
 }
@@ -108,6 +111,7 @@ a:focus {
     max-width: 100%;
     height: auto;
 }
+
 .overlay {
     position: fixed;
     top: 0;
@@ -1242,6 +1246,16 @@ header {
     height: 15px;
     border-radius: 50%;
     background-color: orange;
+    vertical-align: middle;
+}
+
+.badge.Archived {
+    color: blue;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: blue;
     vertical-align: middle;
 }
 

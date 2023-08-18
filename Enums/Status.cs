@@ -8,12 +8,14 @@ namespace Enums
         Pending,
         Approved,
         Rejected,
-        Partial
+        Partial,
+        Archived = 100
     }
 
     public enum StatusSearchEnum
     {
         Approved = 1,
-        Rejected = 2
+        Rejected = 2,
+        Archived = 100
     }
 }

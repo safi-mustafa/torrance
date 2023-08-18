@@ -414,7 +414,7 @@
         var labourContingency = parseFloat((labourEstimate / contingency).toFixed(2));
         var materialContingency = parseFloat((materialEstimate / contingency).toFixed(2));
         var equipmentContingency = parseFloat((equipmentEstimate / contingency).toFixed(2));
-        var shopContingency = parseFloat((shopEstimate + (shopEstimate / contingency)).toFixed(2));
+        var shopContingency = parseFloat((shopEstimate / contingency).toFixed(2));
         var total = parseFloat((labourEstimate + materialEstimate + equipmentEstimate).toFixed(2));
         var totalContingency = parseFloat((labourContingency + materialContingency + equipmentContingency).toFixed(2));
         var subTotal = parseFloat((total + totalContingency).toFixed(2));
