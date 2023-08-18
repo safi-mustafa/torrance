@@ -259,8 +259,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     model.File.EntityType = AttachmentEntityType.FCOLogFile;
                     await AddAttachment(model.Photo, mappedModel.Id);
                     await AddAttachment(model.File, mappedModel.Id);
-
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, await GetFCONumber((long)model.Unit.Id, mappedModel.SrNo));
+                    string fcoIdentifier = await GetFCONumber((long)model.Unit.Id, mappedModel.SrNo);
+                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, fcoIdentifier);
                     await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
@@ -413,7 +413,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             return true;
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(FCOLog model, NotificationEventTypeCatalog eventType, string srNo)
+        private async Task<NotificationViewModel> GetNotificationModel(FCOLog model, NotificationEventTypeCatalog eventType, string fcoIdentifier)
         {
             string userFullName = "";
             string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -428,7 +428,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 EventType = eventType,
                 EntityType = NotificationEntityType.FCOLog,
                 IdentifierKey = "FCO#",
-                IdentifierValue = srNo,
+                IdentifierValue = fcoIdentifier,
                 User = userFullName
             };
         }
