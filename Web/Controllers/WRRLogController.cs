@@ -42,8 +42,38 @@ namespace Web.Controllers
         }
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
+            var loggedInUserRole = _userInfo.LoggedInUserRole();
+            var html = "";
+            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString())
+            {
+                html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Submitted m-1""> </span>
+                        <span class=""stat-name"">Pending</span>
+                    </div>";
+            }
+
+            html += @"
+                    <div class=""p-2 row"">
+                        <span class=""badge Approved m-1""> </span>
+                        <span class=""stat-name"">Approved</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Rejected m-1""> </span>
+                        <span class=""stat-name"">Rejected</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Archived m-1""> </span>
+                        <span class=""stat-name"">Archived</span>
+                    </div>";
+            vm.DataTableHeaderHtml = html;
+            vm.IsResponsiveDatatable = false;
             vm.IsExcelDownloadAjaxBased = true;
-            return base.OverrideCrudListVM(vm);
+            bool canAddLogs = false;
+            var canAddLogsClaim = User.FindFirst("CanAddLogs");
+            bool.TryParse(canAddLogsClaim?.Value, out canAddLogs);
+            vm.HideCreateButton = !(_userInfo.LoggedInUserRoles().Contains("Administrator") || _userInfo.LoggedInUserRoles().Contains("SuperAdmin") || _userInfo.LoggedInUserRoles().Contains("Employee") || canAddLogs);
+            return vm;
         }
         public override List<DataTableViewModel> GetColumns()
         {

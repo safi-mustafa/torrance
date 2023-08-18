@@ -68,6 +68,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         {
             var searchFilters = filters as ORLogSearchViewModel;
             var status = (Status?)((int?)searchFilters.Status);
+            List<Status> statusNotList = new();
             if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
@@ -76,6 +77,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 searchFilters.StatusNot = Status.Pending;
             }
+
+            if (searchFilters.StatusNot != null)
+                statusNotList.Add(searchFilters.StatusNot.Value);
+            if (status != Status.Archived)
+                statusNotList.Add(Status.Archived);
+            statusNotList.Add(Status.Partial);
 
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToString().Contains(searchFilters.Search.value.ToLower()))
@@ -110,7 +117,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
                             &&
                             x.IsDeleted == false
             ;

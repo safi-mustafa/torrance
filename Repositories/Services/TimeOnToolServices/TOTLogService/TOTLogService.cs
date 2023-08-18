@@ -63,6 +63,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
+            List<Status> statusNotList = new();
             if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
@@ -71,6 +72,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             {
                 searchFilters.StatusNot = Status.Pending;
             }
+            if (searchFilters.StatusNot != null)
+                statusNotList.Add(searchFilters.StatusNot.Value);
+            if (status != Status.Archived)
+                statusNotList.Add(Status.Archived);
+            statusNotList.Add(Status.Partial);
 
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.Contains(searchFilters.Search.value.ToLower()))
@@ -108,7 +114,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
                             &&
                             x.IsDeleted == false
             ;

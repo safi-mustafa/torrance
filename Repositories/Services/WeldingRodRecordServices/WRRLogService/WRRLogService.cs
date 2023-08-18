@@ -70,6 +70,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             var status = (Status?)((int?)searchFilters.Status);
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
+            List<Status> statusNotList = new();
             if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
@@ -78,6 +79,13 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             {
                 searchFilters.StatusNot = Status.Pending;
             }
+
+            if (searchFilters.StatusNot != null)
+                statusNotList.Add(searchFilters.StatusNot.Value);
+            if (status != Status.Archived)
+                statusNotList.Add(Status.Archived);
+            statusNotList.Add(Status.Partial);
+
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
@@ -109,7 +117,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
                             &&
                             x.IsDeleted == false
             ;
