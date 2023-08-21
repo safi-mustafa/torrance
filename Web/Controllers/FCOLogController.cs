@@ -220,7 +220,7 @@ namespace Web.Controllers
         {
             var response = await _fCOLogService.GetFCOComments(Id);
             var parsedResponse = response as RepositoryResponseWithModel<List<FCOCommentsViewModel>>;
-            return View("_Comment", parsedResponse);
+            return View("_Comment", parsedResponse.ReturnModel);
         }
 
 
