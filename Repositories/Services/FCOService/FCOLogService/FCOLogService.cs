@@ -721,7 +721,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             fcoLogSheet.Cell(1, currentColumn++).Value = "Section Total";
         }
 
-        public async Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId)
+        public async Task<IRepositoryResponse> GetFCOComments(long fcoId)
         {
             try
             {
@@ -734,7 +734,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                                           CommentedBy = u.FullName,
                                           CommentedDate = c.CreatedOn
                                       }).ToListAsync();
-                return comments;
+                var response = new RepositoryResponseWithModel<List<FCOCommentsViewModel>> { ReturnModel = comments };
+                return response;
             }
             catch (Exception ex)
             {
