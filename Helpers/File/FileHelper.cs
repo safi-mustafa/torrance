@@ -12,10 +12,10 @@ namespace Helpers.File
 {
     public interface IFileHelper
     {
-        string Save(IFileModel model, string existingUrl = "");
+        string Save(IFileModel model, string existingUrl = "", string baseFolder = "", string namePrefix = "");
         bool Delete(string url);
 
-        void GetFilePath(string extension, string _baseFolder, out string subPath, out string uniqueFileName, out string filePath, out string basePath);
+        void GetFilePath(string extension, string _baseFolder, string namePrefix, out string subPath, out string uniqueFileName, out string filePath, out string basePath);
     }
     public class FileHelper : IFileHelper
     {
@@ -29,7 +29,7 @@ namespace Helpers.File
             _logger = logger;
             _env = env;
         }
-        public string Save(IFileModel model, string existingUrl = "")
+        public string Save(IFileModel model, string existingUrl = "", string baseFolder = "", string namePrefix = "")
         {
             string imageUrl = "";
             try
@@ -40,7 +40,7 @@ namespace Helpers.File
                     var extension = Path.GetExtension(model.File.FileName);
                     _logger.LogDebug("File Save method, extension trimmed", extension);
                     string subPath, uniqueFileName, filePath, basePathStorage;
-                    GetFilePath(extension, _baseFolder, out subPath, out uniqueFileName, out filePath, out basePathStorage);
+                    GetFilePath(extension, _baseFolder, namePrefix, out subPath, out uniqueFileName, out filePath, out basePathStorage);
                     if (!string.IsNullOrEmpty(existingUrl))
                     {
                         Delete(existingUrl);
@@ -72,15 +72,20 @@ namespace Helpers.File
             return imageUrl;
         }
 
-        public void GetFilePath(string extension, string _baseFolder, out string subPath, out string uniqueFileName, out string filePath, out string basePath)
+        public void GetFilePath(string extension, string _baseFolder, string prefix, out string subPath, out string uniqueFileName, out string filePath, out string basePath)
         {
-            string basePathStorage = $"wwwroot/{_configuration.GetValue<string>("UploadBaseStoragePath")}";
+            string basePathStorage = $"{_configuration.GetValue<string>("UploadBaseStoragePath")}";
             basePath = _configuration.GetValue<string>("UploadBasePath");
             subPath = _configuration.GetValue<string>("UploadSubPath");
             string uploadsFolder = Path.Combine(basePathStorage, subPath, _baseFolder);
             uniqueFileName = DateTime.UtcNow.Ticks.ToString() + extension;
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                uniqueFileName = prefix + "-" + uniqueFileName;
+            }
             filePath = Path.Combine(uploadsFolder, uniqueFileName);
         }
+
 
         public bool Delete(string url)
         {

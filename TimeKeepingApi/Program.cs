@@ -13,6 +13,7 @@ using System.Text;
 using Torrance.Api.Mapper;
 using Centangle.Common.RequestHelpers.SwaggerFilters;
 using Web.Extensions;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +46,17 @@ else
 }
 
 //app.UseHttpsRedirection(); //ENABLE IN PRODUCTION
-app.UseStaticFiles();
+var directoryPath = configuration.GetValue<string>("DirectoryPath");
+var uploadBasePath = configuration.GetValue<string>("UploadBasePath");
+//app.UseHttpsRedirection(); //ENABLE IN PRODUCTION
+app.UseStaticFiles(); // For the wwwroot folder  
+app.UseStaticFiles(new StaticFileOptions
+{
+
+    FileProvider = new PhysicalFileProvider(Path.Combine(directoryPath, uploadBasePath)),
+    RequestPath = "/Storage"
+});
+
 
 app.UseRouting();
 //app.UseCors(
