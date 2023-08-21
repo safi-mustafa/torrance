@@ -87,6 +87,14 @@ namespace API.Controllers
             return base.Put(model);
         }
 
+        [HttpGet]
+        [Route("/api/FCOLog/GetFCOComments")]
+        public async Task<IActionResult> GetFCOComments([FromQuery] long Id)
+        {
+            var comments = await _fCOLogService.GetFCOComments(Id);
+            return ReturnProcessedResponse<List<FCOCommentsViewModel>>(comments);
+        }
+
     }
 }
 
