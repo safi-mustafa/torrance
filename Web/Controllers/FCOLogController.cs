@@ -11,6 +11,7 @@ using ViewModels.CRUD;
 using ViewModels.DataTable;
 using ViewModels;
 using Repositories.Services.AppSettingServices;
+using ViewModels.FCO.FCOLog;
 
 namespace Web.Controllers
 {
@@ -71,7 +72,7 @@ namespace Web.Controllers
         {
             try
             {
-                var response = await _fCOLogService.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId, comment, approverType);
+                var response = await _fCOLogService.SetApproveStatus(new FCOLogApproveViewModel { Id = id, Status = status, IsUnauthenticatedApproval = isUnauthenticatedApproval, ApproverId = approverId, NotificationId = notificationId, Comment = comment, ApproverType = approverType });
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     _logger.LogInformation($"FCOLog: Record with id: {id} Approved Successfully at " + DateTime.UtcNow);
