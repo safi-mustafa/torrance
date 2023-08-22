@@ -18,7 +18,8 @@ namespace Repositories.Services.AppSettingServices
         Task<bool> IsFCOLogEmailUnique(int id, string email);
         Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel);
         Task<IRepositoryResponse> SetApproveStatus(FCOLogApproveViewModel model);
-        Task<List<FCOCommentsViewModel>> GetFCOComments(long fcoId);
+        Task<IRepositoryResponse> GetFCOComments(long fcoId);
+
         long GetMaxSectionCount();
     }
 }

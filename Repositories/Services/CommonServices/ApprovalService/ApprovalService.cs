@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Enums;
 using Helpers.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -47,9 +48,13 @@ namespace Repositories.Services.CommonServices.ApprovalService
             try
             {
                 List<string> approverAssociations = null;
+                List<string> fcoApproverAssociations = null;
                 if (isApprover)
                 {
-                    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToListAsync();
+                    var associations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).ToListAsync();
+                    approverAssociations = associations.Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToList();
+                    if (associations != null && associations.Count > 0)
+                        fcoApproverAssociations = associations.Select(x => x.UnitId.ToString()).Distinct().ToList();
                 }
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
@@ -182,7 +187,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     &&
                     (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     &&
-                    (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
+                    (isApprover == false || (fcoApproverAssociations != null && fcoApproverAssociations.Contains(x.UnitId.ToString())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel

@@ -5,9 +5,11 @@ using Newtonsoft.Json.Serialization;
 using Web.Extensions;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Microsoft.Extensions.Configuration.ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
 builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
@@ -41,27 +43,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//                    Path.Combine(builder.Environment.ContentRootPath, "Storage")),
-//    RequestPath = "/Storage"
-//});
+var directoryPath = configuration.GetValue<string>("DirectoryPath");
+var uploadBasePath = configuration.GetValue<string>("UploadBasePath");
+//app.UseHttpsRedirection(); //ENABLE IN PRODUCTION
+app.UseStaticFiles(); // For the wwwroot folder  
+app.UseStaticFiles(new StaticFileOptions
+{
 
-//app.UseDirectoryBrowser(new DirectoryBrowserOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//        System.IO.Path.Combine(builder.Environment.ContentRootPath, "Storage")
-//        ),
-//    RequestPath = "/Storage"
-//});
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//           Path.Combine(builder.Environment.ContentRootPath, "Storage")),
-//    RequestPath = "/Storage"
-//});
+    FileProvider = new PhysicalFileProvider(Path.Combine(directoryPath, uploadBasePath)),
+    RequestPath = "/Storage"
+});
+
 app.UseRouting();
 
 app.UseAuthentication();

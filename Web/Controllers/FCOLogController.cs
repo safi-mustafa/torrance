@@ -12,6 +12,8 @@ using ViewModels.DataTable;
 using ViewModels;
 using Repositories.Services.AppSettingServices;
 using ViewModels.FCO.FCOLog;
+using Centangle.Common.ResponseHelpers.Models;
+using Pagination;
 
 namespace Web.Controllers
 {
@@ -217,8 +219,9 @@ namespace Web.Controllers
 
         public async Task<IActionResult> _GetFCOComments(long Id)
         {
-            var comments = await _fCOLogService.GetFCOComments(Id);
-            return View("_Comment", comments);
+            var response = await _fCOLogService.GetFCOComments(Id);
+            var parsedResponse = response as RepositoryResponseWithModel<List<FCOCommentsViewModel>>;
+            return View("_Comment", parsedResponse.ReturnModel);
         }
 
 
