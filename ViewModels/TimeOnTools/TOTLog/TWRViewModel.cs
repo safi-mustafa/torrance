@@ -469,4 +469,10 @@ namespace ViewModels.TimeOnTools.TOTLog
           }
         };
     }
+
+    public class TWRExcelViewModel
+    {
+        public string AlphabeticPart { get; set; } = "-";
+        public string NumericPart { get; set; } = "-";
+    }
 }

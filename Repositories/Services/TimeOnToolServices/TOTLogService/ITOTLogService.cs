@@ -19,5 +19,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
         Task<IRepositoryResponse> GetDelayReason<BaseBriefVM>(IBaseSearchModel search);
         Task<XLWorkbook> DownloadExcel(TOTLogSearchViewModel searchModel);
+        Task<XLWorkbook> InitializeData();
     }
 }

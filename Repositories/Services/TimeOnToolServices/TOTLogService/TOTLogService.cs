@@ -525,6 +525,77 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
+        public async Task<XLWorkbook> InitializeData()
+        {
+            try
+            {
+                var alphabeticTextList = GetTWRAlphabeticList().Select(x => x.text).ToList();
+                var numericTextList = GetTWRNumericList().Select(x => x.text).ToList();
 
+                var aCount = alphabeticTextList.Count;
+                var nCount = numericTextList.Count;
+
+
+                List<TWRExcelViewModel> list = new();
+                var maxCount = Math.Max(aCount, nCount);
+                for (int i = 0; i < maxCount; i++)
+                {
+                    var item = new TWRExcelViewModel();
+                    if (aCount > i)
+                    {
+                        item.AlphabeticPart = alphabeticTextList[i];
+                    }
+                    if (nCount > i)
+                    {
+                        item.NumericPart = numericTextList[i];
+                    }
+                    list.Add(item);
+                }
+
+
+                var workbook = new XLWorkbook();
+                var worksheet = workbook.Worksheets.Add("TWR");
+                var columnHeaders = new List<string>
+                {
+                    "Alphabetic List",
+                    "Numeric List",
+                };
+                AddColumnHeaders(worksheet, columnHeaders);
+                ChangeBackgroudColor(worksheet, 1, XLColor.FromArgb(0, 0, 0));
+                AddTWRDataRows(worksheet, list);
+
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+                // handle exception
+                return null;
+            }
+        }
+
+        private static void ChangeBackgroudColor(IXLWorksheet worksheet, int row, XLColor? rowColor)
+        {
+            if (rowColor != null)
+            {
+                int columnCount = worksheet.ColumnsUsed().Count();
+                var range = worksheet.Range(row, 1, row, columnCount);
+                range.Style.Fill.BackgroundColor = rowColor;
+                range.Style.Font.FontColor = XLColor.White;
+                range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            }
+        }
+
+        private void AddTWRDataRows(IXLWorksheet worksheet, List<TWRExcelViewModel> items)
+        {
+            var row = 2;
+            foreach (var item in items)
+            {
+                var logIndex = 0;
+                worksheet.Cell(row, ++logIndex).Value = item.AlphabeticPart;
+                worksheet.Cell(row, ++logIndex).Value = item.NumericPart;
+                row++;
+            }
+        }
     }
 }
