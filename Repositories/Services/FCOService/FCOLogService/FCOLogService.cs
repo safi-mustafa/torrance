@@ -8,6 +8,7 @@ using Helpers.Extensions;
 using Helpers.Models.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
@@ -28,6 +29,7 @@ using Repositories.Shared.UserInfoServices;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using ViewModels;
+using ViewModels.FCO.FCOLog;
 using ViewModels.Notification;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
@@ -47,6 +49,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IActionContextAccessor _actionContext;
         private readonly IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> _attachmentService;
 
         public FCOLogService(
@@ -58,6 +61,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                 INotificationService notificationService,
                 IHttpContextAccessor httpContextAccessor,
                 IPossibleApproverService possibleApproverService,
+                IActionContextAccessor actionContext,
                 IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
             ) : base(db, logger, mapper, response)
         {
@@ -69,6 +73,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            this._actionContext = actionContext;
             _attachmentService = attachmentService;
         }
 
@@ -104,6 +109,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                                 (loggedInUserRole == "SuperAdmin")
                                 ||
                                 (loggedInUserRole == RolesCatalog.Administrator.ToString())
+                                ||
+                                (loggedInUserRole == RolesCatalog.Approver.ToString() && x.AreaExecutionLeadId == parsedLoggedInId || x.BusinessTeamLeaderId == parsedLoggedInId || x.RejecterId == parsedLoggedInId)
                                 ||
                                 (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )
@@ -196,6 +203,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     .Include(x => x.FCOSections).ThenInclude(x => x.Craft)
                     .Where(filters)
                     .IgnoreQueryFilters();
+                var check = resultQuery.ToQueryString();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
@@ -443,30 +451,34 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
             };
         }
 
-        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string comment = "", ApproverType approverType = 0)
+        public async Task<IRepositoryResponse> SetApproveStatus(FCOLogApproveViewModel model)
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var allowUnauthenticatedApproval = (isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid());
-                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
+                    var allowUnauthenticatedApproval = (model.IsUnauthenticatedApproval && model.ApproverId > 0 && model.NotificationId != new Guid());
+                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == model.NotificationId && x.SendTo == model.ApproverId.ToString() && x.EntityId == model.Id) : false;
 
-                    if (isUnauthenticatedApproval == false || allowUnauthenticatedApproval)
+                    if (model.IsUnauthenticatedApproval == false || allowUnauthenticatedApproval)
                     {
-                        var logRecord = await _db.FCOLogs.Where(x => x.Id == id).FirstOrDefaultAsync();
+                        var logRecord = await _db.FCOLogs.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                         if (logRecord != null)
                         {
 
-                            if (status == Status.Approved)
+                            if (model.Status == Status.Approved)
                             {
-
-                                if (approverType == ApproverType.AreaExecutionLead)
+                                if (model.ApproverType == null)
+                                {
+                                    _actionContext.ActionContext.ModelState.AddModelError("Approver Type", "Approver Type is required");
+                                    return Response.BadRequestResponse(_response);
+                                }
+                                if (model.ApproverType == ApproverType.AreaExecutionLead)
                                 {
                                     logRecord.AreaExecutionLeadId = long.Parse(_userInfoService.LoggedInUserId());
                                     logRecord.AreaExecutionLeadApprovalDate = DateTime.Now;
                                 }
-                                else if (approverType == ApproverType.BusinessTeamLeader)
+                                else if (model.ApproverType == ApproverType.BusinessTeamLeader)
                                 {
                                     logRecord.BusinessTeamLeaderId = long.Parse(_userInfoService.LoggedInUserId());
                                     logRecord.BusinessTeamLeaderApprovalDate = DateTime.Now;
@@ -488,9 +500,9 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                                 logRecord.RejecterDate = DateTime.Now;
                                 logRecord.Status = Status.Rejected;
                             }
-                            if (!string.IsNullOrEmpty(comment))
+                            if (!string.IsNullOrEmpty(model.Comment))
                             {
-                                await _db.AddAsync(new FCOComment { Comment = comment, FCOLogId = logRecord.Id });
+                                await _db.AddAsync(new FCOComment { Comment = model.Comment, FCOLogId = logRecord.Id });
                             }
 
                             await _db.SaveChangesAsync();
@@ -503,8 +515,8 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             identifierKey = "FCO#";
                             identifier = await GetFCONumber((long)logRecord.UnitId, logRecord.SrNo);
                             notificationEntityType = NotificationEntityType.FCOLog;
-                            var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
-                            string notificationTitle = $"{type} Log {status}";
+                            var eventType = (model.Status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
+                            string notificationTitle = $"{type} Log {model.Status}";
                             //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                             var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
                             var notification = new NotificationViewModel()
@@ -541,7 +553,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             await transaction.CommitAsync();
                             return _response;
                         }
-                        _logger.LogWarning($"No record found for id:{id} for FCOLog in SetApproveStatus()");
+                        _logger.LogWarning($"No record found for id:{model.Id} for FCOLog in SetApproveStatus()");
 
                         await transaction.RollbackAsync();
                     }

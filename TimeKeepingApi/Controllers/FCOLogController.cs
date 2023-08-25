@@ -8,6 +8,8 @@ using Repositories.Services.AppSettingServices;
 using ViewModels;
 using Enums;
 using System.Net;
+using ViewModels.FCO.FCOLog;
+using Centangle.Common.ResponseHelpers.Models;
 
 namespace API.Controllers
 {
@@ -56,15 +58,21 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = ("Admin,SuperAdmin,Approver"))]
-        [HttpPut("{id}/{status}/{approverId}/{comment}/{approverType}")]
+        [HttpPut]
+        [Route("Approve")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public virtual async Task<IActionResult> Approve(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid? notificationId, string? comment, ApproverType approverType)
+        public virtual async Task<IActionResult> Approve(FCOLogApproveViewModel model)
         {
-            var result = await _fCOLogService.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId ?? new Guid(), comment ?? "", approverType);
-            return ReturnProcessedResponse(result);
+            if (ModelState.IsValid)
+            {
+                var result = await _fCOLogService.SetApproveStatus(model);
+                return ReturnProcessedResponse(result);
+            }
+
+            return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
         public override Task<IActionResult> Put([FromForm] FCOLogModifyViewModel model)
         {

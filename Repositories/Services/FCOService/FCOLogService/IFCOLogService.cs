@@ -6,6 +6,7 @@ using ViewModels.Shared;
 using ViewModels;
 using Enums;
 using Centangle.Common.ResponseHelpers.Models;
+using ViewModels.FCO.FCOLog;
 
 namespace Repositories.Services.AppSettingServices
 {
@@ -16,8 +17,9 @@ namespace Repositories.Services.AppSettingServices
     {
         Task<bool> IsFCOLogEmailUnique(int id, string email);
         Task<XLWorkbook> DownloadExcel(FCOLogSearchViewModel searchModel);
-        Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid(), string comment = "", ApproverType approverType = 0);
+        Task<IRepositoryResponse> SetApproveStatus(FCOLogApproveViewModel model);
         Task<IRepositoryResponse> GetFCOComments(long fcoId);
+
         long GetMaxSectionCount();
     }
 }
