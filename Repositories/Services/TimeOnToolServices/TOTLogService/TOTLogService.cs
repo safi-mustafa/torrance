@@ -111,6 +111,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
                             &&
                             x.IsDeleted == false
+                            &&
+                            x.IsArchived == searchFilters.IsArchived
             ;
         }
 

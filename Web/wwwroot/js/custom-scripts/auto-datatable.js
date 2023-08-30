@@ -30,7 +30,7 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
     return "";
 }
 
-function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false,pageLength=25) {
+function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false, pageLength = 25) {
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
@@ -48,7 +48,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
 
 
     $(window).off('scroll');
-    $(window).on('scroll',function () {
+    $(window).on('scroll', function () {
         var isFixhedHeaderVisible = $('.dtfh-floatingparent.dtfh-floatingparenthead').is(':visible');
 
         if (isFixhedHeaderVisible) {
@@ -65,7 +65,7 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
                 // Set the flag to true indicating that the code has been added
                 isScrollableFixedHeaderEventAdded = true;
             }
-         
+
         }
         else {
             isScrollableFixedHeaderEventAdded = false;
@@ -206,7 +206,11 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 if ($('#' + formId).length > 0) {
                     $('#' + formId + ' :input, #' + formId + ' select').each(function (key, val) {
                         if (val.value !== "") {
-                            searchParams[val.name] = $(val).val();
+                            if ($(val).is(":checkbox")) {
+                                searchParams[val.name] = $(val).is(":checked");
+                            }
+                            else
+                                searchParams[val.name] = $(val).val();
                         }
                     });
                 }
@@ -388,7 +392,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
-           
+
             // Add scroll bar on top
             $('.dataTables_scrollHead').off('scroll');
             $('.dataTables_scrollHead').css({
@@ -568,6 +572,9 @@ function SetSearchFilters() {
                     }
                     else if ($(input).is('select')) {
                         value = $(input).find(":selected").text();
+                    }
+                    else if ($(input).is(':checkbox')) {
+                        value = $(input).is(":checked");
                     }
                     if (containerHtml == "") {
                         containerHtml = "<span class='mr-1'>Filters: </span>";

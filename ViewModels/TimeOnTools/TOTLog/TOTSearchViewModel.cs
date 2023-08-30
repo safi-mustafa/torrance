@@ -34,7 +34,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public bool IsExcelDownload { get; set; }
-
+        [Display(Name = "Show Archived")]
+        public bool IsArchived { get; set; }
         public List<string> SelectedIds { get; set; }
     }
 
