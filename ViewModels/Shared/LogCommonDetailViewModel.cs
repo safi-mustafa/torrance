@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Enums;
 using Helpers.Extensions;
 using ViewModels.Authentication.User;
@@ -19,6 +20,10 @@ namespace ViewModels.Shared
                 return Status != Status.Pending;
             }
         }
+
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
+
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
     }
 }

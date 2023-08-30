@@ -50,6 +50,10 @@ namespace ViewModels.OverrideLogs.ORLog
             }
         }
 
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
+
+
         [Display(Name = "Work Date")]
         public DateTime WorkCompletedDate { get; set; } = DateTime.UtcNow;
         public string FormattedDateOfWorkCompleted

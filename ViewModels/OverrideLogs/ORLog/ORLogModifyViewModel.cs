@@ -38,6 +38,9 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
 
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
+
         public UnitBriefViewModel Unit { get; set; } = new();
 
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();

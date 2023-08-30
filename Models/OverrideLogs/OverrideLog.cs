@@ -16,6 +16,7 @@ namespace Models.OverrideLogs
         public int OverrideHours { get; set; }
         public long PoNumber { get; set; }
         public Status Status { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("Shift")]
         public long ShiftId { get; set; }
