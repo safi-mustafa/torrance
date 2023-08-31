@@ -17,7 +17,7 @@ namespace API.Controllers
             this._versionService = versionService;
         }
         [HttpGet]
-        [Route("/api/Account/UpdateStatus")]
+        [Route("/api/UpdateStatus")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateStatus()
         {

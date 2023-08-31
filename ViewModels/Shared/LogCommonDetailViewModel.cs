@@ -12,7 +12,6 @@ namespace ViewModels.Shared
         public Guid NotificationId { get; set; }
         public Status Status { get; set; }
 
-        public string FormattedStatus { get => Status.GetDisplayName(); }
         public bool IsEditRestricted
         {
             get
@@ -23,6 +22,13 @@ namespace ViewModels.Shared
 
         [Display(Name = "Is Archived")]
         public bool IsArchived { get; set; }
+        public new string FormattedStatus
+        {
+            get
+            {
+                return IsArchived ? "Archived" : Status.GetDisplayName();
+            }
+        }
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
     }

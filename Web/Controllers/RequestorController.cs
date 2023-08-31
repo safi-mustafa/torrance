@@ -37,7 +37,6 @@ namespace Web.Controllers
             _userManager = userManager;
         }
 
-
         public IActionResult ImportExcelSheet()
         {
             var model = new ExcelFileVM();
@@ -48,6 +47,10 @@ namespace Web.Controllers
         {
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                model.Password = "Torrance";
+            }
             return base.Create(model);
         }
 
