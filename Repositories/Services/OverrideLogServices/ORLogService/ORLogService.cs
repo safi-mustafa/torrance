@@ -113,6 +113,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
                             &&
                             x.IsDeleted == false
+                            &&
+                            x.IsArchived == searchFilters.IsArchived
             ;
         }
 

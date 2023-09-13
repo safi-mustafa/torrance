@@ -29,6 +29,7 @@ namespace Models.TimeOnTools
         public string? EquipmentNo { get; set; }
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("Department")]
         public long DepartmentId { get; set; }

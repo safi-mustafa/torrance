@@ -30,6 +30,9 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Status Is Not")]
         public Status? StatusNot { get; set; } = null;
 
+        [Display(Name = "Show Archived")]
+        public bool IsArchived { get; set; }
+
         public bool IsExcelDownload { get; set; } = false;
 
         public List<string> SelectedIds { get; set; }

@@ -36,7 +36,7 @@
             <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
         </div>
     </div>
-   
+
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
@@ -61,6 +61,12 @@
                 <option selected="selected" value="">Select Status</option>
             </select>
             <input type="hidden" asp-for="StatusNot" />
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="form-group profile-input">
+            <label asp-for="IsArchived" class="control-label form-label fw-600"></label>
+            <input type="checkbox" id="show-archive" name="IsArchived" value="false" style="display: block;" />
         </div>
     </div>
 </div>

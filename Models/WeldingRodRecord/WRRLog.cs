@@ -24,6 +24,7 @@ namespace Models.WeldingRodRecord
         public double RodCheckedOutLbs { get; set; }
         public double? RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("Department")]
         public long DepartmentId { get; set; }

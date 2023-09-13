@@ -67,7 +67,7 @@ namespace Repositories.Services.DashboardService
                                       .Include(x => x.ShiftDelay)
                                       .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
                                       {
-                                          Category = x.Max(y => y.ShiftDelay.Name)??"None",
+                                          Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
                                           Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
                                       }).ToListAsync();
 
@@ -86,6 +86,7 @@ namespace Repositories.Services.DashboardService
                                          Category = x.Max(y => y.StartOfWorkDelay.Name) ?? "None",
                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
                                      }).ToListAsync();
+
             model.OngoingWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                     .Include(x => x.OngoingWorkDelay)
                                     .GroupBy(x => x.OngoingWorkDelayId).Select(x => new LogPieChartViewModel
@@ -199,9 +200,9 @@ namespace Repositories.Services.DashboardService
             {
                 var dashboardData = new DashboardViewModel
                 {
-                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false).CountAsync(),
-                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false).CountAsync(),
-                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false).CountAsync()
+                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
+                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
+                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync()
                 };
                 return dashboardData;
             }
@@ -215,7 +216,10 @@ namespace Repositories.Services.DashboardService
         private IQueryable<TOTLog> GetFilteredTOTLogs(TOTLogSearchViewModel search)
         {
             return _db.TOTLogs.Where(x =>
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     (search.DelayType.Id == null || search.DelayType.Id == x.DelayTypeId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == x.UnitId)
@@ -225,8 +229,10 @@ namespace Repositories.Services.DashboardService
         private IQueryable<OverrideLog> GetFilteredORLogs(TOTLogSearchViewModel search)
         {
             return _db.OverrideLogs.Where(x =>
-
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
                 );
         }
@@ -234,7 +240,10 @@ namespace Repositories.Services.DashboardService
         private IQueryable<WRRLog> GetFilteredWrrLogs(WRRLogSearchViewModel search)
         {
             return _db.WRRLogs.Where(x =>
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     (search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId)

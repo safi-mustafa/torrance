@@ -112,6 +112,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
                             &&
                             x.IsDeleted == false
+                            &&
+                            x.IsArchived == searchFilters.IsArchived
             ;
         }
 

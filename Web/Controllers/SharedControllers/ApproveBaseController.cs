@@ -67,6 +67,10 @@ namespace Web.Controllers
                     <div class=""m-2 row"">
                         <span class=""badge Rejected m-1""> </span>
                         <span class=""stat-name"">Rejected</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge Archived m-1""> </span>
+                        <span class=""stat-name"">Archived</span>
                     </div>";
             vm.DataTableHeaderHtml = html;
             vm.IsResponsiveDatatable = false;

@@ -45,6 +45,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? WorkScope { get; set; }
         [Required]
         public string? Foreman { get; set; }
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
 
         [Display(Name = "Hours", Prompt = "Add Hours")]
         [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
@@ -58,7 +60,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? Comment { get; set; }
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
         [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }

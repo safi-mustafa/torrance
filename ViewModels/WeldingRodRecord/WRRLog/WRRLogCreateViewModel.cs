@@ -48,6 +48,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
         public double RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
