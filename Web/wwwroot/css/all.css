@@ -21063,9 +21063,14 @@ input[type="text"].noui-height-helper:not(.noUi-target)[data-fouc] {
 }
 
 .select2-selection--multiple .select2-selection__rendered {
-    overflow: hidden;
+    /*   overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    list-style: none;
+    margin: 0;
+    padding: 0 0.125rem 0.125rem 0.125rem;
+    width: 100%;*/
+    white-space: normal; /* Allow text to wrap and show full content */
     list-style: none;
     margin: 0;
     padding: 0 0.125rem 0.125rem 0.125rem;
