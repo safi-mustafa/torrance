@@ -53,6 +53,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Company",data = "Company.Name", orderable = true},
                 new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
                 new DataTableViewModel{title = "Employee Name(s)",data = "EmployeeNames", orderable=true},
+                new DataTableViewModel{title = "Clipped Employee(s)",data = "ClippedEmployeesUrl",format="html",formatValue="link"},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},

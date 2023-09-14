@@ -136,8 +136,8 @@ namespace Models.Mapper
             CreateMap<StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel>().ReverseMap();
             CreateMap<StartOfWorkDelay, StartOfWorkDelayBriefViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, StartOfWorkDelayBriefViewModel>().ReverseMap();
-            
-            
+
+
             //OngoingWorkDelay
             CreateMap<OngoingWorkDelayModifyViewModel, OngoingWorkDelay>().ReverseMap();
             CreateMap<OngoingWorkDelay, OngoingWorkDelayDetailViewModel>().ReverseMap();
@@ -439,6 +439,8 @@ namespace Models.Mapper
                 .ForMember(src => src.ApproverId, opt => opt.MapFrom(dest => dest.Approver.Id))
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ForMember(dest => dest.ApproverId, act => act.Condition(src => (src.Approver.Id != 0)))
+                .ForMember(src => src.ClippedEmployeesUrl, opt => opt.MapFrom(dest => dest.ClippedEmployees.Url))
+                .ForMember(dest => dest.ClippedEmployeesUrl, act => act.Condition(src => (src.ClippedEmployees != null)))
                 .ReverseMap();
 
             CreateMap<OverrideLog, ORLogBriefViewModel>().ReverseMap();

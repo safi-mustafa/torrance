@@ -468,6 +468,8 @@ namespace Torrance.Api.Mapper
                 .ForMember(x => x.Approver, opt => opt.Ignore())
                 .ForMember(src => src.UnitId, opt => opt.MapFrom(dest => dest.Unit.Id))
                 .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(src => src.ClippedEmployeesUrl, opt => opt.MapFrom(dest => dest.ClippedEmployees.Url))
+                .ForMember(dest => dest.ClippedEmployeesUrl, act => act.Condition(src => (src.ClippedEmployees != null)))
                 .ReverseMap();
             CreateMap<OverrideLog, ORLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))

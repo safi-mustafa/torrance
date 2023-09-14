@@ -1418,3 +1418,9 @@ header {
 .doc-icon {
     height: 50px;
 }
+
+.disabled-link {
+    pointer-events: none; /* Disable mouse events */
+    color: gray; /* Change text color to gray or a less prominent color */
+    text-decoration: none; /* Remove underlines or other decorations */
+}

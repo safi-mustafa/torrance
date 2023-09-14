@@ -101,7 +101,15 @@ namespace ViewModels.OverrideLogs.ORLog
         public string? Reason { get; set; }
 
         public string PossibleApprovers { get; set; }
+
         [Display(Name = "Employee Name(s)")]
         public string EmployeeNames { get; set; }
+
+        [Display(Name = "Clipped Employees")]
+        public string ClippedEmployeesUrl { get; set; }
+
+        public string DomainUrl { get; set; }
+
+        public string FormattedClippedEmployeeUrl { get => string.IsNullOrEmpty(ClippedEmployeesUrl) ? "" : $"{DomainUrl}{ClippedEmployeesUrl}"; }
     }
 }

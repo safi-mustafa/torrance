@@ -10,7 +10,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost
+    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost, IClippedAttachment
     {
 
         [Display(Name = "Work Date")]
@@ -45,6 +45,8 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required]
         public string? EmployeeNames { get; set; }
 
+        [Display(Name = "Clip Employees")]
+        public ClipEmployeeModifyViewModel? ClippedEmployees { get; set; } = new();
 
         [Required]
         [Display(Name = "Override Reason")]

@@ -3,9 +3,12 @@ using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
 using DataLibrary;
+using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Enums;
 using Helpers.Extensions;
+using Helpers.File;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,6 +26,7 @@ using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using ViewModels;
 using ViewModels.Notification;
 using ViewModels.OverrideLogs;
@@ -36,8 +40,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 {
     public class ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<OverrideLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IClippedAttachment, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IClippedAttachment, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -49,8 +53,18 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IFileHelper _fileHelper;
 
-        public ORLogService(ToranceContext db, ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public ORLogService(
+            ToranceContext db,
+            ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger,
+            IMapper mapper,
+            IRepositoryResponse response,
+            IUserInfoService userInfoService,
+            INotificationService notificationService,
+            IHttpContextAccessor httpContextAccessor,
+            IPossibleApproverService possibleApproverService,
+            IFileHelper fileHelper) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -60,6 +74,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _fileHelper = fileHelper;
             _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
@@ -230,6 +245,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
                     var costs = model as IORLogCost;
                     var mappedModel = _mapper.Map<OverrideLog>(model);
+                    //save and attach clipped employees.
+                    AddClippedEmployees(model, mappedModel);
                     mappedModel.Approver = null;
                     mappedModel.Id = 0;
                     await SetRequesterId(mappedModel);
@@ -267,13 +284,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
-
                             var dbModel = _mapper.Map(model, record);
                             if (record.ApproverId != updateModel.Approver?.Id)
                             {
                                 var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
                                 await _notificationService.Create(notification);
                             }
+
+                            //save and attach clipped employees.
+                            AddClippedEmployees(model, dbModel);
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
                             dbModel.TotalHours = CalculateTotalHours(costs);
@@ -296,6 +315,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     return Response.BadRequestResponse(_response);
                 }
             }
+        }
+
+        private void AddClippedEmployees(IClippedAttachment model, OverrideLog mappedModel)
+        {
+            if (model.ClippedEmployees?.File != null)
+                mappedModel.ClippedEmployeesUrl = _fileHelper.Save(model.ClippedEmployees);
         }
 
         public async Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search)
@@ -504,7 +529,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var response = await GetAll<ORLogDetailViewModel>(searchModel);
 
                 var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
-
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUri = httpContext?.Request;
+                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
+                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
                 // Create a new workbook
                 var workbook = new XLWorkbook();
                 var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
@@ -530,8 +558,23 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
                     overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
                     overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
-                    overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].EmployeeNames;
-                    int currentColumn = 12;
+                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
+                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
+                    //overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    // Create a cell with the URL as a hyperlink
+                    var cell = overrideLogSheet.Cell(rowNumber, 13);
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        cell.Value = "link";
+                        cell.Hyperlink = new XLHyperlink(new Uri(url));
+                    }
+                    else
+                        cell.Value = "";
+
+                    int currentColumn = 13;
                     for (int i = 0; i < maxCostRows; i++)
                     {
                         if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
@@ -595,8 +638,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             overrideLogSheet.Cell(1, 10).Value = "Shift";
             overrideLogSheet.Cell(1, 11).Value = "Override Reason";
             overrideLogSheet.Cell(1, 12).Value = "Employee Names";
+            overrideLogSheet.Cell(1, 13).Value = "Clipped Employees";
 
-            int currentColumn = 12;
+            int currentColumn = 13;
             for (int i = 0; i < maxCostRows; i++)
             {
                 //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";

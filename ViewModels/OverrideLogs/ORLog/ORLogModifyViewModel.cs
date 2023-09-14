@@ -20,10 +20,8 @@ using Helpers.Attributes;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost, IClippedAttachment
     {
-
-
         [Required]
         [Display(Name = "Work Date")]
         public DateTime? WorkCompletedDate { get; set; }
@@ -53,16 +51,17 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false, "");
 
         [ListMinCount<ORLogCostViewModel>(1)]
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
-        [Required]
+        //[Required]
         [Display(Name = "Employee Name(s)")]
         public string? EmployeeNames { get; set; }
 
+        [Display(Name = "Clip Employees")]
+        public ClipEmployeeModifyViewModel? ClippedEmployees { get; set; } = new();
 
         [Required]
         [Display(Name = "Override Reason")]

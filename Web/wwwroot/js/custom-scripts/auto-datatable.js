@@ -531,7 +531,10 @@ function RenderHtml(data, dtColumns, meta) {
         return '<span class="badge ' + data + '">' + data + '</span>';
     }
     else if (dtColumns[meta.col].formatValue === "link") {
-        return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
+        if (data !== null && data !== undefined && data !== "")
+            return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
+        else
+            return '<a onclick="return false;"><i class="fa-solid fa-link disabled-link"></i></a>';
     }
     else if (dtColumns[meta.col].formatValue === "image") {
         return ' <img src="' + data + '" class="rounded" alt="Image">';

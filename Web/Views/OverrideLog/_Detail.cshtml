@@ -105,6 +105,20 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
+            <label asp-for="ClippedEmployeesUrl" class="form-label fw-600"></label>
+            <div></div>
+            @if (string.IsNullOrEmpty(Model.ClippedEmployeesUrl))
+            {
+                <a onclick="return false;"><i class="fa-solid fa-link disabled-link"></i></a>
+            }
+            else
+            {
+                <a href="@Model.ClippedEmployeesUrl" target="_blank"><i class="fa-solid fa-link"></i></a>
+            }
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
             <label asp-for="Status" class="form-label fw-600"></label>
             <div>@Model.FormattedStatus</div>
         </div>
