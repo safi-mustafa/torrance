@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly ICompanyService<CompanyModifyViewModel, CompanyModifyViewModel, CompanyDetailViewModel> _companyService;
         private readonly ILogger<CompanyController> _logger;
 
-        public CompanyController(ICompanyService<CompanyModifyViewModel, CompanyModifyViewModel, CompanyDetailViewModel> companyService, ILogger<CompanyController> logger, IMapper mapper) : base(companyService, logger, mapper, "Company", "Companies")
+        public CompanyController(ICompanyService<CompanyModifyViewModel, CompanyModifyViewModel, CompanyDetailViewModel> companyService, ILogger<CompanyController> logger, IMapper mapper) : base(companyService, logger, mapper, "Company", "Company")
         {
             _companyService = companyService;
             _logger = logger;

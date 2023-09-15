@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> _dropboxService;
         private readonly ILogger<DropboxController> _logger;
 
-        public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService, ILogger<DropboxController> logger, IMapper mapper) : base(dropboxService, logger, mapper, "Dropbox", "Dropboxes")
+        public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService, ILogger<DropboxController> logger, IMapper mapper) : base(dropboxService, logger, mapper, "Dropbox", "Dropbox")
         {
             _dropboxService = dropboxService;
             _logger = logger;

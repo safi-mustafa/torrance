@@ -27,7 +27,7 @@ namespace Web.Controllers
                 ILogger<AttachmentController> logger,
                 IMapper mapper,
                 IAttachmentService<AttachmentModifyViewModel, AttachmentModifyViewModel, AttachmentModifyViewModel> attachmentService
-            ) : base(attachmentService, logger, mapper, "Attachment", "Attachments", false, false)
+            ) : base(attachmentService, logger, mapper, "Attachment", "Attachment", false, false)
         {
             _logger = logger;
             _mapper = mapper;

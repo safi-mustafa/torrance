@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> _leadPlannerService;
         private readonly ILogger<LeadPlannerController> _logger;
 
-        public LeadPlannerController(ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> leadPlannerService, ILogger<LeadPlannerController> logger, IMapper mapper) : base(leadPlannerService, logger, mapper, "LeadPlanner", "Lead Planners")
+        public LeadPlannerController(ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> leadPlannerService, ILogger<LeadPlannerController> logger, IMapper mapper) : base(leadPlannerService, logger, mapper, "LeadPlanner", "Lead Planner")
         {
             _leadPlannerService = leadPlannerService;
             _logger = logger;

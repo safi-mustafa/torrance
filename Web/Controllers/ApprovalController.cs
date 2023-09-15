@@ -48,7 +48,7 @@ namespace Web.Controllers
             IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> overrideLogService,
             ILogger<ApprovalController> logger,
             IMapper mapper
-            ) : base(approvaleService, logger, mapper, "Approval", "Approvals", true)
+            ) : base(approvaleService, logger, mapper, "Approval", "Approval", true)
         {
             _approvalService = approvaleService;
             _totService = totService;

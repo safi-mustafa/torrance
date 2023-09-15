@@ -22,7 +22,7 @@ namespace Web.Controllers
                 IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService,
                 ILogger<FolderController> logger,
                 IMapper mapper
-            ) : base(folderService, logger, mapper, "Folder", "Folders", false, false)
+            ) : base(folderService, logger, mapper, "Folder", "Folder", false, false)
         {
             _folderService = folderService;
             _logger = logger;

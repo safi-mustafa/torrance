@@ -35,7 +35,7 @@ namespace Web.Controllers
         private readonly UserManager<ToranceUser> _userManager;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", userInfo)
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Log", userInfo)
         {
             _TOTLogService = TOTLogService;
             _logger = logger;

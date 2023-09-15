@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> _reasonForRequestService;
         private readonly ILogger<ReasonForRequestController> _logger;
 
-        public ReasonForRequestController(IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> reasonForRequestService, ILogger<ReasonForRequestController> logger, IMapper mapper) : base(reasonForRequestService, logger, mapper, "ReasonForRequest", "Reason For Requests")
+        public ReasonForRequestController(IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> reasonForRequestService, ILogger<ReasonForRequestController> logger, IMapper mapper) : base(reasonForRequestService, logger, mapper, "ReasonForRequest", "Reason For Request")
         {
             _reasonForRequestService = reasonForRequestService;
             _logger = logger;

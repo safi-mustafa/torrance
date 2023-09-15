@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> _PermitTypeService;
         private readonly ILogger<PermitTypeController> _logger;
 
-        public PermitTypeController(IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> PermitTypeService, ILogger<PermitTypeController> logger, IMapper mapper) : base(PermitTypeService, logger, mapper, "PermitType", "Permit Types")
+        public PermitTypeController(IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> PermitTypeService, ILogger<PermitTypeController> logger, IMapper mapper) : base(PermitTypeService, logger, mapper, "PermitType", "Permit Type")
         {
             _PermitTypeService = PermitTypeService;
             _logger = logger;

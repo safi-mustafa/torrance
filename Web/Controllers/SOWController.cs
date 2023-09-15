@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> _SOWService;
         private readonly ILogger<SOWController> _logger;
 
-        public SOWController(ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> SOWService, ILogger<SOWController> logger, IMapper mapper) : base(SOWService, logger, mapper, "SOW", "SOWs")
+        public SOWController(ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> SOWService, ILogger<SOWController> logger, IMapper mapper) : base(SOWService, logger, mapper, "SOW", "SOW")
         {
             _SOWService = SOWService;
             _logger = logger;

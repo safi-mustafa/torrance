@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> _WeldMethodService;
         private readonly ILogger<WeldMethodController> _logger;
 
-        public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> WeldMethodService, ILogger<WeldMethodController> logger, IMapper mapper) : base(WeldMethodService, logger, mapper, "WeldMethod", "Weld Methods")
+        public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> WeldMethodService, ILogger<WeldMethodController> logger, IMapper mapper) : base(WeldMethodService, logger, mapper, "WeldMethod", "Weld Method")
         {
             _WeldMethodService = WeldMethodService;
             _logger = logger;
