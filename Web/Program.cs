@@ -5,6 +5,8 @@ using Newtonsoft.Json.Serialization;
 using Web.Extensions;
 using DataLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
 builder.Services.ConfigureDependencies();
+Microsoft.Extensions.Configuration.ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
+
 var app = builder.Build();
 
 await using var scope = app.Services.CreateAsyncScope();
@@ -41,7 +45,18 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+var directoryPath = configuration.GetValue<string>("DirectoryPath");
+var uploadBasePath = configuration.GetValue<string>("UploadBasePath");
+//app.UseHttpsRedirection(); //ENABLE IN PRODUCTION
+app.UseStaticFiles(); // For the wwwroot folder  
+app.UseStaticFiles(new StaticFileOptions
+{
+
+    FileProvider = new PhysicalFileProvider(Path.Combine(directoryPath, uploadBasePath)),
+    RequestPath = "/Storage"
+});
+
 //app.UseStaticFiles(new StaticFileOptions
 //{
 //    FileProvider = new PhysicalFileProvider(
