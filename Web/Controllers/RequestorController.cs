@@ -18,6 +18,8 @@ using ViewModels.Shared;
 using Pagination;
 using Select2;
 using Newtonsoft.Json;
+using ViewModels.CRUD;
+using Humanizer;
 
 namespace Web.Controllers
 {
@@ -29,7 +31,13 @@ namespace Web.Controllers
         private readonly ILogger<RequestorController> _logger;
         private readonly UserManager<ToranceUser> _userManager;
 
-        public RequestorController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService, ILogger<RequestorController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Requestor", "Requestor", RolesCatalog.Employee)
+        public RequestorController(
+            IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, 
+            IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
+            ILogger<RequestorController> logger,
+            IMapper mapper,
+            UserManager<ToranceUser> userManager
+            ) : base(employeeService, logger, mapper, userManager, "Requestor", "Requestor", RolesCatalog.Employee)
         {
             _employeeService = employeeService;
             _approverService = approverService ?? throw new ArgumentNullException(nameof(approverService));
@@ -41,6 +49,21 @@ namespace Web.Controllers
         {
             var model = new ExcelFileVM();
             return View(model);
+        }
+        public override ActionResult Index()
+        {
+            var vm = new CrudListViewModel();
+            vm.Title = "Requestor".Pluralize();
+            vm.Filters = SetDefaultFilters();
+            vm.DatatableColumns = GetColumns();
+            vm.DisableSearch = false;
+            vm.HideCreateButton = User.IsInRole("Approver") ? true : false;
+            vm.IsResponsiveDatatable = false;
+            vm.ControllerName = "Requestor";
+            vm.DataUrl = $"/Requestor/Search";
+            vm.SearchViewPath = $"~/Views/Requestor/_Search.cshtml";
+            vm = OverrideCrudListVM(vm);
+            return DataTableIndexView(vm);
         }
 
         public override Task<ActionResult> Create(EmployeeModifyViewModel model)
@@ -63,5 +86,6 @@ namespace Web.Controllers
             }
             return RedirectToAction("ImportExcelSheet");
         }
+
     }
 }

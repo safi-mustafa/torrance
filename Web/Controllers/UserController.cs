@@ -34,7 +34,7 @@ namespace Web.Controllers
         private readonly string _controllerName;
         private readonly RolesCatalog _role;
 
-        public UserController(IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> logger, IMapper mapper, UserManager<ToranceUser> userManager, string controllerName, string title, RolesCatalog role) : base(service, logger, mapper, controllerName, title)
+        public UserController(IUserService<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger<UserController<CreateViewModel, UpdateViewModel, DetailViewModel, PaginatedViewModel, SearchViewModel>> logger, IMapper mapper, UserManager<ToranceUser> userManager, string controllerName, string title, RolesCatalog role, bool hideCreateButton = false) : base(service, logger, mapper, controllerName, title, hideCreateButton)
         {
             _service = service;
             _logger = logger;
@@ -46,7 +46,7 @@ namespace Web.Controllers
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
             result.ActionsList = new List<DataTableActionViewModel>();
-            if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+            if ((User.IsInRole("SuperAdmin") || User.IsInRole("Administrator")) && (_controllerName != "Requestor"))
             {
                 result.ActionsList.Add(
                     new DataTableActionViewModel() { Action = "ResetPassword", Title = "ResetPassword", Href = $"/{_controllerName}/ResetPassword/Id" }
@@ -62,11 +62,11 @@ namespace Web.Controllers
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                 {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/{_controllerName}/Detail/Id"},
-                    new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/{_controllerName}/Update/Id"},
+                    new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/{_controllerName}/Update/Id" },                   
                     new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/{_controllerName}/Delete/Id"},
                 });
             }
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/{_controllerName}/Detail/Id" });
 
         }
         public override List<DataTableViewModel> GetColumns()
