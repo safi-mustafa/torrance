@@ -118,13 +118,12 @@
     });
     function AddAssociation(element) {
         var thisElement = $(element);
-        var departmentId = $("#department-id").val();
-        var departmentName = $("#department-id").text();
-        departmentName = departmentName.replace(/(\r\n|\n|\r)/gm, "");
+        var departmentId = $("#department-id").select2('data')[0].id;
+        var departmentName = $("#department-id").select2('data')[0].text;
+        //departmentName = departmentName.replace(/(\r\n|\n|\r)/gm, "");
 
-        var unitId = $("#unit-id").val();
-        var unitName = $("#unit-id").text();
-        unitName = unitName.replace(/(\r\n|\n|\r)/gm, "");
+        var unitId = $('#unit-id').select2('data')[0].id;
+        var unitName = $('#unit-id').select2('data')[0].text;
 
         if (departmentId != null && departmentId != "" && unitId != null && unitId != "") {
             var rowNumber = $(".association-row").length;
