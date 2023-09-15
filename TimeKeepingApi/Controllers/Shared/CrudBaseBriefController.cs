@@ -5,6 +5,7 @@ using Models;
 using Models.Common.Interfaces;
 using Pagination;
 using Repositories.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Security.Claims;
 using ViewModels.Shared;
@@ -31,8 +32,14 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> GetAll([FromQuery] SearchViewModel search)
         {
+            SetPagination(search);
             var result = await _service.GetAll<PaginatedResultViewModel>(search);
             return ReturnProcessedResponse<PaginatedResultModel<PaginatedResultViewModel>>(result);
+        }
+
+        protected virtual void SetPagination(SearchViewModel search)
+        {
+            search.DisablePagination = true;
         }
 
     }
