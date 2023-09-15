@@ -69,13 +69,13 @@ namespace Repositories.Services.CommonServices.CompanyService
                 await _db.SaveChangesAsync();
                 if (company.Id > 0)
                 {
-                    var result = await SetCompanyCraftSkills(viewModel.CraftIds, company.Id);
-                    if (result)
-                    {
+                    //var result = await SetCompanyCraftSkills(viewModel.CraftIds, company.Id);
+                    //if (result)
+                    //{
                         await transaction.CommitAsync();
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = company.Id };
                         return response;
-                    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -99,13 +99,13 @@ namespace Repositories.Services.CommonServices.CompanyService
                     {
                         company.Name = viewModel.Name;
                         await _db.SaveChangesAsync();
-                        var mappingsModified = await SetCompanyCraftSkills(viewModel.CraftIds, company.Id);
-                        if (mappingsModified)
-                        {
+                        //var mappingsModified = await SetCompanyCraftSkills(viewModel.CraftIds, company.Id);
+                        //if (mappingsModified)
+                        //{
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = company.Id };
                             return response;
-                        }
+                       // }
                     }
                     _logger.LogWarning($"Record for id: {model?.Id} not found in Employee");
                     await transaction.RollbackAsync();
@@ -127,7 +127,7 @@ namespace Repositories.Services.CommonServices.CompanyService
             if (response.Status == System.Net.HttpStatusCode.OK)
             {
                 var companyModel = (response as RepositoryResponseWithModel<CompanyDetailViewModel>).ReturnModel;
-                companyModel.Crafts = await GetCompanyCraftSkills(companyModel.Id ?? 0);
+               // companyModel.Crafts = await GetCompanyCraftSkills(companyModel.Id ?? 0);
             }
             return response;
         }
@@ -142,12 +142,12 @@ namespace Repositories.Services.CommonServices.CompanyService
                 var paginatedCompanies = await companiesQueryable.Paginate(searchFilter);
                 var filteredCompaniesIds = paginatedCompanies.Items.Select(x => x.Id);
 
-                var companiesCraftSkills = await _db.CompanyCrafts.Include(x => x.CraftSkill).Where(x => filteredCompaniesIds.Contains(x.CompanyId)).ToListAsync();
+               // var companiesCraftSkills = await _db.CompanyCrafts.Include(x => x.CraftSkill).Where(x => filteredCompaniesIds.Contains(x.CompanyId)).ToListAsync();
 
-                paginatedCompanies.Items.ForEach(x =>
-                {
-                    x.Crafts = _mapper.Map<List<BaseBriefVM>>(companiesCraftSkills.Where(u => u.CompanyId == x.Id).Select(x => x.CraftSkill).ToList());
-                });
+                //paginatedCompanies.Items.ForEach(x =>
+                //{
+                //    x.Crafts = _mapper.Map<List<BaseBriefVM>>(companiesCraftSkills.Where(u => u.CompanyId == x.Id).Select(x => x.CraftSkill).ToList());
+                //});
                 var responseModel = new RepositoryResponseWithModel<PaginatedResultModel<M>>();
                 responseModel.ReturnModel = paginatedCompanies as PaginatedResultModel<M>;
                 return responseModel;

@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Models.Common.Interfaces;
 using Pagination;
@@ -38,7 +39,7 @@ namespace Web.Controllers.SharedControllers
         public virtual ActionResult Index()
         {
             var vm = new CrudListViewModel();
-            vm.Title = _title;
+            vm.Title = _title.Pluralize();
             vm.Filters = SetDefaultFilters();
             vm.DatatableColumns = GetColumns();
             vm.DisableSearch = false;

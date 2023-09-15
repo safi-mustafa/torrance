@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IOngoingWorkDelayService<OngoingWorkDelayModifyViewModel, OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel> _OngoingWorkDelayService;
         private readonly ILogger<OngoingWorkDelayController> _logger;
 
-        public OngoingWorkDelayController(IOngoingWorkDelayService<OngoingWorkDelayModifyViewModel, OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel> OngoingWorkDelayService, ILogger<OngoingWorkDelayController> logger, IMapper mapper) : base(OngoingWorkDelayService, logger, mapper, "OngoingWorkDelay", "Ongoing Work Delays")
+        public OngoingWorkDelayController(IOngoingWorkDelayService<OngoingWorkDelayModifyViewModel, OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel> OngoingWorkDelayService, ILogger<OngoingWorkDelayController> logger, IMapper mapper) : base(OngoingWorkDelayService, logger, mapper, "OngoingWorkDelay", "Ongoing Work Delay")
         {
             _OngoingWorkDelayService = OngoingWorkDelayService;
             _logger = logger;

@@ -13,13 +13,13 @@ namespace ViewModels.Common.Company
         [DisplayName("Name")]
         public string Name { get; set; }
 
-        public List<BaseBriefVM> Crafts { get; set; } = new List<BaseBriefVM>();
-        public string FormattedCrafts
-        {
-            get
-            {
-                return Crafts != null && Crafts.Count() > 0 ? string.Join(", ", Crafts.Select(m => m.Name).ToList()) : "";
-            }
-        }
+        //public List<BaseBriefVM> Crafts { get; set; } = new List<BaseBriefVM>();
+        //public string FormattedCrafts
+        //{
+        //    get
+        //    {
+        //        return Crafts != null && Crafts.Count() > 0 ? string.Join(", ", Crafts.Select(m => m.Name).ToList()) : "";
+        //    }
+        //}
     }
 }

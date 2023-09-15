@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> _DelayTypeService;
         private readonly ILogger<DelayTypeController> _logger;
 
-        public DelayTypeController(IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> DelayTypeService, ILogger<DelayTypeController> logger, IMapper mapper) : base(DelayTypeService, logger, mapper, "DelayType", "Delay Types")
+        public DelayTypeController(IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> DelayTypeService, ILogger<DelayTypeController> logger, IMapper mapper) : base(DelayTypeService, logger, mapper, "DelayType", "Delay Type")
         {
             _DelayTypeService = DelayTypeService;
             _logger = logger;

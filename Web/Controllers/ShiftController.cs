@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> _ShiftService;
         private readonly ILogger<ShiftController> _logger;
 
-        public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> ShiftService, ILogger<ShiftController> logger, IMapper mapper) : base(ShiftService, logger, mapper, "Shift", "Shifts")
+        public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> ShiftService, ILogger<ShiftController> logger, IMapper mapper) : base(ShiftService, logger, mapper, "Shift", "Shift")
         {
             _ShiftService = ShiftService;
             _logger = logger;

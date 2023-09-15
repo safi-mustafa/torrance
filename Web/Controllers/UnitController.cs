@@ -17,7 +17,7 @@ namespace Web.Controllers
         private readonly IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> _UnitService;
         private readonly ILogger<UnitController> _logger;
 
-        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> UnitService, ILogger<UnitController> logger, IMapper mapper) : base(UnitService, logger, mapper, "Unit", "Units")
+        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> UnitService, ILogger<UnitController> logger, IMapper mapper) : base(UnitService, logger, mapper, "Unit", "Unit")
         {
             _UnitService = UnitService;
             _logger = logger;

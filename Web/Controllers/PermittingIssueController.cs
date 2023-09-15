@@ -15,7 +15,7 @@ namespace Web.Controllers
         private readonly IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> _permittingIssueService;
         private readonly ILogger<PermittingIssueController> _logger;
 
-        public PermittingIssueController(IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> permittingIssueService, ILogger<PermittingIssueController> logger, IMapper mapper) : base(permittingIssueService, logger, mapper, "PermittingIssue", "Permitting Issues")
+        public PermittingIssueController(IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> permittingIssueService, ILogger<PermittingIssueController> logger, IMapper mapper) : base(permittingIssueService, logger, mapper, "PermittingIssue", "Permitting Issue")
         {
             _permittingIssueService = permittingIssueService;
             _logger = logger;

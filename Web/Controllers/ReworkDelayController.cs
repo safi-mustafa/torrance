@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> _ReworkDelayService;
         private readonly ILogger<ReworkDelayController> _logger;
 
-        public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> ReworkDelayService, ILogger<ReworkDelayController> logger, IMapper mapper) : base(ReworkDelayService, logger, mapper, "ReworkDelay", "Rework Delays")
+        public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> ReworkDelayService, ILogger<ReworkDelayController> logger, IMapper mapper) : base(ReworkDelayService, logger, mapper, "ReworkDelay", "Rework Delay")
         {
             _ReworkDelayService = ReworkDelayService;
             _logger = logger;
