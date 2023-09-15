@@ -35,7 +35,6 @@ namespace Web.Controllers.SharedControllers
             _mapper = mapper;
         }
 
-
         public virtual ActionResult Index()
         {
             var vm = new CrudListViewModel();
@@ -84,7 +83,6 @@ namespace Web.Controllers.SharedControllers
                 return null;
             }
         }
-
 
         protected DatatablePaginatedResultModel<T> ConvertToDataTableModel<T>(PaginatedResultModel<T> model, IBaseSearchModel searchModel) where T : new()
         {

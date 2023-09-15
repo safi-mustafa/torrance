@@ -5,6 +5,7 @@ var isAjaxBasedCrud = true;
 var enableButtons = true;
 var isExcelDownloadAjaxBased = false;
 var isScrollableFixedHeaderEventAdded = false;
+var pageLength = 0;
 actionIcons["Update"] = "fa-solid fa-pen-to-square";
 actionIcons["Profile"] = "fa-solid fa-user-plus";
 actionIcons["Notes"] = "fa-solid fa-file";
@@ -31,6 +32,9 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
 }
 
 function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false, pageLength = 25) {
+    
+    pageLength = pageLength;
+    
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
@@ -143,9 +147,9 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
-    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength);
+    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow);
 }
-function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength) {
+function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow) {
     if (typeof isResponsive != "boolean") {
         isResponsive = isResponsive == "true";
     }
@@ -405,6 +409,11 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 $(scrollBody).trigger('scroll');
             });
         }
+    });
+    $('#' + tableId).off('length.dt');
+    $('#' + tableId).on('length.dt', function (e, settings, len) {
+        pageLength = len;
+        // You can perform custom actions here
     });
     new $.fn.dataTable.FixedHeader(dataTable, {
         // options
