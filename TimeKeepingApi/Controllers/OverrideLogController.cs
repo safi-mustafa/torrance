@@ -42,13 +42,13 @@ namespace API.Controllers
             var result = await _oRLogService.GetAll<ORLogDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<ORLogDetailViewModel>>(result);
         }
-        public override Task<IActionResult> Post([FromBody] ORLogModifyViewModel model)
+        public override Task<IActionResult> Post([FromForm] ORLogModifyViewModel model)
         {
             ManagePostModelState(model);
             return base.Post(model);
         }
 
-        public override Task<IActionResult> Put([FromBody] ORLogModifyViewModel model)
+        public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
             ManagePutModelState(model);
             return base.Put(model);
@@ -89,7 +89,7 @@ namespace API.Controllers
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            if (version<= Version.Parse("0.0.0"))
+            if (version <= Version.Parse("0.0.0"))
             {
                 ModelState.Remove("EmployeeNames");
             }
