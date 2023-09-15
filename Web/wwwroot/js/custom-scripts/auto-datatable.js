@@ -187,6 +187,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             "data": function (searchParams) {
                 $("#" + tableId + " td").removeAttr("colspan");
                 if ($("#loader").length > 0) {
+                    $('#' + tableId).css("min-height", "200px");
                     $('#' + tableId).block({
                         message: $("#loader"),
                         centerY: false,
@@ -389,6 +390,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             $('input[type="search"]').attr('autocomplete', 'new-password');
         },
         "drawCallback": function (settings) {
+            $('#' + tableId).css("min-height", "auto");
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
