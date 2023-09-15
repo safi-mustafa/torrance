@@ -14,7 +14,7 @@ namespace ViewModels.TimeOnTools.PermitType
         {
 
         }
-        [DisplayName("PermitType")]
+        [DisplayName("Permit Type")]
         public override string Name { get; set; }
     }
 

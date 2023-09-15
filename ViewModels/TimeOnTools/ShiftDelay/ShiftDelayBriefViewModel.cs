@@ -9,7 +9,7 @@ namespace ViewModels.TimeOnTools.ShiftDelay
         {
 
         }
-        [DisplayName("ShiftDelay")]
+        [DisplayName("Shift Delay")]
         public override string? Name { get; set; }
     }
 

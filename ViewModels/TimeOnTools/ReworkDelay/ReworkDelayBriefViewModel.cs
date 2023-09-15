@@ -9,7 +9,7 @@ namespace ViewModels.TimeOnTools.ReworkDelay
         {
 
         }
-        [DisplayName("ReworkDelay")]
+        [DisplayName("Rework Delay")]
         public override string? Name { get; set; }
     }
 

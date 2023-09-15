@@ -79,7 +79,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 searchFilters.StatusNot = Status.Pending;
             }
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Approver.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()) || x.Employee.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                             &&

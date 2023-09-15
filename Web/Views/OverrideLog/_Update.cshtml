@@ -261,7 +261,7 @@
         else {
             swal.fire({
                 title: 'Validation Error',
-                text: "OverrideType, Craft, Head Count & Hours are required fields.",
+                text: "Override Type, Craft, Head Count & Hours are required fields.",
                 type: 'error',
                 showCancelButton: true,
                 confirmButtonText: "Okay",
@@ -274,7 +274,8 @@
     }
     function ResetCostInputs() {
         $('.costs-inputs-container').find(':input').val(null);
-        $("#craft-skill-id").val('').trigger('change')
+        $("#craft-skill-id").val('').trigger('change');
+        $("#cost-override-type").val(0);
     }
 
     function AddCosttRow(obj, rowNumber) {
