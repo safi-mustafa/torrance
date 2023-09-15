@@ -3,6 +3,16 @@
 $.getScript("/js/crud/validation-summary.js", function () {
 });
 
+$(function () {
+    $(document).on('keydown', "#crudModalPanelBody form", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            //var childElement = $(this).children().first();
+            //updateRecord(childElement);
+        }
+    })
+})
+
 function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
     $.ajax({
         type: "GET",
