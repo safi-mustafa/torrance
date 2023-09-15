@@ -17,7 +17,7 @@ using Models;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Administrator,Admin")]
+    [Authorize(Roles = "SuperAdmin,Administrator,Admin, Approver")]
     public class ApproverController : UserController<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel, ApproverDetailViewModel, ApproverSearchViewModel>
     {
         private readonly IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> _service;
