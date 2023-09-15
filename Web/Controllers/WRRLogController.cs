@@ -53,7 +53,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
                 new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true,className="exclude-form-table include-in-export"},

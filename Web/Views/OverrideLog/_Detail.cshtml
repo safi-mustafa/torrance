@@ -131,13 +131,13 @@
     </div>
 
 
-    <div class="col-lg-4">
+    @*<div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Approver" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? Model.PossibleApprovers : Model.Approver.Name)</div>
         </div>
     </div>
-    @*<div class="col-lg-12">
+    <div class="col-lg-12">
         <div class="mb-3">
         <label asp-for="Description" class="form-label fw-600"></label>
         <div>@Model.Description</div>

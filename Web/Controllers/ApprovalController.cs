@@ -23,6 +23,7 @@ using ViewModels.OverrideLogs.ORLog;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using static Repositories.Services.CommonServices.ApprovalService.ApprovalService;
 using ViewModels.Authentication.User;
+using Humanizer;
 
 namespace Web.Controllers
 {
@@ -251,7 +252,7 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
-                new DataTableViewModel{title = "Requester",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
                 //new DataTableViewModel{title = "Approver",data = "Approver"},
                 new DataTableViewModel{title = "Department",data = "Department",orderable=true},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
@@ -277,7 +278,7 @@ namespace Web.Controllers
             return vm;
         }
 
-        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model, bool isApproval)
+        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model, bool isApproval, LogType type)
         {
             CrudDetailViewModel vm = new CrudDetailViewModel()
             {
@@ -295,7 +296,7 @@ namespace Web.Controllers
             {
                 var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
                 var model = parsedResponse?.ReturnModel ?? new();
-                var vm = SetDetailViewModel(model, isApproval);
+                var vm = SetDetailViewModel(model, isApproval, type);
                 return View(view, vm);
             }
             else
@@ -312,6 +313,7 @@ namespace Web.Controllers
             ViewBag.IgnoreLayout = true;
             if (type == LogType.TimeOnTools)
             {
+                _detailTitle = "TOTLog";
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
                 response = await _totService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
@@ -320,6 +322,7 @@ namespace Web.Controllers
             }
             else if (type == LogType.WeldingRodRecord)
             {
+                _detailTitle = "WRRLog";
                 _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                 response = await _wrrService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
@@ -328,6 +331,7 @@ namespace Web.Controllers
             }
             else
             {
+                _detailTitle = "OverrideLog";
                 _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
                 response = await _overrideLogService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;

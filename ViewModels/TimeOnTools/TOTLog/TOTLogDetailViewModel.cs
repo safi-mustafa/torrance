@@ -62,7 +62,7 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Delay Description")]
         public string? DelayDescription { get; set; }
-        [Display(Name = "Workscope")]
+        [Display(Name = "Work Scope")]
         public string? WorkScope { get; set; }
         public string Twr { get; set; }
 

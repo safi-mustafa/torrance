@@ -9,7 +9,7 @@ namespace ViewModels.TimeOnTools.StartOfWorkDelay
         {
 
         }
-        [DisplayName("ShiftDelay")]
+        [DisplayName("Start Of Work Delay")]
         public override string? Name { get; set; }
     }
 

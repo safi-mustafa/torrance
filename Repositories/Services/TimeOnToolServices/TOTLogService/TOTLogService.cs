@@ -73,7 +73,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.EquipmentNo) || x.EquipmentNo.ToLower().Contains(searchFilters.EquipmentNo.ToLower()))
                             &&
