@@ -32,7 +32,7 @@ namespace Web.Controllers
         private readonly UserManager<ToranceUser> _userManager;
 
         public RequestorController(
-            IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, 
+            IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
             IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
             ILogger<RequestorController> logger,
             IMapper mapper,
@@ -50,20 +50,11 @@ namespace Web.Controllers
             var model = new ExcelFileVM();
             return View(model);
         }
-        public override ActionResult Index()
+
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
-            var vm = new CrudListViewModel();
-            vm.Title = "Requestor".Pluralize();
-            vm.Filters = SetDefaultFilters();
-            vm.DatatableColumns = GetColumns();
-            vm.DisableSearch = false;
             vm.HideCreateButton = User.IsInRole("Approver") ? true : false;
-            vm.IsResponsiveDatatable = false;
-            vm.ControllerName = "Requestor";
-            vm.DataUrl = $"/Requestor/Search";
-            vm.SearchViewPath = $"~/Views/Requestor/_Search.cshtml";
-            vm = OverrideCrudListVM(vm);
-            return DataTableIndexView(vm);
+            return vm;
         }
 
         public override Task<ActionResult> Create(EmployeeModifyViewModel model)

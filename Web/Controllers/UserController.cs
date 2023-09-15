@@ -62,7 +62,7 @@ namespace Web.Controllers
             {
                 result.ActionsList.AddRange(new List<DataTableActionViewModel>()
                 {
-                    new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/{_controllerName}/Update/Id" },                   
+                    new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/{_controllerName}/Update/Id" },
                     new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/{_controllerName}/Delete/Id"},
                 });
             }
@@ -201,6 +201,7 @@ namespace Web.Controllers
             }
             catch (Exception ex) { _logger.LogError($"Account ResetPassword method threw an exception, Message: {ex.Message}"); return RedirectToAction("Index"); }
         }
+
         [HttpPost]
         public async Task<JsonResult> ResetPassword(ResetPasswordVM model)
         {
@@ -222,7 +223,6 @@ namespace Web.Controllers
                 {
                     ErrorsHelper.AddErrorsToModelState(resetResult, ModelState, "Password");
                 }
-
             }
             var errors = ModelState.ToDictionary(
              kvp => kvp.Key,
@@ -230,7 +230,6 @@ namespace Web.Controllers
             );
             return new JsonResult(new { success = false, errors = errors });
         }
-
 
         public async Task<ActionResult> ResetAccessCode(int id)
         {
@@ -256,6 +255,7 @@ namespace Web.Controllers
             }
             catch (Exception ex) { _logger.LogError($"Account ResetPassword method threw an exception, Message: {ex.Message}"); return RedirectToAction("Index"); }
         }
+
         [HttpPost]
         public async Task<ActionResult> ResetAccessCode(ChangeAccessCodeVM model)
         {

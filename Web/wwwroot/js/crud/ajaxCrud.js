@@ -14,6 +14,7 @@ $(function () {
 })
 
 function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
+    debugger;
     $.ajax({
         type: "GET",
         url: contentUrl,
