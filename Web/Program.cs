@@ -52,7 +52,6 @@ var uploadBasePath = configuration.GetValue<string>("UploadBasePath");
 app.UseStaticFiles(); // For the wwwroot folder  
 app.UseStaticFiles(new StaticFileOptions
 {
-
     FileProvider = new PhysicalFileProvider(Path.Combine(directoryPath, uploadBasePath)),
     RequestPath = "/Storage"
 });

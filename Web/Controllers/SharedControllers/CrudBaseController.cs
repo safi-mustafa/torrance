@@ -206,7 +206,6 @@ namespace Web.Controllers
         //    catch (Exception ex) { _logger.LogError($"{_controllerName} Approve method threw an exception for record with id: {id}, Message: {ex.Message}"); return RedirectToAction("Index"); }
         //}
         [AllowAnonymous]
-
         public virtual async Task<JsonResult> Select2(string prefix, int pageSize, int pageNumber, string customParams)
         {
             try
