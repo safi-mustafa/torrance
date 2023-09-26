@@ -34,10 +34,10 @@
                 </div>
             </div>
             @* <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
+            </div>
+            </div>*@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
@@ -46,10 +46,10 @@
                 </div>
             </div>
             @*            <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_DelayType.cshtml" for="DelayType" />
+            </div>
+            </div>*@
             <div class="col-lg-12">
                 <div class="mb-3">
                     <label asp-for="Reason" class="form-label fw-600"></label>
@@ -58,45 +58,45 @@
                 </div>
             </div>
             @* <div class="col-lg-6">
-                <div class="mb-3">
-                <label class="form-label fw-600">Delay Reason</label>
-                <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
-                <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
-                </div>
-                </div>
+            <div class="mb-3">
+            <label class="form-label fw-600">Delay Reason</label>
+            <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog)).OrderBy(x=>x.Text)" id="delay-reason" class="form-control"></select>
+            <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+            </div>
+            </div>
 
-                <div class="col-lg-6" id="shift-delay-container">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-                </div>
-                </div>
-                <div class="col-lg-6" id="rework-delay-container">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-                </div>
-                </div>
-                <div class="col-lg-6" id="start-of-work-delay-container">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
-                </div>
-                </div>*@
+            <div class="col-lg-6" id="shift-delay-container">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+            </div>
+            </div>
+            <div class="col-lg-6" id="rework-delay-container">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+            </div>
+            </div>
+            <div class="col-lg-6" id="start-of-work-delay-container">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_StartOfWorkDelay.cshtml" for="StartOfWorkDelay" />
+            </div>
+            </div>*@
 
             @* @if (isAdmin)
-                {
-                <div class="col-lg-4">
-                <div class="mb-3">
+            {
+            <div class="col-lg-4">
+            <div class="mb-3">
 
-                <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-                </div>
-                </div>
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <label class="form-label fw-600">Company</label>
-                <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-                <input type="hidden" class="form-control" id="company-id" value="@Model.Company.Id" readonly />
-                </div>
-                </div>
-                }*@
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <label class="form-label fw-600">Company</label>
+            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+            <input type="hidden" class="form-control" id="company-id" value="@Model.Company.Id" readonly />
+            </div>
+            </div>
+            }*@
             <div class="col-lg-6">
                 @if (User.IsInRole(RolesCatalog.Employee.ToString()))
                 {
@@ -126,31 +126,31 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="ClippedEmployees" class="form-label fw-600"></label>
-                    <input type="file" id="file" asp-for="ClippedEmployees.File" class="form-control" />
+                    <input type="file" id="clipped-employees" asp-for="ClippedEmployees.File" class="form-control" accept="image/*" />
                     <span asp-validation-for="ClippedEmployees" class="validation-invalid-label"></span>
                 </div>
             </div>
 
             @* <div class="col-lg-12">
-                <div class="mb-3">
-                <label asp-for="Description" class="form-label fw-600"></label>
-                <input asp-for="Description" type="text" class="form-control" />
-                <span asp-validation-for="Description" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-600"></label>
+            <input asp-for="Description" type="text" class="form-control" />
+            <span asp-validation-for="Description" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             @*   @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
-                {
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-                </div>
-                </div>
-                }
-                else
-                {
-                <input asp-for="Approver.Id" type="hidden" />
-                }*@
+            {
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+            </div>
+            </div>
+            }
+            else
+            {
+            <input asp-for="Approver.Id" type="hidden" />
+            }*@
             <input asp-for="Approver.Id" type="hidden" />
             <div class="col-md-12 mt-3">
                 <div class="form-group costs-inputs-container row">
@@ -207,7 +207,8 @@
 <input asp-for="Id" type="hidden" />
 <input asp-for="Employee.Id" type="hidden" />
 
-<script>$(function () {
+<script>
+    $(function () {
         DelayReasonChanged();
         $('#requester-id').off('change.select2');
         $('#requester-id').on('change.select2', function (e) {
@@ -233,6 +234,28 @@
             $(this).closest("tr").remove();
             RefreshInputIndexes();
         });
+        //$(document).off("change", "#clipped-employees-temp");
+        //$(document).on("change", "#clipped-employees-temp", function (e) {
+        //    var imgFile = e.target.files[0];
+        //    if (imgFile) {
+        //        // Get the original image size
+        //        new Compressor(imgFile, {
+        //            quality: 0.5,
+        //            maxWidth: 1200,
+        //            success(result) {
+        //                // Convert the compressed image data to Base64
+        //                var reader = new FileReader();
+        //                reader.readAsDataURL(result);
+        //                reader.onloadend = function () {
+        //                    var base64data = reader.result;
+
+        //                    // Set the Base64 data as the value of the hidden input
+        //                    $("#clipped-employees").val(base64data);
+        //                };
+        //            }
+        //        });
+        //    }
+        //});
     });
     function AddCost(element) {
         var thisElement = $(element);
@@ -285,7 +308,7 @@
             data: { model: obj, 'rowNumber': rowNumber },
             dataType: "html",
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 $('#cost-table tbody').append(response);
             },
             error: function (jqXHR, textStatus, errorThrown) {

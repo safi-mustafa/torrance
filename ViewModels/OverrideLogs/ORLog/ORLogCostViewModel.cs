@@ -7,7 +7,7 @@ namespace ViewModels.OverrideLogs.ORLog
     {
         public long Id { get; set; }
         [Display(Name = "Hours")]
-        [Range(1, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
+        [Range(0, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
         [Required]
         public double? OverrideHours { get; set; }
 
