@@ -75,6 +75,10 @@ namespace Web.Controllers
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
+            else if(User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+            {
+                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id" });
+            }
             result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
             //result.ActionsList = actions;
         }

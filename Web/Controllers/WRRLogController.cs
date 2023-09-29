@@ -113,6 +113,10 @@ namespace Web.Controllers
             {
                 result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
             }
+            else if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+            {
+                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id" });
+            }
             result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" });
         }
 

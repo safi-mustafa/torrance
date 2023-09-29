@@ -81,22 +81,15 @@
             </div>
             </div>*@
 
-            @* @if (isAdmin)
+            @if (isAdmin)
             {
-            <div class="col-lg-4">
-            <div class="mb-3">
+                <div class="col-lg-4">
+                    <div class="mb-3">
 
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-            </div>
-            </div>
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label fw-600">Company</label>
-            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-            <input type="hidden" class="form-control" id="company-id" value="@Model.Company.Id" readonly />
-            </div>
-            </div>
-            }*@
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                    </div>
+                </div>
+            }
             <div class="col-lg-6">
                 @if (User.IsInRole(RolesCatalog.Employee.ToString()))
                 {
