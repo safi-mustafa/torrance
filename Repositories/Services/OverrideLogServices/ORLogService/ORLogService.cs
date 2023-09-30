@@ -284,6 +284,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
+                            if (model.ClippedEmployees==null || model.ClippedEmployees?.File == null)
+                            {
+                                model.ClippedEmployees = new ClipEmployeeModifyViewModel();
+                                model.ClippedEmployees.Url = record.ClippedEmployeesUrl;
+                            }
                             var dbModel = _mapper.Map(model, record);
                             if (record.ApproverId != updateModel.Approver?.Id)
                             {
@@ -292,6 +297,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             }
 
                             //save and attach clipped employees.
+
                             AddClippedEmployees(model, dbModel);
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
@@ -320,7 +326,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private void AddClippedEmployees(IClippedAttachment model, OverrideLog mappedModel)
         {
             if (model.ClippedEmployees?.File != null)
+            {
                 mappedModel.ClippedEmployeesUrl = _fileHelper.Save(model.ClippedEmployees);
+
+            }
         }
 
         public async Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search)
