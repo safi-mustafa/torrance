@@ -399,14 +399,18 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
 
+
             // Add scroll bar on top
             $('.dataTables_scrollHead').off('scroll');
             $('.dataTables_scrollHead').css({
                 'overflow-x': 'scroll'
             }).on('scroll', function (e) {
-                var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
-                scrollBody.scrollLeft = this.scrollLeft;
-                $(scrollBody).trigger('scroll');
+                var scrollLeft = this.scrollLeft;
+                if (!$('.dtfh-floatingparent.dtfh-floatingparenthead').is(':visible')) {
+                    var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
+                    scrollBody.scrollLeft = scrollLeft;
+                    $(scrollBody).trigger('scroll');
+                }
             });
         }
     });
