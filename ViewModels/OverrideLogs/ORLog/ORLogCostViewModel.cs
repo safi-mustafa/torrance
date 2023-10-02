@@ -19,14 +19,31 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required]
         public OverrideTypeCatalog? OverrideType { get; set; }
 
+        [Display(Name = "ST Hours")]
+        public double? STHours { get; set; }
+
+        [Display(Name = "OT Hours")]
+        public double? OTHours { get; set; }
+
+        [Display(Name = "DT Hours")]
+        public double? DTHours { get; set; }
+
         public long OverrideLogId { get; set; }
 
         public double Cost
         {
             get
             {
-                var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
-                var totalCost = ((rate ?? 0) * (OverrideHours ?? 0) * (HeadCount ?? 0));
+                double totalCost = 0d;
+                if (OverrideType != null)
+                {
+                    var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
+                    totalCost = ((rate ?? 0) * (OverrideHours ?? 0) * (HeadCount ?? 0));
+                }
+                else
+                {
+                    totalCost = ((CraftSkill.STRate * STHours) + (CraftSkill.OTRate * OTHours) + (CraftSkill.DTRate * DTHours)) ?? 0;
+                }
                 return totalCost;
             }
         }
