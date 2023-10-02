@@ -1,10 +1,13 @@
-﻿using DataLibrary;
+﻿using Centangle.Common.ResponseHelpers;
+using Centangle.Common.ResponseHelpers.Models;
+using DataLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
+using Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +23,16 @@ namespace Repositories.Services.DashboardService
     {
         private readonly ToranceContext _db;
         private readonly ILogger<DashboardService> _logger;
+        private readonly IRepositoryResponse _response;
 
-        public DashboardService(ToranceContext db, ILogger<DashboardService> logger)
+        public DashboardService(ToranceContext db, ILogger<DashboardService> logger, IRepositoryResponse response)
         {
             _db = db;
             _logger = logger;
+            _response = response;
         }
+
+        
 
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
@@ -70,14 +77,20 @@ namespace Repositories.Services.DashboardService
                                           Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
                                           Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
                                       }).ToListAsync();
+            await GetTOTDelayTypeCharts(search, model, totHours);
+            return model;
 
+        }
+
+        private async Task GetTOTDelayTypeCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeChartViewModel model, long? totHours)
+        {
             model.ReworkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-                                     .Include(x => x.ReworkDelay)
-                                     .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
-                                     {
-                                         Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
-                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                     }).ToListAsync();
+                                                 .Include(x => x.ReworkDelay)
+                                                 .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
+                                                 {
+                                                     Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
+                                                     Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                                 }).ToListAsync();
 
             model.StartOfWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                      .Include(x => x.StartOfWorkDelay)
@@ -94,8 +107,6 @@ namespace Repositories.Services.DashboardService
                                         Category = x.Max(y => y.OngoingWorkDelay.Name) ?? "None",
                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
                                     }).ToListAsync();
-            return model;
-
         }
 
         public async Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search)
@@ -250,6 +261,21 @@ namespace Repositories.Services.DashboardService
                 );
         }
 
+        public async Task<IRepositoryResponse> GetTotDelayTypeChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeChartViewModel();
+                var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+                await GetTOTDelayTypeCharts(search, model, totHours);
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
 
+            }
+            return Response.BadRequestResponse(_response);
+        }
     }
 }
