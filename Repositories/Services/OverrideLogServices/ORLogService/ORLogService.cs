@@ -218,7 +218,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                                        OTRate = cs.OTRate,
                                                        DTRate = cs.DTRate
                                                    },
-                                                   OverrideType = olc.OverrideType
+                                                   OverrideType = olc.OverrideType,
+                                                   STHours = olc.STHours,
+                                                   DTHours = olc.DTHours,
+                                                   OTHours = olc.OTHours,
                                                }).ToListAsync();
                     mappedModel.ShiftDelay = mappedModel.ShiftDelay ?? new();
                     mappedModel.ReworkDelay = mappedModel.ReworkDelay ?? new();
