@@ -172,6 +172,11 @@ namespace Web.Controllers
             }
             return model;
         }
+
+        public async Task MergeCostsForCraft()
+        {
+            await _overrideLogService.MergeCostsForCraft();
+        }
     }
 
 }

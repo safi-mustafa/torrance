@@ -259,13 +259,13 @@
     });
     function AddCost(element) {
         var thisElement = $(element);
-        var costSTHours = $("#cost-st-hours").val();
-        var costOTHours = $("#cost-ot-hours").val();
-        var costDTHours = $("#cost-dt-hours").val();
+        var costSTHours = parseToInt($("#cost-st-hours").val());
+        var costOTHours = parseToInt($("#cost-ot-hours").val());
+        var costDTHours = parseToInt($("#cost-dt-hours").val());
         var headCount = $("#head-count").val();
         var costCraftId = $('#craft-skill-id').select2('data')[0].id;
         var costCraftName = $('#craft-skill-id').select2('data')[0].text;
-        var totalCost = parseInt(costSTHours) + parseInt(costOTHours) + parseInt(costDTHours);
+        var totalCost = costSTHours + costOTHours + costDTHours;
         if (totalCost != null && headCount != "" && headCount > 0 && totalCost != "" && totalCost > 0 && costCraftId != null && costCraftId != "") {
             var rowNumber = $(".cost-row").length;
             var obj = {
@@ -277,9 +277,9 @@
                     'DTRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.DTRate,
                 },
                 'HeadCount': headCount,
-                'STHours': costSTHours,
-                'OTHours': costOTHours,
-                'DTHours': costDTHours
+                'STHours': costSTHours != null ? costSTHours : 0,
+                'OTHours': costOTHours != null ? costOTHours : 0,
+                'DTHours': costDTHours != null ? costDTHours : 0
             }
             AddCosttRow(obj, rowNumber);
             ResetCostInputs();
@@ -301,6 +301,18 @@
     function ResetCostInputs() {
         $('.costs-inputs-container').find(':input').val(null);
         $("#craft-skill-id").val('').trigger('change');
+    }
+
+    function parseToInt(input) {
+        // Use parseInt to attempt to parse the input as an integer
+        const parsedInt = parseInt(input);
+
+        // Check if parsedInt is NaN
+        if (isNaN(parsedInt)) {
+            return 0; // Return 0 if it's NaN
+        } else {
+            return parsedInt; // Return the parsed integer if it's a valid number
+        }
     }
 
     function AddCosttRow(obj, rowNumber) {
