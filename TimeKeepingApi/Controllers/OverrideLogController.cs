@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Models.OverrideLogs;
 using Pagination;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
 using Repositories.Shared.VersionService;
 using Select2.Model;
 using Torrance.Api.Controllers;
+using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 
 namespace API.Controllers
@@ -71,7 +75,7 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState();
+            ManageCommonModelState(model);
         }
         private void ManagePutModelState(ORLogModifyViewModel model)
         {
@@ -80,10 +84,10 @@ namespace API.Controllers
             {
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState();
+            ManageCommonModelState(model);
         }
 
-        private void ManageCommonModelState()
+        private void ManageCommonModelState(ORLogModifyViewModel model)
         {
             var version = Version.Parse(_versionService.GetVersionNumber());
             ModelState.Remove("Company.Name");
@@ -102,6 +106,42 @@ namespace API.Controllers
                     ModelState.Remove(key);
                 }
             }
+            if (version < Version.Parse("1.0.2"))
+            {
+                for (var i = 0; i < model.Costs.Count; i++)
+                {
+
+                    if (model.Costs[i].STHours < 1 && model.Costs[i].OTHours < 1 && model.Costs[i].DTHours < 1)
+                    {
+                        ModelState.AddModelError($"Costs[{i}]", "Cost must have at least one ST, OT or DT hour.");
+                    }
+                }
+            }
+        }
+
+        private List<ORLogCostViewModel> GroupCosts(List<ORLogCostViewModel> costs)
+        {
+            var mergedCosts = new List<ORLogCostViewModel>();
+            foreach (var c in costs.GroupBy(x => x.CraftSkill.Id))
+            {
+                var mergedCost = new ORLogCostViewModel();
+                foreach (var i in c)
+                {
+                    //mapping hours on the basis of Override Type
+                    switch (i.OverrideType)
+                    {
+                        case OverrideTypeCatalog.ST: mergedCost.STHours = i.OverrideHours; break;
+                        case OverrideTypeCatalog.OT: mergedCost.OTHours = i.OverrideHours; break;
+                        case OverrideTypeCatalog.DT: mergedCost.DTHours = i.OverrideHours; break;
+                    }
+                }
+                //mapping common fields
+                mergedCost.CraftSkill = new CraftSkillForORLogBriefViewModel { Id = c.Max(x => x.CraftSkill.Id) };
+                mergedCost.OverrideLogId = c.Max(x => x.OverrideLogId);
+                mergedCost.HeadCount = c.Max(x => x.HeadCount);
+                mergedCosts.Add(mergedCost);
+            }
+            return mergedCosts;
         }
     }
 }
