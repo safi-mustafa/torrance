@@ -3,6 +3,7 @@ using AutoMapper;
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using DataLibrary;
+using DocumentFormat.OpenXml.InkML;
 using Enums;
 using Helpers.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -91,7 +92,7 @@ namespace Repositories.Shared.NotificationServices
                 }
                 List<Notification> notifications = new List<Notification>();
                 //SetProcessedLogPushNotification(model, notifications);
-                SendProcessedLogEmailNotification(model, notifications, approver);
+                await SendProcessedLogEmailNotification(model, notifications, approver);
                 _db.Set<Notification>().AddRange(notifications);
                 await _db.SaveChangesAsync();
                 var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
@@ -119,19 +120,38 @@ namespace Repositories.Shared.NotificationServices
             notifications.Add(notificationMappedModel);
         }
 
-        private void SendProcessedLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
+        private async Task SendProcessedLogEmailNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
         {
-            var notificationMappedModel = _mapper.Map<Notification>(model);
-            notificationMappedModel.Id = Guid.NewGuid();
-
-            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, SentEmailType.LogProcessed));
-            notificationMappedModel.SendTo = model.SendTo;
-            notificationMappedModel.Type = NotificationType.Email;
-            notificationMappedModel.CreatedOn = DateTime.UtcNow;
-            notificationMappedModel.IsSent = false;
-            notifications.Add(notificationMappedModel);
+            var notificationUserIds = await GetAdminIdsForProcessedLogNotifcation();
+            notificationUserIds.Add(model.SendTo);
+            notificationUserIds = notificationUserIds.Distinct().ToList();
+            foreach (var userId in notificationUserIds)
+            {
+                var notificationMappedModel = _mapper.Map<Notification>(model);
+                notificationMappedModel.Id = Guid.NewGuid();
+                notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, approver, SentEmailType.LogProcessed));
+                notificationMappedModel.SendTo = userId;
+                notificationMappedModel.Type = NotificationType.Email;
+                notificationMappedModel.CreatedOn = DateTime.UtcNow;
+                notificationMappedModel.IsSent = false;
+                notifications.Add(notificationMappedModel);
+            }
         }
 
+        private async Task<List<string>> GetAdminIdsForProcessedLogNotifcation()
+        {
+            var targetRoles = new List<string>() { RolesCatalog.Administrator.ToString() };
+            var adminUserIdsQueryable = (from r in _db.Roles
+                                         join ur in _db.UserRoles on r.Id equals ur.RoleId
+                                         join u in _db.Users on ur.UserId equals u.Id
+                                         where targetRoles.Contains(r.Name)
+                                         && u.IsDeleted == false
+                                         && u.ActiveStatus == ActiveStatus.Active
+                                         select ur.UserId.ToString()).AsQueryable();
+
+            var adminUserIds = await adminUserIdsQueryable.ToListAsync();
+            return adminUserIds;
+        }
         private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, ApproverAssociation? approver)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
