@@ -3,15 +3,12 @@ using Centangle.Common.ResponseHelpers.Models;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Models.OverrideLogs;
 using Pagination;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
 using Repositories.Shared.VersionService;
 using Select2.Model;
 using Torrance.Api.Controllers;
-using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 
 namespace API.Controllers
@@ -98,6 +95,7 @@ namespace API.Controllers
             }
             ManageCommonModelStateAndVersionChanges(model);
         }
+
         private void ManagePutModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
