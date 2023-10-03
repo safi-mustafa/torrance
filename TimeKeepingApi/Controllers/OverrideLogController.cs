@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
+using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pagination;
@@ -20,6 +22,7 @@ namespace API.Controllers
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IVersionService _versionService;
+        private readonly Version _version;
 
         public OverrideLogController(
             IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> oRLogService
@@ -32,6 +35,7 @@ namespace API.Controllers
             _userInfoService = userInfoService;
             _mapper = mapper;
             _versionService = versionService;
+            _version = Version.Parse(_versionService.GetVersionNumber());
         }
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
@@ -42,15 +46,33 @@ namespace API.Controllers
             var result = await _oRLogService.GetAll<ORLogDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<ORLogDetailViewModel>>(result);
         }
+
+        public async override Task<IActionResult> Get(long id)
+        {
+
+            var result = await _oRLogService.GetById(id);
+            var responseModel = result as RepositoryResponseWithModel<ORLogDetailViewModel>;
+            var model = responseModel?.ReturnModel;
+
+            if (_version < Version.Parse("1.0.2"))
+            {
+                if (model != null)
+                {
+                    model.Costs = UnGroupCosts(model.Costs);
+                }
+            }
+            return ReturnProcessedResponse<ORLogDetailViewModel>(responseModel);
+        }
+
         public override Task<IActionResult> Post([FromForm] ORLogModifyViewModel model)
         {
-            ManagePostModelState(model);
+            ManagePostModelStateAndVersionChanges(model);
             return base.Post(model);
         }
 
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
-            ManagePutModelState(model);
+            ManagePutModelStateAndVersionChanges(model);
             return base.Put(model);
         }
 
@@ -62,7 +84,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
 
-        private void ManagePostModelState(ORLogModifyViewModel model)
+        private void ManagePostModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
@@ -71,29 +93,29 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState();
+            ManageCommonModelStateAndVersionChanges(model);
         }
-        private void ManagePutModelState(ORLogModifyViewModel model)
+
+        private void ManagePutModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState();
+            ManageCommonModelStateAndVersionChanges(model);
         }
 
-        private void ManageCommonModelState()
+        private void ManageCommonModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
-            var version = Version.Parse(_versionService.GetVersionNumber());
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            if (version <= Version.Parse("0.0.0"))
+            if (_version <= Version.Parse("0.0.0"))
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (version < Version.Parse("1.0.1"))
+            if (_version < Version.Parse("1.0.1"))
             {
                 ModelState.Remove("Costs");
                 var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[")).ToList();
@@ -102,6 +124,81 @@ namespace API.Controllers
                     ModelState.Remove(key);
                 }
             }
+            if (_version < Version.Parse("1.0.2"))
+            {
+                model.Costs = GroupCosts(model.Costs);
+            }
+            if(_version >= Version.Parse("1.0.2"))
+            {
+                for (var i = 0; i < model.Costs.Count; i++)
+                {
+
+                    if (model.Costs[i].STHours < 1 && model.Costs[i].OTHours < 1 && model.Costs[i].DTHours < 1)
+                    {
+                        ModelState.AddModelError($"Costs[{i}]", "Cost must have at least one ST, OT or DT hour.");
+                    }
+                }
+            }
+        }
+
+        private List<ORLogCostViewModel> GroupCosts(List<ORLogCostViewModel> costs)
+        {
+            var mergedCosts = new List<ORLogCostViewModel>();
+            foreach (var c in costs.GroupBy(x => x.CraftSkill.Id))
+            {
+                var mergedCost = new ORLogCostViewModel();
+                foreach (var i in c)
+                {
+                    //mapping hours on the basis of Override Type
+                    switch (i.OverrideType)
+                    {
+                        case OverrideTypeCatalog.ST: mergedCost.STHours = i.OverrideHours; break;
+                        case OverrideTypeCatalog.OT: mergedCost.OTHours = i.OverrideHours; break;
+                        case OverrideTypeCatalog.DT: mergedCost.DTHours = i.OverrideHours; break;
+                    }
+                }
+                //mapping common fields
+                mergedCost.CraftSkill = c.Max(x => x.CraftSkill) ?? new();
+                mergedCost.OverrideLogId = c.Max(x => x.OverrideLogId);
+                mergedCost.HeadCount = c.Max(x => x.HeadCount);
+                mergedCosts.Add(mergedCost);
+            }
+            return mergedCosts;
+        }
+
+        private List<ORLogCostViewModel> UnGroupCosts(List<ORLogCostViewModel> costs)
+        {
+            var mergedCosts = new List<ORLogCostViewModel>();
+            foreach (var c in costs)
+            {
+                //un grouping on row in to multiple based on the Hours added, i.e. for STHours an object with OverrideType ST and STHours will be mapped to OverrideHours.
+                if (c.STHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.ST, c.STHours ?? 0);
+                }
+                if (c.OTHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT,c.OTHours ?? 0);
+                }
+                if (c.DTHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.DT, c.DTHours ?? 0);
+                }
+            }
+            return mergedCosts;
+        }
+
+        private static void CreateNewCostObject(List<ORLogCostViewModel> mergedCosts, ORLogCostViewModel c, OverrideTypeCatalog oRType, double hours)
+        {
+            var mergedCost = c.CreateShallowCopy();
+
+            //mapping fields
+            mergedCost.OverrideType = oRType;
+            mergedCost.CraftSkill = c.CraftSkill;
+            mergedCost.OverrideLogId = c.OverrideLogId;
+            mergedCost.HeadCount = c.HeadCount;
+            mergedCost.OverrideHours = hours; 
+            mergedCosts.Add(mergedCost);
         }
     }
 }

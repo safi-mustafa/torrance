@@ -37,7 +37,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public string? WorkScope { get; set; }
 
         [Display(Name = "Is Archived")]
-        public bool IsArchived { get; set; }
+        public bool IsArchived { get; set; } = false;
 
         public UnitBriefViewModel Unit { get; set; } = new();
 

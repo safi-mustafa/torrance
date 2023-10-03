@@ -7,8 +7,8 @@ namespace ViewModels.OverrideLogs.ORLog
     {
         public long Id { get; set; }
         [Display(Name = "Hours")]
-        [Range(0, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
-        [Required]
+        //[Range(0, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
+        //[Required]
         public double? OverrideHours { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "The field Head Count must be greater than zero.")]
@@ -16,8 +16,17 @@ namespace ViewModels.OverrideLogs.ORLog
         public int? HeadCount { get; set; }
         [RequiredNotNull]
         public CraftSkillForORLogBriefViewModel CraftSkill { get; set; } = new();
-        [Required]
+        //[Required]
         public OverrideTypeCatalog? OverrideType { get; set; }
+
+        [Display(Name = "ST Hours")]
+        public double? STHours { get; set; } = 0;
+
+        [Display(Name = "OT Hours")]
+        public double? OTHours { get; set; } = 0;
+
+        [Display(Name = "DT Hours")]
+        public double? DTHours { get; set; } = 0;
 
         public long OverrideLogId { get; set; }
 
@@ -25,8 +34,16 @@ namespace ViewModels.OverrideLogs.ORLog
         {
             get
             {
-                var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
-                var totalCost = ((rate ?? 0) * (OverrideHours ?? 0) * (HeadCount ?? 0));
+                double totalCost = 0d;
+                if (OverrideType != null)
+                {
+                    var rate = (OverrideType == OverrideTypeCatalog.ST ? CraftSkill.STRate : (OverrideType == OverrideTypeCatalog.OT ? CraftSkill.OTRate : CraftSkill.DTRate));
+                    totalCost = ((rate ?? 0) * (OverrideHours ?? 0) * (HeadCount ?? 0));
+                }
+                else
+                {
+                    totalCost = ((CraftSkill.STRate * STHours) + (CraftSkill.OTRate * OTHours) + (CraftSkill.DTRate * DTHours)) ?? 0;
+                }
                 return totalCost;
             }
         }

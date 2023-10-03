@@ -218,7 +218,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                                        OTRate = cs.OTRate,
                                                        DTRate = cs.DTRate
                                                    },
-                                                   OverrideType = olc.OverrideType
+                                                   OverrideType = olc.OverrideType,
+                                                   STHours = olc.STHours,
+                                                   DTHours = olc.DTHours,
+                                                   OTHours = olc.OTHours,
                                                }).ToListAsync();
                     mappedModel.ShiftDelay = mappedModel.ShiftDelay ?? new();
                     mappedModel.ReworkDelay = mappedModel.ReworkDelay ?? new();
@@ -284,7 +287,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         var record = await _db.Set<OverrideLog>().FindAsync(updateModel?.Id);
                         if (record != null)
                         {
-                            if (model.ClippedEmployees==null || model.ClippedEmployees?.File == null)
+                            if (model.ClippedEmployees == null || model.ClippedEmployees?.File == null)
                             {
                                 model.ClippedEmployees = new ClipEmployeeModifyViewModel();
                                 model.ClippedEmployees.Url = record.ClippedEmployeesUrl;
@@ -393,9 +396,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     foreach (var cost in overrideLogCost.Costs)
                     {
                         OverrideLogCost dbCost = new OverrideLogCost();
-                        dbCost.OverrideHours = cost.OverrideHours;
+                        dbCost.STHours = cost.STHours;
+                        dbCost.OTHours = cost.OTHours;
+                        dbCost.DTHours = cost.DTHours;
                         dbCost.CraftSkillId = cost.CraftSkill.Id;
-                        dbCost.OverrideType = cost.OverrideType;
                         dbCost.HeadCount = cost.HeadCount;
                         dbCost.OverrideLogId = id;
                         if (dbCost.CraftSkillId > 0)
@@ -510,6 +514,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         OverrideLogId = olc.OverrideLogId,
                         OverrideHours = olc.OverrideHours,
                         HeadCount = olc.HeadCount,
+                        STHours = olc.STHours,
+                        DTHours = olc.DTHours,
+                        OTHours = olc.OTHours,
                         CraftSkill = new CraftSkillForORLogBriefViewModel()
                         {
                             Id = cs.Id,
@@ -629,6 +636,47 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
             }
             return null;
+        }
+
+        public async Task<bool> MergeCostsForCraft()
+        {
+            try
+            {
+                //getting all the costs with override not null from db
+                var costs = await _db.OverrideLogCost.Where(x => x.OverrideType != null).ToListAsync();
+                var mergedCosts = new List<OverrideLogCost>();
+                foreach (var c in costs)
+                {
+                    //mapping the old cost on to new one, as per discussion, 
+                    var mergedCost = new OverrideLogCost();
+                    mergedCost.STHours = 0;
+                    mergedCost.OTHours = 0;
+                    mergedCost.DTHours = 0;
+                    //mapping hours on the basis of Override Type
+                    switch (c.OverrideType)
+                    {
+                        case OverrideTypeCatalog.ST: mergedCost.STHours = c.OverrideHours; break;
+                        case OverrideTypeCatalog.OT: mergedCost.OTHours = c.OverrideHours; break;
+                        case OverrideTypeCatalog.DT: mergedCost.DTHours = c.OverrideHours; break;
+                    }
+                    //mapping common fields
+                    mergedCost.CraftSkillId = c.CraftSkillId;
+                    mergedCost.OverrideLogId = c.OverrideLogId;
+                    mergedCost.HeadCount = c.HeadCount;
+                    mergedCosts.Add(mergedCost);
+                }
+                //removing old costs
+                _db.RemoveRange(costs);
+                //adding newly merged costs
+                await _db.AddRangeAsync(mergedCosts);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception thrown in MergeCostForCraft()");
+            }
+            return false;
         }
 
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
