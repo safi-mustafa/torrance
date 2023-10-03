@@ -136,12 +136,46 @@ namespace API.Controllers
                     }
                 }
                 //mapping common fields
-                mergedCost.CraftSkill = new CraftSkillForORLogBriefViewModel { Id = c.Max(x => x.CraftSkill.Id) };
+                mergedCost.CraftSkill = c.Max(x => x.CraftSkill) ?? new();
                 mergedCost.OverrideLogId = c.Max(x => x.OverrideLogId);
                 mergedCost.HeadCount = c.Max(x => x.HeadCount);
                 mergedCosts.Add(mergedCost);
             }
             return mergedCosts;
+        }
+
+        private List<ORLogCostViewModel> UnGroupCosts(List<ORLogCostViewModel> costs)
+        {
+            var mergedCosts = new List<ORLogCostViewModel>();
+            foreach (var c in costs)
+            {
+                //un grouping on row in to multiple based on the Hours added, i.e. for STHours an object with OverrideType ST and STHours will be mapped to OverrideHours.
+                if (c.STHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.ST);
+                }
+                if (c.OTHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT);
+                }
+                if (c.DTHours > 0)
+                {
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.DT);
+                }
+            }
+            return mergedCosts;
+        }
+
+        private static void CreateNewCostObject(List<ORLogCostViewModel> mergedCosts, ORLogCostViewModel c, OverrideTypeCatalog oRType)
+        {
+            var mergedCost = c.CreateShallowCopy();
+
+            //mapping fields
+            mergedCost.OverrideType = oRType;
+            mergedCost.CraftSkill = c.CraftSkill;
+            mergedCost.OverrideLogId = c.OverrideLogId;
+            mergedCost.HeadCount = c.HeadCount;
+            mergedCosts.Add(mergedCost);
         }
     }
 }
