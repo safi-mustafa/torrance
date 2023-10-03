@@ -1,25 +1,18 @@
-using Centangle.Common.ResponseHelpers.Models;
-using DataLibrary;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Text;
-using Torrance.Api.Mapper;
-using Centangle.Common.RequestHelpers.SwaggerFilters;
 using Web.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
+using Serilog.Formatting.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
 IWebHostEnvironment environment = builder.Environment;
+
+
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 
 builder.Services.AddRazorPages();
 builder.Services.ConfigureServices(configuration);
@@ -31,7 +24,6 @@ builder.Services.ConfigureDependencies();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -44,7 +36,7 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
-
+app.UseSerilogRequestLogging();
 //app.UseHttpsRedirection(); //ENABLE IN PRODUCTION
 var directoryPath = configuration.GetValue<string>("DirectoryPath");
 var uploadBasePath = configuration.GetValue<string>("UploadBasePath");
