@@ -7,8 +7,8 @@ namespace ViewModels.OverrideLogs.ORLog
     {
         public long Id { get; set; }
         [Display(Name = "Hours")]
-        [Range(0, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
-        [Required]
+        //[Range(0, double.MaxValue, ErrorMessage = "The field Override Hours must be greater than zero.")]
+        //[Required]
         public double? OverrideHours { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "The field Head Count must be greater than zero.")]
@@ -16,7 +16,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public int? HeadCount { get; set; }
         [RequiredNotNull]
         public CraftSkillForORLogBriefViewModel CraftSkill { get; set; } = new();
-        [Required]
+        //[Required]
         public OverrideTypeCatalog? OverrideType { get; set; }
 
         [Display(Name = "ST Hours")]

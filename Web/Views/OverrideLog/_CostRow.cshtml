@@ -9,20 +9,17 @@
     var rowName = "cost-row[" + rowNumber + "]";
     var rowId = "cost-row-" + rowNumber;
 
-    var overrideType = collectionType + "[" + rowNumber + "].OverrideType";
     var craftId = collectionType + "[" + rowNumber + "].CraftSkill.Id";
     var craftName = collectionType + "[" + rowNumber + "].CraftSkill.Name";
-    var overrideHours = collectionType + "[" + rowNumber + "].OverrideHours";
+    var stHours = collectionType + "[" + rowNumber + "].StHours";
+    var otHours = collectionType + "[" + rowNumber + "].OtHours";
+    var dtHours = collectionType + "[" + rowNumber + "].DtHours";
     var headCount = collectionType + "[" + rowNumber + "].HeadCount";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
 
 }
 
 <tr class="cost-row" id="@rowId">
-    <td>
-        <span style="text-align: initial !important;">@Model.OverrideType</span>
-        <input type="hidden" name="@overrideType" value="@Model.OverrideType" />
-    </td>
     <td>
         <span style=" text-align: initial !important;">@Model.CraftSkill.Name</span>
         <input type="hidden" name="@craftId" value="@Model.CraftSkill.Id" />
@@ -33,8 +30,16 @@
         <input type="hidden" name="@headCount" value="@Model.HeadCount" />
     </td>
     <td>
-        <span style=" text-align: initial !important;">@Model.OverrideHours</span>
-        <input type="hidden" name="@overrideHours" value="@Model.OverrideHours" />
+        <span style=" text-align: initial !important;">@Model.STHours</span>
+        <input type="hidden" name="@stHours" value="@Model.STHours" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.OTHours</span>
+        <input type="hidden" name="@otHours" value="@Model.OTHours" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.DTHours</span>
+        <input type="hidden" name="@dtHours" value="@Model.DTHours" />
     </td>
     @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
     {
