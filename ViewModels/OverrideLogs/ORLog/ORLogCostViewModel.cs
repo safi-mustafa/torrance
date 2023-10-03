@@ -20,13 +20,13 @@ namespace ViewModels.OverrideLogs.ORLog
         public OverrideTypeCatalog? OverrideType { get; set; }
 
         [Display(Name = "ST Hours")]
-        public double? STHours { get; set; }
+        public double? STHours { get; set; } = 0;
 
         [Display(Name = "OT Hours")]
-        public double? OTHours { get; set; }
+        public double? OTHours { get; set; } = 0;
 
         [Display(Name = "DT Hours")]
-        public double? DTHours { get; set; }
+        public double? DTHours { get; set; } = 0;
 
         public long OverrideLogId { get; set; }
 
