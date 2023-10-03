@@ -277,9 +277,9 @@
                     'DTRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.DTRate,
                 },
                 'HeadCount': headCount,
-                'STHours': costSTHours != null ? costSTHours : 0,
-                'OTHours': costOTHours != null ? costOTHours : 0,
-                'DTHours': costDTHours != null ? costDTHours : 0
+                'STHours': costSTHours,
+                'OTHours': costOTHours,
+                'DTHours': costDTHours
             }
             AddCosttRow(obj, rowNumber);
             ResetCostInputs();
