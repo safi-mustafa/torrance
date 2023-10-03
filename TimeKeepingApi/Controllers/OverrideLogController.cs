@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centangle.Common.ResponseHelpers.Models;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace API.Controllers
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IVersionService _versionService;
+        private readonly Version _version;
 
         public OverrideLogController(
             IORLogService<ORLogModifyViewModel, ORLogModifyViewModel, ORLogDetailViewModel> oRLogService
@@ -36,6 +38,7 @@ namespace API.Controllers
             _userInfoService = userInfoService;
             _mapper = mapper;
             _versionService = versionService;
+            _version = Version.Parse(_versionService.GetVersionNumber());
         }
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
@@ -46,15 +49,33 @@ namespace API.Controllers
             var result = await _oRLogService.GetAll<ORLogDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<ORLogDetailViewModel>>(result);
         }
+
+        public async override Task<IActionResult> Get(long id)
+        {
+
+            var result = await _oRLogService.GetById(id);
+            var responseModel = result as RepositoryResponseWithModel<ORLogDetailViewModel>;
+            var model = responseModel?.ReturnModel;
+
+            if (_version < Version.Parse("1.0.2"))
+            {
+                if (model != null)
+                {
+                    model.Costs = UnGroupCosts(model.Costs);
+                }
+            }
+            return ReturnProcessedResponse<ORLogDetailViewModel>(responseModel);
+        }
+
         public override Task<IActionResult> Post([FromForm] ORLogModifyViewModel model)
         {
-            ManagePostModelState(model);
+            ManagePostModelStateAndVersionChanges(model);
             return base.Post(model);
         }
 
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
-            ManagePutModelState(model);
+            ManagePutModelStateAndVersionChanges(model);
             return base.Put(model);
         }
 
@@ -66,7 +87,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
 
-        private void ManagePostModelState(ORLogModifyViewModel model)
+        private void ManagePostModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
@@ -75,29 +96,28 @@ namespace API.Controllers
                 ModelState.Remove("Requester.Name");
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState(model);
+            ManageCommonModelStateAndVersionChanges(model);
         }
-        private void ManagePutModelState(ORLogModifyViewModel model)
+        private void ManagePutModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
                 // ModelState.Remove("Approver.Name");
             }
-            ManageCommonModelState(model);
+            ManageCommonModelStateAndVersionChanges(model);
         }
 
-        private void ManageCommonModelState(ORLogModifyViewModel model)
+        private void ManageCommonModelStateAndVersionChanges(ORLogModifyViewModel model)
         {
-            var version = Version.Parse(_versionService.GetVersionNumber());
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
-            if (version <= Version.Parse("0.0.0"))
+            if (_version <= Version.Parse("0.0.0"))
             {
                 ModelState.Remove("EmployeeNames");
             }
-            if (version < Version.Parse("1.0.1"))
+            if (_version < Version.Parse("1.0.1"))
             {
                 ModelState.Remove("Costs");
                 var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[")).ToList();
@@ -106,7 +126,7 @@ namespace API.Controllers
                     ModelState.Remove(key);
                 }
             }
-            if (version < Version.Parse("1.0.2"))
+            if (_version < Version.Parse("1.0.2"))
             {
                 for (var i = 0; i < model.Costs.Count; i++)
                 {
@@ -116,6 +136,7 @@ namespace API.Controllers
                         ModelState.AddModelError($"Costs[{i}]", "Cost must have at least one ST, OT or DT hour.");
                     }
                 }
+                model.Costs = GroupCosts(model.Costs);
             }
         }
 
