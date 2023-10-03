@@ -126,6 +126,10 @@ namespace API.Controllers
             }
             if (_version < Version.Parse("1.0.2"))
             {
+                model.Costs = GroupCosts(model.Costs);
+            }
+            if(_version >= Version.Parse("1.0.2"))
+            {
                 for (var i = 0; i < model.Costs.Count; i++)
                 {
 
@@ -134,7 +138,6 @@ namespace API.Controllers
                         ModelState.AddModelError($"Costs[{i}]", "Cost must have at least one ST, OT or DT hour.");
                     }
                 }
-                model.Costs = GroupCosts(model.Costs);
             }
         }
 
@@ -171,21 +174,21 @@ namespace API.Controllers
                 //un grouping on row in to multiple based on the Hours added, i.e. for STHours an object with OverrideType ST and STHours will be mapped to OverrideHours.
                 if (c.STHours > 0)
                 {
-                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.ST);
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.ST, c.STHours ?? 0);
                 }
                 if (c.OTHours > 0)
                 {
-                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT);
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT,c.OTHours ?? 0);
                 }
                 if (c.DTHours > 0)
                 {
-                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.DT);
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.DT, c.DTHours ?? 0);
                 }
             }
             return mergedCosts;
         }
 
-        private static void CreateNewCostObject(List<ORLogCostViewModel> mergedCosts, ORLogCostViewModel c, OverrideTypeCatalog oRType)
+        private static void CreateNewCostObject(List<ORLogCostViewModel> mergedCosts, ORLogCostViewModel c, OverrideTypeCatalog oRType, double hours)
         {
             var mergedCost = c.CreateShallowCopy();
 
@@ -194,6 +197,7 @@ namespace API.Controllers
             mergedCost.CraftSkill = c.CraftSkill;
             mergedCost.OverrideLogId = c.OverrideLogId;
             mergedCost.HeadCount = c.HeadCount;
+            mergedCost.OverrideHours = hours; 
             mergedCosts.Add(mergedCost);
         }
     }
