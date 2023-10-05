@@ -12,7 +12,7 @@ namespace API.Controllers
     [AllowAnonymous]
     public class ContractorController : CrudBaseBriefController<ContractorDetailViewModel, ContractorSearchViewModel>
     {
-        public ContractorController(IContractorService<ContractorCreateViewModel, ContractorModifyViewModel, ContractorDetailViewModel> contractorService) : base(contractorService)
+        public ContractorController(IContractorService<ContractorCreateViewModel, ContractorModifyViewModel, ContractorDetailViewModel> contractorService, ILogger<ContractorController> logger) : base(contractorService, logger, "Contractor")
         {
         }
     }

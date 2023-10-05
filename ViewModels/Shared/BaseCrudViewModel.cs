@@ -13,7 +13,7 @@ namespace ViewModels.Shared
     public class BaseCrudViewModel : IBaseCrudViewModel
     {
         [DisplayName("Status")]
-        public ActiveStatus ActiveStatus { get; set; } 
+        public ActiveStatus ActiveStatus { get; set; }
         public string FormattedStatus
         {
             get
@@ -25,5 +25,5 @@ namespace ViewModels.Shared
 
 
 
-    
+
 }

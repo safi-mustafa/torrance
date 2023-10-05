@@ -11,7 +11,7 @@ namespace API.Controllers
     //[Authorize]
     public class DropboxController : CrudBaseBriefController<DropboxDetailViewModel, DropboxSearchViewModel>
     {
-        public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService) : base(dropboxService)
+        public DropboxController(IDropboxService<DropboxModifyViewModel, DropboxModifyViewModel, DropboxDetailViewModel> dropboxService, ILogger<DropboxController> logger) : base(dropboxService, logger, "Dropbox")
         {
         }
 

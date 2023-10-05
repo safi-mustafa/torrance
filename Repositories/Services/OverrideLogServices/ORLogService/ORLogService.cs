@@ -307,7 +307,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             dbModel.TotalHours = CalculateTotalHours(costs);
                             dbModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                             await SetRequesterId(dbModel);
-                            await _db.SaveChangesAsync();
+                            await _db.SaveChangesAsync(model);
                             await SetORLogCosts(costs, dbModel.Id);
                             await transaction.CommitAsync();
                             var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };

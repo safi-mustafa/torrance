@@ -56,6 +56,7 @@ using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
 using Repositories.Services.DashboardService;
+using CorrelationId.DependencyInjection;
 
 namespace Web.Extensions
 {
@@ -231,6 +232,7 @@ namespace Web.Extensions
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IVersionService, VersionService>();
             services.AddScoped(typeof(IOngoingWorkDelayService<,,>), typeof(OngoingWorkDelayService<,,>));
+            services.AddDefaultCorrelationId();
 
         }
     }

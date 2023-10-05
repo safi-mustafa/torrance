@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class SOWController : CrudBaseBriefController<SOWDetailViewModel, SOWSearchViewModel>
     {
-        public SOWController(ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> sowService) : base(sowService)
+        public SOWController(ISOWService<SOWModifyViewModel, SOWModifyViewModel, SOWDetailViewModel> sowService, ILogger<SOWController> logger) : base(sowService, logger, "SOW")
         {
         }
     }

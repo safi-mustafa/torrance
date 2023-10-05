@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class ReworkDelayController : CrudBaseBriefController<ReworkDelayDetailViewModel, ReworkDelaySearchViewModel>
     {
-        public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> reworkDelayService) : base(reworkDelayService)
+        public ReworkDelayController(IReworkDelayService<ReworkDelayModifyViewModel, ReworkDelayModifyViewModel, ReworkDelayDetailViewModel> reworkDelayService, ILogger<ReworkDelayController> logger) : base(reworkDelayService, logger, "ReworkDelay")
         {
         }
     }

@@ -7,6 +7,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Configuration;
+using CorrelationId;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +77,7 @@ app.UseStaticFiles(new StaticFileOptions
 //           Path.Combine(builder.Environment.ContentRootPath, "Storage")),
 //    RequestPath = "/Storage"
 //});
+app.UseCorrelationId();
 app.UseRouting();
 
 app.UseAuthentication();

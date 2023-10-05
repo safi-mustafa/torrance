@@ -33,7 +33,7 @@ namespace API.Controllers
             , IMapper mapper
             , IVersionService versionService
             , ILogger<OverrideLogController> logger
-            ) : base(oRLogService)
+            ) : base(oRLogService, logger, "OverrideLog")
         {
             _oRLogService = oRLogService;
             _userInfoService = userInfoService;
@@ -41,7 +41,6 @@ namespace API.Controllers
             _versionService = versionService;
             _logger = logger;
             _version = Version.Parse(_versionService.GetVersionNumber());
-            _logger.LogInformation("Version: {Version}", _version.ToString());
         }
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
@@ -67,6 +66,7 @@ namespace API.Controllers
                     model.Costs = UnGroupCosts(model.Costs);
                 }
             }
+            _logger.LogInformation($"OverrieLog -> GetById: {JsonConvert.SerializeObject(model)}");
             return ReturnProcessedResponse<ORLogDetailViewModel>(responseModel);
         }
 
@@ -80,8 +80,7 @@ namespace API.Controllers
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
             ManagePutModelStateAndVersionChanges(model);
-            _logger.LogInformation(JsonConvert.SerializeObject(model));
-            _logger.LogInformation("Version: {Version}", _version.ToString());
+            _logger.LogInformation($"OverrideLog -> Put: {JsonConvert.SerializeObject(model)}");
             return base.Put(model);
         }
 
@@ -120,6 +119,8 @@ namespace API.Controllers
             ModelState.Remove("Company.Name");
             ModelState.Remove("ReasonForRequest");
             ModelState.Remove("DelayType");
+            ModelState.Remove("ActiveStatus");
+            ModelState.Remove("IsArchived");
             if (_version <= Version.Parse("0.0.0"))
             {
                 ModelState.Remove("EmployeeNames");
@@ -144,8 +145,13 @@ namespace API.Controllers
 
                     if (model.Costs[i].STHours < 1 && model.Costs[i].OTHours < 1 && model.Costs[i].DTHours < 1)
                     {
-                        ModelState.AddModelError($"Costs[{i}]", "Cost must have at least one ST, OT or DT hour.");
+                        ModelState.AddModelError($"Costs[{i}].general", "Cost must have at least one ST, OT or DT hour.");
                     }
+                }
+                var keysToRemove = ModelState.Keys.Where(k => k.StartsWith("Costs[") && (k.EndsWith("].OverrideType") || k.EndsWith("].OverrideHours"))).ToList();
+                foreach (var key in keysToRemove)
+                {
+                    ModelState.Remove(key);
                 }
             }
         }

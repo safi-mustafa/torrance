@@ -101,6 +101,7 @@
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="1.25.10" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="CorrelationId" Version="3.0.1" />
 	</ItemGroup>
 
   <ItemGroup>

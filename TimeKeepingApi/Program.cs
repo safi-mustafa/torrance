@@ -2,7 +2,7 @@ using Web.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Formatting.Json;
-
+using CorrelationId;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,9 @@ ConfigurationManager configuration = builder.Configuration; // allows both to ac
 IWebHostEnvironment environment = builder.Environment;
 
 
-builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, configuration) => configuration
+.ReadFrom.Configuration(context.Configuration)
+);
 
 
 builder.Services.AddRazorPages();
@@ -50,6 +52,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
+app.UseCorrelationId();
 app.UseRouting();
 //app.UseCors(
 //    options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()

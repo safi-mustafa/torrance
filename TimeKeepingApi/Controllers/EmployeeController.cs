@@ -23,7 +23,7 @@ namespace API.Controllers
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IMapper mapper) : base(employeeService)
+        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IMapper mapper, ILogger<EmployeeController> logger) : base(employeeService, logger, "Employee")
         {
             _employeeService = employeeService;
             _mapper = mapper;

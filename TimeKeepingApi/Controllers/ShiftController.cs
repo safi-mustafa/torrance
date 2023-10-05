@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class ShiftController : CrudBaseBriefController<ShiftDetailViewModel, ShiftSearchViewModel>
     {
-        public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> shiftService) : base(shiftService)
+        public ShiftController(IShiftService<ShiftModifyViewModel, ShiftModifyViewModel, ShiftDetailViewModel> shiftService, ILogger<ShiftController> logger) : base(shiftService, logger, "Shift")
         {
         }
     }

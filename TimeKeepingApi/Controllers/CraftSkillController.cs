@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class CraftSkillController : CrudBaseBriefController<CraftSkillDetailViewModel, CraftSkillSearchViewModel>
     {
-        public CraftSkillController(ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> permitTypeService) : base(permitTypeService)
+        public CraftSkillController(ICraftSkillService<CraftSkillModifyViewModel, CraftSkillModifyViewModel, CraftSkillDetailViewModel> permitTypeService, ILogger<CraftSkillController> logger) : base(permitTypeService, logger, "CraftSkill")
         {
         }
     }

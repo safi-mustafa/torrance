@@ -22,7 +22,7 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly IUserInfoService _userInfoService;
 
-        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> ApproverService, IMapper mapper, IUserInfoService userInfoService) : base(ApproverService)
+        public ApproverController(IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> ApproverService, IMapper mapper, IUserInfoService userInfoService, ILogger<ApproverController> logger) : base(ApproverService, logger, "Approver")
         {
             _approverService = ApproverService;
             _mapper = mapper;

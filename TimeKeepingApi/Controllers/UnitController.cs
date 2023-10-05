@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class UnitController : CrudBaseBriefController<UnitDetailViewModel, UnitSearchViewModel>
     {
-        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> unitService) : base(unitService)
+        public UnitController(IUnitService<UnitModifyViewModel, UnitModifyViewModel, UnitDetailViewModel> unitService, ILogger<UnitController> logger) : base(unitService, logger, "Unit")
         {
         }
     }

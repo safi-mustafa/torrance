@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class OverrideTypeController : CrudBaseBriefController<OverrideTypeDetailViewModel, OverrideTypeSearchViewModel>
     {
-        public OverrideTypeController(IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> permitTypeService) : base(permitTypeService)
+        public OverrideTypeController(IOverrideTypeService<OverrideTypeModifyViewModel, OverrideTypeModifyViewModel, OverrideTypeDetailViewModel> permitTypeService, ILogger<OverrideTypeController> logger) : base(permitTypeService, logger, "OverrideType")
         {
         }
     }

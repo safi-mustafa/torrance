@@ -13,9 +13,9 @@ namespace API.Controllers
     [AllowAnonymous]
     public class CompanyController : CrudBaseBriefController<CompanyDetailViewModel, CompanySearchViewModel>
     {
-        public CompanyController(ICompanyService<CompanyCreateViewModel, CompanyModifyViewModel, CompanyDetailViewModel> CompanyService) : base(CompanyService)
+        public CompanyController(ICompanyService<CompanyCreateViewModel, CompanyModifyViewModel, CompanyDetailViewModel> CompanyService, ILogger<CompanyController> logger) : base(CompanyService, logger, "Company")
         {
-             
+
         }
         public override Task<IActionResult> GetAll([FromQuery] CompanySearchViewModel search)
         {

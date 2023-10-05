@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿using CorrelationId.DependencyInjection;
+using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
 using NotificationWorkerService;
@@ -7,6 +8,9 @@ using NotificationWorkerService.Interface;
 using NotificationWorkerService.Repository;
 using Repository;
 using Serilog;
+using CorrelationId.DependencyInjection;
+using CorrelationId;
+using CorrelationId.Abstractions;
 
 namespace NotificationWService
 {
@@ -24,8 +28,25 @@ namespace NotificationWService
             try
             {
                 Log.Information("Lab Notification Service has started");
-                CreateHostBuilder(args).Build().Run();
-                return;
+
+                // Create the host
+                var host = CreateHostBuilder(args).Build();
+
+                // Manually configure and set up Correlation IDs
+                using (var scope = host.Services.CreateScope())
+                {
+                    //var serviceProvider = scope.ServiceProvider;
+                    //var correlationIdProvider = serviceProvider.GetRequiredService<ICorrelationIdProvider>();
+
+                    //// Generate a new Correlation ID (you can customize this as needed)
+                    //var newCorrelationId = Guid.NewGuid().ToString();
+
+                    //// Set the Correlation ID for the current context
+                    //correlationIdProvider.CorrelationId = newCorrelationId;
+
+                    // Run the worker service
+                    host.Run();
+                }
             }
             catch (Exception ex)
             {
@@ -61,6 +82,8 @@ namespace NotificationWService
                     services.AddSingleton<IEmail, EmailService>();
                     services.AddSingleton<ISms, SmsService>();
                     services.AddSingleton<IPushNotification, PushNotificationService>();
+                    services.AddDefaultCorrelationId();
+
                 })
                 .UseSerilog();
     }

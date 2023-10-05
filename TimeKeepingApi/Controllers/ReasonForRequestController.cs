@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class ReasonForRequestController : CrudBaseBriefController<ReasonForRequestDetailViewModel, ReasonForRequestSearchViewModel>
     {
-        public ReasonForRequestController(IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> permitTypeService) : base(permitTypeService)
+        public ReasonForRequestController(IReasonForRequestService<ReasonForRequestModifyViewModel, ReasonForRequestModifyViewModel, ReasonForRequestDetailViewModel> permitTypeService, ILogger<ReasonForRequestController> logger) : base(permitTypeService, logger, "ReasonForRequest")
         {
         }
     }

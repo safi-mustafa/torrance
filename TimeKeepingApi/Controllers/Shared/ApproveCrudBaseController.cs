@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using Centangle.Common.ResponseHelpers.Models;
+﻿using Centangle.Common.ResponseHelpers.Models;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Models.Common.Interfaces;
+using Newtonsoft.Json;
 using Pagination;
 using Repositories.Interfaces;
 using Repositories.Shared.Interfaces;
 using System.Net;
-using System.Security.Claims;
 using ViewModels.Shared;
 
 namespace Torrance.Api.Controllers
@@ -25,10 +23,14 @@ namespace Torrance.Api.Controllers
         where Service : IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
     {
         private readonly Service _service;
+        private readonly ILogger _logger;
+        private readonly string _controllerName;
 
-        public ApproveCrudBaseController(Service service)
+        public ApproveCrudBaseController(Service service, ILogger logger, string controllerName)
         {
             _service = service;
+            _logger = logger;
+            _controllerName = controllerName;
         }
 
         [HttpGet]
@@ -38,6 +40,7 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> GetAll([FromQuery] SearchViewModel search)
         {
+            _logger.LogInformation($"{_controllerName} -> GetAll: {JsonConvert.SerializeObject(search)}");
             var result = await _service.GetAll<PaginatedResultViewModel>(search);
             return ReturnProcessedResponse<PaginatedResultModel<PaginatedResultViewModel>>(result);
         }
@@ -50,6 +53,7 @@ namespace Torrance.Api.Controllers
         public virtual async Task<IActionResult> Get(long id)
         {
             var result = await _service.GetById(id);
+            _logger.LogInformation($"{_controllerName} -> GetById({id}): {JsonConvert.SerializeObject(result)}");
             return ReturnProcessedResponse<DetailViewModel>(result);
         }
 
@@ -61,6 +65,7 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> Approve(long id, Status status)
         {
+            _logger.LogInformation($"{_controllerName} -> Approve(id: {id}, status:{status})");
             var result = await _service.SetApproveStatus(id, status);
             return ReturnProcessedResponse(result);
         }
@@ -74,6 +79,7 @@ namespace Torrance.Api.Controllers
         {
             if (ModelState.IsValid)
             {
+                _logger.LogInformation($"{_controllerName} -> Post: {JsonConvert.SerializeObject(model)}");
                 var data = await _service.Create(model);
                 return ReturnProcessedResponse(data);
             }
@@ -89,6 +95,7 @@ namespace Torrance.Api.Controllers
         {
             if (ModelState.IsValid)
             {
+                _logger.LogInformation($"{_controllerName} -> Put: {JsonConvert.SerializeObject(model)}");
                 var data = await _service.Update(model);
                 return ReturnProcessedResponse(data);
             }
@@ -102,6 +109,7 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> Delete(long id)
         {
+            _logger.LogInformation($"{_controllerName} -> Delete: {id}");
             var property = await _service.Delete(id);
             return ReturnProcessedResponse(property);
         }

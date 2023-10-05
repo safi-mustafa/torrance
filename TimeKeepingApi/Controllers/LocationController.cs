@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class LocationController : CrudBaseBriefController<LocationDetailViewModel, LocationSearchViewModel>
     {
-        public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> locationService) : base(locationService)
+        public LocationController(ILocationService<LocationModifyViewModel, LocationModifyViewModel, LocationDetailViewModel> locationService, ILogger<LocationController> logger) : base(locationService, logger, "Location")
         {
         }
     }

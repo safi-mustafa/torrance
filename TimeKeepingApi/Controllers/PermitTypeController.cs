@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class PermitTypeController : CrudBaseBriefController<PermitTypeDetailViewModel, PermitTypeSearchViewModel>
     {
-        public PermitTypeController(IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> permitTypeService) : base(permitTypeService)
+        public PermitTypeController(IPermitTypeService<PermitTypeModifyViewModel, PermitTypeModifyViewModel, PermitTypeDetailViewModel> permitTypeService, ILogger<PermitTypeController> logger) : base(permitTypeService, logger, "PermitType")
         {
         }
     }

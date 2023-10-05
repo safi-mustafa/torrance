@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class LeadPlannerController : CrudBaseBriefController<LeadPlannerDetailViewModel, LeadPlannerSearchViewModel>
     {
-        public LeadPlannerController(ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> permitTypeService) : base(permitTypeService)
+        public LeadPlannerController(ILeadPlannerService<LeadPlannerModifyViewModel, LeadPlannerModifyViewModel, LeadPlannerDetailViewModel> permitTypeService, ILogger<LeadPlannerController> logger) : base(permitTypeService, logger, "LeadPlanner")
         {
         }
     }
