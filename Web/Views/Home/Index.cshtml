@@ -5,6 +5,8 @@
 @model DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
+    var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
+    var isApprover = User.IsInRole("Approver");
 }
 <style>
     *[class^='progress-done-'] {
@@ -24,113 +26,86 @@
 </style>
 <div class="container-fluid">
     <main>
+        @if (isAdmin)
+        {
+            <h3 class="default-heading">
+                Torrance Admin Dashboard
+            </h3>
+        }
+        @if (isApprover)
+        {
+            <h3 class="default-heading">
+                Torrance Approver Dashboard
+            </h3>
+        }
 
-        <h3 class="default-heading">
-            Torrance Admin Dashboard
-        </h3>
         <br>
-
-
-        <div class="row dashboard-stats-row">
-            <div class="col-md-4">
-                <div class="card w-100">
-                    <div class="card-body">
-                        <div class="content">
-                            <h5 class="card-title"> Total TOT's</h5>
-                            <p class="card-text">@Model.TotalTotLogs</p>
-                        </div>
-
-                        <div class="icon">
-                            <span class="tot"><i class="bi-file-text"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card w-100">
-                    <div class="card-body">
-                        <div class="content">
-                            <h5 class="card-title">Total WRR's</h5>
-                            <p class="card-text">@Model.TotalWRRLogs</p>
-                        </div>
-
-                        <div class="icon">
-                            <span class="tot"><i class="bi-file-text"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card w-100">
-                    <div class="card-body">
-                        <div class="content">
-                            <h5 class="card-title">Total Overrides</h5>
-                            <p class="card-text">@Model.TotalORLogs</p>
-                        </div>
-
-                        <div class="icon">
-                            <span class="tot"><i class="bi-file-text"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @* <div id="progress-charts-container" class="row">
-            <div id="progress-chart-div"></div>
-            </div>*@
-        <div class="row dashboard-filters-row">
-
-            @* <div class="col-md-12">
-                <form id="dashboard-filter-form">
-                <p>Filter By:</p>
-                <div class="filter-select">
-                <div class="row">
+        @if (isAdmin)
+        {
+            <div class="row dashboard-stats-row">
                 <div class="col-md-4">
-                <div class="form-group">
-                <partial name="~/Views/Shared/Select2/_Department.cshtml" model="new DepartmentBriefViewModel()" />
-                </div>
-                </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                <partial name="~/Views/Shared/Select2/_Unit.cshtml" model="new UnitBriefViewModel()" />
-                </div>
-                </div>
-                </div>
-                </div>
-                </form>
-                </div>*@
-            <partial name="_TOTStatusChart" />
-            <partial name="_WRRStatusChart" />
-            <partial name="_OverrideStatusChart" />
-            @* <partial name="_WrrPieCharts" />*@
-            <div class="row col-12">
-                <partial name="_OverridePieCharts" />
-                @*  <div class="card w-100">
-                <div class="card-body">
-                <div class="content">
-                <h5 class="card-title">Overrides</h5>
-                </div>
-                <div class="row col-12">
-                <partial name="_OverridePieCharts" />
-                </div>
-                </div>
-                </div>*@
-            </div>
-            <div class="row col-12">
-                <partial name="_TOTPieCharts" />
-                @*<div class="card w-100">
+                    <div class="card w-100">
                         <div class="card-body">
                             <div class="content">
-                                <h5 class="card-title">TOT's</h5>
+                                <h5 class="card-title"> Total TOT's</h5>
+                                <p class="card-text">@Model.TotalTotLogs</p>
                             </div>
-                            <div class="row col-12">
 
+                            <div class="icon">
+                                <span class="tot"><i class="bi-file-text"></i></span>
                             </div>
                         </div>
-                    </div>*@
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h5 class="card-title">Total WRR's</h5>
+                                <p class="card-text">@Model.TotalWRRLogs</p>
+                            </div>
+
+                            <div class="icon">
+                                <span class="tot"><i class="bi-file-text"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h5 class="card-title">Total Overrides</h5>
+                                <p class="card-text">@Model.TotalORLogs</p>
+                            </div>
+
+                            <div class="icon">
+                                <span class="tot"><i class="bi-file-text"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-           
+        }
+        <div class="row dashboard-filters-row">
+            @if (isAdmin)
+            {
+                <partial name="_TOTStatusChart" />
+                <partial name="_WRRStatusChart" />
+                <partial name="_OverrideStatusChart" />
+                <div class="row col-12">
+                    <partial name="_OverridePieCharts" />
+                </div>
+            }
+            @if (isAdmin || isApprover)
+            {
+                <div class="row col-12">
+                    <partial name="_TOTPieCharts" />
+                </div>
+            }
+            
+
         </div>
     </main>
 </div>
@@ -157,11 +132,12 @@
 <script src="~/js/custom-scripts/dashboard/override-pie-chart.js"></script>
 <script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
 <!-- Chart code -->
-<script>$(function () {
+<script>
+    $(function () {
         GetStatusChartData("TOT", "tot-status");
         GetStatusChartData("WRR", "wrr-status");
         GetStatusChartData("Override", "override-status");
-        GetTOTChartData();
+        GetTOTChartData("@isAdmin" ,"@isApprover");
         GetOverrideChartData();
 
         //$(document).on("change", "#department-id, #unit-id", function () {

@@ -69,14 +69,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.DelayType.Name),
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
-
-            model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-                                      .Include(x => x.ShiftDelay)
-                                      .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
-                                      {
-                                          Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
-                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                      }).ToListAsync();
+            
             await GetTOTDelayTypeCharts(search, model, totHours);
             return model;
 
@@ -84,6 +77,14 @@ namespace Repositories.Services.DashboardService
 
         private async Task GetTOTDelayTypeCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeChartViewModel model, long? totHours)
         {
+            model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
+                                      .Include(x => x.ShiftDelay)
+                                      .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
+                                      {
+                                          Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
+                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                      }).ToListAsync();
+
             model.ReworkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                                  .Include(x => x.ReworkDelay)
                                                  .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel

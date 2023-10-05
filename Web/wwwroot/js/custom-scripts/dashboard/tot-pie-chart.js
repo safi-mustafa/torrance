@@ -1,4 +1,5 @@
-﻿function GetTOTChartData(formData = "") {
+﻿function GetTOTChartData(isAdmin, isApprover, formData = "") {
+    debugger;
     $.ajax({
         type: "GET",
         url: "/Home/GetTotChartsData",
@@ -6,14 +7,19 @@
         dataType: "json",
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            TOTDepartmentChart(data.Department);
-            TOTUnitChart(data.Unit);
-            TOTShiftChart(data.Shift);
-            TOTRequestReasonChart(data.RequestReason);
-            TOTShiftDelayChart(data.ShiftDelay);
-            TOTReworkDelayChart(data.ReworkDelay);
-            TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
-            TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
+            if (isAdmin == "True") {
+                TOTDepartmentChart(data.Department);
+                TOTUnitChart(data.Unit);
+                TOTShiftChart(data.Shift);
+                TOTRequestReasonChart(data.RequestReason);
+            }
+            if (isAdmin == "True" || isApprover == "True") {
+                TOTShiftDelayChart(data.ShiftDelay);
+                TOTReworkDelayChart(data.ReworkDelay);
+                TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
+                TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
+            }
+            
         },
         error: function () {
             console.log("Error occured!!")

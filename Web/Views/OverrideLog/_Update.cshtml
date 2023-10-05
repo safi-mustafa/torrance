@@ -90,18 +90,13 @@
                     </div>
                 </div>
             }
-            <div class="col-lg-6">
-                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
-                {
-                    <label class="form-label fw-600">Company</label>
-                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
-                    <input asp-for="Company.Id" type="hidden" />
-                }
-                else
-                {
+
+            @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+            {
+                <div class="col-lg-6">
                     <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
-                }
-            </div>
+                </div>
+            }
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="PoNumber" class="form-label fw-600"></label>
@@ -155,7 +150,7 @@
                         <label class="form-label fw-600">Head Count<span style="color:red"> *</span></label>
                         <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
                     </span>
-                   
+
                     <span class="cost-st-hours-td col-md-2">
                         <label class="form-label fw-600">ST Hours<span style="color:red"> *</span></label>
                         <input type="number" name="cost-st-hours" id="cost-st-hours" class="form-control cost-st-hours cost" placeholder="ST Hours" />
@@ -206,6 +201,7 @@
 </div>
 <input asp-for="Id" type="hidden" />
 <input asp-for="Employee.Id" type="hidden" />
+<input asp-for="Company.Id" type="hidden" />
 
 <script>
     $(function () {

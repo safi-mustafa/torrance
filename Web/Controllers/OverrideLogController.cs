@@ -106,6 +106,7 @@ namespace Web.Controllers
                 ModelState.Remove("Requester.Id");
                 ModelState.Remove("Requester.Name");
                 ModelState.Remove("Approver.Name");
+                ModelState.Remove("Company.Id");
             }
             ModelState.Remove("Company.Name");
             return base.Create(model);
