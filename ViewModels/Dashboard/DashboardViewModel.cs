@@ -22,7 +22,6 @@ namespace ViewModels.Dashboard
         public List<LogPieChartViewModel> Unit { get; set; }
         public List<LogPieChartViewModel> Department { get; set; }
         public List<LogPieChartViewModel> RequestReason { get; set; }
-        public List<LogPieChartViewModel> ShiftDelay { get; set; }
     }
 
 
