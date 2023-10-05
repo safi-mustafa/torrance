@@ -23,10 +23,12 @@ namespace Repositories.Shared.VersionService
         public string GetVersionNumber()
         {
             var versionHeader = _configuration.GetValue<string>("VersionHeader");
-            string version = "";
+            string version = "0.0.0";
             if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey(versionHeader))
             {
-                version = _httpContextAccessor.HttpContext.Request.Headers[versionHeader].ToString() ?? "0.0.0";
+                version = _httpContextAccessor.HttpContext.Request.Headers[versionHeader].ToString();
+                if (string.IsNullOrEmpty(version))
+                    version = "0.0.0";
             }
 
             _logger.LogInformation($"LoggedInUserId: {_userInfoService.LoggedInUserId()}, LoggedInUser: {_userInfoService.LoggedInUserFullName()}, Version: {version}");
