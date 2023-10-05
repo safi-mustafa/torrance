@@ -100,6 +100,8 @@ namespace Web.Controllers
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
+                ModelState.Remove("Company.Id");
+                ModelState.Remove("Company.Name");
             }
             model.Validate(ModelState);
             return base.Create(model);

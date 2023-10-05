@@ -94,9 +94,12 @@ namespace Web.Controllers
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
+                ModelState.Remove("Company.Id");
+                ModelState.Remove("Company.Name");
             }
             return base.Create(model);
         }
+
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return View("~/Views/WRRLog/_Index.cshtml", vm);
