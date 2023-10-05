@@ -16,7 +16,7 @@ namespace API.Controllers
         private readonly ILogger<DashboardController> _logger;
         private readonly IDashboardService _dashboardService;
 
-        public DashboardController(ILogger<DashboardController> logger, IDashboardService dashboardService)
+        public DashboardController(ILogger<DashboardController> logger, IDashboardService dashboardService) : base(logger, "Dashboard")
         {
             _logger = logger;
             _dashboardService = dashboardService;

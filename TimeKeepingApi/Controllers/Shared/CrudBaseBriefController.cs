@@ -23,7 +23,7 @@ namespace Torrance.Api.Controllers
         private readonly ILogger _logger;
         private readonly string _controllerName;
 
-        public CrudBaseBriefController(IBaseSearch service, ILogger logger, string controllerName)
+        public CrudBaseBriefController(IBaseSearch service, ILogger logger, string controllerName) : base(logger, controllerName)
         {
             _service = service;
             _logger = logger;

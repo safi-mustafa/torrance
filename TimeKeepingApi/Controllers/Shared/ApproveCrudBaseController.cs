@@ -26,7 +26,7 @@ namespace Torrance.Api.Controllers
         private readonly ILogger _logger;
         private readonly string _controllerName;
 
-        public ApproveCrudBaseController(Service service, ILogger logger, string controllerName)
+        public ApproveCrudBaseController(Service service, ILogger logger, string controllerName) : base(logger, controllerName)
         {
             _service = service;
             _logger = logger;
@@ -83,6 +83,8 @@ namespace Torrance.Api.Controllers
                 var data = await _service.Create(model);
                 return ReturnProcessedResponse(data);
             }
+            //adding model state errors in the logs
+            LogModelStateError(model);
             return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 
@@ -99,6 +101,8 @@ namespace Torrance.Api.Controllers
                 var data = await _service.Update(model);
                 return ReturnProcessedResponse(data);
             }
+            //adding model state errors in the logs
+            LogModelStateError(model);
             return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 

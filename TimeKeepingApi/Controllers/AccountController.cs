@@ -63,7 +63,7 @@ namespace Torrance.Api.Controllers
                 IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
                 IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
                 ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService
-            )
+            ) : base(logger, "Account")
         {
             _configuration = configuration;
             _db = db;

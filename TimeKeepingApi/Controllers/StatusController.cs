@@ -12,7 +12,7 @@ namespace API.Controllers
     {
         private readonly IVersionService _versionService;
 
-        public StatusController(IVersionService versionService)
+        public StatusController(IVersionService versionService, ILogger<StatusController> logger) : base(logger, "Status")
         {
             this._versionService = versionService;
         }

@@ -25,7 +25,7 @@ namespace Torrance.Api.Controllers
         private readonly ILogger _logger;
         private readonly string _controllerName;
 
-        public CrudBaseController(IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger logger, string controllerName)
+        public CrudBaseController(IBaseCrud<CreateViewModel, UpdateViewModel, DetailViewModel> service, ILogger logger, string controllerName) : base(logger, controllerName)
         {
             _service = service;
             _logger = logger;
@@ -69,6 +69,8 @@ namespace Torrance.Api.Controllers
                 var data = await _service.Create(model);
                 return ReturnProcessedResponse(data);
             }
+            //adding model state errors in the logs
+            LogModelStateError(model);
             return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 
@@ -79,9 +81,15 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public virtual async Task<IActionResult> Put([FromBody] UpdateViewModel model)
         {
-            _logger.LogInformation($"{_controllerName} -> Put: {JsonConvert.SerializeObject(model)}");
-            var result = await _service.Update(model);
-            return ReturnProcessedResponse(result);
+            if (ModelState.IsValid)
+            {
+                _logger.LogInformation($"{_controllerName} -> Put: {JsonConvert.SerializeObject(model)}");
+                var result = await _service.Update(model);
+                return ReturnProcessedResponse(result);
+            }
+            //adding model state errors in the logs
+            LogModelStateError(model);
+            return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 
         [HttpDelete("{id}")]

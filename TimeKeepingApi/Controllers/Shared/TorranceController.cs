@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 using ViewModels.Shared;
 
@@ -10,6 +11,14 @@ namespace Torrance.Api.Controllers
     [Authorize]
     public class TorranceController : ControllerBase
     {
+        private readonly ILogger _logger;
+        private readonly string _controllerName;
+        public TorranceController(ILogger logger, string controllerName)
+        {
+
+            _logger = logger;
+            _controllerName = controllerName;
+        }
         protected IActionResult ReturnProcessedResponse(IRepositoryResponse response)
         {
             switch (response.Status)
@@ -68,6 +77,16 @@ namespace Torrance.Api.Controllers
                         return BadRequest();
                     }
             }
+        }
+
+        protected virtual void LogModelStateError(object model)
+        {
+            var errors = "";
+            foreach (var e in ModelState)
+            {
+                errors += $"{e.Key}: {e.Value}";
+            }
+            _logger.LogCritical($"{_controllerName} -> Post: {JsonConvert.SerializeObject(model)}, ModelStateError: {errors}");
         }
     }
 }
