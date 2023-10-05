@@ -695,7 +695,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             overrideLogSheet.Cell(1, 10).Value = "Shift";
             overrideLogSheet.Cell(1, 11).Value = "Override Reason";
             overrideLogSheet.Cell(1, 12).Value = "Employee Names";
-            overrideLogSheet.Cell(1, 13).Value = "Clipped Employees";
+            overrideLogSheet.Cell(1, 13).Value = "Uploaded Form";
 
             int currentColumn = 13;
             for (int i = 0; i < maxCostRows; i++)

@@ -45,7 +45,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required]
         public string? EmployeeNames { get; set; }
 
-        [Display(Name = "Clip Employees")]
+        [Display(Name = "Upload Form")]
         public ClipEmployeeModifyViewModel? ClippedEmployees { get; set; } = new();
 
         [Required]

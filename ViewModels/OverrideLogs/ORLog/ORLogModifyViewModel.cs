@@ -60,7 +60,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Employee Name(s)")]
         public string? EmployeeNames { get; set; }
 
-        [Display(Name = "Clip Employees")]
+        [Display(Name = "Uplaod Form")]
         public ClipEmployeeModifyViewModel? ClippedEmployees { get; set; } = new();
 
         [Required]

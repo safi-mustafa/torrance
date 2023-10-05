@@ -105,7 +105,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Employee Name(s)")]
         public string EmployeeNames { get; set; }
 
-        [Display(Name = "Clipped Employees")]
+        [Display(Name = "Uploaded Form")]
         public string ClippedEmployeesUrl { get; set; }
 
         public string DomainUrl { get; set; }

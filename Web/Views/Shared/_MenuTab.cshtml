@@ -14,7 +14,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
-                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator") || User.IsInRole("Approver"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/">Dashboard</a></li>
                 }
@@ -54,8 +54,8 @@
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @* <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <b>All</b>
-                                </a>*@
+                        <b>All</b>
+                        </a>*@
                             <a class="dropdown-item px-3" asp-controller="Company" asp-action="Index">Companies</a>
                             <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Crafts</a>
                             <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
