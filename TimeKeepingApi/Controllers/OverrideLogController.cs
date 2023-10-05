@@ -3,6 +3,8 @@ using Centangle.Common.ResponseHelpers.Models;
 using Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.OverrideLogs;
+using Newtonsoft.Json;
 using Pagination;
 using Repositories.Services.OverrideLogServices.ORLogService;
 using Repositories.Shared.UserInfoServices;
@@ -22,6 +24,7 @@ namespace API.Controllers
         private readonly IUserInfoService _userInfoService;
         private readonly IMapper _mapper;
         private readonly IVersionService _versionService;
+        private readonly ILogger<OverrideLogController> _logger;
         private readonly Version _version;
 
         public OverrideLogController(
@@ -29,13 +32,16 @@ namespace API.Controllers
             , IUserInfoService userInfoService
             , IMapper mapper
             , IVersionService versionService
+            , ILogger<OverrideLogController> logger
             ) : base(oRLogService)
         {
             _oRLogService = oRLogService;
             _userInfoService = userInfoService;
             _mapper = mapper;
             _versionService = versionService;
+            _logger = logger;
             _version = Version.Parse(_versionService.GetVersionNumber());
+            _logger.LogInformation("Version: {Version}", _version.ToString());
         }
 
         public override async Task<IActionResult> GetAll([FromQuery] ORLogAPISearchViewModel search)
@@ -67,12 +73,15 @@ namespace API.Controllers
         public override Task<IActionResult> Post([FromForm] ORLogModifyViewModel model)
         {
             ManagePostModelStateAndVersionChanges(model);
+            _logger.LogInformation(JsonConvert.SerializeObject(model));
             return base.Post(model);
         }
 
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
             ManagePutModelStateAndVersionChanges(model);
+            _logger.LogInformation(JsonConvert.SerializeObject(model));
+            _logger.LogInformation("Version: {Version}", _version.ToString());
             return base.Put(model);
         }
 
@@ -128,7 +137,7 @@ namespace API.Controllers
             {
                 model.Costs = GroupCosts(model.Costs);
             }
-            if(_version >= Version.Parse("1.0.2"))
+            if (_version >= Version.Parse("1.0.2"))
             {
                 for (var i = 0; i < model.Costs.Count; i++)
                 {
@@ -143,24 +152,46 @@ namespace API.Controllers
 
         private List<ORLogCostViewModel> GroupCosts(List<ORLogCostViewModel> costs)
         {
+            //var mergedCosts = new List<ORLogCostViewModel>();
+            //foreach (var c in costs.GroupBy(x => x.CraftSkill.Id))
+            //{
+            //    var mergedCost = new ORLogCostViewModel();
+            //    foreach (var i in c)
+            //    {
+            //        //mapping hours on the basis of Override Type
+            //        switch (i.OverrideType)
+            //        {
+            //            case OverrideTypeCatalog.ST: mergedCost.STHours = i.OverrideHours; break;
+            //            case OverrideTypeCatalog.OT: mergedCost.OTHours = i.OverrideHours; break;
+            //            case OverrideTypeCatalog.DT: mergedCost.DTHours = i.OverrideHours; break;
+            //        }
+            //    }
+            //    //mapping common fields
+            //    mergedCost.CraftSkill = c.Max(x => x.CraftSkill) ?? new();
+            //    mergedCost.OverrideLogId = c.Max(x => x.OverrideLogId);
+            //    mergedCost.HeadCount = c.Max(x => x.HeadCount);
+            //    mergedCosts.Add(mergedCost);
+            //}
+            //return mergedCosts;
             var mergedCosts = new List<ORLogCostViewModel>();
-            foreach (var c in costs.GroupBy(x => x.CraftSkill.Id))
+            foreach (var c in costs)
             {
+                //mapping the old cost format on to new one, as per discussion, 
                 var mergedCost = new ORLogCostViewModel();
-                foreach (var i in c)
+                mergedCost.STHours = 0;
+                mergedCost.OTHours = 0;
+                mergedCost.DTHours = 0;
+                //mapping hours on the basis of Override Type
+                switch (c.OverrideType)
                 {
-                    //mapping hours on the basis of Override Type
-                    switch (i.OverrideType)
-                    {
-                        case OverrideTypeCatalog.ST: mergedCost.STHours = i.OverrideHours; break;
-                        case OverrideTypeCatalog.OT: mergedCost.OTHours = i.OverrideHours; break;
-                        case OverrideTypeCatalog.DT: mergedCost.DTHours = i.OverrideHours; break;
-                    }
+                    case OverrideTypeCatalog.ST: mergedCost.STHours = c.OverrideHours; break;
+                    case OverrideTypeCatalog.OT: mergedCost.OTHours = c.OverrideHours; break;
+                    case OverrideTypeCatalog.DT: mergedCost.DTHours = c.OverrideHours; break;
                 }
                 //mapping common fields
-                mergedCost.CraftSkill = c.Max(x => x.CraftSkill) ?? new();
-                mergedCost.OverrideLogId = c.Max(x => x.OverrideLogId);
-                mergedCost.HeadCount = c.Max(x => x.HeadCount);
+                mergedCost.CraftSkill = c.CraftSkill;
+                mergedCost.OverrideLogId = c.OverrideLogId;
+                mergedCost.HeadCount = c.HeadCount;
                 mergedCosts.Add(mergedCost);
             }
             return mergedCosts;
@@ -178,7 +209,7 @@ namespace API.Controllers
                 }
                 if (c.OTHours > 0)
                 {
-                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT,c.OTHours ?? 0);
+                    CreateNewCostObject(mergedCosts, c, OverrideTypeCatalog.OT, c.OTHours ?? 0);
                 }
                 if (c.DTHours > 0)
                 {
@@ -197,7 +228,7 @@ namespace API.Controllers
             mergedCost.CraftSkill = c.CraftSkill;
             mergedCost.OverrideLogId = c.OverrideLogId;
             mergedCost.HeadCount = c.HeadCount;
-            mergedCost.OverrideHours = hours; 
+            mergedCost.OverrideHours = hours;
             mergedCosts.Add(mergedCost);
         }
     }
