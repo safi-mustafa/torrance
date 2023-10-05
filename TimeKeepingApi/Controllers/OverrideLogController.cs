@@ -66,7 +66,6 @@ namespace API.Controllers
                     model.Costs = UnGroupCosts(model.Costs);
                 }
             }
-            _logger.LogInformation($"OverrieLog -> GetById: {JsonConvert.SerializeObject(model)}");
             return ReturnProcessedResponse<ORLogDetailViewModel>(responseModel);
         }
 
@@ -80,7 +79,6 @@ namespace API.Controllers
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
             ManagePutModelStateAndVersionChanges(model);
-            _logger.LogInformation($"OverrideLog -> Put: {JsonConvert.SerializeObject(model)}");
             return base.Put(model);
         }
 
