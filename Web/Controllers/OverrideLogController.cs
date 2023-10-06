@@ -178,6 +178,12 @@ namespace Web.Controllers
         {
             await _overrideLogService.MergeCostsForCraft();
         }
+
+        public async Task CalculateTotals()
+        {
+            await _overrideLogService.CalculateTotalCostAndHours();
+            RedirectToAction("Index");
+        }
     }
 
 }
