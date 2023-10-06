@@ -142,8 +142,11 @@ namespace API.Controllers
             {
                 for (var i = 0; i < model.Costs.Count; i++)
                 {
-
-                    if (model.Costs[i].STHours < 1 && model.Costs[i].OTHours < 1 && model.Costs[i].DTHours < 1)
+                    if (model.Costs[i].STHours < 0 || model.Costs[i].OTHours < 0 || model.Costs[i].DTHours < 0)
+                    {
+                        ModelState.AddModelError($"Costs[{i}].general", "Cost must have hours greater than 0 for ST, OT and DT hour.");
+                    }
+                    if (model.Costs[i].STHours <= 0 && model.Costs[i].OTHours <= 0 && model.Costs[i].DTHours <= 0)
                     {
                         ModelState.AddModelError($"Costs[{i}].general", "Cost must have at least one ST, OT or DT hour.");
                     }
