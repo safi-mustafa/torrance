@@ -437,21 +437,30 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var selectedCraft = crafts.Where(x => x.Id == cost.CraftSkill.Id).FirstOrDefault();
                 if (selectedCraft != null)
                 {
-                    if (cost.OverrideType == OverrideTypeCatalog.ST)
+                    if (cost.OverrideType == null)
                     {
-                        craftCost = selectedCraft.STRate;
-                    }
-                    else if (cost.OverrideType == OverrideTypeCatalog.OT)
-                    {
-                        craftCost = selectedCraft.OTRate;
+                        var stCost = (cost.STHours ?? 0) * selectedCraft.STRate;
+                        var otCost = (cost.OTHours ?? 0) * selectedCraft.OTRate;
+                        var dtCost = (cost.DTHours ?? 0) * selectedCraft.DTRate;
+                        totalCost += (stCost + otCost + dtCost) * (cost.HeadCount ?? 0);
                     }
                     else
                     {
-                        craftCost = selectedCraft.DTRate;
+                        if (cost.OverrideType == OverrideTypeCatalog.ST)
+                        {
+                            craftCost = selectedCraft.STRate;
+                        }
+                        else if (cost.OverrideType == OverrideTypeCatalog.OT)
+                        {
+                            craftCost = selectedCraft.OTRate;
+                        }
+                        else
+                        {
+                            craftCost = selectedCraft.DTRate;
+                        }
+                        totalCost += (cost.OverrideHours ?? 0) * (cost.HeadCount ?? 0) * craftCost;
                     }
                 }
-
-                totalCost += (cost.OverrideHours ?? 0) * (cost.HeadCount ?? 0) * craftCost;
             }
             return totalCost;
 
@@ -463,7 +472,15 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
                 return 0;
             }
-            return overrideLogCost.Costs.Sum(x => x.OverrideHours ?? 0);
+            if (overrideLogCost.Costs.Any(x => x.OverrideType == null))
+            {
+                return (overrideLogCost.Costs.Sum(x => (x.STHours ?? 0) + (x.OTHours ?? 0) + (x.DTHours ?? 0)));
+            }
+            else
+            {
+                return overrideLogCost.Costs.Sum(x => x.OverrideHours ?? 0);
+            }
+
 
         }
         private double CalculateTotalHeadCount(IORLogCost overrideLogCost)

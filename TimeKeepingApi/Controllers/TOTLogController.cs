@@ -52,6 +52,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
 
+        [HttpPost]
         public override Task<IActionResult> Post([FromBody] TOTLogCreateViewModel model)
         {
 
@@ -69,6 +70,7 @@ namespace API.Controllers
             return base.Post(model);
         }
 
+        [HttpPut]
         public override Task<IActionResult> Put([FromBody] TOTLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();

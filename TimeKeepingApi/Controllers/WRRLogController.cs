@@ -35,6 +35,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<WRRLogDetailViewModel>>(result);
         }
 
+        [HttpPost]
         public override Task<IActionResult> Post([FromBody] WRRLogCreateViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
@@ -57,6 +58,7 @@ namespace API.Controllers
             return base.Post(model);
         }
 
+        [HttpPut]
         public override Task<IActionResult> Put([FromBody] WRRLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();

@@ -23,6 +23,7 @@ namespace ViewModels.OverrideLogs.ORLog
         //[Required]
         public string? Description { get; set; }
 
+        [Required]
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
 

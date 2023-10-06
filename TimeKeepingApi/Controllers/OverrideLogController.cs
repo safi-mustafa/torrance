@@ -69,6 +69,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<ORLogDetailViewModel>(responseModel);
         }
 
+        [HttpPost]
         public override Task<IActionResult> Post([FromForm] ORLogModifyViewModel model)
         {
             ManagePostModelStateAndVersionChanges(model);
@@ -76,6 +77,7 @@ namespace API.Controllers
             return base.Post(model);
         }
 
+        [HttpPut]
         public override Task<IActionResult> Put([FromForm] ORLogModifyViewModel model)
         {
             ManagePutModelStateAndVersionChanges(model);
