@@ -638,47 +638,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return null;
         }
 
-        public async Task<bool> MergeCostsForCraft()
-        {
-            try
-            {
-                //getting all the costs with override not null from db
-                var costs = await _db.OverrideLogCost.Where(x => x.OverrideType != null).ToListAsync();
-                var mergedCosts = new List<OverrideLogCost>();
-                foreach (var c in costs)
-                {
-                    //mapping the old cost on to new one, as per discussion, 
-                    var mergedCost = new OverrideLogCost();
-                    mergedCost.STHours = 0;
-                    mergedCost.OTHours = 0;
-                    mergedCost.DTHours = 0;
-                    //mapping hours on the basis of Override Type
-                    switch (c.OverrideType)
-                    {
-                        case OverrideTypeCatalog.ST: mergedCost.STHours = c.OverrideHours; break;
-                        case OverrideTypeCatalog.OT: mergedCost.OTHours = c.OverrideHours; break;
-                        case OverrideTypeCatalog.DT: mergedCost.DTHours = c.OverrideHours; break;
-                    }
-                    //mapping common fields
-                    mergedCost.CraftSkillId = c.CraftSkillId;
-                    mergedCost.OverrideLogId = c.OverrideLogId;
-                    mergedCost.HeadCount = c.HeadCount;
-                    mergedCosts.Add(mergedCost);
-                }
-                //removing old costs
-                _db.RemoveRange(costs);
-                //adding newly merged costs
-                await _db.AddRangeAsync(mergedCosts);
-                await _db.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception thrown in MergeCostForCraft()");
-            }
-            return false;
-        }
-
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
         {
             // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
@@ -725,5 +684,91 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         }
 
+        public async Task<bool> MergeCostsForCraft()
+        {
+            try
+            {
+                //getting all the costs with override not null from db
+                var costs = await _db.OverrideLogCost.Where(x => x.OverrideType != null).ToListAsync();
+                var mergedCosts = new List<OverrideLogCost>();
+                foreach (var c in costs)
+                {
+                    //mapping the old cost on to new one, as per discussion, 
+                    var mergedCost = new OverrideLogCost();
+                    mergedCost.STHours = 0;
+                    mergedCost.OTHours = 0;
+                    mergedCost.DTHours = 0;
+                    //mapping hours on the basis of Override Type
+                    switch (c.OverrideType)
+                    {
+                        case OverrideTypeCatalog.ST: mergedCost.STHours = c.OverrideHours; break;
+                        case OverrideTypeCatalog.OT: mergedCost.OTHours = c.OverrideHours; break;
+                        case OverrideTypeCatalog.DT: mergedCost.DTHours = c.OverrideHours; break;
+                    }
+                    //mapping common fields
+                    mergedCost.CraftSkillId = c.CraftSkillId;
+                    mergedCost.OverrideLogId = c.OverrideLogId;
+                    mergedCost.HeadCount = c.HeadCount;
+                    mergedCosts.Add(mergedCost);
+                }
+                //removing old costs
+                _db.RemoveRange(costs);
+                //adding newly merged costs
+                await _db.AddRangeAsync(mergedCosts);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception thrown in MergeCostForCraft()");
+            }
+            return false;
+        }
+
+        public async Task<bool> CalculateTotalCostAndHours()
+        {
+            var overrideLogCosts = await _db.OverrideLogCost.Include(x => x.CraftSkill)
+                                            .Where(x => x.OverrideType == null)
+                                            .GroupBy(x => new { x.OverrideLogId, x.CraftSkillId })
+                                            .Select(x => new OverrideCostVM
+                                            {
+                                                OverrideLogId = x.Key.OverrideLogId,
+                                                CraftSkillId = x.Key.CraftSkillId,
+                                                HeadCount = x.Sum(y => y.HeadCount),
+                                                STHours = x.Sum(y => y.STHours),
+                                                OTHours = x.Sum(y => y.OTHours),
+                                                DTHours = x.Sum(y => y.DTHours),
+                                                STRate = x.Max(y => y.CraftSkill.STRate),
+                                                OTRate = x.Max(y => y.CraftSkill.OTRate),
+                                                DTRate = x.Max(y => y.CraftSkill.DTRate)
+                                            })
+                                            .ToListAsync();
+
+
+
+            return true;
+        }
+
+    }
+
+    internal class OverrideCostVM
+    {
+        public long OverrideLogId { get; set; }
+        public long? CraftSkillId { get; set; }
+        public int? HeadCount { get; set; }
+        public double? STHours { get; set; }
+        public double? OTHours { get; set; }
+        public double? DTHours { get; set; }
+        public double STRate { get; set; }
+        public double OTRate { get; set; }
+        public double DTRate { get; set; }
+
+        public double TotalST { get => (double)(STHours * STRate); } 
+        public double TotalOT { get => (double)(OTHours * OTRate); } 
+        public double TotalDT { get => (double)(DTHours * DTRate); } 
+
+        public double TotalCost { get => (double)(HeadCount * (TotalST + TotalOT + TotalDT)); }
+
+        public double TotalHours { get => (double)(STHours + DTHours + OTHours); }
     }
 }
