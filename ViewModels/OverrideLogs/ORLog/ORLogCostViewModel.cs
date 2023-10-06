@@ -43,7 +43,11 @@ namespace ViewModels.OverrideLogs.ORLog
                 else
                 {
                     totalCost = ((CraftSkill.STRate * STHours) + (CraftSkill.OTRate * OTHours) + (CraftSkill.DTRate * DTHours)) ?? 0;
+                    totalCost = (totalCost * HeadCount) ?? 0;
                 }
+                // Round the totalCost to 2 decimal places
+                totalCost = Math.Round(totalCost, 2);
+
                 return totalCost;
             }
         }

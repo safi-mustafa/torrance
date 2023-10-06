@@ -255,9 +255,9 @@
     });
     function AddCost(element) {
         var thisElement = $(element);
-        var costSTHours = parseToInt($("#cost-st-hours").val());
-        var costOTHours = parseToInt($("#cost-ot-hours").val());
-        var costDTHours = parseToInt($("#cost-dt-hours").val());
+        var costSTHours = parseToFloat($("#cost-st-hours").val());
+        var costOTHours = parseToFloat($("#cost-ot-hours").val());
+        var costDTHours = parseToFloat($("#cost-dt-hours").val());
         var headCount = $("#head-count").val();
         var costCraftId = $('#craft-skill-id').select2('data')[0].id;
         var costCraftName = $('#craft-skill-id').select2('data')[0].text;
@@ -308,6 +308,17 @@
             return 0; // Return 0 if it's NaN
         } else {
             return parsedInt; // Return the parsed integer if it's a valid number
+        }
+    }
+    function parseToFloat(input) {
+        // Use parseFloat to attempt to parse the input as a float
+        const parsedFloat = parseFloat(input);
+
+        // Check if parsedFloat is NaN
+        if (isNaN(parsedFloat)) {
+            return 0.0; // Return 0.0 if it's NaN
+        } else {
+            return parsedFloat; // Return the parsed float if it's a valid number
         }
     }
 

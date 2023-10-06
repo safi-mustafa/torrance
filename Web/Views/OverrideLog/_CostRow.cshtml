@@ -16,6 +16,13 @@
     var dtHours = collectionType + "[" + rowNumber + "].DtHours";
     var headCount = collectionType + "[" + rowNumber + "].HeadCount";
     var hiddenId = collectionType + "[" + rowNumber + "].Id";
+    switch (Model.OverrideType)
+    {
+        case OverrideTypeCatalog.ST: Model.STHours = Model.OverrideHours; break;
+        case OverrideTypeCatalog.OT: Model.OTHours = Model.OverrideHours; break;
+        case OverrideTypeCatalog.DT: Model.DTHours = Model.OverrideHours; break;
+        default: break;
+    }
 
 }
 
