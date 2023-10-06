@@ -742,30 +742,53 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return false;
         }
 
-        public async Task<bool> CalculateTotalCostAndHours()
+        public async Task CalculateTotalCostAndHours()
         {
-            var overrideLogCosts = await _db.OverrideLogCost.Include(x => x.CraftSkill)
-                                            .Where(x => x.OverrideType == null)
-                                            .GroupBy(x => new { x.OverrideLogId, x.CraftSkillId })
-                                            .Select(x => new OverrideCostVM
-                                            {
-                                                OverrideLogId = x.Key.OverrideLogId,
-                                                CraftSkillId = x.Key.CraftSkillId,
-                                                HeadCount = x.Sum(y => y.HeadCount),
-                                                STHours = x.Sum(y => y.STHours),
-                                                OTHours = x.Sum(y => y.OTHours),
-                                                DTHours = x.Sum(y => y.DTHours),
-                                                STRate = x.Max(y => y.CraftSkill.STRate),
-                                                OTRate = x.Max(y => y.CraftSkill.OTRate),
-                                                DTRate = x.Max(y => y.CraftSkill.DTRate)
-                                            })
-                                            .ToListAsync();
+            try
+            {
+                var overrideLogCosts = await _db.OverrideLogCost
+                                           .Include(x => x.CraftSkill)
+                                           .Where(x => x.OverrideType == null)
+                                           .GroupBy(x => new { x.OverrideLogId, x.CraftSkillId })
+                                           .Select(x => new OverrideCostVM
+                                           {
+                                               OverrideLogId = x.Key.OverrideLogId,
+                                               CraftSkillId = x.Key.CraftSkillId,
+                                               HeadCount = x.Sum(y => y.HeadCount),
+                                               STHours = x.Sum(y => y.STHours),
+                                               OTHours = x.Sum(y => y.OTHours),
+                                               DTHours = x.Sum(y => y.DTHours),
+                                               STRate = x.Max(y => y.CraftSkill.STRate),
+                                               OTRate = x.Max(y => y.CraftSkill.OTRate),
+                                               DTRate = x.Max(y => y.CraftSkill.DTRate)
+                                           })
+                                           .ToListAsync();
 
+                var groupedByORId = overrideLogCosts
+                                    .GroupBy(x => x.OverrideLogId)
+                                    .Select(x => new
+                                    {
+                                        OverrideLogId = x.Key,
+                                        TotalCost = x.Sum(y => y.TotalCost),
+                                        TotalHours = x.Sum(y => y.TotalHours),
+                                    }).ToList();
 
+                var overrideLogIds = groupedByORId.Select(x => x.OverrideLogId).ToList();
 
-            return true;
+                var overrideLogs = await _db.OverrideLogs.Where(x => overrideLogIds.Contains(x.Id)).ToListAsync();
+
+                foreach (var item in overrideLogs)
+                {
+                    var groupedData = groupedByORId.Where(x => x.OverrideLogId == item.Id).FirstOrDefault();
+                    item.TotalCost = groupedData.TotalCost;
+                    item.TotalHours = groupedData.TotalHours;
+                }
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+            }
         }
-
     }
 
     internal class OverrideCostVM
@@ -780,9 +803,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         public double OTRate { get; set; }
         public double DTRate { get; set; }
 
-        public double TotalST { get => (double)(STHours * STRate); } 
-        public double TotalOT { get => (double)(OTHours * OTRate); } 
-        public double TotalDT { get => (double)(DTHours * DTRate); } 
+        public double TotalST { get => (double)(STHours * STRate); }
+        public double TotalOT { get => (double)(OTHours * OTRate); }
+        public double TotalDT { get => (double)(DTHours * DTRate); }
 
         public double TotalCost { get => (double)(HeadCount * (TotalST + TotalOT + TotalDT)); }
 

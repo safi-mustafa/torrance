@@ -182,6 +182,7 @@ namespace Web.Controllers
         public async Task CalculateTotals()
         {
             await _overrideLogService.CalculateTotalCostAndHours();
+            RedirectToAction("Index");
         }
     }
 

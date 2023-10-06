@@ -17,6 +17,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel);
         Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search);
         Task<bool> MergeCostsForCraft();
-        Task<bool> CalculateTotalCostAndHours();
+        Task CalculateTotalCostAndHours();
     }
 }
