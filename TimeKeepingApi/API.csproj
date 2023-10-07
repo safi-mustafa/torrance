@@ -6,10 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   <AssemblyName>TorranceAPI</AssemblyName>
+  <UserSecretsId>59e925f2-30a6-4f32-b688-ef82c6e960d9</UserSecretsId>
   </PropertyGroup>
 
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'TorranceApi' " />
+
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\jquery.js" />
+    <Content Remove="wwwroot\js\jquery.min.js" />
+    <Content Remove="wwwroot\js\jquery.min.map" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
@@ -66,5 +74,10 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Helper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\js\jquery.js" />
+    <None Include="wwwroot\js\jquery.min.js" />
+    <None Include="wwwroot\js\jquery.min.map" />
   </ItemGroup>
 </Project>

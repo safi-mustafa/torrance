@@ -1,0 +1,122 @@
+﻿@page
+@model API.Pages.ApproverDashboardModel
+@{
+}
+<link href="~/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    *[class^='progress-done-'] {
+        height: 100%;
+        width: 0;
+        opacity: 0;
+        background: linear-gradient(to left, #f2709c,#ff9472);
+        color: #fff;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fac090;
+        box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+        transition: 1s ease;
+    }
+
+    .card {
+        margin-top: 20px;
+    }
+
+    .card-title {
+        text-align: center;
+    }
+
+    .am-chart {
+        width: 100%;
+        height: 350px;
+    }
+
+    .am-pie-chart {
+        width: 100%;
+        height: 350px;
+    }
+</style>
+<div class="container-fluid" style="background-color:white;">
+    <main>
+        <h3 class="text-center p-5">Approver Dashboard</h3>
+        <div class="row col-12">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hours By Shift Delay (TOT)
+                        </h5>
+                        <p class="card-text">
+                            <div class="am-pie-chart" id="tot-shift-delay"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hours By Rework Delay(TOT)
+                        </h5>
+                        <p class="card-text">
+                            <div class="am-pie-chart" id="tot-rework-delay"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hours By Start Of Work Delay(TOT)
+                        </h5>
+                        <p class="card-text">
+                            <div class="am-pie-chart" id="tot-start-of-work-delay"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hours By OnGoing Work Delay(TOT)
+                        </h5>
+                        <p class="card-text">
+                            <div class="am-pie-chart" id="tot-ongoing-work-delay"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+<script src="~/js/jquery.min.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="~/js/dashboard/am-chart.js"></script>
+<!-- Chart code -->
+<script>
+    $(function () {
+        TOTShiftDelayChart(@Json.Serialize(Model.DashboarModel.ShiftDelay));
+        TOTReworkDelayChart(@Json.Serialize(Model.DashboarModel.ReworkDelay));
+        TOTStartOfWorkDelayChart(@Json.Serialize(Model.DashboarModel.StartOfWorkDelay));
+        TOTOngoingWorkDelayChart(@Json.Serialize(Model.DashboarModel.OngoingWorkDelay));
+    })
+    function TOTShiftDelayChart(seriesData) {
+        GeneratePieChart("tot-shift-delay", seriesData)
+    }
+    function TOTReworkDelayChart(seriesData) {
+        GeneratePieChart("tot-rework-delay", seriesData)
+    }
+    function TOTStartOfWorkDelayChart(seriesData) {
+        GeneratePieChart("tot-start-of-work-delay", seriesData)
+    }
+    function TOTOngoingWorkDelayChart(seriesData) {
+        GeneratePieChart("tot-ongoing-work-delay", seriesData)
+    }
+</script>
