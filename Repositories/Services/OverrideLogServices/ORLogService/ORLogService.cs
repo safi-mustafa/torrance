@@ -609,26 +609,26 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         cell.Value = "";
 
                     int currentColumn = 13;
-                    for (int i = 0; i < maxCostRows; i++)
-                    {
-                        if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
-                        {
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                        }
-                        else
-                        {
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
-                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
-                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
-                        }
-                    }
+                    //for (int i = 0; i < maxCostRows; i++)
+                    //{
+                    //    if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
+                    //    {
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //    }
+                    //    else
+                    //    {
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
+                    //    }
+                    //}
 
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
@@ -675,16 +675,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             overrideLogSheet.Cell(1, 13).Value = "Uploaded Form";
 
             int currentColumn = 13;
-            for (int i = 0; i < maxCostRows; i++)
-            {
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
-                overrideLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
-                //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
-            }
+            //for (int i = 0; i < maxCostRows; i++)
+            //{
+            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
+            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
+            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
+            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
+            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
+            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
+            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
+            //}
 
             currentColumn += 1;
             overrideLogSheet.Cell(1, currentColumn++).Value = "Total Hours";
