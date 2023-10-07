@@ -506,6 +506,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 LogId = model.Id,
                 EntityId = model.Id,
                 EventType = eventType,
+                RequestorId = model.EmployeeId,
                 EntityType = NotificationEntityType.OverrideLog,
                 IdentifierKey = "PO#",
                 IdentifierValue = model.PoNumber.ToString(),

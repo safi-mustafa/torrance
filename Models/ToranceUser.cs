@@ -36,5 +36,7 @@ public class ToranceUser : IdentityUser<long>, IBaseModel
     public bool ChangePassword { get; set; }
 
     public bool CanAddLogs { get; set; }
+
+    public bool DisableNotifications { get; set; }
 }
 

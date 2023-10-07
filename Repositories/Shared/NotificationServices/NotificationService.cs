@@ -49,23 +49,33 @@ namespace Repositories.Shared.NotificationServices
         {
             try
             {
-                var association = await GetLogUnitAndDepartment(model);
-                var approvers = await _db.ApproverAssociations
-                    .Include(x => x.Approver)
-                    .Include(x => x.Department)
-                    .Include(x => x.Unit).
-                    Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
-                if (approvers != null && approvers.Count > 0)
+                bool sendNotifications = true;
+                var requestor = await _db.Users.Where(x => x.Id == model.RequestorId).FirstOrDefaultAsync();
+                if (requestor != null && requestor.DisableNotifications == true)
                 {
-                    List<Notification> notifications = new List<Notification>();
-                    foreach (var approver in approvers)
-                    {
-                        SetLogPushNotification(model, notifications, approver);
-                        SendLogEmailNotification(model, notifications, approver);
-                    }
-                    _db.Set<Notification>().AddRange(notifications);
-                    await _db.SaveChangesAsync();
+                    sendNotifications = false;
                 }
+                if (sendNotifications)
+                {
+                    var association = await GetLogUnitAndDepartment(model);
+                    var approvers = await _db.ApproverAssociations
+                        .Include(x => x.Approver)
+                        .Include(x => x.Department)
+                        .Include(x => x.Unit).
+                        Where(x => x.UnitId == association.Unit.Id && x.DepartmentId == association.Department.Id && x.Approver.ActiveStatus == ActiveStatus.Active).Distinct().ToListAsync();
+                    if (approvers != null && approvers.Count > 0)
+                    {
+                        List<Notification> notifications = new List<Notification>();
+                        foreach (var approver in approvers)
+                        {
+                            SetLogPushNotification(model, notifications, approver);
+                            SendLogEmailNotification(model, notifications, approver);
+                        }
+                        _db.Set<Notification>().AddRange(notifications);
+                        await _db.SaveChangesAsync();
+                    }
+                }
+
                 var response = new RepositoryResponseWithModel<long> { ReturnModel = 1 };
                 return response;
             }

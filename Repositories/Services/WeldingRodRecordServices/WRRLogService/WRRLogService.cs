@@ -280,7 +280,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IdentifierKey = "TWR#",
                 IdentifierValue = model.Twr,
                 SendTo = model?.Approver?.Id.ToString(),
-                User = userFullName
+                User = userFullName,
+                RequestorId = model.EmployeeId
             };
         }
 

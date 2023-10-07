@@ -23,6 +23,8 @@ namespace ViewModels.Notification
         public string? Subject { get; set; }
         public string Message { get; set; }
 
+        public long? RequestorId { get; set; }
+
         public string User { get; set; }
         public NotificationType Type { get; set; }
         public long EntityId { get; set; }
