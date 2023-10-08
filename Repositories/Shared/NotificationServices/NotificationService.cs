@@ -150,6 +150,9 @@ namespace Repositories.Shared.NotificationServices
 
         private async Task<List<string>> GetAdminIdsForProcessedLogNotifcation()
         {
+            //for now removing this logic
+            return new List<string>();
+
             var targetRoles = new List<string>() { RolesCatalog.Administrator.ToString() };
             var adminUserIdsQueryable = (from r in _db.Roles
                                          join ur in _db.UserRoles on r.Id equals ur.RoleId
