@@ -99,8 +99,25 @@ namespace Web.Extensions
                     ValidateIssuer = false,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
-                    ClockSkew = TimeSpan.FromMinutes(5)
+                    ClockSkew = TimeSpan.FromMinutes(5),
+
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var currentVersion = configuration["JWT:Version"] ?? "1.0.0"; // Default version if not specified in settings
+                        var tokenVersionClaim = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == "Version")?.Value;
+                        // Compare token version with the stored version
+                        if (tokenVersionClaim != currentVersion)
+                        {
+                            context.Fail("Token is using an outdated version.");
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+
             });
             services.AddAuthorization();
 
@@ -235,5 +252,6 @@ namespace Web.Extensions
             services.AddDefaultCorrelationId();
 
         }
+
     }
 }
