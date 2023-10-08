@@ -35,7 +35,10 @@ function GeneratePieChart(id, seriesData) {
         series.data.setAll(seriesData);
 
         series.labels.template.setAll({
-            fontSize: 11,
+            fontSize: "3.5vw",
+            //style: {
+            //    fontSize: "30px", // Set font size using vw units
+            //},
             /* text: "{category}: [bold]{valuePercentTotal.formatNumber('0.00')}%[/] ({value})",*/
             text: "{category}: {valuePercentTotal.formatNumber('0.00')}%[/]",
             textType: "radial",
