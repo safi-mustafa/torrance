@@ -131,7 +131,7 @@ namespace Web.Areas.Identity.Pages.Account
                         return Page();
                     }
 
-                    if(user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
                     {
                         ModelState.AddModelError(string.Empty, "You can't login. Your status is inactive.");
                         return Page();
@@ -186,6 +186,10 @@ namespace Web.Areas.Identity.Pages.Account
                         if (userWithAccessCode != null)
                         {
                             await _signInManager.SignInAsync(userWithAccessCode, true);
+                            var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()),
+                                new Claim(ClaimTypes.Email, user.Email) };
+                            await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
+
                             var url = await GetReturnUrl(returnUrl, user);
                             return LocalRedirect(url);
                         }
