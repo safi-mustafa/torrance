@@ -1201,7 +1201,7 @@ header {
     vertical-align: middle;
 }
 
-.badge.Archived {
+.badge.IsArchived {
     color: blue;
     display: inline-block;
     width: 15px;

@@ -87,11 +87,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             var status = (Status?)((int?)searchFilters.Status);
             if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
-                searchFilters.StatusNot = null;
+                searchFilters.StatusNot = new();
             }
             else
             {
-                searchFilters.StatusNot = Status.Pending;
+                searchFilters.StatusNot.Add(Status.Pending);
+                searchFilters.StatusNot.Add(Status.InProcess);
             }
 
             return x =>
@@ -127,7 +128,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
                             &&
                             x.IsDeleted == false
                             &&
@@ -571,14 +572,14 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var logoStream = new MemoryStream(File.ReadAllBytes(logoUrl));
 
                 // Add the logo image to the worksheet
-                var logo = overrideLogSheet.AddPicture(logoStream); 
+                var logo = overrideLogSheet.AddPicture(logoStream);
 
 
                 var cell1 = overrideLogSheet.Cell(1, 1);
                 cell1.WorksheetColumn().Width = 50; // Set the width in characters
                 cell1.WorksheetRow().Height = 170;
 
-               // Resize the logo image to fit the desired dimensions
+                // Resize the logo image to fit the desired dimensions
                 //logo.ScaleWidth(100);
                 //logo.ScaleHeight(50);
 

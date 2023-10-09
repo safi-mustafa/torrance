@@ -77,7 +77,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             }
             else
             {
-                searchFilters.StatusNot = Status.Pending;
+                searchFilters.StatusNot.Add(Status.Pending);
+                searchFilters.StatusNot.Add(Status.InProcess);
             }
             return x =>
                             (string.IsNullOrEmpty(searchFilters.Search.value) || x.Approver.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()) || x.Employee.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()))
@@ -110,7 +111,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
                             &&
                             x.IsDeleted == false
                             &&

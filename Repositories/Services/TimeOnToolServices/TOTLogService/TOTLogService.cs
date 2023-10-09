@@ -69,7 +69,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
             else
             {
-                searchFilters.StatusNot = Status.Pending;
+                searchFilters.StatusNot.Add(Status.Pending);
+                searchFilters.StatusNot.Add(Status.InProcess);
             }
 
             return x =>
@@ -108,7 +109,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot != x.Status)
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
                             &&
                             x.IsDeleted == false
                             &&
