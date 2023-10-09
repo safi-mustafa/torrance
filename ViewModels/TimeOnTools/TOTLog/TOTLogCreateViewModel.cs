@@ -14,7 +14,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel
+    public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel, ITOTLogNotificationViewModel
     {
         public DateTime? Date { get; set; } = DateTime.UtcNow;
         public string? Twr

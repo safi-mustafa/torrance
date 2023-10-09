@@ -10,7 +10,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost, IClippedAttachment
+    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost, IClippedAttachment, IORLogNotificationViewModel
     {
 
         [Display(Name = "Work Date")]
