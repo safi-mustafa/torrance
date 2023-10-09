@@ -9,6 +9,8 @@ namespace ViewModels.Notification
     public class LogPushNotificationViewModel
     {
         private readonly NotificationViewModel _notification;
+        private readonly NotificationSendToModel _sendTo;
+
         public long LogId { get; set; }
         public long EntityId { get; set; }
 
@@ -16,9 +18,10 @@ namespace ViewModels.Notification
         public LogType LogType { get; set; }
         public string Message { get; set; }
         public string Title { get; set; }
-        public LogPushNotificationViewModel(NotificationViewModel notification)
+        public LogPushNotificationViewModel(NotificationViewModel notification, NotificationSendToModel sendTo)
         {
             _notification = notification;
+            _sendTo = sendTo;
             LogId = notification.LogId;
             EntityId = notification.LogId;
             EntityType = notification.EntityType.ToString();
@@ -62,7 +65,7 @@ namespace ViewModels.Notification
 
         public string GetApproverAssignedMessage()
         {
-            if (_notification.SendTo == _notification.ApproverId)// Sending Notification To Assigned Approver
+            if (_sendTo.Id == _notification.ApproverId)// Sending Notification To Assigned Approver
             {
                 return $"You have beed assgined to {_notification.EntityType.GetDisplayName()} with {_notification.IdentifierKey} ({_notification.IdentifierValue}).";
             }

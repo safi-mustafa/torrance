@@ -14,13 +14,15 @@ namespace ViewModels.Notification
         private readonly NotificationSendToModel _sendTo;
         private readonly string _publicLink;
         private readonly IConfiguration _configuration;
+        private readonly Guid _notificationId;
 
-        public LogEmailViewModel(NotificationViewModel notification, NotificationSendToModel sendTo, IConfiguration configuration)
+        public LogEmailViewModel(NotificationViewModel notification, NotificationSendToModel sendTo, Guid notificationId, IConfiguration configuration)
         {
             _notification = notification;
             _sendTo = sendTo;
-            _publicLink = GetPublicLink();
             _configuration = configuration;
+            _notificationId = notificationId;
+            _publicLink = GetPublicLink();
             Subject = GetSubject();
             Body = GetEmailBody();
         }
@@ -105,7 +107,7 @@ namespace ViewModels.Notification
             if (_notification.EventType == NotificationEventTypeCatalog.ApproverAssigned)
             {
                 var domain = _configuration["WebUrl"];
-                return $"{domain}/Approval/ApproveByNotification?id={_notification.Id}";
+                return $"{domain}/Approval/ApproveByNotification?id={_notificationId}";
             }
             return null;
         }

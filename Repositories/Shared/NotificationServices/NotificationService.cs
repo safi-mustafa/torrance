@@ -293,8 +293,8 @@ namespace Repositories.Shared.NotificationServices
             try
             {
                 var mappedModel = _mapper.Map<Notification>(model);
-                if (string.IsNullOrEmpty(mappedModel.Message))
-                    mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
+                //if (string.IsNullOrEmpty(mappedModel.Message))
+                //    mappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
                 mappedModel.Id = Guid.NewGuid();
                 mappedModel.CreatedOn = DateTime.UtcNow;
                 await _db.Set<Notification>().AddAsync(mappedModel);
@@ -318,7 +318,7 @@ namespace Repositories.Shared.NotificationServices
             var notificationMappedModel = _mapper.Map<Notification>(model);
             notificationMappedModel.Id = Guid.NewGuid();
 
-            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, sendTo, _configuration));
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogEmailViewModel(model, sendTo, notificationMappedModel.Id, _configuration));
             notificationMappedModel.SendTo = sendTo.Id;
             notificationMappedModel.Type = NotificationType.Email;
             notificationMappedModel.CreatedOn = DateTime.UtcNow;
@@ -330,7 +330,7 @@ namespace Repositories.Shared.NotificationServices
         private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, NotificationSendToModel sendTo)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
-            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model));
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model,sendTo));
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = sendTo.Id;
             notificationMappedModel.Type = NotificationType.Push;
@@ -513,6 +513,7 @@ namespace Repositories.Shared.NotificationServices
         {
             return new NotificationViewModel()
             {
+                Id = Guid.NewGuid(),
                 LogId = model.LogId,
                 EntityId = model.LogId,
                 EventType = eventType,
