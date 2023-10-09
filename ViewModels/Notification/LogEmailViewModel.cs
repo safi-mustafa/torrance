@@ -59,7 +59,7 @@ namespace ViewModels.Notification
             {
                 return $@"<div class=""container"">
 						<p>Dear {_sendTo.Name},</p>
-						<p>A new <strong>{_notification.EntityType.GetDisplayName()}</strong> request is updated by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+						<p>A <strong>{_notification.EntityType.GetDisplayName()}</strong> request is updated by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 					</div>";
             }
             if (_notification.EventType == NotificationEventTypeCatalog.ApproverAssigned)
