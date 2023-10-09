@@ -228,7 +228,11 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         dbModel.Status = previousStatus;
                         if (previousApproverId != updateModel.Approver?.Id)
                         {
-                            await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, record));
+                            if (record.ApproverId != null && record.ApproverId > 0)
+                            {
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, record));
+                            }
+
                             if (previousStatus == Status.Pending)
                             {
                                 dbModel.Status = Status.InProcess;
@@ -236,7 +240,10 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
+                            }
                         }
 
                         await SetRequesterId(dbModel);

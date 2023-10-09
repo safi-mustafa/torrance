@@ -239,7 +239,10 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         dbModel.Status = previousStatus;
                         if (previousApproverId != updateModel.Approver?.Id)
                         {
-                            await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
+                            if (record.ApproverId != null && record.ApproverId > 0)
+                            {
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
+                            }
                             if (previousStatus == Status.Pending)
                             {
                                 dbModel.Status = Status.InProcess;
@@ -247,7 +250,10 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                            }
                         }
 
                         await SetRequesterId(dbModel);

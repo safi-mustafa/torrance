@@ -304,11 +304,18 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 {
                                     dbModel.Status = Status.InProcess;
                                 }
-                                await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, record));
+                                if (record.ApproverId != null && record.ApproverId > 0)
+                                {
+                                    await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, record));
+                                }
+
                             }
                             else
                             {
-                                await _notificationService.CreateNotificationsForLogUpdation(new ORLogNotificationViewModel(model, record));
+                                if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                                {
+                                    await _notificationService.CreateNotificationsForLogUpdation(new ORLogNotificationViewModel(model, record));
+                                }
                             }
 
                             //save and attach clipped employees.

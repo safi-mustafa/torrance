@@ -355,7 +355,7 @@ namespace Web.Controllers
                 parsedModel.ReturnModel.Approver = new ApproverBriefViewModel { Id = approverId };
                 parsedModel.ReturnModel.IsUnauthenticatedApproval = isUnauthenticatedApproval;
                 parsedModel.ReturnModel.NotificationId = notificationId;
-                isApproval = parsedModel.ReturnModel.Status == Status.Pending;
+                isApproval = (parsedModel.ReturnModel.Status == Status.Pending || parsedModel.ReturnModel.Status == Status.InProcess);
             }
             return isApproval;
         }
