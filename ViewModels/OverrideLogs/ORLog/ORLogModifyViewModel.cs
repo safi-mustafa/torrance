@@ -68,7 +68,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Override Reason")]
         public string? Reason { get; set; }
 
-
+        public Status? Status { get; set; } = Enums.Status.Pending;
 
     }
 }

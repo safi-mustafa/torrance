@@ -292,11 +292,16 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 model.ClippedEmployees = new ClipEmployeeModifyViewModel();
                                 model.ClippedEmployees.Url = record.ClippedEmployeesUrl;
                             }
+                            var previousApproverId = record.ApproverId;
                             var dbModel = _mapper.Map(model, record);
-                            if (record.ApproverId != updateModel.Approver?.Id)
+                            if (previousApproverId != updateModel.Approver?.Id)
                             {
                                 var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
                                 await _notificationService.Create(notification);
+                                if (updateModel.Status == Status.Pending)
+                                {
+                                    dbModel.Status = Status.InProcess;
+                                }
                             }
 
                             //save and attach clipped employees.
@@ -383,6 +388,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
 
         }
+
         public async Task<bool> SetORLogCosts(IORLogCost overrideLogCost, long id)
         {
             try
@@ -483,6 +489,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
 
         }
+
         private double CalculateTotalHeadCount(IORLogCost overrideLogCost)
         {
             if (overrideLogCost.Costs == null || overrideLogCost.Costs.Count < 1)
