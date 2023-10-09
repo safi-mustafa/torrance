@@ -563,6 +563,127 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 // Create a new workbook
                 var workbook = new XLWorkbook();
                 var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
+                // Add a new worksheet to the workbook and set its name
+                var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
+                //var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
+
+                SetExcelHeaders(overrideLogSheet, maxCostRows);
+
+                var rowNumber = 1;
+                var overrideCostIndex = 1;
+                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
+                {
+                    rowNumber = rowNumber + 1;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
+                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
+                    overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
+                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
+                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
+                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
+                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
+                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
+                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
+                    //overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    // Create a cell with the URL as a hyperlink
+                    var cell = overrideLogSheet.Cell(rowNumber, 13);
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        cell.Value = "link";
+                        cell.Hyperlink = new XLHyperlink(new Uri(url));
+                    }
+                    else
+                        cell.Value = "";
+
+                    int currentColumn = 13;
+                    for (int i = 0; i < maxCostRows; i++)
+                    {
+                        if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
+                        {
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                        }
+                        else
+                        {
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
+                            //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
+                        }
+                    }
+                    //for (int i = 0; i < maxCostRows; i++)
+                    //{
+                    //    if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
+                    //    {
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
+                    //    }
+                    //    else
+                    //    {
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
+                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
+                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
+                    //    }
+                    //}
+
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
+
+                    //for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
+                    //{
+                    //    overrideCostIndex = overrideCostIndex + 1;
+                    //    overrideLogCostSheet.Cell($"A{overrideCostIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
+                    //    overrideLogCostSheet.Cell($"B{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
+                    //    overrideLogCostSheet.Cell($"C{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
+                    //    overrideLogCostSheet.Cell($"D{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
+                    //    overrideLogCostSheet.Cell($"E{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
+                    //    overrideLogCostSheet.Cell($"f{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].FormattedCost;
+                    //}
+                }
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        public async Task<XLWorkbook> DownloadExcelWithLogo(ORLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<ORLogDetailViewModel>(searchModel);
+
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUri = httpContext?.Request;
+                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
+                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
+                // Create a new workbook
+                var workbook = new XLWorkbook();
+                var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
 
 
                 // Add a new worksheet to the workbook and set its name
