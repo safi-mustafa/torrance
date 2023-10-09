@@ -26,10 +26,10 @@ namespace ViewModels.Shared
         {
             get
             {
-                return IsArchived ? "Archived" : Status.GetDisplayName();
+                return IsArchived ? "IsArchived" : Status.GetDisplayName();
             }
         }
-        public string FormattedStatusForView { get => Status.ToString(); }
+        public string FormattedStatusForView { get { return IsArchived ? "IsArchived" : Status.ToString(); } }
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
     }
