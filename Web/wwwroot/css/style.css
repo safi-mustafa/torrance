@@ -1181,6 +1181,16 @@ header {
     vertical-align: middle;
 }
 
+.badge.InProcess {
+    color: purple;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: purple;
+    vertical-align: middle;
+}
+
 .badge.Rejected {
     color: red;
     display: inline-block;

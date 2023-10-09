@@ -4,6 +4,9 @@
 @{
     Layout = null;
     var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
+
+    //this check is placed so that no one can change Approver unless it is an Admin and Log is updated and Status is Pending and inProcess
+    var canModifyApprover = isAdmin && (Model.Status == Status.Pending || Model.Status == Status.InProcess) && Model.Id > 0;
 }
 <div class="row">
     <div class="col-lg-12">
@@ -134,7 +137,7 @@
                     <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
                 </div>
             </div>
-            @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
+            @if (canModifyApprover)
             {
                 <div class="col-lg-6">
                     <div class="mb-3">

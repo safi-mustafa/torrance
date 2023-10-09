@@ -273,6 +273,8 @@ namespace Web.Controllers
                     <div class=""p-2 row"">
                         <span class=""badge Submitted m-1""> </span>
                         <span class=""stat-name"">Pending</span>
+                        <span class=""badge InProcess m-1""> </span>
+                        <span class=""stat-name"">In Process</span>
                     </div>";
             vm.IsResponsiveDatatable = false;
             return vm;
