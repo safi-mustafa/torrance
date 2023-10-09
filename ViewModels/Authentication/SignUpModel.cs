@@ -60,5 +60,6 @@ namespace ViewModels.Authentication
         public bool ChangePassword { get; set; }
 
         public bool CanAddLogs { get; set; }
+        public bool DisableNotifications { get; set; }
     }
 }

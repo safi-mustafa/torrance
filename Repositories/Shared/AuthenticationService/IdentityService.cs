@@ -62,6 +62,10 @@ namespace Repositories.Shared.AuthenticationService
                 try
                 {
                     user.UserName = Guid.NewGuid().ToString();
+                    if (model.Role == "Administrator")
+                    {
+                        user.DisableNotifications = model.DisableNotifications;
+                    }
                     var result = await _userManager.CreateAsync(user, model.Password);
                     var role = model.Role != null ? model.Role : "SuperAdmin";
                     if (result.Succeeded)
@@ -107,6 +111,10 @@ namespace Repositories.Shared.AuthenticationService
                     user.ActiveStatus = model.ActiveStatus;
                     user.NormalizedEmail = model.Email.ToUpper();
                     user.CanAddLogs = model.CanAddLogs;
+                    if (model.Role == "Administrator")
+                    {
+                        user.DisableNotifications = model.DisableNotifications;
+                    }
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
