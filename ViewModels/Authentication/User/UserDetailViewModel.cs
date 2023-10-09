@@ -47,5 +47,14 @@ namespace ViewModels.Authentication.User
                 return CanAddLogs ? "Yes" : "No";
             }
         }
+        [Display(Name = "Disable Notifications?")]
+        public bool DisableNotifications { get; set; }
+        public string FormattedDisableNotifications
+        {
+            get
+            {
+                return DisableNotifications ? "Yes" : "No";
+            }
+        }
     }
 }

@@ -53,6 +53,8 @@ namespace ViewModels.Authentication.User
         [DisplayName("Can Add Logs?")]
 
         public bool CanAddLogs { get; set; }
+
+        [DisplayName("Disable Notifications?")]
         public bool DisableNotifications { get; set; }
     }
 }
