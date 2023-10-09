@@ -8,25 +8,19 @@ using ViewModels.Shared;
 using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.Services.CommonServices.UserService;
-using ExcelReader.Repository;
 using ViewModels.WeldingRodRecord.Employee;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 using System.Reflection;
 using System.Data;
-using System.ComponentModel;
 using ViewModels.Common.Company;
 using Repositories.Shared.UserInfoServices;
 using Pagination;
 using Helpers.Extensions;
 using Models.WeldingRodRecord;
 using Centangle.Common.ResponseHelpers;
-using System.Linq.Expressions;
-using ViewModels.Authentication.User;
 using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
-using ViewModels.Authentication.Approver;
 using System.Linq.Dynamic.Core;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService

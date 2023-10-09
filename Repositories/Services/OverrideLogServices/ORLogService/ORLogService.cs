@@ -2,18 +2,14 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
-using ClosedXML.Excel.Drawings;
+using ClosedXML;
 using DataLibrary;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Enums;
 using Helpers.Extensions;
 using Helpers.File;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Models.Common;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
@@ -23,20 +19,12 @@ using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
-using System.ComponentModel.Design;
-using System.Drawing;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using ViewModels;
-using ViewModels.Notification;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
-using ViewModels.TimeOnTools.ShiftDelay;
-using ViewModels.WeldingRodRecord;
-using ViewModels.WeldingRodRecord.Employee;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Drawing;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
@@ -555,7 +543,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
+        public async Task<XLWorkbook> DownloadExcel1(ORLogSearchViewModel searchModel)
         {
             try
             {
@@ -603,7 +591,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     if (!string.IsNullOrEmpty(url))
                     {
                         cell.Value = "link";
-                        cell.Hyperlink = new XLHyperlink(new Uri(url));
+                        cell.SetHyperlink(new XLHyperlink(new Uri(url)));
                     }
                     else
                         cell.Value = "";
@@ -646,6 +634,87 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     //    overrideLogCostSheet.Cell($"E{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
                     //    overrideLogCostSheet.Cell($"f{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].FormattedCost;
                     //}
+                }
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
+        {
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<ORLogDetailViewModel>(searchModel);
+
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUri = httpContext?.Request;
+                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
+                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
+                // Create a new workbook
+                var workbook = new XLWorkbook();
+                var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
+
+
+                // Add a new worksheet to the workbook and set its name
+                var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
+
+                //var logoUrl = _env.ContentRootPath + "/wwwroot/img/logo.png";
+                var logoUrl = "E:\\dotnet\\torrance\\Web\\wwwroot\\img\\logo.png";
+
+                var picture = overrideLogSheet.AddPicture(logoUrl)
+                                            .MoveTo(overrideLogSheet.Cell(1, 1)); // Set the location where the image should appear
+
+                // Set the dimensions (size) of the image
+                picture.Width = 200; // Set the width in pixels
+                picture.Height = 100; // Set the height in pixels
+                                      // Load the logo image into a memory stream
+
+
+                SetExcelHeaders(overrideLogSheet, maxCostRows);
+
+                var rowNumber = 2;
+                var overrideCostIndex = 1;
+                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
+                {
+                    rowNumber = rowNumber + 1;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
+                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
+                    overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
+                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
+                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
+                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
+                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
+                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
+                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
+
+                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    // Create a cell with the URL as a hyperlink
+                    var cell = overrideLogSheet.Cell(rowNumber, 13);
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        cell.Value = "link";
+                        cell.SetHyperlink(new XLHyperlink(new Uri(url)));
+                    }
+                    else
+                        cell.Value = "";
+
+                    int currentColumn = 13;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
                 }
                 return workbook;
             }
