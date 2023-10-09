@@ -240,7 +240,10 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
+                            }
                         }
 
                         await SetRequesterId(dbModel);

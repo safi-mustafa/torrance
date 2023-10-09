@@ -250,7 +250,10 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                            }
                         }
 
                         await SetRequesterId(dbModel);
