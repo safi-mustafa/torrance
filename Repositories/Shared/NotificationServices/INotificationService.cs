@@ -14,7 +14,7 @@ namespace Repositories.Shared.NotificationServices
         Task<IRepositoryResponse> CreateNotificationsForLogUpdation(INotificationMetaViewModel meta);
         Task<IRepositoryResponse> CreateNotificationsForLogApproverAssignment(INotificationMetaViewModel meta);
 
-        Task<IRepositoryResponse> CreateNotificationsForLogAfterProcessing(INotificationMetaViewModel meta, NotificationEventTypeCatalog eventType);
+        Task<IRepositoryResponse> CreateNotificationsForLogAfterProcessing(NotificationViewModel meta);
         Task<IRepositoryResponse> Create(NotificationViewModel model);
         //Task<IRepositoryResponse> CreateLogNotificationAfterProcessing(NotificationViewModel model, long approverId);
     }

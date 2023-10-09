@@ -10,7 +10,7 @@ using ViewModels.Shared;
 
 namespace ViewModels.Notification
 {
-    public class NotificationViewModel: INotificationMetaViewModel
+    public class NotificationViewModel : INotificationMetaViewModel
     {
         public NotificationViewModel() { }
 
@@ -23,7 +23,7 @@ namespace ViewModels.Notification
         public string Message { get; set; }
 
         public string User { get; set; }
-       
+
         public NotificationType Type { get; set; }
         public long EntityId { get; set; }
         public NotificationEntityType EntityType { get; set; }
@@ -75,5 +75,6 @@ namespace ViewModels.Notification
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool SendPushNotification { get; set; } = true;
     }
 }

@@ -153,7 +153,10 @@ namespace Repositories.Shared.NotificationServices
                         List<Notification> notifications = new List<Notification>();
                         foreach (var sendToUser in sendToUsers)
                         {
-                            //SetLogPushNotification(model, notifications, admin);
+                            if (sendToUser.SendPushNotification)
+                            {
+                                SetLogPushNotification(model, notifications, sendToUser);
+                            }
                             SendLogEmailNotification(model, notifications, sendToUser);
                         }
                         _db.Set<Notification>().AddRange(notifications);
@@ -213,13 +216,13 @@ namespace Repositories.Shared.NotificationServices
             }
         }
 
-        public async Task<IRepositoryResponse> CreateNotificationsForLogAfterProcessing(INotificationMetaViewModel meta, NotificationEventTypeCatalog eventType)
+        public async Task<IRepositoryResponse> CreateNotificationsForLogAfterProcessing(NotificationViewModel model)
         {
             try
             {
-                var model = GetNotificationModel(meta, eventType);
+                //var model = GetNotificationModel(meta, eventType);
                 bool sendNotifications = true;
-                var requestor = await _db.Users.Where(x => x.Id == meta.RequestorId).FirstOrDefaultAsync();
+                var requestor = await _db.Users.Where(x => x.Id == model.RequestorId).FirstOrDefaultAsync();
                 if (requestor != null && requestor.DisableNotifications == true)
                 {
                     sendNotifications = false;
@@ -238,7 +241,7 @@ namespace Repositories.Shared.NotificationServices
                         List<Notification> notifications = new List<Notification>();
                         foreach (var sendToUser in sendToUsers)
                         {
-                            if (sendToUser.Id == model.RequestorId?.ToString())
+                            if (sendToUser.SendPushNotification)
                             {
                                 SetLogPushNotification(model, notifications, sendToUser);
                             }
@@ -330,7 +333,7 @@ namespace Repositories.Shared.NotificationServices
         private void SetLogPushNotification(NotificationViewModel model, List<Notification> notifications, NotificationSendToModel sendTo)
         {
             var notificationMappedModel = _mapper.Map<Notification>(model);
-            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model,sendTo));
+            notificationMappedModel.Message = JsonConvert.SerializeObject(new LogPushNotificationViewModel(model, sendTo));
             notificationMappedModel.Id = Guid.NewGuid();
             notificationMappedModel.SendTo = sendTo.Id;
             notificationMappedModel.Type = NotificationType.Push;
@@ -428,7 +431,9 @@ namespace Repositories.Shared.NotificationServices
                                       select new NotificationSendToModel
                                       {
                                           Id = ur.UserId.ToString(),
-                                          Name = u.FullName
+                                          Name = u.FullName,
+                                          SendPushNotification = false
+
                                       }).AsQueryable();
 
             var adminUsers = await adminUserQueryable.ToListAsync();
