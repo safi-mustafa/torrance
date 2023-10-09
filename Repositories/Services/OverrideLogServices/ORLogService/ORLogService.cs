@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
+using ClosedXML.Excel.Drawings;
 using DataLibrary;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -23,6 +24,7 @@ using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
 using System.ComponentModel.Design;
+using System.Drawing;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -570,13 +572,36 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 // Create a new workbook
                 var workbook = new XLWorkbook();
                 var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
+
+
                 // Add a new worksheet to the workbook and set its name
                 var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
-                //var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
+                var logoUrl = "E:\\dotnet\\torrance\\Web\\wwwroot\\img\\logo.png";
+                // Load the logo image into a memory stream
+                var logoStream = new MemoryStream(File.ReadAllBytes(logoUrl));
+
+                // Add the logo image to the worksheet
+                var logo = overrideLogSheet.AddPicture(logoStream); 
+
+
+                var cell1 = overrideLogSheet.Cell(1, 1);
+                cell1.WorksheetColumn().Width = 50; // Set the width in characters
+                cell1.WorksheetRow().Height = 170;
+
+               // Resize the logo image to fit the desired dimensions
+                //logo.ScaleWidth(100);
+                //logo.ScaleHeight(50);
+
+                // Resize the logo image to fit the 1,1 cell
+                //logo.Scale(overrideLogSheet.Cell(1, 1).WorksheetColumn().Width, true);
+                //logo.Scale(overrideLogSheet.Cell(1, 1).WorksheetRow().Height, true);
+
+                // Move the logo image to the desired location in the worksheet
+                logo.MoveTo(cell1);
 
                 SetExcelHeaders(overrideLogSheet, maxCostRows);
 
-                var rowNumber = 1;
+                var rowNumber = 2;
                 var overrideCostIndex = 1;
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
@@ -594,7 +619,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
                     var checkCell = overrideLogSheet.Cell(rowNumber, 12);
                     checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
-                    //overrideLogSheet.Cell(rowNumber, 12).Value = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
 
                     var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
 
@@ -609,43 +633,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         cell.Value = "";
 
                     int currentColumn = 13;
-                    //for (int i = 0; i < maxCostRows; i++)
-                    //{
-                    //    if (i > (logs.ReturnModel.Items[l].Costs.Count - 1))
-                    //    {
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = "-";
-                    //    }
-                    //    else
-                    //    {
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].CraftSkill.Name;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCraftRate;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideHours;
-                    //        overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].OverrideType;
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].HeadCount;
-                    //        //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Costs[i].FormattedCost;
-                    //    }
-                    //}
-
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
-
-                    //for (var c = 0; c < logs.ReturnModel.Items[l].Costs.Count(); c++)
-                    //{
-                    //    overrideCostIndex = overrideCostIndex + 1;
-                    //    overrideLogCostSheet.Cell($"A{overrideCostIndex}").Value = logs.ReturnModel.Items[l].PoNumber;
-                    //    overrideLogCostSheet.Cell($"B{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideType;
-                    //    overrideLogCostSheet.Cell($"C{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].CraftSkill.Name;
-                    //    overrideLogCostSheet.Cell($"D{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].HeadCount;
-                    //    overrideLogCostSheet.Cell($"E{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].OverrideHours;
-                    //    overrideLogCostSheet.Cell($"f{overrideCostIndex}").Value = logs.ReturnModel.Items[l].Costs[c].FormattedCost;
-                    //}
                 }
                 return workbook;
             }
@@ -659,39 +651,27 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
         {
             // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            overrideLogSheet.Cell(1, 1).Value = "Company";
-            overrideLogSheet.Cell(1, 2).Value = "Department";
-            overrideLogSheet.Cell(1, 3).Value = "Requester";
-            overrideLogSheet.Cell(1, 4).Value = "Date Submitted";
-            overrideLogSheet.Cell(1, 5).Value = "Time Submitted";
-            overrideLogSheet.Cell(1, 6).Value = "Work Date";
-            overrideLogSheet.Cell(1, 7).Value = "Workscope";
-            overrideLogSheet.Cell(1, 8).Value = "PO Number";
-
-            overrideLogSheet.Cell(1, 9).Value = "Unit";
-            overrideLogSheet.Cell(1, 10).Value = "Shift";
-            overrideLogSheet.Cell(1, 11).Value = "Override Reason";
-            overrideLogSheet.Cell(1, 12).Value = "Employee Names";
-            overrideLogSheet.Cell(1, 13).Value = "Uploaded Form";
+            overrideLogSheet.Cell(2, 1).Value = "Company";
+            overrideLogSheet.Cell(2, 2).Value = "Department";
+            overrideLogSheet.Cell(2, 3).Value = "Requester";
+            overrideLogSheet.Cell(2, 4).Value = "Date Submitted";
+            overrideLogSheet.Cell(2, 5).Value = "Time Submitted";
+            overrideLogSheet.Cell(2, 6).Value = "Work Date";
+            overrideLogSheet.Cell(2, 7).Value = "Workscope";
+            overrideLogSheet.Cell(2, 8).Value = "PO Number";
+            overrideLogSheet.Cell(2, 9).Value = "Unit";
+            overrideLogSheet.Cell(2, 10).Value = "Shift";
+            overrideLogSheet.Cell(2, 11).Value = "Override Reason";
+            overrideLogSheet.Cell(2, 12).Value = "Employee Names";
+            overrideLogSheet.Cell(2, 13).Value = "Uploaded Form";
 
             int currentColumn = 13;
-            //for (int i = 0; i < maxCostRows; i++)
-            //{
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
-            //}
-
             currentColumn += 1;
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Hours";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Head Count";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Cost";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Status";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Approver";
+            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Hours";
+            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Head Count";
+            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Cost";
+            overrideLogSheet.Cell(2, currentColumn++).Value = "Status";
+            overrideLogSheet.Cell(2, currentColumn++).Value = "Approver";
 
             //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
             //overrideLogCostSheet.Cell($"B1").Value = "Override Type";
