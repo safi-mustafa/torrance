@@ -5,17 +5,10 @@ using ViewModels.WeldingRodRecord;
 using ViewModels.Common.Unit;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
-using ViewModels.Authentication;
 using ViewModels.Authentication.User;
-using Models.Common;
 using ViewModels.Common.Department;
 using Enums;
-using ViewModels.TimeOnTools.PermitType;
-using ViewModels.TimeOnTools.ReworkDelay;
-using ViewModels.TimeOnTools.ShiftDelay;
-using ViewModels.TimeOnTools.StartOfWorkDelay;
 using ViewModels.TimeOnTools;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Helpers.Attributes;
 
 namespace ViewModels.OverrideLogs.ORLog

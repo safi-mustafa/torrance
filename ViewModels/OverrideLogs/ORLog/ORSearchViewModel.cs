@@ -28,7 +28,7 @@ namespace ViewModels.OverrideLogs.ORLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(false);
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
-        public Status? StatusNot { get; set; } = null;
+        public List<Status> StatusNot { get; set; } = new();
 
         [Display(Name = "Show Archived")]
         public bool IsArchived { get; set; }

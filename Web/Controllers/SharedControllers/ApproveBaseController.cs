@@ -56,6 +56,10 @@ namespace Web.Controllers
                     <div class=""p-2 row"">
                         <span class=""badge Submitted m-1""> </span>
                         <span class=""stat-name"">Pending</span>
+                    </div>
+                    <div class=""m-2 row"">
+                        <span class=""badge InProcess m-1""> </span>
+                        <span class=""stat-name"">In Process</span>
                     </div>";
             }
 
@@ -69,7 +73,7 @@ namespace Web.Controllers
                         <span class=""stat-name"">Rejected</span>
                     </div>
                     <div class=""m-2 row"">
-                        <span class=""badge Archived m-1""> </span>
+                        <span class=""badge IsArchived m-1""> </span>
                         <span class=""stat-name"">Archived</span>
                     </div>";
             vm.DataTableHeaderHtml = html;

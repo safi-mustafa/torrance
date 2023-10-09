@@ -37,7 +37,7 @@ namespace Web.Controllers
         protected override WRRLogSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.StatusNot = Enums.Status.Pending;
+            filters.StatusNot.Add(Status.Pending);
             return filters;
         }
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
@@ -51,7 +51,7 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
                 new DataTableViewModel{title = "Requestor",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
