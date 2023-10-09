@@ -62,6 +62,10 @@ namespace Repositories.Shared.AuthenticationService
                 try
                 {
                     user.UserName = Guid.NewGuid().ToString();
+                    if (model.Role == "Administrator")
+                    {
+                        user.DisableNotifications = model.DisableNotifications;
+                    }
                     var result = await _userManager.CreateAsync(user, model.Password);
                     var role = model.Role != null ? model.Role : "SuperAdmin";
                     if (result.Succeeded)
@@ -107,6 +111,10 @@ namespace Repositories.Shared.AuthenticationService
                     user.ActiveStatus = model.ActiveStatus;
                     user.NormalizedEmail = model.Email.ToUpper();
                     user.CanAddLogs = model.CanAddLogs;
+                    if (model.Role == "Administrator")
+                    {
+                        user.DisableNotifications = model.DisableNotifications;
+                    }
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
@@ -188,6 +196,7 @@ namespace Repositories.Shared.AuthenticationService
                         Id = x.Id,
                         Email = x.Email,
                         UserName = x.UserName,
+                        DisableNotifications = x.DisableNotifications
                     }).ToListAsync();
                 var roles = await _db.UserRoles
                   .Join(_db.Roles.Where(x => x.Name != "SuperAdmin"),
@@ -208,6 +217,7 @@ namespace Repositories.Shared.AuthenticationService
                     x.Id = userList.Where(a => a.Id == x.Id).Select(x => x.Id).FirstOrDefault();
                     x.Email = userList.Where(a => a.Id == x.Id).Select(x => x.Email).FirstOrDefault();
                     x.UserName = userList.Where(a => a.Id == x.Id).Select(x => x.UserName).FirstOrDefault();
+                    x.DisableNotifications = userList.Where(a => a.Id == x.Id).Select(x => x.DisableNotifications).FirstOrDefault();
                     x.Roles = roles.Where(u => u.UserId == x.Id).Select(r => new UserRolesVM { Id = r.RoleId, Name = r.RoleName }).ToList();
                 });
                 var mappedUserList = _mapper.Map<List<T>>(users.Items);

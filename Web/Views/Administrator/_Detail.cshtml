@@ -23,6 +23,13 @@
             <div>@(string.IsNullOrEmpty(Model.Email) ? "-" : Model.Email)</div>
         </div>
     </div>
+
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="DisableNotifications" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.FormattedDisableNotifications) ? "-" : Model.FormattedDisableNotifications)</div>
+        </div>
+    </div>
 @*
     <div class="col-lg-4">
         <div class="mb-3">
