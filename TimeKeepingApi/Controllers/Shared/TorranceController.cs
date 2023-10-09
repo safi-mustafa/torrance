@@ -79,14 +79,24 @@ namespace Torrance.Api.Controllers
             }
         }
 
-        protected virtual void LogModelStateError(object model)
+        protected virtual void LogModelStateError(object model, string action)
         {
-            var errors = "";
+            var errors = "{";
             foreach (var e in ModelState)
             {
-                errors += $"{e.Key}: {e.Value}";
+                errors += $"'{e.Key}': '{e.Value.ValidationState}',";
+                if (e.Value.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid && e.Value.Errors.Count > 0)
+                {
+                    errors += ", Error Message: ";
+                    foreach (var m in e.Value.Errors)
+                    {
+                        errors += $"*{m.ErrorMessage};";
+                    }
+                }
             }
-            _logger.LogCritical($"{_controllerName} -> Post: {JsonConvert.SerializeObject(model)}, ModelStateError: {errors}");
+            errors += "}";
+
+            _logger.LogCritical($"ModelState Validation Error!: {_controllerName} -> {action}: {JsonConvert.SerializeObject(model)}, ModelStateError: {errors}");
         }
     }
 }

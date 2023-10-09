@@ -37,6 +37,13 @@ namespace Repositories.Services.CommonServices.ApprovalService
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Method to get unapproved logs for Admin and Approvers
+        ///     User won't get any result from this method.
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel model)
         {
             var search = model as ApprovalSearchViewModel;
@@ -46,11 +53,12 @@ namespace Repositories.Services.CommonServices.ApprovalService
             var isEmployee = userRoles.Contains("Employee");
             try
             {
-                List<string> approverAssociations = null;
-                if (isApprover)
-                {
-                    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToListAsync();
-                }
+                //commented for change in flow of assinging approver
+                //List<string> approverAssociations = null;
+                //if (isApprover)
+                //{
+                //    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToListAsync();
+                //}
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
@@ -65,8 +73,11 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      (search.Unit.Id == 0 || search.Unit.Id == null || search.Unit.Id == x.UnitId)
                      &&
                      (search.Company.Id == 0 || search.Company.Id == null || search.Company.Id == x.CompanyId)
+                     //commented for change in flow of assinging approver
+                     //&&
+                     //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
                      &&
-                     (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
+                     (!isApprover || x.ApproverId == loggedInUserId)
                      &&
                      (!isEmployee)
                      &&
@@ -75,8 +86,9 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      (search.Status == x.Status)
                      &&
                      (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
-                     &&
-                     (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
+                     //commented for change in flow of assinging approver
+                     //&&
+                     //(isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                      )
                      .Select(x =>
                         new ApprovalDetailViewModel
@@ -102,19 +114,23 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
-                    x.IsDeleted == false
-                     &&
-                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                        x.IsDeleted == false
                          &&
-                         (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
-                         &&
-                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                         &&
-                         (search.Status == null || search.Status == x.Status)
-                         &&
-                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
-                         &&
-                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
+                        (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                        //commented for change in flow of assinging approver
+                        //&&
+                        //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
+                        &&
+                        (!isApprover || x.ApproverId == loggedInUserId)
+                        &&
+                        (search.Type == null || search.Type == LogType.WeldingRodRecord)
+                        &&
+                        (search.Status == null || search.Status == x.Status)
+                        &&
+                        (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                    //commented for change in flow of assinging approver
+                    //&&
+                    //(isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel
@@ -140,21 +156,25 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     .Include(x => x.Contractor)
                     .Include(x => x.Unit)
                     .Where(x =>
-                         x.IsDeleted == false
-                         &&
-                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
-                         &&
-                         (!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
-                         &&
-                         (!isEmployee)
-                         &&
-                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                         &&
-                         (search.Status == null || search.Status == x.Status)
-                         &&
-                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
-                         &&
-                         (isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
+                        x.IsDeleted == false
+                        &&
+                        (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                        //commented for change in flow of assinging approver
+                        //&&
+                        //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
+                        &&
+                        (!isApprover || x.ApproverId == loggedInUserId)
+                        &&
+                        (!isEmployee)
+                        &&
+                        (search.Type == null || search.Type == LogType.WeldingRodRecord)
+                        &&
+                        (search.Status == null || search.Status == x.Status)
+                        &&
+                        (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
+                    //commented for change in flow of assinging approver
+                    //&&
+                    //(isApprover == false || (approverAssociations != null && approverAssociations.Contains(x.DepartmentId.ToString() + "-" + x.UnitId.ToString())))
                     )
                     .Select(x =>
                     new ApprovalDetailViewModel
