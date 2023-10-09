@@ -18,7 +18,7 @@ using ViewModels.Common.Company;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
+    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove, IWRRLogNotificationViewModel
     {
         [Display(Name = "Rod Returned")]
         [Required]

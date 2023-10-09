@@ -32,8 +32,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
     public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IDelayType, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IDelayType, ITOTLogNotificationViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, ITOTLogNotificationViewModel, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -208,8 +208,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    await _notificationService.CreateLogNotification(notification);
+                    await _notificationService.CreateNotificationsForLogCreation(new TOTLogNotificationViewModel(model, mappedModel));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -233,12 +232,23 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                        var previousApproverId = record.ApproverId;
+                        var previousStatus = record.Status;
                         var dbModel = _mapper.Map(model, record);
-                        if (record.ApproverId != updateModel.Approver?.Id)
+                        dbModel.Status = previousStatus;
+                        if (previousApproverId != updateModel.Approver?.Id)
                         {
-                            var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
-                            await _notificationService.Create(notification);
+                            await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending)
+                            {
+                                dbModel.Status = Status.InProcess;
+                            }
                         }
+                        else
+                        {
+                            await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                        }
+
                         await SetRequesterId(dbModel);
                         SetDelayReasonFields(dbModel, model);
                         await _db.SaveChangesAsync();
@@ -405,27 +415,27 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
-        {
-            string userFullName = "";
-            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
-            }
-            return new NotificationViewModel()
-            {
-                LogId = model.Id,
-                EntityId = model.Id,
-                EventType = eventType,
-                EntityType = NotificationEntityType.TOTLog,
-                IdentifierKey = "Permit#",
-                IdentifierValue = model.PermitNo,
-                SendTo = model?.Approver?.Id.ToString(),
-                User = userFullName,
-                RequestorId = model.EmployeeId
-            };
-        }
+        //private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
+        //{
+        //    string userFullName = "";
+        //    string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    if (!string.IsNullOrEmpty(userId))
+        //    {
+        //        userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
+        //    }
+        //    return new NotificationViewModel()
+        //    {
+        //        LogId = model.Id,
+        //        EntityId = model.Id,
+        //        EventType = eventType,
+        //        EntityType = NotificationEntityType.TOTLog,
+        //        IdentifierKey = "Permit#",
+        //        IdentifierValue = model.PermitNo,
+        //        SendTo = model?.Approver?.Id.ToString(),
+        //        Approver = userFullName,
+        //        RequestorId = model.EmployeeId
+        //    };
+        //}
 
 
 

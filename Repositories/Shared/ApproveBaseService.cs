@@ -25,7 +25,7 @@ namespace Repositories.Shared
 {
 
     public class ApproveBaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel> : BaseService<TEntity, CreateViewModel, UpdateViewModel, DetailViewModel>, IBaseApprove
-        where TEntity : BaseDBModel, IApprove, IEmployeeId, IApproverId
+        where TEntity : BaseDBModel, IApprove, IEmployeeId, IApproverId, IUnitId, IDepartmentId
         where DetailViewModel : class, new()
         where CreateViewModel : class, IBaseCrudViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
@@ -141,38 +141,52 @@ namespace Repositories.Shared
                             var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
                             string notificationTitle = $"{type} Log {status}";
                             //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
-                            var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
-                            var notification = new NotificationViewModel()
+                            //var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
+                            //var notification = new NotificationViewModel()
+                            //{
+                            //    LogId = logRecord.Id,
+                            //    EntityId = logRecord.Id,
+                            //    EventType = eventType,
+                            //    Type = NotificationType.Push,
+                            //    EntityType = notificationEntityType,
+                            //    SendTo = userId.ToString() ?? "",
+                            //    IdentifierKey = identifierKey,
+                            //    IdentifierValue = identifier
+
+                            //};
+                            ////await _notificationService.Create(notification);
+                            //var requestorId = logRecord.EmployeeId.ToString();
+                            //if (!string.IsNullOrEmpty(requestorId))
+                            //{
+                            //    var notificationToRequestor = new NotificationViewModel()
+                            //    {
+                            //        LogId = logRecord.Id,
+                            //        EntityId = logRecord.Id,
+                            //        EventType = eventType,
+                            //        EntityType = notificationEntityType,
+                            //        IdentifierKey = identifierKey,
+                            //        IdentifierValue = identifier,
+                            //        RequestorId = logRecord.EmployeeId,
+                            //        ApproverId = logRecord.ApproverId?.ToString(),
+                            //        DepartmentId = logRecord.DepartmentId.ToString(),
+                            //        UnitId = logRecord.UnitId.ToString(),
+                            //    };
+                            //    //await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.ApproverId ?? 0);
+                            //}
+                            var notificationModel = new NotificationViewModel()
                             {
                                 LogId = logRecord.Id,
                                 EntityId = logRecord.Id,
                                 EventType = eventType,
-                                Type = NotificationType.Push,
                                 EntityType = notificationEntityType,
-                                SendTo = userId.ToString() ?? "",
                                 IdentifierKey = identifierKey,
-                                IdentifierValue = identifier
-
+                                IdentifierValue = identifier,
+                                RequestorId = logRecord.EmployeeId,
+                                ApproverId = logRecord.ApproverId?.ToString(),
+                                DepartmentId = logRecord.DepartmentId.ToString(),
+                                UnitId = logRecord.UnitId.ToString(),
                             };
-                            await _notificationService.Create(notification);
-                            var requestorId = logRecord.EmployeeId.ToString();
-                            if (!string.IsNullOrEmpty(requestorId))
-                            {
-                                var notificationToRequestor = new NotificationViewModel()
-                                {
-                                    LogId = logRecord.Id,
-                                    EntityId = logRecord.Id,
-                                    EventType = eventType,
-                                    Subject = $"{type} with {identifierKey}-{identifier} {eventType}",
-                                    Type = NotificationType.Email,
-                                    EntityType = notificationEntityType,
-                                    SendTo = requestorId,
-                                    IdentifierKey = identifierKey,
-                                    IdentifierValue = identifier,
-                                    User = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
-                                };
-                                await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.ApproverId ?? 0);
-                            }
+                            await _notificationService.CreateNotificationsForLogAfterProcessing(notificationModel);
                             await transaction.CommitAsync();
                             return _response;
                         }

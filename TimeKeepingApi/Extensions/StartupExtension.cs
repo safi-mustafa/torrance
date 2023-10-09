@@ -106,8 +106,12 @@ namespace Web.Extensions
                 {
                     OnTokenValidated = context =>
                     {
-                        var currentVersion = configuration["JWT:Version"] ?? "1.0.0"; // Default version if not specified in settings
+                        var currentVersion = configuration["JWT:Version"] ?? "null"; // Default version if not specified in settings
                         var tokenVersionClaim = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == "Version")?.Value;
+                        if (tokenVersionClaim == null)
+                        {
+                            tokenVersionClaim = "null";
+                        }
                         // Compare token version with the stored version
                         if (tokenVersionClaim != currentVersion)
                         {

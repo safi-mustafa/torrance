@@ -249,7 +249,7 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
                 new DataTableViewModel{title = "Requestor",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
@@ -273,6 +273,8 @@ namespace Web.Controllers
                     <div class=""p-2 row"">
                         <span class=""badge Submitted m-1""> </span>
                         <span class=""stat-name"">Pending</span>
+                        <span class=""badge InProcess m-1""> </span>
+                        <span class=""stat-name"">In Process</span>
                     </div>";
             vm.IsResponsiveDatatable = false;
             return vm;

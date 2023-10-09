@@ -20,7 +20,7 @@ using Helpers.Attributes;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost, IClippedAttachment
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost, IClippedAttachment, IORLogNotificationViewModel
     {
         [Required]
         [Display(Name = "Work Date")]
@@ -68,7 +68,7 @@ namespace ViewModels.OverrideLogs.ORLog
         [Display(Name = "Override Reason")]
         public string? Reason { get; set; }
 
-
+        public Status? Status { get; set; } = Enums.Status.Pending;
 
     }
 }

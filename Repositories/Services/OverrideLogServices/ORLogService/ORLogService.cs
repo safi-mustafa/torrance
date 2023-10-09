@@ -42,8 +42,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 {
     public class ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<OverrideLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IClippedAttachment, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IClippedAttachment, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IClippedAttachment, IORLogNotificationViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IClippedAttachment, IIdentitifier, IORLogNotificationViewModel, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<ORLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -261,8 +261,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     mappedModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    await _notificationService.CreateLogNotification(notification);
+                    await _notificationService.CreateNotificationsForLogCreation(new ORLogNotificationViewModel(model, mappedModel));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -294,15 +293,24 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 model.ClippedEmployees = new ClipEmployeeModifyViewModel();
                                 model.ClippedEmployees.Url = record.ClippedEmployeesUrl;
                             }
+                            var previousApproverId = record.ApproverId;
+                            var previousStatus = record.Status;
                             var dbModel = _mapper.Map(model, record);
-                            if (record.ApproverId != updateModel.Approver?.Id)
+                            dbModel.Status = previousStatus;
+                            if (previousApproverId != updateModel.Approver?.Id)
                             {
-                                var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
-                                await _notificationService.Create(notification);
+                                if (previousStatus == Status.Pending)
+                                {
+                                    dbModel.Status = Status.InProcess;
+                                }
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, record));
+                            }
+                            else
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new ORLogNotificationViewModel(model, record));
                             }
 
                             //save and attach clipped employees.
-
                             AddClippedEmployees(model, dbModel);
                             dbModel.Approver = null;
                             dbModel.TotalCost = await CalculateTotalCost(costs);
@@ -385,6 +393,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
 
         }
+
         public async Task<bool> SetORLogCosts(IORLogCost overrideLogCost, long id)
         {
             try
@@ -485,6 +494,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
 
         }
+
         private double CalculateTotalHeadCount(IORLogCost overrideLogCost)
         {
             if (overrideLogCost.Costs == null || overrideLogCost.Costs.Count < 1)
@@ -495,27 +505,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(OverrideLog model, NotificationEventTypeCatalog eventType)
-        {
-            string userFullName = "";
-            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
-            }
-            return new NotificationViewModel()
-            {
-                LogId = model.Id,
-                EntityId = model.Id,
-                EventType = eventType,
-                RequestorId = model.EmployeeId,
-                EntityType = NotificationEntityType.OverrideLog,
-                IdentifierKey = "PO#",
-                IdentifierValue = model.PoNumber.ToString(),
-                SendTo = model?.Approver?.Id.ToString(),
-                User = userFullName
-            };
-        }
+
 
         private async Task SetOverrideLogCosts(List<ORLogDetailViewModel> overrideLogs)
         {
@@ -723,6 +713,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return false;
         }
 
+
+        #region[One Time Fixes. Delete Them Later On]
         public async Task CalculateTotalCostAndHours()
         {
             try
@@ -770,8 +762,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             {
             }
         }
+        #endregion
     }
-
+    #region[One Time Fixes. Delete Them Later On]
     internal class OverrideCostVM
     {
         public long OverrideLogId { get; set; }
@@ -792,4 +785,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         public double TotalHours { get => (double)(STHours + DTHours + OTHours); }
     }
+
+    #endregion
+
+
 }
