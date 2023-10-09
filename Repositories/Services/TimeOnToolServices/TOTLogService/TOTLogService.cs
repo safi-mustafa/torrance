@@ -232,10 +232,17 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                        var previousApproverId = record.ApproverId;
+                        var previousStatus = record.Status;
                         var dbModel = _mapper.Map(model, record);
-                        if (record.ApproverId != updateModel.Approver?.Id)
+                        dbModel.Status = previousStatus;
+                        if (previousApproverId != updateModel.Approver?.Id)
                         {
                             await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
+                            if (previousStatus == Status.Pending)
+                            {
+                                dbModel.Status = Status.InProcess;
+                            }
                         }
                         else
                         {

@@ -292,10 +292,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 model.ClippedEmployees.Url = record.ClippedEmployeesUrl;
                             }
                             var previousApproverId = record.ApproverId;
+                            var previousStatus = record.Status;
                             var dbModel = _mapper.Map(model, record);
+                            dbModel.Status = previousStatus;
                             if (previousApproverId != updateModel.Approver?.Id)
                             {
-                                if (updateModel.Status == Status.Pending)
+                                if (previousStatus == Status.Pending)
                                 {
                                     dbModel.Status = Status.InProcess;
                                 }
