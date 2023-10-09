@@ -208,7 +208,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.CreateNotificationsForLogCreation(new TOTLogNotificationViewModel(model, mappedModel.Id));
+                    await _notificationService.CreateNotificationsForLogCreation(new TOTLogNotificationViewModel(model, mappedModel));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -235,11 +235,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, model.Id));
+                            await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, model.Id));
+                            await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
                         }
 
                         await SetRequesterId(dbModel);

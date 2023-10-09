@@ -23,14 +23,14 @@ namespace ViewModels.WeldingRodRecord.WRRLog
     }
     public class WRRLogNotificationViewModel : INotificationMetaViewModel
     {
-        public WRRLogNotificationViewModel(IWRRLogNotificationViewModel model, long id)
+        public WRRLogNotificationViewModel(IWRRLogNotificationViewModel model, Models.WeldingRodRecord.WRRLog wrrLog)
         {
-            LogId = id;
+            LogId = wrrLog.Id;
             DepartmentId = model.Department?.Id?.ToString();
             UnitId = model.Unit?.Id?.ToString();
             IdentifierKey = "TWR#";
             IdentifierValue = model.Twr;
-            RequestorId = model.Employee.Id;
+            RequestorId = wrrLog.EmployeeId;
             ApproverId = model.Approver?.Id?.ToString();
             EntityType = NotificationEntityType.WRRLog;
         }

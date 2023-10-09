@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Models.OverrideLogs;
 using ViewModels.Authentication.User;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -19,14 +20,14 @@ namespace ViewModels.OverrideLogs.ORLog
     }
     public class ORLogNotificationViewModel : INotificationMetaViewModel
     {
-        public ORLogNotificationViewModel(IORLogNotificationViewModel model, long id)
+        public ORLogNotificationViewModel(IORLogNotificationViewModel model, OverrideLog overrideLog)
         {
-            LogId = id;
+            LogId = overrideLog.Id;
             DepartmentId = model.Department?.Id?.ToString();
             UnitId = model.Unit?.Id?.ToString();
             IdentifierKey = "PO#";
             IdentifierValue = model.PoNumber.ToString();
-            RequestorId = model.Employee.Id;
+            RequestorId = overrideLog.EmployeeId;
             ApproverId = model.Approver?.Id?.ToString();
             EntityType = NotificationEntityType.OverrideLog;
         }

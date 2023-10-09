@@ -18,14 +18,14 @@ namespace ViewModels.TimeOnTools.TOTLog
     }
     public class TOTLogNotificationViewModel : INotificationMetaViewModel
     {
-        public TOTLogNotificationViewModel(ITOTLogNotificationViewModel model,long id)
+        public TOTLogNotificationViewModel(ITOTLogNotificationViewModel model, Models.TimeOnTools.TOTLog totLog)
         {
-            LogId = id;
+            LogId = totLog.Id;
             DepartmentId = model.Department?.Id?.ToString();
             UnitId = model.Unit?.Id?.ToString();
             IdentifierKey = "Permit#";
             IdentifierValue = model.PermitNo.ToString();
-            RequestorId = model.Employee.Id;
+            RequestorId = totLog.EmployeeId;
             ApproverId = model.Approver?.Id?.ToString();
             EntityType = NotificationEntityType.TOTLog;
         }

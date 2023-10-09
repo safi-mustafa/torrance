@@ -259,7 +259,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     mappedModel.TotalHeadCount = CalculateTotalHeadCount(costs);
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
-                    await _notificationService.CreateNotificationsForLogCreation(new ORLogNotificationViewModel(model, mappedModel.Id));
+                    await _notificationService.CreateNotificationsForLogCreation(new ORLogNotificationViewModel(model, mappedModel));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -294,11 +294,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             var dbModel = _mapper.Map(model, record);
                             if (record.ApproverId != updateModel.Approver?.Id)
                             {
-                                await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, model.Id));
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, record));
                             }
                             else
                             {
-                                await _notificationService.CreateNotificationsForLogUpdation(new ORLogNotificationViewModel(model, model.Id));
+                                await _notificationService.CreateNotificationsForLogUpdation(new ORLogNotificationViewModel(model, record));
                             }
 
                             //save and attach clipped employees.

@@ -196,7 +196,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<WRRLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    await _notificationService.CreateNotificationsForLogCreation(new WRRLogNotificationViewModel(model, mappedModel.Id));
+                    await _notificationService.CreateNotificationsForLogCreation(new WRRLogNotificationViewModel(model, mappedModel));
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -224,11 +224,11 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         var dbModel = _mapper.Map(model, record);
                         if (record.ApproverId != updateModel.Approver?.Id)
                         {
-                            await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, model.Id));
+                            await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, record));
                         }
                         else
                         {
-                            await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, model.Id));
+                            await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
                         }
 
                         await SetRequesterId(dbModel);
