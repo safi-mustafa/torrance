@@ -574,7 +574,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
                 //var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
 
-                SetExcelHeaders(overrideLogSheet, maxCostRows);
+                SetExcelHeaders(overrideLogSheet, maxCostRows, 1);
 
                 var rowNumber = 1;
                 var overrideCostIndex = 1;
@@ -718,7 +718,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 // Move the logo image to the desired location in the worksheet
                 logo.MoveTo(cell1);
 
-                SetExcelHeaders(overrideLogSheet, maxCostRows);
+                SetExcelHeaders(overrideLogSheet, maxCostRows, 1);
 
                 var rowNumber = 2;
                 var overrideCostIndex = 1;
@@ -767,30 +767,30 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return null;
         }
 
-        private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
+        private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows, int headerColumnNumber)
         {
             // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            overrideLogSheet.Cell(2, 1).Value = "Company";
-            overrideLogSheet.Cell(2, 2).Value = "Department";
-            overrideLogSheet.Cell(2, 3).Value = "Requester";
-            overrideLogSheet.Cell(2, 4).Value = "Date Submitted";
-            overrideLogSheet.Cell(2, 5).Value = "Time Submitted";
-            overrideLogSheet.Cell(2, 6).Value = "Work Date";
-            overrideLogSheet.Cell(2, 7).Value = "Workscope";
-            overrideLogSheet.Cell(2, 8).Value = "PO Number";
-            overrideLogSheet.Cell(2, 9).Value = "Unit";
-            overrideLogSheet.Cell(2, 10).Value = "Shift";
-            overrideLogSheet.Cell(2, 11).Value = "Override Reason";
-            overrideLogSheet.Cell(2, 12).Value = "Employee Names";
-            overrideLogSheet.Cell(2, 13).Value = "Uploaded Form";
+            overrideLogSheet.Cell(headerColumnNumber, 1).Value = "Company";
+            overrideLogSheet.Cell(headerColumnNumber, 2).Value = "Department";
+            overrideLogSheet.Cell(headerColumnNumber, 3).Value = "Requester";
+            overrideLogSheet.Cell(headerColumnNumber, 4).Value = "Date Submitted";
+            overrideLogSheet.Cell(headerColumnNumber, 5).Value = "Time Submitted";
+            overrideLogSheet.Cell(headerColumnNumber, 6).Value = "Work Date";
+            overrideLogSheet.Cell(headerColumnNumber, 7).Value = "Workscope";
+            overrideLogSheet.Cell(headerColumnNumber, 8).Value = "PO Number";
+            overrideLogSheet.Cell(headerColumnNumber, 9).Value = "Unit";
+            overrideLogSheet.Cell(headerColumnNumber, 10).Value = "Shift";
+            overrideLogSheet.Cell(headerColumnNumber, 11).Value = "Override Reason";
+            overrideLogSheet.Cell(headerColumnNumber, 12).Value = "Employee Names";
+            overrideLogSheet.Cell(headerColumnNumber, 13).Value = "Uploaded Form";
 
             int currentColumn = 13;
             currentColumn += 1;
-            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Hours";
-            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Head Count";
-            overrideLogSheet.Cell(2, currentColumn++).Value = "Total Cost";
-            overrideLogSheet.Cell(2, currentColumn++).Value = "Status";
-            overrideLogSheet.Cell(2, currentColumn++).Value = "Approver";
+            overrideLogSheet.Cell(headerColumnNumber, currentColumn++).Value = "Total Hours";
+            overrideLogSheet.Cell(headerColumnNumber, currentColumn++).Value = "Total Head Count";
+            overrideLogSheet.Cell(headerColumnNumber, currentColumn++).Value = "Total Cost";
+            overrideLogSheet.Cell(headerColumnNumber, currentColumn++).Value = "Status";
+            overrideLogSheet.Cell(headerColumnNumber, currentColumn++).Value = "Approver";
 
             //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
             //overrideLogCostSheet.Cell($"B1").Value = "Override Type";
