@@ -84,7 +84,7 @@ namespace Torrance.Api.Controllers
                 return ReturnProcessedResponse(data);
             }
             //adding model state errors in the logs
-            LogModelStateError(model);
+            LogModelStateError(model, "POST");
             return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 
@@ -102,7 +102,7 @@ namespace Torrance.Api.Controllers
                 return ReturnProcessedResponse(data);
             }
             //adding model state errors in the logs
-            LogModelStateError(model);
+            LogModelStateError(model, "PUT");
             return ReturnProcessedResponse(new RepositoryResponse { Status = HttpStatusCode.BadRequest });
         }
 

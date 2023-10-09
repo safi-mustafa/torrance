@@ -26,11 +26,11 @@
                     </div>
                 </div>
                 @* <div class="col-lg-6">
-            <div class="mb-3">
-            <label class="form-label fw-600">Company</label>
-            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-            </div>
-            </div>*@
+                    <div class="mb-3">
+                    <label class="form-label fw-600">Company</label>
+                    <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+                    </div>
+                    </div>*@
             }
 
 
@@ -92,12 +92,12 @@
                 </div>
             </div>
             @* <div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="Email" class="form-label fw-600"></label>
-            <input asp-for="Email" type="email" class="form-control" />
-            <span asp-validation-for="Email" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-600"></label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -134,19 +134,19 @@
                     <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
                 </div>
             </div>
-            @*@if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
+            @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
             {
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-            </div>
-            </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+                    </div>
+                </div>
             }
             else
             {
-            <input asp-for="Approver.Id" type="hidden" />
-            }*@
-            <input asp-for="Approver.Id" type="hidden" />
+                <input asp-for="Approver.Id" type="hidden" />
+            }
+            @*<input asp-for="Approver.Id" type="hidden" />*@
         </div>
     </div>
 </div>
@@ -156,8 +156,7 @@
 <input asp-for="Company.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
-<script>
-    $(function () {
+<script>$(function () {
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");

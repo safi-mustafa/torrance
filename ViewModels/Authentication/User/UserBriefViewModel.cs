@@ -12,8 +12,7 @@ namespace ViewModels.Authentication.User
         public UserBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled)
         {
         }
-        public UserBriefViewModel(bool isValidationEnabled, string errorMessage) :
-            base(isValidationEnabled, errorMessage)
+        public UserBriefViewModel(bool isValidationEnabled, string errorMessage) : base(isValidationEnabled, errorMessage)
         {
         }
         public override string? Name { get; set; }
@@ -28,7 +27,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Approver")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
     }
 
 }
