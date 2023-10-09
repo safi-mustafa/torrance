@@ -19,6 +19,8 @@ namespace ViewModels.Common
         public long Id { get; set; }
         public Status Status { get; set; }
         public string FormattedStatus { get => Status.GetDisplayName(); }
+        public string FormattedStatusForView { get => Status.ToString(); }
+
         public DateTime Date { get; set; }
         public string FormattedDate { get => Date.FormatDatetimeInPST(); }
         public LogType Type { get; set; }
