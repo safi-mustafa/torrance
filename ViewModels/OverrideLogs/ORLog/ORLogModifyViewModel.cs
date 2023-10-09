@@ -20,7 +20,7 @@ using Helpers.Attributes;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost, IClippedAttachment
+    public class ORLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IORLogCost, IClippedAttachment, IORLogNotificationViewModel
     {
         [Required]
         [Display(Name = "Work Date")]

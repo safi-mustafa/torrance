@@ -154,7 +154,7 @@ namespace Repositories.Shared
                                 IdentifierValue = identifier
 
                             };
-                            await _notificationService.Create(notification);
+                            //await _notificationService.Create(notification);
                             var requestorId = logRecord.EmployeeId.ToString();
                             if (!string.IsNullOrEmpty(requestorId))
                             {
@@ -169,9 +169,9 @@ namespace Repositories.Shared
                                     SendTo = requestorId,
                                     IdentifierKey = identifierKey,
                                     IdentifierValue = identifier,
-                                    User = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
+                                    Approver = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
                                 };
-                                await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.ApproverId ?? 0);
+                                //await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.ApproverId ?? 0);
                             }
                             await transaction.CommitAsync();
                             return _response;

@@ -22,7 +22,7 @@ using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class TOTLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier, ITOTLogNotificationViewModel
     {
         public DateTime? Date { get; set; } = DateTime.UtcNow;
         [Display(Name = "Twr", Prompt = "Add Twr")]

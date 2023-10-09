@@ -17,7 +17,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove
+    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove, IWRRLogNotificationViewModel
     {
         [Required]
         public DateTime? DateRodReturned { get; set; }
