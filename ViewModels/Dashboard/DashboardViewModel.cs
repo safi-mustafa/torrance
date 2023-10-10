@@ -14,38 +14,32 @@ namespace ViewModels.Dashboard
     }
     public class StatusChartViewModel
     {
-        public List<BarChartViewModel> ChartData { get; set; }
+        public List<ChartViewModel> ChartData { get; set; }
     }
     public class TOTPieChartViewModel : TOTWorkDelayTypeChartViewModel
     {
-        public List<LogPieChartViewModel> Shift { get; set; }
-        public List<LogPieChartViewModel> Unit { get; set; }
-        public List<LogPieChartViewModel> Department { get; set; }
-        public List<LogPieChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> Shift { get; set; }
+        public List<ChartViewModel> Unit { get; set; }
+        public List<ChartViewModel> Department { get; set; }
+        public List<ChartViewModel> RequestReason { get; set; }
     }
 
 
     public class OverridePieChartViewModel
     {
-        public List<LogPieChartViewModel> Shift { get; set; }
-        public List<LogPieChartViewModel> Unit { get; set; }
-        public List<LogPieChartViewModel> Department { get; set; }
-        public List<LogPieChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> Shift { get; set; }
+        public List<ChartViewModel> Unit { get; set; }
+        public List<ChartViewModel> Department { get; set; }
+        public List<ChartViewModel> RequestReason { get; set; }
     }
 
     public class WrrPieChartViewModel
     {
-        public List<LogPieChartViewModel> WeldMethods { get; set; }
-        public List<LogPieChartViewModel> RodTypes { get; set; }
+        public List<ChartViewModel> WeldMethods { get; set; }
+        public List<ChartViewModel> RodTypes { get; set; }
     }
 
-    public class LogPieChartViewModel
-    {
-        public string Category { get; set; }
-        public double Value { get; set; }
-    }
-
-    public class BarChartViewModel
+    public class ChartViewModel
     {
         public string Category { get; set; }
         public double Value { get; set; }

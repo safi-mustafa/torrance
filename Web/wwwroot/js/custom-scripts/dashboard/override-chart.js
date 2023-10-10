@@ -18,15 +18,15 @@
 }
 
 function OverrideDepartmentChart(seriesData) {
-    GeneratePieChart("override-department", seriesData)
+    GenerateBarChart("override-department", seriesData)
 }
 function OverrideUnitChart(seriesData) {
-    GeneratePieChart("override-unit", seriesData)
+    GenerateBarChart("override-unit", seriesData)
 }
 function OverrideShiftChart(seriesData) {
 
-    GeneratePieChart("override-shift", seriesData)
+    GenerateBarChart("override-shift", seriesData)
 }
 function OverrrideRequestReasonChart(seriesData) {
-    GeneratePieChart("override-request-reason", seriesData)
+    GenerateBarChart("override-request-reason", seriesData)
 }
