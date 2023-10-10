@@ -271,14 +271,45 @@ namespace Repositories.Services.DashboardService
                 );
         }
 
-        public async Task<IRepositoryResponse> GetTotDelayTypeChartsData(TOTLogSearchViewModel search)
+        public async Task<IRepositoryResponse> GetAPITotChartsData(TOTLogSearchViewModel search)
         {
             try
             {
-                var model = new TOTWorkDelayTypeChartViewModel();
-                var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
-                await GetTOTDelayTypeCharts(search, model, totHours);
-                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
+                var model = await GetTotChartsData(search);
+                var response = new RepositoryResponseWithModel<TOTPieChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetAPIOverrideChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = await GetOverrideChartsData(search);
+                var response = new RepositoryResponseWithModel<OverridePieChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetAPIBarChartsData()
+        {
+            try
+            {
+                var model = new APIBarChartsVM();
+                model.TOTLogs = await GetTotStatusChartData(new TOTLogSearchViewModel());
+                model.ORLogs = await GetOverrideStatusChartData(new TOTLogSearchViewModel());
+                model.WRRLogs = await GetWrrStatusChartData(new WRRLogSearchViewModel());
+                var response = new RepositoryResponseWithModel<APIBarChartsVM> { ReturnModel = model };
                 return response;
             }
             catch (Exception ex)
@@ -298,5 +329,12 @@ namespace Repositories.Services.DashboardService
                 }
             });
         }
+    }
+
+    public class APIBarChartsVM 
+    {
+        public StatusChartViewModel TOTLogs { get; set; }
+        public StatusChartViewModel ORLogs { get; set; }
+        public StatusChartViewModel WRRLogs { get; set; }
     }
 }
