@@ -130,6 +130,8 @@
         TOTUnitChart(@Json.Serialize(Model.DashboardTOTModel.Unit));
         TOTShiftChart(@Json.Serialize(Model.DashboardTOTModel.Shift));
         TOTRequestReasonChart(@Json.Serialize(Model.DashboardTOTModel.RequestReason));
+        TOTDelayTypeHoursChart(@Json.Serialize(Model.DashboardTOTModel.DelayTypeHours));
+        TOTDelayTypeCostsChart(@Json.Serialize(Model.DashboardTOTModel.DelayTypeCosts));
     })
     function GenerateTOTBarChart(seriesData) {
         GenerateBarChart("tot-status", seriesData)
@@ -178,5 +180,11 @@
     }
     function OverrrideRequestReasonChart(seriesData) {
         GeneratePieChart("override-request-reason", seriesData)
+    }
+    function TOTDelayTypeHoursChart(seriesData) {
+        GenerateBarChart("tot-work-delay-hours", seriesData)
+    }
+    function TOTDelayTypeCostsChart(seriesData) {
+        GenerateBarChart("tot-work-delay-costs", seriesData)
     }
 </script>
