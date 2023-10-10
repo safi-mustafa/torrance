@@ -40,7 +40,11 @@ function GeneratePieChart(id, seriesData) {
             //    fontSize: "30px", // Set font size using vw units
             //},
             /* text: "{category}: [bold]{valuePercentTotal.formatNumber('0.00')}%[/] ({value})",*/
+
             text: "{category}: {valuePercentTotal.formatNumber('0.00')}%[/]",
+            oversizedBehavior: "truncate",
+            maxWidth: 450,
+            ellipsis: "...",
             textType: "radial",
             radius: 0,
             centerX: am5.percent(100),

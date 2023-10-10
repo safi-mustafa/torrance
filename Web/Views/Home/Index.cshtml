@@ -40,7 +40,7 @@
         }
 
         <br>
-        @if (isAdmin)
+        @if (isAdmin || isApprover)
         {
             <div class="row dashboard-stats-row">
                 <div class="col-md-4">
@@ -89,7 +89,7 @@
             </div>
         }
         <div class="row dashboard-filters-row">
-            @if (isAdmin)
+            @if (isAdmin || isApprover)
             {
                 <partial name="_TOTStatusChart" />
                 <partial name="_WRRStatusChart" />
@@ -104,7 +104,7 @@
                     <partial name="_TOTPieCharts" />
                 </div>
             }
-            
+
 
         </div>
     </main>
@@ -126,18 +126,16 @@
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
 <script src="~/js/custom-scripts/dashboard/am-chart.js"></script>
-@*<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
-    <script src="~/js/custom-scripts/dashboard/wrr-pie-chart.js"></script>*@
 <script src="~/js/custom-scripts/dashboard/status-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/override-pie-chart.js"></script>
-<script src="~/js/custom-scripts/dashboard/tot-pie-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/override-chart.js"></script>
+<script src="~/js/custom-scripts/dashboard/tot-chart.js"></script>
 <!-- Chart code -->
 <script>
     $(function () {
         GetStatusChartData("TOT", "tot-status");
         GetStatusChartData("WRR", "wrr-status");
         GetStatusChartData("Override", "override-status");
-        GetTOTChartData("@isAdmin" ,"@isApprover");
+        GetTOTChartData("@isAdmin", "@isApprover");
         GetOverrideChartData();
 
         //$(document).on("change", "#department-id, #unit-id", function () {

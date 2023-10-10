@@ -7,6 +7,7 @@
     body {
         font-size: 16px; /* Base font size */
     }
+
     *[class^='progress-done-'] {
         height: 100%;
         width: 0;
@@ -48,55 +49,58 @@
 <div class="container-fluid" style="background-color:white;">
     <main>
         <h3 class="text-center p-5">Approver Dashboard</h3>
+        <div class="row dashboard-stats-row">
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title"> Total TOT's</h5>
+                            <p class="card-text">@Model.DashboardStats.TotalTotLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title">Total WRR's</h5>
+                            <p class="card-text">@Model.DashboardStats.TotalWRRLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <h5 class="card-title">Total Overrides</h5>
+                            <p class="card-text">@Model.DashboardStats.TotalORLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row col-12">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Hours By Shift Delay (TOT)
-                        </h5>
-                        <p class="card-text">
-                            <div class="am-pie-chart" id="tot-shift-delay"></div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Hours By Rework Delay(TOT)
-                        </h5>
-                        <p class="card-text">
-                            <div class="am-pie-chart" id="tot-rework-delay"></div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Hours By Start Of Work Delay(TOT)
-                        </h5>
-                        <p class="card-text">
-                            <div class="am-pie-chart" id="tot-start-of-work-delay"></div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Hours By OnGoing Work Delay(TOT)
-                        </h5>
-                        <p class="card-text">
-                            <div class="am-pie-chart" id="tot-ongoing-work-delay"></div>
-                        </p>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTStatusBarChart")
+            @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideStatusBarChart")
+            @await Html.PartialAsync("Shared/Dashboard/WRR/_WRRStatusBarChart")
+
+            @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideCostPieCharts")
+            @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTHoursPieCharts")
         </div>
 
     </main>
@@ -110,11 +114,32 @@
 <!-- Chart code -->
 <script>
     $(function () {
-        TOTShiftDelayChart(@Json.Serialize(Model.DashboarModel.ShiftDelay));
-        TOTReworkDelayChart(@Json.Serialize(Model.DashboarModel.ReworkDelay));
-        TOTStartOfWorkDelayChart(@Json.Serialize(Model.DashboarModel.StartOfWorkDelay));
-        TOTOngoingWorkDelayChart(@Json.Serialize(Model.DashboarModel.OngoingWorkDelay));
+        GenerateTOTBarChart(@Json.Serialize(Model.DashboardBarChartModel.TOTLogs.ChartData));
+        GenerateORBarChart(@Json.Serialize(Model.DashboardBarChartModel.ORLogs.ChartData));
+        GenerateWRRBarChart(@Json.Serialize(Model.DashboardBarChartModel.WRRLogs.ChartData));
+        OverrideDepartmentChart(@Json.Serialize(Model.DashboardORModel.Department));
+        OverrideUnitChart(@Json.Serialize(Model.DashboardORModel.Unit));
+        OverrideShiftChart(@Json.Serialize(Model.DashboardORModel.Shift));
+        OverrrideRequestReasonChart(@Json.Serialize(Model.DashboardORModel.RequestReason));
+
+        TOTShiftDelayChart(@Json.Serialize(Model.DashboardTOTModel.ShiftDelay));
+        TOTReworkDelayChart(@Json.Serialize(Model.DashboardTOTModel.ReworkDelay));
+        TOTStartOfWorkDelayChart(@Json.Serialize(Model.DashboardTOTModel.StartOfWorkDelay));
+        TOTOngoingWorkDelayChart(@Json.Serialize(Model.DashboardTOTModel.OngoingWorkDelay));
+        TOTDepartmentChart(@Json.Serialize(Model.DashboardTOTModel.Department));
+        TOTUnitChart(@Json.Serialize(Model.DashboardTOTModel.Unit));
+        TOTShiftChart(@Json.Serialize(Model.DashboardTOTModel.Shift));
+        TOTRequestReasonChart(@Json.Serialize(Model.DashboardTOTModel.RequestReason));
     })
+    function GenerateTOTBarChart(seriesData) {
+        GenerateBarChart("tot-status", seriesData)
+    }
+    function GenerateORBarChart(seriesData) {
+        GenerateBarChart("override-status", seriesData)
+    }
+    function GenerateWRRBarChart(seriesData) {
+        GenerateBarChart("wrr-status", seriesData)
+    }
     function TOTShiftDelayChart(seriesData) {
         GeneratePieChart("tot-shift-delay", seriesData)
     }
@@ -126,5 +151,32 @@
     }
     function TOTOngoingWorkDelayChart(seriesData) {
         GeneratePieChart("tot-ongoing-work-delay", seriesData)
+    }
+    function TOTDepartmentChart(seriesData) {
+        GeneratePieChart("tot-department", seriesData)
+    }
+    function TOTUnitChart(seriesData) {
+        GeneratePieChart("tot-unit", seriesData)
+    }
+    function TOTShiftChart(seriesData) {
+
+        GeneratePieChart("tot-shift", seriesData)
+    }
+    function TOTRequestReasonChart(seriesData) {
+        GeneratePieChart("tot-request-reason", seriesData)
+    }
+
+    function OverrideDepartmentChart(seriesData) {
+        GeneratePieChart("override-department", seriesData)
+    }
+    function OverrideUnitChart(seriesData) {
+        GeneratePieChart("override-unit", seriesData)
+    }
+    function OverrideShiftChart(seriesData) {
+
+        GeneratePieChart("override-shift", seriesData)
+    }
+    function OverrrideRequestReasonChart(seriesData) {
+        GeneratePieChart("override-request-reason", seriesData)
     }
 </script>

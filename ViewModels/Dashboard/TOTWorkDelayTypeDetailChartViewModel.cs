@@ -4,9 +4,9 @@ namespace ViewModels
 {
     public class TOTWorkDelayTypeDetailChartViewModel
     {
-        public List<LogPieChartViewModel> OngoingWorkDelay { get; set; }
-        public List<LogPieChartViewModel> ReworkDelay { get; set; }
-        public List<LogPieChartViewModel> ShiftDelay { get; set; }
-        public List<LogPieChartViewModel> StartOfWorkDelay { get; set; }
+        public List<ChartViewModel> OngoingWorkDelay { get; set; }
+        public List<ChartViewModel> ReworkDelay { get; set; }
+        public List<ChartViewModel> ShiftDelay { get; set; }
+        public List<ChartViewModel> StartOfWorkDelay { get; set; }
     }
 }

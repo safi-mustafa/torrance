@@ -2,6 +2,6 @@
 {
     public class TOTWorkDelayTypeChartViewModel
     {
-        public List<BarChartViewModel> ChartData { get; set; }
+        public List<ChartViewModel> ChartData { get; set; }
     }
 }
