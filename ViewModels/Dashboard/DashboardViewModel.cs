@@ -22,6 +22,8 @@ namespace ViewModels.Dashboard
         public List<ChartViewModel> Unit { get; set; }
         public List<ChartViewModel> Department { get; set; }
         public List<ChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> DelayTypeHours { get; set; }
+        public List<ChartViewModel> DelayTypeCosts { get; set; }
     }
 
 
