@@ -118,7 +118,7 @@
     $(function () {
         GenerateTOTBarChart(@Json.Serialize(Model.DashboardBarChartModel.TOTLogs.ChartData));
         GenerateORBarChart(@Json.Serialize(Model.DashboardBarChartModel.ORLogs.ChartData));
-        //GenerateWRRBarChart(@Json.Serialize(Model.DashboardBarChartModel.WRRLogs.ChartData));
+        GenerateWRRBarChart(@Json.Serialize(Model.DashboardBarChartModel.WRRLogs.ChartData));
         GetTOTChartData(@Json.Serialize(Model.DashboardTOTModel));
         GetOverrideChartData(@Json.Serialize(Model.DashboardORModel));
         TOTDelayTypeHoursChart(@Json.Serialize(Model.DashboardTOTModel.DelayTypeHours));
