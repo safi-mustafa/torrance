@@ -5,7 +5,9 @@
                 WRR
             </h5>
             <p class="card-text">
-                <div class="am-chart" id="wrr-status"></div>
+                <div class="am-chart" id="wrr-status">
+                    @await Html.PartialAsync("Shared/Dashboard/_Loader")
+                </div>
             </p>
 
         </div>

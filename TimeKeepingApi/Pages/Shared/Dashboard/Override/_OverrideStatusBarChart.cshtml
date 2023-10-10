@@ -5,7 +5,10 @@
                 Override
             </h5>
             <p class="card-text">
-                <div class="am-chart" id="override-status"></div>
+
+                <div class="am-chart" id="override-status">
+                    @await Html.PartialAsync("Shared/Dashboard/_Loader")
+                </div>
             </p>
 
         </div>
