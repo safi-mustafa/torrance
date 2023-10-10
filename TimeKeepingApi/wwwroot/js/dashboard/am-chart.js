@@ -82,6 +82,11 @@ function GeneratePieChart(id, seriesData) {
     }); // end am5.ready()
 }
 function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
+    var spinnerHtml = '<div class="spinner-grow chart-loader" style="width: 5rem; height: 5rem;" role="status">' +
+        '<span class="sr-only">Loading...</span>' +
+        '</div>';
+    const container = $("#" + id);
+    container.append(spinnerHtml);
     am5.ready(function () {
 
         DisposeRoot(id);
@@ -101,8 +106,8 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         var chart = root.container.children.push(am5xy.XYChart.new(root, {
             panX: false,
             panY: false,
-            wheelX: "panX",
-            wheelY: "zoomX",
+            wheelX: "none",
+            wheelY: "none",
             pinchZoomX: false
         }));
 
@@ -137,7 +142,7 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
             maxDeviation: 0.3,
             renderer: am5xy.AxisRendererY.new(root, {
                 strokeOpacity: 0.1,
-                fontSize:50
+                fontSize: 50
             })
         }));
 
@@ -180,10 +185,15 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         yAxis.get("renderer").labels.template.set("fontSize", "1.5vw"); // Set your desired font size here
         series.data.setAll(seriesData);
 
+        // Simulate an asynchronous action with a timeout
+        setTimeout(function () {
+            container.find('.chart-loader').remove();
+        }, 1000); // Adjust the delay (in milliseconds) as needed
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear(1000);
         chart.appear(1000, 100);
+
     });
 }
 
