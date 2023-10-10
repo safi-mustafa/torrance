@@ -157,7 +157,7 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
 
         series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
         setBarChartToolTip(series, root, chart);
-        setBarChartSeriesBullets(series, root);
+        //setBarChartSeriesBullets(series, root);
         series.columns.template.label = am5.Label.new(root, {
             text: "{valueY}",
             centerX: am5.p50,

@@ -40,7 +40,7 @@
         }
 
         <br>
-        @if (isAdmin)
+        @if (isAdmin || isApprover)
         {
             <div class="row dashboard-stats-row">
                 <div class="col-md-4">
@@ -89,7 +89,7 @@
             </div>
         }
         <div class="row dashboard-filters-row">
-            @if (isAdmin)
+            @if (isAdmin || isApprover)
             {
                 <partial name="_TOTStatusChart" />
                 <partial name="_WRRStatusChart" />
@@ -104,7 +104,7 @@
                     <partial name="_TOTPieCharts" />
                 </div>
             }
-            
+
 
         </div>
     </main>
@@ -135,7 +135,7 @@
         GetStatusChartData("TOT", "tot-status");
         GetStatusChartData("WRR", "wrr-status");
         GetStatusChartData("Override", "override-status");
-        GetTOTChartData("@isAdmin" ,"@isApprover");
+        GetTOTChartData("@isAdmin", "@isApprover");
         GetOverrideChartData();
 
         //$(document).on("change", "#department-id, #unit-id", function () {
