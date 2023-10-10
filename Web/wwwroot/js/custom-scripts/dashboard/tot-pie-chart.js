@@ -45,8 +45,6 @@ function TOTShiftDelayChart(seriesData) {
     GeneratePieChart("tot-shift-delay", seriesData)
 }
 function TOTReworkDelayChart(seriesData) {
-    console.log("HERE");
-    console.log(seriesData);
     GeneratePieChart("tot-rework-delay", seriesData)
 }
 function TOTStartOfWorkDelayChart(seriesData) {
