@@ -176,6 +176,11 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         }
 
         xAxis.data.setAll(seriesData);
+        xAxis.get("renderer").labels.template.setAll({
+            oversizedBehavior: "truncate",
+            textAlign: "center",
+            maxHeight: 100
+        });
         series.data.setAll(seriesData);
 
 
