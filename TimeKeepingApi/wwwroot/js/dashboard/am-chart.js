@@ -195,7 +195,6 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         }, 1000);
         series.appear(1000);
         chart.appear(1000, 100);
-        //container.find('.chart-loader').remove();
 
     });
 }
