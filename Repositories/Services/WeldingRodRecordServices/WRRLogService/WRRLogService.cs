@@ -4,7 +4,9 @@ using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
+using Helpers.ExcelReader;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -41,6 +43,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IHostingEnvironment _env;
 
         public WRRLogService(
                 ToranceContext db,
@@ -50,7 +53,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IUserInfoService userInfoService,
                 INotificationService notificationService,
                 IHttpContextAccessor httpContextAccessor,
-                IPossibleApproverService possibleApproverService
+                IPossibleApproverService possibleApproverService,
+                IHostingEnvironment env
             ) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
@@ -61,6 +65,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _env = env;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -314,6 +319,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("WeldingRodRecordLogs");
+                LogExcelHelper.AddLogo(worksheet, _env);
 
                 var columnHeaders = new List<string>
                 {
@@ -351,7 +357,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
         private void AddDataRows(IXLWorksheet worksheet, List<WRRLogDetailViewModel> items)
         {
-            var row = 2;
+            var row = 3;
             foreach (var item in items)
             {
                 var logIndex = 0;
@@ -363,7 +369,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
                 worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.FormattedCalibrationDate;
-                worksheet.Cell(row, ++logIndex).Value = item.FumeControlUsed;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedFumeControlUsed;
                 worksheet.Cell(row, ++logIndex).Value = item.RodType != null ? item.RodType.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Twr;
                 worksheet.Cell(row, ++logIndex).Value = item.WeldMethod != null ? item.WeldMethod.Name : "-";
@@ -372,15 +378,15 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOutLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.RodReturnedWasteLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.DateRodReturned;
-                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedStatus;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }
         }
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
-            var row = worksheet.Row(1);
-            //  row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+            var row = worksheet.Row(2);
+            worksheet.Row(2).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             for (int i = 0; i < headers.Count; i++)
             {
                 row.Cell(i + 1).Value = headers[i];

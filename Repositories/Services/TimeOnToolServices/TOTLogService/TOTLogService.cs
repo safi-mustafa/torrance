@@ -4,7 +4,9 @@ using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
+using Helpers.ExcelReader;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -43,8 +45,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IHostingEnvironment _env;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService, IHostingEnvironment env) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -54,6 +57,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _env = env;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -456,6 +460,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("TimeOnToolLogs");
+                LogExcelHelper.AddLogo(worksheet, _env);
 
                 var columnHeaders = new List<string>
                 {
@@ -498,7 +503,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
         private void AddDataRows(IXLWorksheet worksheet, List<TOTLogDetailViewModel> items)
         {
-            var row = 2;
+            var row = 3;
             foreach (var item in items)
             {
                 var logIndex = 0;
@@ -524,14 +529,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 worksheet.Cell(row, ++logIndex).Value = item.ManHours;
                 worksheet.Cell(row, ++logIndex).Value = item.TotalHours;
                 worksheet.Cell(row, ++logIndex).Value = item.DelayDescription;
-                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedStatus;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }
         }
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
-            var row = worksheet.Row(1);
+            var row = worksheet.Row(2);
+            worksheet.Row(2).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+
             //row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             for (int i = 0; i < headers.Count; i++)
             {

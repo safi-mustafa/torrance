@@ -28,15 +28,6 @@
 
 <tr class="cost-row" id="@rowId">
     <td>
-        <span style=" text-align: initial !important;">@Model.CraftSkill.Name</span>
-        <input type="hidden" name="@craftId" value="@Model.CraftSkill.Id" />
-        <input type="hidden" name="@craftName" value="@Model.CraftSkill.Name" />
-    </td>
-    <td>
-        <span style="text-align: initial !important;">@Model.HeadCount</span>
-        <input type="hidden" name="@headCount" value="@Model.HeadCount" />
-    </td>
-    <td>
         <span style=" text-align: initial !important;">@Model.STHours</span>
         <input type="hidden" name="@stHours" value="@Model.STHours" />
     </td>
@@ -47,6 +38,15 @@
     <td>
         <span style=" text-align: initial !important;">@Model.DTHours</span>
         <input type="hidden" name="@dtHours" value="@Model.DTHours" />
+    </td>
+    <td>
+        <span style=" text-align: initial !important;">@Model.CraftSkill.Name</span>
+        <input type="hidden" name="@craftId" value="@Model.CraftSkill.Id" />
+        <input type="hidden" name="@craftName" value="@Model.CraftSkill.Name" />
+    </td>
+    <td>
+        <span style="text-align: initial !important;">@Model.HeadCount</span>
+        <input type="hidden" name="@headCount" value="@Model.HeadCount" />
     </td>
     @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
     {

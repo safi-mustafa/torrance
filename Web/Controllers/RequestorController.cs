@@ -68,15 +68,5 @@ namespace Web.Controllers
             return base.Create(model);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> ImportExcelSheet(ExcelFileVM model)
-        {
-            if (await _employeeService.InitializeExcelContractData(model))
-            {
-                return RedirectToAction("Index");
-            }
-            return RedirectToAction("ImportExcelSheet");
-        }
-
     }
 }

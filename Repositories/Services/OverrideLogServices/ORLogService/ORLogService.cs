@@ -2,18 +2,15 @@
 using Centangle.Common.ResponseHelpers;
 using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
-using ClosedXML.Excel.Drawings;
 using DataLibrary;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Enums;
+using Helpers.ExcelReader;
 using Helpers.Extensions;
 using Helpers.File;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Models.Common;
 using Models.Common.Interfaces;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
@@ -23,20 +20,10 @@ using Repositories.Shared;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
 using Select2.Model;
-using System.ComponentModel.Design;
-using System.Drawing;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using ViewModels;
-using ViewModels.Notification;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
-using ViewModels.TimeOnTools.ShiftDelay;
-using ViewModels.WeldingRodRecord;
-using ViewModels.WeldingRodRecord.Employee;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
@@ -56,6 +43,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
         private readonly IFileHelper _fileHelper;
+        private readonly IHostingEnvironment _env;
 
         public ORLogService(
             ToranceContext db,
@@ -66,7 +54,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             INotificationService notificationService,
             IHttpContextAccessor httpContextAccessor,
             IPossibleApproverService possibleApproverService,
-            IFileHelper fileHelper) : base(db, logger, mapper, response, userInfoService, notificationService)
+            IFileHelper fileHelper,
+            IHostingEnvironment env) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -77,6 +66,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
             _fileHelper = fileHelper;
+            _env = env;
             _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
@@ -513,8 +503,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
         }
 
-
-
         private async Task SetOverrideLogCosts(List<ORLogDetailViewModel> overrideLogs)
         {
             List<ORLogCostViewModel> overrideLogCosts = new List<ORLogCostViewModel>();
@@ -555,7 +543,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
         }
 
-        public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
+        public async Task<XLWorkbook> DownloadExcel1(ORLogSearchViewModel searchModel)
         {
             try
             {
@@ -574,9 +562,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
                 //var overrideLogCostSheet = workbook.Worksheets.Add("OverrideLogCosts");
 
-                SetExcelHeaders(overrideLogSheet, maxCostRows);
+                SetExcelHeaders(overrideLogSheet, 1);
 
-                var rowNumber = 1;
+                var rowNumber = 2;
                 var overrideCostIndex = 1;
                 for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
                 {
@@ -603,7 +591,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     if (!string.IsNullOrEmpty(url))
                     {
                         cell.Value = "link";
-                        cell.Hyperlink = new XLHyperlink(new Uri(url));
+                        cell.SetHyperlink(new XLHyperlink(new Uri(url)));
                     }
                     else
                         cell.Value = "";
@@ -656,53 +644,105 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             return null;
         }
 
-        private void SetExcelHeaders(IXLWorksheet overrideLogSheet, long maxCostRows)
+        public async Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel)
         {
-            // overrideLogSheet.Row(1).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
-            overrideLogSheet.Cell(1, 1).Value = "Company";
-            overrideLogSheet.Cell(1, 2).Value = "Department";
-            overrideLogSheet.Cell(1, 3).Value = "Requester";
-            overrideLogSheet.Cell(1, 4).Value = "Date Submitted";
-            overrideLogSheet.Cell(1, 5).Value = "Time Submitted";
-            overrideLogSheet.Cell(1, 6).Value = "Work Date";
-            overrideLogSheet.Cell(1, 7).Value = "Workscope";
-            overrideLogSheet.Cell(1, 8).Value = "PO Number";
+            try
+            {
+                searchModel.IsExcelDownload = true;
+                var response = await GetAll<ORLogDetailViewModel>(searchModel);
 
-            overrideLogSheet.Cell(1, 9).Value = "Unit";
-            overrideLogSheet.Cell(1, 10).Value = "Shift";
-            overrideLogSheet.Cell(1, 11).Value = "Override Reason";
-            overrideLogSheet.Cell(1, 12).Value = "Employee Names";
-            overrideLogSheet.Cell(1, 13).Value = "Uploaded Form";
+                var logs = response as RepositoryResponseWithModel<PaginatedResultModel<ORLogDetailViewModel>>;
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUri = httpContext?.Request;
+                var domainUrl = $"{baseUri?.Scheme}://{baseUri?.Host}";
+                logs.ReturnModel.Items.ForEach(x => x.DomainUrl = domainUrl);
+                // Create a new workbook
+                var workbook = new XLWorkbook();
+                var maxCostRows = logs.ReturnModel.Items.Max(x => x.Costs.Count);
 
-            int currentColumn = 13;
-            //for (int i = 0; i < maxCostRows; i++)
-            //{
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Type - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Skill- {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Craft Rate - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"Override Hours - {i + 1}";
-            //    overrideLogSheet.Cell(1, ++currentColumn).Value = $"OT Type - {i + 1}";
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Head Count - {i + 1}";
-            //    //overrideLogSheet.Cell(1, ++currentColumn).Value = $"Cost - {i + 1}";
-            //}
+                // Add a new worksheet to the workbook and set its name
+                var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
+                LogExcelHelper.AddLogo(overrideLogSheet, _env);
 
-            currentColumn += 1;
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Hours";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Head Count";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Total Cost";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Status";
-            overrideLogSheet.Cell(1, currentColumn++).Value = "Approver";
+                var rowNumber = 2;
+                SetExcelHeaders(overrideLogSheet, rowNumber);
 
-            //overrideLogCostSheet.Cell($"A1").Value = "PO Number";
-            //overrideLogCostSheet.Cell($"B1").Value = "Override Type";
-            //overrideLogCostSheet.Cell($"C1").Value = "Craft";
-            //overrideLogCostSheet.Cell($"D1").Value = "Head Count";
-            //overrideLogCostSheet.Cell($"E1").Value = "Hours";
-            //overrideLogCostSheet.Cell($"F1").Value = "Cost";
+                var overrideCostIndex = 1;
+                for (var l = 0; l < logs.ReturnModel.Items.Count(); l++)
+                {
+                    rowNumber = rowNumber + 1;
+                    overrideLogSheet.Cell(rowNumber, 1).Value = logs.ReturnModel.Items[l].Company.Name;
+                    overrideLogSheet.Cell(rowNumber, 2).Value = logs.ReturnModel.Items[l].Department.Name;
+                    overrideLogSheet.Cell(rowNumber, 3).Value = logs.ReturnModel.Items[l].Employee.Name;
+                    overrideLogSheet.Cell(rowNumber, 4).Value = logs.ReturnModel.Items[l].FormattedCreatedDate;
+                    overrideLogSheet.Cell(rowNumber, 5).SetValue(logs.ReturnModel.Items[l].FormattedCreatedTime);
+                    overrideLogSheet.Cell(rowNumber, 6).Value = logs.ReturnModel.Items[l].FormattedDateOfWorkCompleted;
+                    overrideLogSheet.Cell(rowNumber, 7).Value = logs.ReturnModel.Items[l].WorkScope;
+                    overrideLogSheet.Cell(rowNumber, 8).Value = logs.ReturnModel.Items[l].PoNumber;
+                    overrideLogSheet.Cell(rowNumber, 9).Value = logs.ReturnModel.Items[l].Unit.Name;
+                    overrideLogSheet.Cell(rowNumber, 10).Value = logs.ReturnModel.Items[l].Shift.Name;
+                    overrideLogSheet.Cell(rowNumber, 11).Value = logs.ReturnModel.Items[l].Reason;
+                    var checkCell = overrideLogSheet.Cell(rowNumber, 12);
+                    checkCell.Value = logs.ReturnModel.Items[l].EmployeeNames;
 
+                    var url = logs.ReturnModel.Items[l].FormattedClippedEmployeeUrl;
+
+                    // Create a cell with the URL as a hyperlink
+                    var cell = overrideLogSheet.Cell(rowNumber, 13);
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        cell.Value = "link";
+                        cell.SetHyperlink(new XLHyperlink(new Uri(url)));
+                    }
+                    else
+                        cell.Value = "";
+
+                    int currentColumn = 13;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FormattedStatus;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].Approver.Name;
+                }
+                return workbook;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
         }
 
 
+
+        private void SetExcelHeaders(IXLWorksheet overrideLogSheet, int rowNumber)
+        {
+            overrideLogSheet.Row(rowNumber).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+            overrideLogSheet.Cell(rowNumber, 1).Value = "Company";
+            overrideLogSheet.Cell(rowNumber, 2).Value = "Department";
+            overrideLogSheet.Cell(rowNumber, 3).Value = "Requester";
+            overrideLogSheet.Cell(rowNumber, 4).Value = "Date Submitted";
+            overrideLogSheet.Cell(rowNumber, 5).Value = "Time Submitted";
+            overrideLogSheet.Cell(rowNumber, 6).Value = "Work Date";
+            overrideLogSheet.Cell(rowNumber, 7).Value = "Workscope";
+            overrideLogSheet.Cell(rowNumber, 8).Value = "PO Number";
+
+            overrideLogSheet.Cell(rowNumber, 9).Value = "Unit";
+            overrideLogSheet.Cell(rowNumber, 10).Value = "Shift";
+            overrideLogSheet.Cell(rowNumber, 11).Value = "Override Reason";
+            overrideLogSheet.Cell(rowNumber, 12).Value = "Employee Names";
+            overrideLogSheet.Cell(rowNumber, 13).Value = "Uploaded Form";
+
+            int currentColumn = 13;
+
+            currentColumn += 1;
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Hours";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Head Count";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Cost";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Status";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Approver";
+
+        }
 
         public async Task<bool> MergeCostsForCraft()
         {
@@ -744,7 +784,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             }
             return false;
         }
-
 
         #region[One Time Fixes. Delete Them Later On]
         public async Task CalculateTotalCostAndHours()

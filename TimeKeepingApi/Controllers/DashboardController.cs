@@ -4,6 +4,7 @@ using Pagination;
 using Repositories.Services.DashboardService;
 using Select2.Model;
 using Torrance.Api.Controllers;
+using ViewModels;
 using ViewModels.Dashboard;
 using ViewModels.TimeOnTools.TOTLog;
 
@@ -27,6 +28,20 @@ namespace API.Controllers
         public async Task<IActionResult> GetTOTCharts([FromQuery] TOTLogSearchViewModel search)
         {
             var result = await _dashboardService.GetAPITotChartsData(search);
+            return ReturnProcessedResponse<TOTPieChartViewModel>(result);
+        }
+        [HttpGet]
+        [Route("~/api/Dashboard/GetTotDelayTypeChartsData")]
+        public async Task<IActionResult> GetTotDelayTypeChartsData([FromQuery] TOTLogSearchViewModel search)
+        {
+            var result = await _dashboardService.GetTotDelayTypeChartsData(search);
+            return ReturnProcessedResponse<TOTWorkDelayTypeChartViewModel>(result);
+        }
+        [HttpGet]
+        [Route("~/api/Dashboard/GetTotDelayTypeChartsCostsData")]
+        public async Task<IActionResult> GetTotDelayTypeChartsCostsData([FromQuery] TOTLogSearchViewModel search)
+        {
+            var result = await _dashboardService.GetTotDelayTypeChartsCostsData(search);
             return ReturnProcessedResponse<TOTWorkDelayTypeChartViewModel>(result);
         }
     }

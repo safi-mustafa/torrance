@@ -51,7 +51,6 @@ using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
-using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
@@ -209,7 +208,6 @@ namespace Web.Extensions
 
         public static void ConfigureDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IExcelReader, ExcelReaderService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();

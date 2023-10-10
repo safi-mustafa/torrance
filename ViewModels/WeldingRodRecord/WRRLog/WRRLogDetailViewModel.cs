@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Helpers.Datetime;
+using Helpers.Extensions;
 using Models.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -81,6 +82,13 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Required]
         [DisplayName("Fume Control Used")]
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
+        public new string FormattedFumeControlUsed
+        {
+            get
+            {
+                return FumeControlUsed.GetDisplayName();
+            }
+        }
         public string Twr { get; set; }
 
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();

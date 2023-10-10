@@ -14,6 +14,8 @@
             TOTReworkDelayChart(data.ReworkDelay);
             TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
             TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
+            TOTWorkDelayHours(data.DelayTypeHours);
+            TOTWorkDelayCosts(data.DelayTypeCosts);
 
         },
         error: function () {
@@ -47,4 +49,12 @@ function TOTStartOfWorkDelayChart(seriesData) {
 }
 function TOTOngoingWorkDelayChart(seriesData) {
     GenerateBarChart("tot-ongoing-work-delay", seriesData)
+}
+
+function TOTWorkDelayHours(seriesData) {
+    GenerateBarChart("tot-work-delay-hours", seriesData)
+}
+
+function TOTWorkDelayCosts(seriesData) {
+    GenerateBarChart("tot-work-delay-costs", seriesData)
 }

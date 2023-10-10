@@ -13,6 +13,9 @@ namespace Repositories.Services.DashboardService
         Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search);
         Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search);
         Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search);
+        Task<IRepositoryResponse> GetTotDelayTypeDetailedChartsData(TOTLogSearchViewModel search);
+        Task<IRepositoryResponse> GetTotDelayTypeChartsData(TOTLogSearchViewModel search);
+        Task<IRepositoryResponse> GetTotDelayTypeChartsCostsData(TOTLogSearchViewModel search);
         Task<IRepositoryResponse> GetAPITotChartsData(TOTLogSearchViewModel search);
         Task<IRepositoryResponse> GetAPIOverrideChartsData(TOTLogSearchViewModel search);
         Task<IRepositoryResponse> GetAPIBarChartsData();
