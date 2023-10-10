@@ -28,8 +28,6 @@ namespace Repositories.Services.DashboardService
             _response = response;
         }
 
-
-
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
             var model = new TOTPieChartViewModel();
@@ -41,7 +39,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Shift.Name),
                   Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Department = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
@@ -50,7 +48,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Department.Name),
                   Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Unit = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
@@ -59,7 +57,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Unit.Name),
                   Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.RequestReason = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.DelayType)
@@ -68,7 +66,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.DelayType.Name),
                   Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                   //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             await GetTOTDelayTypeDetailedCharts(search, model, totHours);
             return model;
@@ -84,7 +82,7 @@ namespace Repositories.Services.DashboardService
                                           Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
                                           Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                                           //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                      }).Take(10).ToListAsync();
+                                      }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.ReworkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                                  .Include(x => x.ReworkDelay)
@@ -93,7 +91,7 @@ namespace Repositories.Services.DashboardService
                                                      Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
                                                      Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                                                      //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                                 }).Take(10).ToListAsync();
+                                                 }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.StartOfWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                      .Include(x => x.StartOfWorkDelay)
@@ -102,7 +100,7 @@ namespace Repositories.Services.DashboardService
                                          Category = x.Max(y => y.StartOfWorkDelay.Name) ?? "None",
                                          Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                                          //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                     }).Take(10).ToListAsync();
+                                     }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.OngoingWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                     .Include(x => x.OngoingWorkDelay)
@@ -111,7 +109,7 @@ namespace Repositories.Services.DashboardService
                                         Category = x.Max(y => y.OngoingWorkDelay.Name) ?? "None",
                                         Value = (double)(x.Sum(y => y.ManHours) ?? 0)
                                         //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                    }).Take(10).ToListAsync();
+                                    }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
         }
 
         public async Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search)
@@ -125,7 +123,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Shift.Name),
                   Value = (double)(x.Sum(y => y.TotalCost))
                   //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Department = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
@@ -134,7 +132,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Department.Name),
                   Value = (double)(x.Sum(y => y.TotalCost))
                   //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Unit = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
@@ -143,7 +141,7 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.Unit.Name),
                   Value = (double)(x.Sum(y => y.TotalCost))
                   //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.RequestReason = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.ReasonForRequest)
@@ -152,13 +150,11 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.ReasonForRequest.Name),
                   Value = (double)(x.Sum(y => y.TotalCost))
                   //Value = x.Sum(y => y.TotalCost) * 100 / totCost
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             return model;
 
         }
-
-
 
         public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
         {
@@ -168,7 +164,7 @@ namespace Repositories.Services.DashboardService
               {
                   Category = x.Max(y => y.Status).ToString(),
                   Value = x.Count()
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
             SetDisplayNameForStatus(model.ChartData);
             return model;
         }
@@ -182,9 +178,8 @@ namespace Repositories.Services.DashboardService
                   StartOfWorkDelayName = x.Max(y => y.StartOfWorkDelay.Name),
                   StartOfWorkDelay = x.Key,
                   Value = x.Count()
-              }).Take(10).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
         }
-
 
         public async Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search)
         {
@@ -214,7 +209,6 @@ namespace Repositories.Services.DashboardService
             return model;
 
         }
-
 
         public async Task<DashboardViewModel> GetDashboardData()
         {
@@ -304,6 +298,7 @@ namespace Repositories.Services.DashboardService
                     })
                     .IgnoreAutoIncludes()
                     .ToListAsync();
+                model.ChartData = chartData;
                 var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
                 return response;
             }
@@ -330,6 +325,7 @@ namespace Repositories.Services.DashboardService
                     })
                     .IgnoreQueryFilters()
                     .ToListAsync();
+                model.ChartData = chartData;
                 var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model }; return response;
             }
             catch (Exception ex)
