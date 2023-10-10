@@ -147,13 +147,6 @@
             <div class="col-md-12 mt-3">
                 <div class="form-group costs-inputs-container row">
                     <h4 class="col-md-12">Costs</h4>
-                    <span class="cost-craft-skill-td col-md-2">
-                        @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
-                    </span>
-                    <span class="cost-head-count-td col-md-2">
-                        <label class="form-label fw-600">Head Count<span style="color:red"> *</span></label>
-                        <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
-                    </span>
 
                     <span class="cost-st-hours-td col-md-2">
                         <label class="form-label fw-600">ST Hours<span style="color:red"> *</span></label>
@@ -170,6 +163,15 @@
                         <input type="number" name="cost-dt-hours" id="cost-dt-hours" class="form-control cost-dt-hours cost" placeholder="DT Hours" />
                     </span>
 
+                    <span class="cost-craft-skill-td col-md-2">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
+                    </span>
+
+                    <span class="cost-head-count-td col-md-2">
+                        <label class="form-label fw-600">Head Count<span style="color:red"> *</span></label>
+                        <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
+                    </span>
+
                     <span class="text-center col-md-2">
                         <label class="form-label fw-600 w-100">Add</label>
                         <button type="button" class="add-cost btn-circle btn-sm" style="height: calc(1.5715em + 0.875rem + 2px);"><i class="icon-plus2"></i></button>
@@ -180,11 +182,11 @@
                 <table class="table text-nowrap">
                     <thead>
                         <tr>
-                            <th>Craft</th>
-                            <th>Head Count</th>
                             <th>ST Hours</th>
                             <th>OT Hours</th>
                             <th>DT Hours</th>
+                            <th>Craft</th>
+                            <th>Head Count</th>
                             @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
                             {
                                 <th>Cost</th>
