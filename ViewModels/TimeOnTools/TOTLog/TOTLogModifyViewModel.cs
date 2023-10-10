@@ -49,8 +49,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public bool IsArchived { get; set; }
 
         [Display(Name = "Hours", Prompt = "Add Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
-        public long ManHours { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.UtcNow;
         [Display(Name = "Time Requested")]

@@ -37,8 +37,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? WorkScope { get; set; }
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
-        public long ManHours { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.UtcNow;
         [Display(Name = "Time Requested")]

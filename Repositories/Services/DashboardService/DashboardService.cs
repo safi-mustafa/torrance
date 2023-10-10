@@ -77,7 +77,7 @@ namespace Repositories.Services.DashboardService
 
         }
 
-        private async Task GetTOTDelayTypeDetailedCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeDetailChartViewModel model, long? totHours)
+        private async Task GetTOTDelayTypeDetailedCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeDetailChartViewModel model, double? totHours)
         {
             model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                       .Include(x => x.ShiftDelay)
@@ -335,7 +335,7 @@ namespace Repositories.Services.DashboardService
             return Response.BadRequestResponse(_response);
         }
 
-        private async Task<List<ChartViewModel>> GetTOTDelayTypeCosts(TOTLogSearchViewModel search, long? totHours)
+        private async Task<List<ChartViewModel>> GetTOTDelayTypeCosts(TOTLogSearchViewModel search, double? totHours)
         {
             return await GetFilteredTOTLogs(search)
                                 .Include(x => x.DelayType)

@@ -69,7 +69,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
         [Display(Name = "Hours")]
-        public long ManHours { get; set; }
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; }
         public string FormattedStartOfWork
@@ -107,7 +107,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Total Hours")]
-        public long TotalHours
+        public double TotalHours
         {
             get
             {
