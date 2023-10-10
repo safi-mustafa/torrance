@@ -39,15 +39,31 @@
     .am-chart {
         width: 100vw; /* 100% of the viewport width */
         height: 50vh; /* 50% of the viewport height, change as needed */
-        text-align: center;
+      /*  display:flex;
+        justify-content:center;
+        align-items:center;*/
+        position:relative;
     }
 
-    .am-pie-chart {
-        width: 100vw; /* 100% of the viewport width */
-        height: 50vh; /* 50% of the viewport height, change as needed */
-        text-align: center;
+    .chart-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0); /* Semi-transparent black overlay */
+        z-index: 999; /* Adjust the z-index to be higher than your other elements */
+        pointer-events: all; /* Enable pointer events on the overlay */
     }
 </style>
+
 <div class="container-fluid" style="background-color:white;">
     <main>
         <div class="row dashboard-stats-row">
@@ -99,7 +115,6 @@
             @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTStatusBarChart")
             @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideStatusBarChart")
             @await Html.PartialAsync("Shared/Dashboard/WRR/_WRRStatusBarChart")
-
             @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideCostBarCharts")
             @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTHoursBarCharts")
         </div>
@@ -118,6 +133,15 @@
 <!-- Chart code -->
 <script>
     $(function () {
+        // Loop through each 'am-chart' element and append the spinner HTML
+        $(".am-chart").each(function () {
+            // Append the spinner HTML to the current 'am-chart' element
+            $(this).append('<div class="spinner-grow chart-loader" style="width: 5rem; height: 5rem;" role="status">' +
+                '<span class="sr-only">Loading...</span>' +
+                '</div>'+
+                '<div class="overlay"></div>');
+        });
+            
         GenerateTOTBarChart(@Json.Serialize(Model.DashboardBarChartModel.TOTLogs.ChartData));
         GenerateORBarChart(@Json.Serialize(Model.DashboardBarChartModel.ORLogs.ChartData));
         GenerateWRRBarChart(@Json.Serialize(Model.DashboardBarChartModel.WRRLogs.ChartData));
