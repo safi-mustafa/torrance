@@ -190,9 +190,12 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         // Simulate an asynchronous action with a timeout
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
+        setTimeout(() => {
+            container.find('.chart-loader').remove();
+        }, 1000);
         series.appear(1000);
         chart.appear(1000, 100);
-        container.find('.chart-loader').remove();
+        //container.find('.chart-loader').remove();
 
     });
 }
