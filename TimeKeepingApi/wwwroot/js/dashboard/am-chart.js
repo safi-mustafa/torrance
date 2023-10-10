@@ -1,5 +1,31 @@
 ﻿var roots = [];
+const colorArray = [
+    "#77B7D8",
+    "#94C18D",
+    "#D9A97A",
+    "#B3AED0",
+    "#8CB8A8",
+    "#C0C6E1",
+    "#A3C2B6",
+    "#E1C340",
+    "#B6D3A3",
+    "#D3B6C6",
+    "#B7D1E4",
+    "#C4E59D",
+    "#E1BBA3",
+    "#A6C6E4",
+    "#D0D39C",
+    "#BFC5D9",
+    "#A3D1C6",
+    "#D9B8B3",
+    "#C7D8A3",
+    "#E7C9A7"
+];
+// For API Charts json helper converts our data into camelCase
+const categoryFieldName = "category";
+const valueFieldName = "value";
 function GeneratePieChart(id, seriesData) {
+    console.log(seriesData);
     am5.ready(function () {
         DisposeRoot(id);
         var root = am5.Root.new(id);
@@ -19,12 +45,19 @@ function GeneratePieChart(id, seriesData) {
 
         var series = chart.series.push(
             am5percent.PieSeries.new(root, {
-                valueField: "value",
-                categoryField: "category",
+                valueField: valueFieldName,
+                categoryField: categoryFieldName,
                 endAngle: 270,
                 alignLabels: false
             })
         );
+
+        //series.labels.template.setAll({
+        //    maxWidth: 150,
+        //    oversizedBehavior: "truncate", // to truncate labels, use "truncate"
+        //    fontSize: 10,
+        //    textType: "circular", inside: true
+        //});
 
         series.states.create("hidden", {
             endAngle: -90
@@ -36,26 +69,19 @@ function GeneratePieChart(id, seriesData) {
 
         series.labels.template.setAll({
             fontSize: "3.5vw",
-            //style: {
-            //    fontSize: "30px", // Set font size using vw units
-            //},
             /* text: "{category}: [bold]{valuePercentTotal.formatNumber('0.00')}%[/] ({value})",*/
-
             text: "{category}: {valuePercentTotal.formatNumber('0.00')}%[/]",
-            oversizedBehavior: "truncate",
-            maxWidth: 450,
-            ellipsis: "...",
             textType: "radial",
             radius: 0,
             centerX: am5.percent(100),
             fill: am5.color(0xffffff)
-        });
+        })
 
         series.appear(1000, 100);
 
     }); // end am5.ready()
 }
-function GenerateBarChart(id, seriesData) {
+function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
     am5.ready(function () {
 
         DisposeRoot(id);
@@ -73,11 +99,11 @@ function GenerateBarChart(id, seriesData) {
         // Create chart
         // https://www.amcharts.com/docs/v5/charts/xy-chart/
         var chart = root.container.children.push(am5xy.XYChart.new(root, {
-            panX: true,
-            panY: true,
+            panX: false,
+            panY: false,
             wheelX: "panX",
             wheelY: "zoomX",
-            pinchZoomX: true
+            pinchZoomX: false
         }));
 
         // Add cursor
@@ -102,7 +128,7 @@ function GenerateBarChart(id, seriesData) {
 
         var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
             maxDeviation: 0.3,
-            categoryField: "Category",
+            categoryField: categoryFieldName,
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {})
         }));
@@ -110,7 +136,8 @@ function GenerateBarChart(id, seriesData) {
         var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
             maxDeviation: 0.3,
             renderer: am5xy.AxisRendererY.new(root, {
-                strokeOpacity: 0.1
+                strokeOpacity: 0.1,
+                fontSize:50
             })
         }));
 
@@ -121,49 +148,37 @@ function GenerateBarChart(id, seriesData) {
             name: "Series 1",
             xAxis: xAxis,
             yAxis: yAxis,
-            valueYField: "Value",
+            valueYField: valueFieldName,
             sequencedInterpolation: true,
-            categoryXField: "Category",
+            categoryXField: categoryFieldName,
             tooltip: am5.Tooltip.new(root, {
                 labelText: "{valueY}"
-            })
+            }),
+            maskBullets: false
         }));
 
         series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
-        //series.columns.template.adapters.add("fill", function (fill, target) {
-        //    return chart.get("colors").getIndex(series.columns.indexOf(target));
-        //});
-
-        //series.columns.template.adapters.add("stroke", function (stroke, target) {
-        //    return chart.get("colors").getIndex(series.columns.indexOf(target));
-        //});
-        series.columns.template.adapters.add("fill", function (fill, target) {
-            if (target.dataItem.dataContext.Category == "Pending") {
-                return am5.color("#ffa500");
+        setBarChartToolTip(series, root, chart);
+        //setBarChartSeriesBullets(series, root);
+        if (setCustomBarChartSeriesColor && typeof setCustomBarChartSeriesColor === 'function') {
+            setCustomBarChartSeriesColor(series);
+        } else {
+            // If series is longer than colorArray, add missing colors
+            for (let i = colorArray.length; i < seriesData.length; i++) {
+                colorArray.push(getRandomColor());
             }
-            else if (target.dataItem.dataContext.Category == "Approved") {
-                return am5.color("#25b372");
-            }
-            else {
-                return am5.color("#ff0000");
-            }
-        });
-
-        series.columns.template.adapters.add("stroke", function (stroke, target) {
-            if (target.dataItem.dataContext.Category == "Pending") {
-                return am5.color("#ffa500");
-            }
-            else if (target.dataItem.dataContext.Category == "Approved") {
-                return am5.color("#25b372");
-            }
-            else {
-                return am5.color("#ff0000");
-            }
-        });
+            setBarChartSeriesColors(series);
+        }
 
         xAxis.data.setAll(seriesData);
+        xAxis.get("renderer").labels.template.setAll({
+            oversizedBehavior: "truncate",
+            textAlign: "center",
+            maxHeight: 100,
+            fontSize: "2vw"
+        });
+        yAxis.get("renderer").labels.template.set("fontSize", "1.5vw"); // Set your desired font size here
         series.data.setAll(seriesData);
-
 
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -171,11 +186,85 @@ function GenerateBarChart(id, seriesData) {
         chart.appear(1000, 100);
     });
 }
-function setBarChartSeriesColors(barChart) {
-    barChart.get("colors").set("colors", [
-        am5.color("#528d73"),
-        am5.color("#ab0b00"),
-    ]);
+
+// Function to generate a random hex color
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function setBarChartSeriesColors(series) {
+    series.columns.template.adapters.add("fill", function (fill, target) {
+        // Get the series index
+        const seriesIndex = series.columns.indexOf(target);
+
+        // Check if the index is within the bounds of colorArray
+        if (seriesIndex >= 0 && seriesIndex < colorArray.length) {
+            return am5.color(colorArray[seriesIndex]);
+        }
+    });
+
+    series.columns.template.adapters.add("stroke", function (stroke, target) {
+        // Get the series index
+        const seriesIndex = series.columns.indexOf(target);
+
+        // Check if the index is within the bounds of colorArray
+        if (seriesIndex >= 0 && seriesIndex < colorArray.length) {
+            return am5.color(colorArray[seriesIndex]);
+        }
+    });
+}
+function setBarChartSeriesBullets(series, root) {
+    series.bullets.push(function () {
+        return am5.Bullet.new(root, {
+            locationX: 0.5,
+            locationY: 0.5,
+            sprite: am5.Label.new(root, {
+                text: "{Value}",
+                fill: root.interfaceColors.get("alternativeText"),
+                centerX: am5.percent(50),
+                centerY: am5.percent(50),
+                populateText: true
+            })
+        });
+    });
+}
+function setBarChartToolTip(series, root, barChart) {
+    var tooltip = series.set("tooltip", am5.Tooltip.new(root, {
+        getFillFromSprite: false,
+        getStrokeFromSprite: true,
+        autoTextColor: false,
+        pointerOrientation: "horizontal"
+    }));
+
+    tooltip.get("background").setAll({
+        fill: am5.color(0xffffff),
+        fillOpacity: 0.8
+    });
+
+    tooltip.get("background").setAll({
+        fill: am5.color(0xffffff)
+    })
+
+    tooltip.label.setAll({
+        text: "{Category}[/]",
+        fill: am5.color(0x000000)
+    });
+
+    tooltip.label.adapters.add("text", function (text, target) {
+        return getBarChartToolTipContent(barChart, text);
+    });
+}
+function getBarChartToolTipContent(barChart, text) {
+    barChart.series.each(function (series) {
+        //text += '\n[' + series.get("stroke").toString() + ']●[/] [bold width:100px]' + series.get("name") + ':[/] {' + series.get("valueYField") + '}'
+        text += ': {' + series.get("valueYField") + '}'
+    })
+    return text;
 }
 function DisposeRoot(root) {
     if (roots.length > 0) {
