@@ -82,11 +82,7 @@ function GeneratePieChart(id, seriesData) {
     }); // end am5.ready()
 }
 function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
-    var spinnerHtml = '<div class="spinner-grow chart-loader" style="width: 5rem; height: 5rem;" role="status">' +
-        '<span class="sr-only">Loading...</span>' +
-        '</div>';
     const container = $("#" + id);
-    container.append(spinnerHtml);
     am5.ready(function () {
 
         DisposeRoot(id);
@@ -108,9 +104,15 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
             panY: false,
             wheelX: "none",
             wheelY: "none",
-            pinchZoomX: false
+            pinchZoomX: false,
+            touchEnabled: false,
+            hoverEnabled: false
         }));
+        const chartRoot = chart.root;
 
+        // Disable all user interactions.
+        chartRoot.interactionsEnabled = false;
+        chart.interactive = false;
         // Add cursor
         // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
         var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
@@ -186,13 +188,11 @@ function GenerateBarChart(id, seriesData, setCustomBarChartSeriesColor = null) {
         series.data.setAll(seriesData);
 
         // Simulate an asynchronous action with a timeout
-        setTimeout(function () {
-            container.find('.chart-loader').remove();
-        }, 1000); // Adjust the delay (in milliseconds) as needed
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear(1000);
         chart.appear(1000, 100);
+        container.find('.chart-loader').remove();
 
     });
 }
