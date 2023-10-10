@@ -2,9 +2,6 @@
 {
     public class TOTWorkDelayTypeChartViewModel
     {
-        public List<LogPieChartViewModel> OngoingWorkDelay { get; set; }
-        public List<LogPieChartViewModel> ReworkDelay { get; set; }
-        public List<LogPieChartViewModel> ShiftDelay { get; set; }
-        public List<LogPieChartViewModel> StartOfWorkDelay { get; set; }
+        public List<BarChartViewModel> ChartData { get; set; }
     }
 }

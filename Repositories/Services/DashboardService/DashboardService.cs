@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels;
 using ViewModels.Dashboard;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -32,7 +33,7 @@ namespace Repositories.Services.DashboardService
             _response = response;
         }
 
-        
+
 
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
         {
@@ -69,13 +70,13 @@ namespace Repositories.Services.DashboardService
                   Category = x.Max(y => y.DelayType.Name),
                   Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
               }).ToListAsync();
-            
-            await GetTOTDelayTypeCharts(search, model, totHours);
+
+            await GetTOTDelayTypeDetailedCharts(search, model, totHours);
             return model;
 
         }
 
-        private async Task GetTOTDelayTypeCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeChartViewModel model, long? totHours)
+        private async Task GetTOTDelayTypeDetailedCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeDetailChartViewModel model, long? totHours)
         {
             model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                       .Include(x => x.ShiftDelay)
@@ -262,13 +263,64 @@ namespace Repositories.Services.DashboardService
                 );
         }
 
+        public async Task<IRepositoryResponse> GetTotDelayTypeDetailedChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeDetailChartViewModel();
+                var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+                await GetTOTDelayTypeDetailedCharts(search, model, totHours);
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeDetailChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
         public async Task<IRepositoryResponse> GetTotDelayTypeChartsData(TOTLogSearchViewModel search)
         {
             try
             {
                 var model = new TOTWorkDelayTypeChartViewModel();
+                var chartData = await GetFilteredTOTLogs(search)
+                    .Include(x => x.DelayType)
+                    .GroupBy(x => x.DelayTypeId)
+                    .Select(x => new BarChartViewModel
+                    {
+                        Category = x.Max(c => c.DelayType.Name),
+                        Value = x.Sum(y => y.ManHours) ?? 0
+                    })
+                    .IgnoreAutoIncludes()
+                    .ToListAsync();
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetTotDelayTypeChartsCostsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeChartViewModel();
                 var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
-                await GetTOTDelayTypeCharts(search, model, totHours);
+                var chartData = await GetFilteredTOTLogs(search)
+                    .Include(x => x.DelayType)
+                    .GroupBy(x => x.DelayTypeId)
+                    .Select(x => new BarChartViewModel
+                    {
+                        Category = x.Max(c => c.DelayType.Name),
+                        Value = (x.Sum(y => y.ManHours) * 100 / totHours) ?? 0
+                    })
+                    .IgnoreQueryFilters()
+                    .ToListAsync();
                 var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
                 return response;
             }

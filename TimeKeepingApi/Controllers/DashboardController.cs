@@ -26,8 +26,8 @@ namespace API.Controllers
         [Route("~/api/Dashboard/GetTOTCharts")]
         public async Task<IActionResult> GetTOTCharts([FromQuery] TOTLogSearchViewModel search)
         {
-            var result = await _dashboardService.GetTotDelayTypeChartsData(search);
-            return ReturnProcessedResponse<TOTWorkDelayTypeChartViewModel>(result);
+            var result = await _dashboardService.GetTotDelayTypeDetailedChartsData(search);
+            return ReturnProcessedResponse<TOTWorkDelayTypeDetailChartViewModel>(result);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ViewModels.Dashboard
     {
         public List<BarChartViewModel> ChartData { get; set; }
     }
-    public class TOTPieChartViewModel : TOTWorkDelayTypeChartViewModel
+    public class TOTPieChartViewModel : TOTWorkDelayTypeDetailChartViewModel
     {
         public List<LogPieChartViewModel> Shift { get; set; }
         public List<LogPieChartViewModel> Unit { get; set; }
