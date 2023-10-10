@@ -22,6 +22,7 @@ using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using System.Linq.Dynamic.Core;
+using ExcelReader;
 
 namespace Repositories.Services.AppSettingServices.EmployeeService
 {
@@ -36,9 +37,8 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
-        private readonly IExcelReader _excelReader;
 
-        public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IExcelReader excelReader, IUserInfoService userInfoService)
+        public EmployeeService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<EmployeeService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService)
             :
             base(db, RolesCatalog.Employee, userManager, logger, mapper, identity, response, userInfoService)
         {
@@ -48,18 +48,9 @@ namespace Repositories.Services.AppSettingServices.EmployeeService
             _mapper = mapper;
             _identity = identity;
             _response = response;
-            _excelReader = excelReader;
         }
 
-        public async Task<bool> InitializeExcelContractData(ExcelFileVM model)
-        {
-            var data = _excelReader.GetData(model.File.OpenReadStream());
-            //var excelDataList = AddModel<EmployeeModifyViewModel>(data, 0, 0);
-            var excelDataList = _excelReader.AddModel<EmployeeExcelViewModel>(data, 0, 0);
-            var employeeList = _mapper.Map<List<EmployeeModifyViewModel>>(excelDataList);
-            var response = await ProcessExcelData(employeeList);
-            return response;
-        }
+
         public List<T> AddModel<T>(List<DataTable> dataLists, int ind, int startInd) where T : new()
         {
             List<T> list = new List<T>();
