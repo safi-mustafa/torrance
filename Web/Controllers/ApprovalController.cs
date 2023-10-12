@@ -61,7 +61,8 @@ namespace Web.Controllers
         protected override ApprovalSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.Status = Status.Pending;
+            var status = (Status?)((int?)filters.Status);
+            status = Status.Pending;
             return filters;
         }
 
