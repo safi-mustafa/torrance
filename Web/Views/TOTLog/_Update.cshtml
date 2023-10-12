@@ -157,6 +157,10 @@
                     </div>
                     </div>*@
             }
+            else
+            {
+                <input asp-for="Employee.Id" type="hidden" />
+            }
 
             @*       <div class="col-lg-6">
                 <div class="mb-3">
@@ -268,7 +272,6 @@
 </div>
 
 <input asp-for="Status" type="hidden" id="status-id" />
-<input asp-for="Employee.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
 <script>
