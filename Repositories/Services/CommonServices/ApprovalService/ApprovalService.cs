@@ -59,6 +59,9 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 //{
                 //    approverAssociations = await _db.ApproverAssociations.Where(x => x.IsDeleted == false && x.ApproverId == loggedInUserId).Select(x => x.DepartmentId + "-" + x.UnitId).Distinct().ToListAsync();
                 //}
+
+                var status = (Status?)((int?)search.Status);
+
                 var totLogsQueryable = _db.TOTLogs
                     .Include(x => x.Employee)
                     .Include(x => x.Approver)
@@ -73,6 +76,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      (search.Unit.Id == 0 || search.Unit.Id == null || search.Unit.Id == x.UnitId)
                      &&
                      (search.Company.Id == 0 || search.Company.Id == null || search.Company.Id == x.CompanyId)
+                     &&
+                     (search.Approver.Id == 0 || search.Approver.Id == null || search.Approver.Id == x.ApproverId)
                      //commented for change in flow of assinging approver
                      //&&
                      //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
@@ -83,7 +88,9 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      &&
                      (search.Type == null || search.Type == LogType.TimeOnTools)
                      &&
-                     (x.Status == Status.InProcess || x.Status == Status.Pending)
+                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
+                     ||
+                     (status != null && x.Status == status)
                      &&
                      (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      //commented for change in flow of assinging approver
@@ -117,6 +124,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         x.IsDeleted == false
                          &&
                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                        &&
+                        (search.Approver.Id == 0 || search.Approver.Id == null || search.Approver.Id == x.ApproverId)
                         //commented for change in flow of assinging approver
                         //&&
                         //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
@@ -124,8 +133,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         (!isApprover || x.ApproverId == loggedInUserId)
                         &&
                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                        &&
-                        (x.Status == Status.InProcess || x.Status == Status.Pending)
+                         &&
+                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
+                     ||
+                     (status != null && x.Status == status)
                         &&
                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     //commented for change in flow of assinging approver
@@ -159,6 +170,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         x.IsDeleted == false
                         &&
                         (search.Employee.Id == 0 || search.Employee.Id == null || search.Employee.Id == x.EmployeeId)
+                        &&
+                        (search.Approver.Id == 0 || search.Approver.Id == null || search.Approver.Id == x.ApproverId)
                         //commented for change in flow of assinging approver
                         //&&
                         //(!isApprover || x.Approver == null || x.ApproverId == loggedInUserId)
@@ -168,8 +181,10 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         (!isEmployee)
                         &&
                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                        &&
-                        (x.Status == Status.InProcess || x.Status == Status.Pending)
+                         &&
+                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
+                     ||
+                     (status != null && x.Status == status)
                         &&
                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     //commented for change in flow of assinging approver
