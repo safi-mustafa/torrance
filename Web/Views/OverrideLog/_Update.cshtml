@@ -103,6 +103,10 @@
                     </div>
                 </div>
             }
+            else
+            {
+                <input asp-for="Employee.Id" type="hidden" />
+            }
 
             @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
             {
