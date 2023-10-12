@@ -88,9 +88,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                      &&
                      (search.Type == null || search.Type == LogType.TimeOnTools)
                      &&
-                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
-                     ||
-                     (status != null && x.Status == status)
+                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending) || (status != null && x.Status == status))
                      &&
                      (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                      //commented for change in flow of assinging approver
@@ -133,10 +131,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         (!isApprover || x.ApproverId == loggedInUserId)
                         &&
                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                         &&
-                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
-                     ||
-                     (status != null && x.Status == status)
+                        &&
+                        (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending) || (status != null && x.Status == status))
                         &&
                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     //commented for change in flow of assinging approver
@@ -181,10 +177,8 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         (!isEmployee)
                         &&
                         (search.Type == null || search.Type == LogType.WeldingRodRecord)
-                         &&
-                     (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending))
-                     ||
-                     (status != null && x.Status == status)
+                        &&
+                        (status == null && (x.Status == Status.InProcess || x.Status == Status.Pending) || (status != null && x.Status == status))
                         &&
                         (string.IsNullOrEmpty(search.Search.value) || (x.Employee != null && x.Employee.FullName.Trim().ToLower().Contains(search.Search.value.ToLower().Trim())))
                     //commented for change in flow of assinging approver
