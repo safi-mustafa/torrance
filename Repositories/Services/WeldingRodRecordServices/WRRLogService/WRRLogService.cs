@@ -144,7 +144,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
-                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
+                    //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }

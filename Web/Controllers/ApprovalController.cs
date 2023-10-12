@@ -257,10 +257,11 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Department",data = "Department",orderable=true},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit", orderable=true},
+                new DataTableViewModel{title = "Approver" ,data = "Approver"},
                 //new DataTableViewModel{title = "TWR",data = "TWR"},
                 //new DataTableViewModel{title = "Reason",data = "Reason", orderable=true},
-                new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
-                new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
+                //new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
+                //new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 

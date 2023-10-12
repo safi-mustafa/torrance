@@ -19,6 +19,8 @@ namespace ViewModels.Authentication.User
     }
     public class ApproverBriefViewModel : BaseBriefVM
     {
+        private string? name;
+
         public ApproverBriefViewModel() : base(false, "")
         {
         }
@@ -27,7 +29,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Approver")]
-        public override string? Name { get; set; }
+        public override string? Name { get => name; set => name = value; }
     }
 
 }

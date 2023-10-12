@@ -94,7 +94,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                         new ApprovalDetailViewModel
                         {
                             Id = x.Id,
-                            Approver = x.Approver != null ? x.Approver.UserName : "",
+                            Approver = x.Approver != null ? x.Approver.FullName : "-",
                             TotalHours = x.ManHours ?? 0,
                             Date = x.CreatedOn,
                             Status = x.Status,
@@ -136,7 +136,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = x.Approver != null ? x.Approver.FullName : "-",
                         TotalHours = 0,
                         Date = x.CreatedOn,
                         Status = x.Status,
@@ -180,7 +180,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                     new ApprovalDetailViewModel
                     {
                         Id = x.Id,
-                        Approver = x.Approver != null ? x.Approver.UserName : "",
+                        Approver = x.Approver != null ? x.Approver.FullName : "-",
                         TotalHours = x.TotalHours,
                         Date = x.CreatedOn,
                         Status = x.Status,

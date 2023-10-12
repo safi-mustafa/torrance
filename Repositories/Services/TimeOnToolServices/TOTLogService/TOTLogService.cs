@@ -146,7 +146,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
+                    //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;

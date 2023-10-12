@@ -21,6 +21,18 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
+            @if (canModifyApprover)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Approver.Id" type="hidden" />
+            }
             @if (isAdmin)
             {
                 <div class="col-lg-6">
@@ -137,18 +149,6 @@
                     <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
                 </div>
             </div>
-            @if (canModifyApprover)
-            {
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-                    </div>
-                </div>
-            }
-            else
-            {
-                <input asp-for="Approver.Id" type="hidden" />
-            }
             @*<input asp-for="Approver.Id" type="hidden" />*@
         </div>
     </div>

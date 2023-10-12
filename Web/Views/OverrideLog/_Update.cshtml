@@ -23,12 +23,24 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
+            @if (canModifyApprover)
+            {
+                <div class="col-lg-4">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Approver.Id" type="hidden" />
+            }
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
                     <input asp-for="WorkCompletedDate" type="date" class="form-control" />
@@ -40,7 +52,7 @@
                 <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
                 </div>*@
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <input asp-for="WorkScope" type="text" class="form-control" />
@@ -85,9 +97,8 @@
 
             @if (isAdmin)
             {
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
-
                         <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
                     </div>
                 </div>
@@ -129,18 +140,6 @@
                 </div>
                 </div>*@
 
-            @if (canModifyApprover)
-            {
-                <div class="col-lg-4">
-                    <div class="mb-3">
-                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-                    </div>
-                </div>
-            }
-            else
-            {
-                <input asp-for="Approver.Id" type="hidden" />
-            }
 
             @*<input asp-for="Approver.Id" type="hidden" />*@
 

@@ -23,6 +23,12 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
+                    <label asp-for="Approver" class="form-label fw-600"></label>
+                    <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? "-" : Model.Approver.Name)</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
                     <label asp-for="Company" class="form-label fw-600"></label>
                     <div>@(string.IsNullOrEmpty(Model.Company?.Name) ? "-" : Model.Company.Name)</div>
                 </div>
@@ -114,12 +120,6 @@
             </div>
 
 
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label asp-for="Approver" class="form-label fw-600"></label>
-                    <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? Model.PossibleApprovers : Model.Approver.Name)</div>
-                </div>
-            </div>
         </div>
     </div>
     <input type="hidden" id="log-id" name="Id" value="@Model.Id" />
