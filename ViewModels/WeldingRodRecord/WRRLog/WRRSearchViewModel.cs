@@ -36,7 +36,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Display(Name = "Show Archived")]
         public bool IsArchived { get; set; }
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false, "");
         public List<string> SelectedIds { get; set; }
     }
 

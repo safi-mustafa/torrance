@@ -30,7 +30,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false);
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel(false);
         public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public bool IsExcelDownload { get; set; }

@@ -350,7 +350,7 @@ namespace Web.Controllers
                 return true;
             if (approverId > 0 && isUnauthenticatedApproval && parsedModel != null)
             {
-                parsedModel.ReturnModel.Approver = new ApproverBriefViewModel { Id = approverId };
+                parsedModel.ReturnModel.Approver = new ApproverBriefViewModel(false, "") { Id = approverId };
                 parsedModel.ReturnModel.IsUnauthenticatedApproval = isUnauthenticatedApproval;
                 parsedModel.ReturnModel.NotificationId = notificationId;
                 isApproval = (parsedModel.ReturnModel.Status == Status.Pending || parsedModel.ReturnModel.Status == Status.InProcess);
