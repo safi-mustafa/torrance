@@ -39,9 +39,9 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 

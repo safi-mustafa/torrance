@@ -61,8 +61,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-        private EmployeeBriefViewModel? _employee;
-        public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
+        private EmployeeBriefViewModel? _employee = new(true);
+        public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel(true) : _employee; set => _employee = value; }
 
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
@@ -75,7 +75,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }

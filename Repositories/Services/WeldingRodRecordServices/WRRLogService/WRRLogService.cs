@@ -238,10 +238,10 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                                 await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, record));
                             }
 
-                            if (previousStatus == Status.Pending)
-                            {
-                                dbModel.Status = Status.InProcess;
-                            }
+                            //if (previousStatus == Status.Pending)
+                            //{
+                            //    dbModel.Status = Status.InProcess;
+                            //}
                         }
                         else
                         {

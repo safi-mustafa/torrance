@@ -6,7 +6,9 @@
     var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
     var delayTypeIdentifier = string.IsNullOrEmpty(Model.DelayType.Identifier) ? "StartOfWork" : Model.DelayType.Identifier;
     //this check is placed so that no one can change Approver unless it is an Admin and Log is updated and Status is Pending and inProcess
-    var canModifyApprover = isAdmin && (Model.Status == Status.Pending || Model.Status == Status.InProcess) && Model.Id > 0;
+    //var canModifyApprover = isAdmin && (Model.Status == Status.Pending || Model.Status == Status.InProcess) && Model.Id > 0;
+    var canModifyApprover = Model.Status == Status.Pending || Model.Status == Status.InProcess;
+
 }
 <div class="row">
     <div class="col-lg-12">

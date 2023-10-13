@@ -11,7 +11,7 @@ namespace ViewModels.WeldingRodRecord
 
         }
 
-        public EmployeeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Employee field is required.")
+        public EmployeeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Requester field is required.")
         {
 
         }

@@ -290,10 +290,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             dbModel.Status = previousStatus;
                             if (previousApproverId != updateModel.Approver?.Id)
                             {
-                                if (previousStatus == Status.Pending)
-                                {
-                                    dbModel.Status = Status.InProcess;
-                                }
+                                //if (previousStatus == Status.Pending)
+                                //{
+                                //    dbModel.Status = Status.InProcess;
+                                //}
                                 if (record.ApproverId != null && record.ApproverId > 0)
                                 {
                                     await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, record));

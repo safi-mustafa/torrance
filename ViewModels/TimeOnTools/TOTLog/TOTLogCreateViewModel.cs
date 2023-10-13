@@ -70,11 +70,11 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
         [Required]
         public string? Foreman { get; set; }
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 

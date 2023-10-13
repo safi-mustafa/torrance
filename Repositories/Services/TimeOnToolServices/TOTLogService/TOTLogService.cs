@@ -247,10 +247,10 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             {
                                 await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
                             }
-                            if (previousStatus == Status.Pending)
-                            {
-                                dbModel.Status = Status.InProcess;
-                            }
+                            //if (previousStatus == Status.Pending)
+                            //{
+                            //    dbModel.Status = Status.InProcess;
+                            //}
                         }
                         else
                         {
@@ -447,8 +447,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         //        RequestorId = model.EmployeeId
         //    };
         //}
-
-
 
         public async Task<XLWorkbook> DownloadExcel(TOTLogSearchViewModel searchModel)
         {
