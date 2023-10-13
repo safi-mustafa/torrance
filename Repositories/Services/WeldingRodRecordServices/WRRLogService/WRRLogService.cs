@@ -203,6 +203,10 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     await _db.Set<WRRLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
                     await _notificationService.CreateNotificationsForLogCreation(new WRRLogNotificationViewModel(model, mappedModel));
+                    if (mappedModel.ApproverId != null && mappedModel.ApproverId > 0)
+                    {
+                        await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, mappedModel));
+                    }
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

@@ -353,7 +353,7 @@ namespace Web.Controllers
                 parsedModel.ReturnModel.Approver = new ApproverBriefViewModel(false, "") { Id = approverId };
                 parsedModel.ReturnModel.IsUnauthenticatedApproval = isUnauthenticatedApproval;
                 parsedModel.ReturnModel.NotificationId = notificationId;
-                isApproval = (parsedModel.ReturnModel.Status == Status.Pending || parsedModel.ReturnModel.Status == Status.InProcess);
+                isApproval = (parsedModel.ReturnModel.CanProcess);
             }
             return isApproval;
         }

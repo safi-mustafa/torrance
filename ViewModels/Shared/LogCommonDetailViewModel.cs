@@ -29,6 +29,9 @@ namespace ViewModels.Shared
                 return IsArchived ? "IsArchived" : Status.GetDisplayName();
             }
         }
+
+        public bool CanProcess { get => Status == Status.Pending || Status == Status.InProcess; }
+
         public string FormattedStatusForView { get { return IsArchived ? "IsArchived" : Status.ToString(); } }
 
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
