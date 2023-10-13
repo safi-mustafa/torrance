@@ -20,7 +20,7 @@ namespace ViewModels.OverrideLogs.ORLog
             OrderDir = PaginationOrderCatalog.Desc;
         }
         public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public OverrideTypeCatalog? OverrideType { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");

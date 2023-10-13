@@ -34,7 +34,7 @@ namespace ViewModels.Shared
 
         public string FormattedStatusForView { get { return IsArchived ? "IsArchived" : Status.ToString(); } }
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
     }
 }
 
