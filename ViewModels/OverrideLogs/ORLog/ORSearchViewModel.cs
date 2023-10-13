@@ -19,7 +19,7 @@ namespace ViewModels.OverrideLogs.ORLog
             OrderByColumn = "CreatedOn";
             OrderDir = PaginationOrderCatalog.Desc;
         }
-        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false,"");
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public OverrideTypeCatalog? OverrideType { get; set; }

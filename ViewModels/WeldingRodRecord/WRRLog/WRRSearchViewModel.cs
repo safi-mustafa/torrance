@@ -22,7 +22,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
         [Display(Name = "Requestor")]
 
-        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false, "");
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
