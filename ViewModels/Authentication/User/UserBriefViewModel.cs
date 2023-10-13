@@ -23,10 +23,10 @@ namespace ViewModels.Authentication.User
         public ApproverBriefViewModel() : base(true, "The Approver field is required.")
         {
         }
-        public ApproverBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Approver field is required.")
+        public ApproverBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Approver field is required.")
         {
         }
-        public ApproverBriefViewModel(bool isValidationEnabled = false, string message = "") : base(isValidationEnabled, message)
+        public ApproverBriefViewModel(bool isValidationEnabled, string message) : base(isValidationEnabled, message)
         {
         }
 
