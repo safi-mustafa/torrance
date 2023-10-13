@@ -19,7 +19,6 @@ namespace ViewModels.Authentication.User
     }
     public class ApproverBriefViewModel : BaseBriefVM
     {
-        private string? name;
 
         public ApproverBriefViewModel() : base(true, "The Approver field is required.")
         {
@@ -30,6 +29,8 @@ namespace ViewModels.Authentication.User
         public ApproverBriefViewModel(bool isValidationEnabled = false, string message = "") : base(isValidationEnabled, message)
         {
         }
+
+        private string? name;
 
         [DisplayName("Approver")]
         public override string? Name { get => name; set => name = value; }
