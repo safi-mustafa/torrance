@@ -19,7 +19,7 @@ namespace ViewModels.Common
         public ApprovalStatus? Status { get; set; } 
 
         [Display(Name = "Requestor")]
-        public EmployeeBriefViewModel Employee { get; set; } = new();
+        public EmployeeBriefViewModel Employee { get; set; } = new(false,"");
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);

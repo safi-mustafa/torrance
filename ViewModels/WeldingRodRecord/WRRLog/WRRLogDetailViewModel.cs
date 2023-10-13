@@ -109,7 +109,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(false, "");
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
