@@ -253,6 +253,11 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     await _db.SaveChangesAsync();
                     await SetORLogCosts(costs, mappedModel.Id);
                     await _notificationService.CreateNotificationsForLogCreation(new ORLogNotificationViewModel(model, mappedModel));
+                    if (mappedModel.ApproverId != null && mappedModel.ApproverId > 0)
+                    {
+                        await _notificationService.CreateNotificationsForLogApproverAssignment(new ORLogNotificationViewModel(model, mappedModel));
+                    }
+
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;

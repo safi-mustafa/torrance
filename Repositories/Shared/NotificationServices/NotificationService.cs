@@ -433,7 +433,6 @@ namespace Repositories.Shared.NotificationServices
                                           Id = ur.UserId.ToString(),
                                           Name = u.FullName,
                                           SendPushNotification = false
-
                                       }).AsQueryable();
 
             var adminUsers = await adminUserQueryable.ToListAsync();
@@ -459,11 +458,11 @@ namespace Repositories.Shared.NotificationServices
         private async Task<List<NotificationSendToModel>> GetSendToUsersForApproverAssignmentOfLog(NotificationViewModel model)
         {
             List<NotificationSendToModel> sendToUsers = new List<NotificationSendToModel>();
-            sendToUsers.Add(new NotificationSendToModel()
-            {
-                Id = model.RequestorId?.ToString(),
-                Name = model.Requestor
-            });
+            //sendToUsers.Add(new NotificationSendToModel()
+            //{
+            //    Id = model.RequestorId?.ToString(),
+            //    Name = model.Requestor
+            //});
             sendToUsers.Add(new NotificationSendToModel()
             {
                 Id = model.ApproverId,
