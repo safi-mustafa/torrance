@@ -89,11 +89,11 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
 
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }
