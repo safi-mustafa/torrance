@@ -221,9 +221,11 @@ namespace Models.Mapper
                 .ReverseMap();
             CreateMap<WRRLog, WRRLogDetailViewModel>()
                 .ForMember(dest => dest.Approver, act => act.Condition(src => (src.Approver != null)))
+
                 .ForMember(dest => dest.Employee, act => act.Condition(src => (src.Employee != null)))
                 .ReverseMap();
-            CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>().ReverseMap();
+            CreateMap<WRRLogModifyViewModel, WRRLogDetailViewModel>()
+                .ReverseMap();
             CreateMap<WRRLog, WRRLogBriefViewModel>()
                 .ReverseMap();
             CreateMap<BaseBriefVM, WRRLogBriefViewModel>().ReverseMap();
@@ -293,7 +295,7 @@ namespace Models.Mapper
                 .ForMember(dest => dest.Company, act => act.Condition(src => (src.Company != null)))
                 .ReverseMap();
             CreateMap<ToranceUser, ApproverBriefViewModel>()
-                .ConstructUsing((src, context) => new ApproverBriefViewModel(true))
+               //.ConstructUsing((src, context) => new ApproverBriefViewModel(true))
                .ForMember(src => src.Name, opt => opt.MapFrom(dest => dest.FullName))
                .ReverseMap();
             CreateMap<SignUpModel, ToranceUser>()
@@ -314,7 +316,7 @@ namespace Models.Mapper
             CreateMap<UserDetailViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<ApproverModifyViewModel, ApproverDetailViewModel>().ReverseMap();
             CreateMap<BaseBriefVM, ApproverBriefViewModel>()
-                .ConstructUsing((src, context) => new ApproverBriefViewModel(true))
+                //.ConstructUsing((src, context) => new ApproverBriefViewModel(true))
                 .ReverseMap();
 
 
