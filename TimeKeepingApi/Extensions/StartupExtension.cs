@@ -56,6 +56,7 @@ using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
 using Repositories.Services.DashboardService;
 using CorrelationId.DependencyInjection;
+using System.Security.Claims;
 
 namespace Web.Extensions
 {
@@ -103,21 +104,48 @@ namespace Web.Extensions
                 };
                 options.Events = new JwtBearerEvents
                 {
-                    OnTokenValidated = context =>
+                    OnTokenValidated = async context =>
                     {
-                        var currentVersion = configuration["JWT:Version"] ?? "null"; // Default version if not specified in settings
-                        var tokenVersionClaim = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == "Version")?.Value;
-                        if (tokenVersionClaim == null)
+                        try
                         {
-                            tokenVersionClaim = "null";
-                        }
-                        // Compare token version with the stored version
-                        if (tokenVersionClaim != currentVersion)
-                        {
-                            context.Fail("Token is using an outdated version.");
-                        }
+                            var strId = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+                            int.TryParse(strId, out int id);
+                            if (id > 0)
+                            {
+                                var serviceProvider = context.HttpContext.RequestServices;
+                                var dbContext = serviceProvider.GetRequiredService<ToranceContext>(); // Replace YourDbContext with your actual DbContext type
+                                var user = await dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+                                if (user == null || user.IsDeleted == true || user.ActiveStatus == Enums.ActiveStatus.Inactive)
+                                {
+                                    context.Fail("User is deleted or In-active.");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                context.Fail("No such user exists.");
+                                return;
+                            }
 
-                        return Task.CompletedTask;
+                            var currentVersion = configuration["JWT:Version"] ?? "null"; // Default version if not specified in settings
+                            var tokenVersionClaim = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == "Version")?.Value;
+                            if (tokenVersionClaim == null)
+                            {
+                                tokenVersionClaim = "null";
+                            }
+                            // Compare token version with the stored version
+                            if (tokenVersionClaim != currentVersion)
+                            {
+                                context.Fail("Token is using an outdated version.");
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle exceptions appropriately, log them, etc.
+                            context.Fail($"An error occurred: {ex.Message}");
+                        }
+                        return;
                     }
                 };
 
