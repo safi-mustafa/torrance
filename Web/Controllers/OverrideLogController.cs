@@ -101,12 +101,15 @@ namespace Web.Controllers
         }
         public override Task<ActionResult> Create(ORLogModifyViewModel model)
         {
-            if (User.IsInRole("Employee"))
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
-                ModelState.Remove("Approver.Name");
+            }
+            if (User.IsInRole("Employee"))
+            {
                 ModelState.Remove("Company.Id");
+                ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
             return base.Create(model);

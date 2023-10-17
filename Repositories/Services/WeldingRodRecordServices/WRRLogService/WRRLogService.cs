@@ -99,7 +99,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                                 ||
                                 (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                (loggedInUserRole == "Approver" && (x.ApproverId == parsedLoggedInId || x.EmployeeId == parsedLoggedInId))
                                 ||
                                 (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
                             )

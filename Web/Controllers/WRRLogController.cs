@@ -90,10 +90,13 @@ namespace Web.Controllers
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
-            if (User.IsInRole("Employee"))
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
+            }
+            if (User.IsInRole("Employee"))
+            {
                 ModelState.Remove("Company.Id");
                 ModelState.Remove("Company.Name");
             }

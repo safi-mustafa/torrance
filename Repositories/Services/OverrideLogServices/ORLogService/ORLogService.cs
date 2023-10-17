@@ -107,7 +107,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                                 ||
                                  (_loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.ApproverId == _loggedInUserId)
+                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && (x.ApproverId == _loggedInUserId || x.EmployeeId == _loggedInUserId))
                                 ||
                                 (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == _loggedInUserId)
                                 ||
