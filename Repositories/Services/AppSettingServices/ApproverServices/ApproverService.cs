@@ -89,7 +89,6 @@ namespace Repositories.Services.AppSettingServices.ApproverService
 
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
-
             try
             {
                 var searchFilter = search as ApproverSearchViewModel;

@@ -174,6 +174,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         {
             try
             {
+                var isApprover = _userInfoService.LoggedInUserRole() == "Approver";
+                var loggedInUserId = _userInfoService.LoggedInUserId();
+                var parsedLoggedInUser = long.Parse(!string.IsNullOrEmpty(loggedInUserId) ? loggedInUserId : "0");
                 var dbModel = await _db.OverrideLogs
                     //.Include(x => x.CraftSkill)
                     //.Include(x => x.CraftRate)
@@ -189,7 +192,17 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Employee)
                     .Include(x => x.Company)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
+                    .Where(x =>
+                        x.Id == id
+                        &&
+                        x.IsDeleted == false
+                        &&
+                        (
+                            isApprover == false
+                            ||
+                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                        )
+                    ).IgnoreQueryFilters().FirstOrDefaultAsync();
 
 
                 if (dbModel != null)

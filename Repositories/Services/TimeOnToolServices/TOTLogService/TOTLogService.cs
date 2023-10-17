@@ -125,6 +125,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         {
             try
             {
+                var isApprover = _userInfoService.LoggedInUserRole() == "Approver";
+                var loggedInUserId = _userInfoService.LoggedInUserId();
+                var parsedLoggedInUser = long.Parse(!string.IsNullOrEmpty(loggedInUserId) ? loggedInUserId : "0");
                 var queryable = _db.TOTLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
@@ -141,7 +144,17 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
                     .Include(x => x.ReasonForRequest)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters();
+                    .Where(x =>
+                        x.Id == id
+                        &&
+                        x.IsDeleted == false
+                        &&
+                        (
+                            isApprover == false
+                            ||
+                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                        )
+                    ).IgnoreQueryFilters();
                 var dbModel = await queryable.FirstOrDefaultAsync();
                 if (dbModel != null)
                 {

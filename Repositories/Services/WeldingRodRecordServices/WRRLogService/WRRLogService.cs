@@ -128,6 +128,9 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         {
             try
             {
+                var isApprover = _userInfoService.LoggedInUserRole() == "Approver";
+                var loggedInUserId = _userInfoService.LoggedInUserId();
+                var parsedLoggedInUser = long.Parse(!string.IsNullOrEmpty(loggedInUserId) ? loggedInUserId : "0");
                 var dbModel = await _db.WRRLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
@@ -138,7 +141,17 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Include(x => x.Company)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
+                    .Where(x =>
+                        x.Id == id
+                        &&
+                        x.IsDeleted == false
+                        &&
+                        (
+                            isApprover == false
+                            ||
+                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                        )
+                    ).IgnoreQueryFilters().FirstOrDefaultAsync();
 
                 if (dbModel != null)
                 {
