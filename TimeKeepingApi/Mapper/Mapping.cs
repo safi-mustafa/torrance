@@ -270,6 +270,8 @@ namespace Torrance.Api.Mapper
                 .ForMember(x => x.PermittingIssue, opt => opt.Ignore())
                 .ForMember(src => src.DelayTypeId, opt => opt.MapFrom(dest => dest.DelayType.Id))
                 .ForMember(x => x.DelayType, opt => opt.Ignore())
+                .ForMember(src => src.OngoingWorkDelayId, opt => opt.MapFrom(dest => dest.OngoingWorkDelay.Id))
+                .ForMember(x => x.OngoingWorkDelay, opt => opt.Ignore())
                 .ForMember(x => x.Company, o => o.Ignore())
                 .ReverseMap();
             CreateMap<TOTLogCreateViewModel, TOTLog>()
