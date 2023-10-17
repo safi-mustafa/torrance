@@ -16,16 +16,14 @@ using Helpers.Extensions;
 using Repositories.Services.CommonServices.UserService;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common.Department;
 using Repositories.Shared.UserInfoServices;
 using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
-using DocumentFormat.OpenXml.Spreadsheet;
 using System.Linq.Dynamic.Core;
-
+using Microsoft.Extensions.Configuration;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -35,18 +33,24 @@ namespace Repositories.Services.AppSettingServices.ApproverService
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
+        private readonly UserManager<ToranceUser> userManager;
         private readonly ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
+        private readonly IConfiguration _configuration;
 
-        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
+        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService, IConfiguration configuration) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
+            this.userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _identity = identity;
             _response = response;
+            _userInfoService = userInfoService;
+            _configuration = configuration;
         }
         protected override async Task<bool> CreateUserAdditionalMappings(CreateViewModel viewModel, SignUpModel model)
         {
@@ -89,6 +93,11 @@ namespace Repositories.Services.AppSettingServices.ApproverService
             try
             {
                 var searchFilter = search as ApproverSearchViewModel;
+                var setDepartmentFilter = _configuration.GetValue<bool>("SetDepartmentFilter");
+                if (setDepartmentFilter == false)
+                {
+                    searchFilter.Department = new();
+                }
                 var userQueryable = await GetPaginationDbSet(searchFilter);
                 searchFilter.IgnoreOrdering = true;
                 var users = await userQueryable.Paginate(searchFilter);
