@@ -241,6 +241,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                 var notification = await _db.Notifications.Where(x => x.Id == notificationId && x.Type == NotificationType.Email).FirstOrDefaultAsync();
                 if (notification != null)
                 {
+                    var approverId = long.Parse(notification.SendTo);
                     logDetails.LogId = notification.EntityId ?? 0;
                     logDetails.LogType = notification.EntityType == NotificationEntityType.OverrideLog
                          ?
@@ -251,7 +252,7 @@ namespace Repositories.Services.CommonServices.ApprovalService
                              LogType.TimeOnTools
                              :
                              LogType.WeldingRodRecord;
-                    logDetails.ApproverId = long.Parse(notification.SendTo);
+                    logDetails.ApproverId = approverId;
 
                     var response = new RepositoryResponseWithModel<LogDetailFromNotification> { ReturnModel = logDetails };
                     return response;

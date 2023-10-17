@@ -319,6 +319,10 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
                 response = await _totService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<TOTLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
@@ -328,6 +332,10 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                 response = await _wrrService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
@@ -337,6 +345,10 @@ namespace Web.Controllers
                 _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
                 response = await _overrideLogService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<ORLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
@@ -348,6 +360,7 @@ namespace Web.Controllers
             bool isApproval = false;
             if (!isUnauthenticatedApproval)
                 return true;
+
             if (approverId > 0 && isUnauthenticatedApproval && parsedModel != null)
             {
                 parsedModel.ReturnModel.Approver = new ApproverBriefViewModel(false, "") { Id = approverId };
