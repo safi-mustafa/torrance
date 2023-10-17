@@ -97,8 +97,8 @@ namespace API.Controllers
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             if (loggedInUserRole == "Employee")
             {
-                ModelState.Remove("Requester.Id");
-                ModelState.Remove("Requester.Name");
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
                 // ModelState.Remove("Approver.Name");
             }
             ManageCommonModelStateAndVersionChanges(model);

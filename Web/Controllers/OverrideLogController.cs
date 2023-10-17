@@ -103,8 +103,8 @@ namespace Web.Controllers
         {
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Requester.Id");
-                ModelState.Remove("Requester.Name");
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
                 ModelState.Remove("Approver.Name");
                 ModelState.Remove("Company.Id");
             }
@@ -116,8 +116,8 @@ namespace Web.Controllers
         {
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Requester.Id");
-                ModelState.Remove("Requester.Name");
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
                 ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");

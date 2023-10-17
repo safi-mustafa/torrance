@@ -150,17 +150,19 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                 join r in _db.Roles on userRole.RoleId equals r.Id
                                 where
                                 (
-                                   (
-                                       string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
-                                   )
-                                   &&
-                                   (search.Unit.Id == null || search.Unit.Id == 0 || approverAssociation.UnitId == search.Unit.Id)
-                                   &&
-                                   ("Approver" == r.Name)
-                                   &&
-                                   (
-                                       string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
-                                   )
+                                    (
+                                        string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
+                                    )
+                                    &&
+                                    (search.Unit.Id == null || search.Unit.Id == 0 || approverAssociation.UnitId == search.Unit.Id)
+                                    &&
+                                    (search.Department.Id == null || search.Department.Id == 0 || approverAssociation.DepartmentId == search.Department.Id)
+                                    &&
+                                    ("Approver" == r.Name)
+                                    &&
+                                    (
+                                        string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
+                                    )
                                )
                                 select user);
             //select new ApproverDetailViewModel { Id = user.Id });
