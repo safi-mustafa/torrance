@@ -12,6 +12,7 @@ using DataLibrary;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Services.CommonServices.UserService;
 using Helpers.Extensions;
+using System.Security.Claims;
 
 namespace Web.Areas.Identity.Pages.Account
 {
