@@ -54,7 +54,7 @@ namespace ViewModels.Shared
                 }
 
             }
-            else if (DelayType.Identifier == DelayReasonCatalog.OngoingWork.ToString())
+            else if (DelayType.Identifier == DelayReasonCatalog.OnGoingWork.ToString())
             {
                 if ((OngoingWorkDelay == null || OngoingWorkDelay.Id == null || OngoingWorkDelay.Id < 1))
                 {

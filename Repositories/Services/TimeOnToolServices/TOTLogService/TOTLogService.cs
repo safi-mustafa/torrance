@@ -331,7 +331,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     mappedModel.StartOfWorkDelayId = null;
                     mappedModel.OngoingWorkDelayId = null;
                 }
-                else if (delayType.DelayType.Identifier == DelayReasonCatalog.OngoingWork.ToString())
+                else if (delayType.DelayType.Identifier == DelayReasonCatalog.OnGoingWork.ToString())
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.StartOfWorkDelayId = null;

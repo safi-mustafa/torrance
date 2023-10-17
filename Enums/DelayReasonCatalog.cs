@@ -11,6 +11,6 @@ namespace Enums
         [Display(Name = "Rework Delay")]
         ReworkDelay,
         [Display(Name = "Ongoing Work")]
-        OngoingWork,
+        OnGoingWork,
     }
 }
