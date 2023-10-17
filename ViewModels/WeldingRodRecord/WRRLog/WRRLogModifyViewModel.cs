@@ -15,6 +15,7 @@ using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.Common.Company;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
@@ -61,8 +62,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-        private EmployeeBriefViewModel? _employee;
-        public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
+        //private EmployeeBriefViewModel? _employee;
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
