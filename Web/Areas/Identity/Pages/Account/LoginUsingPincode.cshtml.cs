@@ -107,6 +107,9 @@ namespace Web.Areas.Identity.Pages.Account
                 if(user != null)
                 {
                     await _signInManager.SignInAsync(user, true);
+                    var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()),
+                                new Claim(ClaimTypes.Email, user.Email) };
+                    await _signInManager.SignInWithClaimsAsync(user, Input.RememberMe, customClaims);
                     //returnUrl = $"/Employee/Profile/{employee.Id}";
                     return LocalRedirect(returnUrl);
                 }
