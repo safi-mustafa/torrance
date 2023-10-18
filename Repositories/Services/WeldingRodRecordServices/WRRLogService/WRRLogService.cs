@@ -78,8 +78,6 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             var searchFilters = filters as WRRLogSearchViewModel;
             //searchFilters.OrderByColumn = "Status";
             var status = (Status?)((int?)searchFilters.Status);
-            var loggedInUserId = _loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
             if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
@@ -103,9 +101,9 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                                 ||
                                 (_loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.ApproverId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && (x.ApproverId == _loggedInUserId || x.EmployeeId == _loggedInUserId))
                                 ||
-                                (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == _loggedInUserId)
                             )
                             &&
                             (searchFilters.Location.Id == null || searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
@@ -120,7 +118,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == parsedLoggedInId))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == _loggedInUserId))
                             &&
                             x.IsDeleted == false
                             &&
@@ -153,7 +151,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                         (
                             isApprover == false
                             ||
-                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                            (parsedLoggedInUser > 0 && (x.ApproverId == parsedLoggedInUser || x.EmployeeId == parsedLoggedInUser))
                         )
                     ).IgnoreQueryFilters().FirstOrDefaultAsync();
 
@@ -191,12 +189,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Include(x => x.Company)
-                    .Where(filters).IgnoreQueryFilters()
-                    .Select(x => new
-                    {
-                        WRRLog = x,
-                        CustomProperty = "YourCustomValue"
-                    }); ;
+                    .Where(filters).IgnoreQueryFilters();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {

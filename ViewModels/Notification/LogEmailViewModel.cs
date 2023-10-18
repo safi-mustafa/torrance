@@ -88,17 +88,17 @@ namespace ViewModels.Notification
                 {
                     return $@"<div class=""container"">
 						<p>Dear {_sendTo.Name},</p>
-						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.Approver}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 					</div>";
                 }
                 else
                 {
                     return $@"<div class=""container"">
 						<p>Dear {_sendTo.Name},</p>
-						<p><strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.Approver}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+						<p><strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 					</div>";
                 }
-                
+
                 //         <p>Best regards,</p>
                 //<p>Torrance</p>
             }

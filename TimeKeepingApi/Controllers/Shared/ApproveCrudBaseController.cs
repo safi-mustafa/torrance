@@ -53,6 +53,10 @@ namespace Torrance.Api.Controllers
         public virtual async Task<IActionResult> Get(long id)
         {
             var result = await _service.GetById(id);
+            if (result.Status != System.Net.HttpStatusCode.OK)
+            {
+                return ReturnProcessedResponse(result);
+            }
             _logger.LogInformation($"{_controllerName} -> GetById({id}): {JsonConvert.SerializeObject(result)}");
             return ReturnProcessedResponse<DetailViewModel>(result);
         }

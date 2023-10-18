@@ -56,6 +56,10 @@ namespace API.Controllers
         {
 
             var result = await _oRLogService.GetById(id);
+            if (result.Status != System.Net.HttpStatusCode.OK)
+            {
+                return ReturnProcessedResponse(result);
+            }
             var responseModel = result as RepositoryResponseWithModel<ORLogDetailViewModel>;
             var model = responseModel?.ReturnModel;
 

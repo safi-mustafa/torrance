@@ -34,6 +34,8 @@ namespace ViewModels.Authentication.User
 
         [DisplayName("Approver")]
         public override string? Name { get => name; set => name = value; }
+
+        public string? Email { get; set; }
     }
 
 }

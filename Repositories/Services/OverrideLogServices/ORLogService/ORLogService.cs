@@ -207,7 +207,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         (
                             isApprover == false
                             ||
-                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                            (parsedLoggedInUser > 0 && (x.ApproverId == parsedLoggedInUser || x.EmployeeId == parsedLoggedInUser))
                         )
                     ).IgnoreQueryFilters().FirstOrDefaultAsync();
 

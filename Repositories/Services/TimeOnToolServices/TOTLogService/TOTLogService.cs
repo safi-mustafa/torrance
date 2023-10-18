@@ -151,7 +151,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                         (
                             isApprover == false
                             ||
-                            (parsedLoggedInUser > 0 && x.ApproverId == parsedLoggedInUser)
+                            (parsedLoggedInUser > 0 && (x.ApproverId == parsedLoggedInUser || x.EmployeeId==parsedLoggedInUser))
                         )
                     ).IgnoreQueryFilters();
                 var dbModel = await queryable.FirstOrDefaultAsync();
