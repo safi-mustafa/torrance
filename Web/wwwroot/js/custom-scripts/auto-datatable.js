@@ -476,6 +476,10 @@ function GetHref(actionItem, cellData) {
         if (cellData[actionItem.HideBasedOn])
             return "";
     }
+    if (actionItem.ShowBasedOn != null && actionItem.ShowBasedOn != undefined && actionItem.ShowBasedOn != "") {
+        if (cellData[actionItem.ShowBasedOn] == false || cellData[actionItem.ShowBasedOn] == "false")
+            return "";
+    }
     var link = "javascript:void(0)";
     if (actionItem.Href !== '') {
         link = actionItem.Href;

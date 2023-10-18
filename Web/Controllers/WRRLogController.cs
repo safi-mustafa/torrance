@@ -110,20 +110,12 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            result.ActionsList = new List<DataTableActionViewModel>()
+            result.ActionsList = new List<DataTableActionViewModel>
             {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/WRRLog/Detail/Id"},
-
+                new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/WRRLog/Detail/Id" },
+                new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", ShowBasedOn = "CanUpdate" },
+                new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id", ShowBasedOn = "CanDelete" }
             };
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
-            }
-            else if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id" });
-            }
-            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" });
         }
 
         private async Task<WRRLogModifyViewModel> GetCreateViewModel()

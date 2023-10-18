@@ -9,6 +9,7 @@
         public string ReturnUrl { get; set; }
 
         public string HideBasedOn { get; set; }
+        public string ShowBasedOn { get; set; }
 
         public List<string> Attr { get; set; }
 

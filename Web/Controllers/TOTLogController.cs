@@ -96,7 +96,7 @@ namespace Web.Controllers
         }
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
         {
-            if(User.IsInRole("Employee") || User.IsInRole("Approver"))
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
@@ -128,19 +128,12 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            result.ActionsList = new List<DataTableActionViewModel>()
+            result.ActionsList = new List<DataTableActionViewModel>
             {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
+                new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/TOTLog/Detail/Id" },
+                new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", ShowBasedOn = "CanUpdate" },
+                new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id",ShowBasedOn="CanDelete" }
             };
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", HideBasedOn = "IsEditRestricted" });
-            }
-            else if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id" });
-            }
-            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" });
         }
 
         public async Task<JsonResult> GetTWRNumericValues(string prefix, int pageSize, int pageNumber, string customParams)
