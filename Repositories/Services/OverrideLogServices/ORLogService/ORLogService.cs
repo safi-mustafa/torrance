@@ -24,6 +24,7 @@ using System.Linq.Expressions;
 using ViewModels.OverrideLogs;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.Shared.Interfaces;
 
 namespace Repositories.Services.OverrideLogServices.ORLogService
 {
@@ -118,7 +119,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == _loggedInUserId))
                             &&
                             x.IsDeleted == false
                             &&
@@ -151,6 +152,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var item in paginatedResult.Items)
+                    {
+                        var logItem = item as LogCommonDetailViewModel;
+                        logItem.LoggedInUserRole = _loggedInUserRole;
+                        logItem.LoggedInUserId = _loggedInUserId;
+                    }
                     if (searchFilters.IsExcelDownload)
                     {
                         await SetOverrideLogCosts(paginatedResult.Items as List<ORLogDetailViewModel>);
@@ -208,6 +215,8 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<ORLogDetailViewModel>(dbModel);
+                    mappedModel.LoggedInUserRole = _loggedInUserRole;
+                    mappedModel.LoggedInUserId = _loggedInUserId;
                     mappedModel.Costs = await (from olc in _db.OverrideLogCost
                                                join cs in _db.CraftSkills on olc.CraftSkillId equals cs.Id
                                                where olc.OverrideLogId == dbModel.Id

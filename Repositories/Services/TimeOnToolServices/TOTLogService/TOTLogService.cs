@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.TimeOnTools;
-using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
@@ -23,9 +22,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Security.Claims;
-using ViewModels.Notification;
-using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
@@ -33,7 +29,7 @@ using ViewModels.TimeOnTools.TOTLog;
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
     public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, new()
+        where DetailViewModel : class, IBaseCrudViewModel, ILoggedInUserRole, new()
         where CreateViewModel : class, IBaseCrudViewModel, IDelayType, ITOTLogNotificationViewModel, new()
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, ITOTLogNotificationViewModel, new()
     {
@@ -46,6 +42,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
         private readonly IHostingEnvironment _env;
+        private readonly string _loggedInUserRole;
+        private readonly long _loggedInUserId;
 
         public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService, IHostingEnvironment env) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
@@ -58,6 +56,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
             _env = env;
+            _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -99,21 +99,20 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||
-                                 (loggedInUserRole == RolesCatalog.Administrator.ToString())
+                                (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-
-                                (loggedInUserRole == "Approver" && (x.ApproverId == parsedLoggedInId || x.EmployeeId == parsedLoggedInId))
+                                (loggedInUserRole == RolesCatalog.Approver.ToString() && (x.ApproverId == parsedLoggedInId || x.EmployeeId == parsedLoggedInId))
                                 ||
-                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                                (loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
                             (searchFilters.SelectedIds == null || searchFilters.SelectedIds.Count <= 0 || searchFilters.SelectedIds.Contains(x.Id.ToString()) || x.Status == Status.Pending)
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == parsedLoggedInId))
                             &&
                             x.IsDeleted == false
                             &&
@@ -161,6 +160,8 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+                    mappedModel.LoggedInUserRole = _loggedInUserRole;
+                    mappedModel.LoggedInUserId = _loggedInUserId;
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -193,13 +194,19 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Company)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Approver)
-                    .Where(filters).IgnoreQueryFilters();
-                //var query = resultQuery.ToQueryString();
+                    .Where(filters)
+                    .IgnoreQueryFilters();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var item in paginatedResult.Items)
+                    {
+                        var logItem = item as LogCommonDetailViewModel;
+                        logItem.LoggedInUserRole = _loggedInUserRole;
+                        logItem.LoggedInUserId = _loggedInUserId;
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };

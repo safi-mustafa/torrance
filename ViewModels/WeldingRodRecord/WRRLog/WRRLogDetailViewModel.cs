@@ -19,9 +19,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogDetailViewModel : LogCommonDetailViewModel, IApprove
     {
-        public WRRLogDetailViewModel()
-        {
-        }
         public long Id { get; set; }
         public DateTime CreatedOn { get; set; }
 
@@ -109,7 +106,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(false, "");
+        
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

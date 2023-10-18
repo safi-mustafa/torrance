@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using Enums;
 using Helpers.Extensions;
 using ViewModels.Authentication.User;
+using ViewModels.Shared.Interfaces;
+using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.Shared
 {
-    public class LogCommonDetailViewModel : BaseCrudViewModel, ILogCommonDetailViewModel
+    public class LogCommonDetailViewModel : BaseCrudViewModel, ILogCommonDetailViewModel, ILoggedInUserRole
     {
         public bool IsUnauthenticatedApproval { get; set; }
         public Guid NotificationId { get; set; }
@@ -30,11 +32,66 @@ namespace ViewModels.Shared
             }
         }
 
-        public bool CanProcess { get => Status == Status.Pending || Status == Status.InProcess; }
+        public string LoggedInUserRole { get; set; }
+        public long LoggedInUserId { get; set; }
+        public bool CanProcess
+        {
+            get
+            {
+                if (LoggedInUserRole == RolesCatalog.SuperAdmin.ToString() || LoggedInUserRole == RolesCatalog.Administrator.ToString() || LoggedInUserRole == RolesCatalog.Approver.ToString())
+                {
+                    return Status == Status.Pending || Status == Status.InProcess;
+                }
+
+                return false;
+            }
+        }
+
+        public bool CanUpdate
+        {
+            get
+            {
+                if (LoggedInUserRole == RolesCatalog.SuperAdmin.ToString() || LoggedInUserRole == RolesCatalog.Administrator.ToString())
+                {
+                    return true;
+                }
+                if (
+                        (LoggedInUserRole == RolesCatalog.Employee.ToString() || LoggedInUserRole == RolesCatalog.Approver.ToString())
+                        && (Status == Status.Pending || Status == Status.InProcess)
+                        && Employee?.Id == LoggedInUserId
+                   )
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool CanDelete
+        {
+            get
+            {
+                if (LoggedInUserRole == RolesCatalog.SuperAdmin.ToString() || LoggedInUserRole == RolesCatalog.Administrator.ToString())
+                {
+                    return true;
+                }
+                if (
+                        (LoggedInUserRole == RolesCatalog.Employee.ToString() || LoggedInUserRole == RolesCatalog.Approver.ToString())
+                        && (Status == Status.Pending || Status == Status.InProcess)
+                        && Employee?.Id == LoggedInUserId
+                   )
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public string FormattedStatusForView { get { return IsArchived ? "IsArchived" : Status.ToString(); } }
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false, "");
+
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(false, "");
     }
 }
 

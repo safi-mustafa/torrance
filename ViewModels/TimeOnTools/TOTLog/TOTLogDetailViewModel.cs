@@ -167,6 +167,5 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string PossibleApprovers { get; set; }
         public string Foreman { get; set; }
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(false, "");
     }
 }

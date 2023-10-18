@@ -25,6 +25,7 @@ using System.Security.Claims;
 using ViewModels.Notification;
 using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
@@ -44,6 +45,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
         private readonly IHostingEnvironment _env;
+        private readonly string _loggedInUserRole;
+        private readonly long _loggedInUserId;
 
         public WRRLogService(
                 ToranceContext db,
@@ -66,17 +69,18 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
             _env = env;
+            _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
             //searchFilters.OrderByColumn = "Status";
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var status = (Status?)((int?)searchFilters.Status);
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
+            var loggedInUserId = _loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
-            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
             }
@@ -95,13 +99,13 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (_loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||
-                                (loggedInUserRole == RolesCatalog.Administrator.ToString())
+                                (_loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-                                (loggedInUserRole == "Approver" && (x.ApproverId == parsedLoggedInId || x.EmployeeId == parsedLoggedInId))
+                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.ApproverId == parsedLoggedInId)
                                 ||
-                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
                             (searchFilters.Location.Id == null || searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
@@ -116,7 +120,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == parsedLoggedInId))
                             &&
                             x.IsDeleted == false
                             &&
@@ -157,6 +161,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+                    mappedModel.LoggedInUserRole = _loggedInUserRole;
+                    mappedModel.LoggedInUserId = _loggedInUserId;
                     //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
@@ -185,12 +191,23 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Include(x => x.Company)
-                    .Where(filters).IgnoreQueryFilters();
+                    .Where(filters).IgnoreQueryFilters()
+                    .Select(x => new
+                    {
+                        WRRLog = x,
+                        CustomProperty = "YourCustomValue"
+                    }); ;
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var item in paginatedResult.Items)
+                    {
+                        var logItem = item as LogCommonDetailViewModel;
+                        logItem.LoggedInUserRole = _loggedInUserRole;
+                        logItem.LoggedInUserId = _loggedInUserId;
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };

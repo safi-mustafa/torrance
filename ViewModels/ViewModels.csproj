@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\Interfaces\" />
     <Folder Include="Attachment\" />
     <Folder Include="Common\Approval\" />
     <Folder Include="OverrideLogs\ReasonForRequest\" />

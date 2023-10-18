@@ -89,7 +89,6 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
-        public EmployeeBriefViewModel Employee { get; set; } = new(false,"");
 
         public CompanyBriefViewModel Company { get; set; } = new();
 
