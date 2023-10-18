@@ -158,10 +158,10 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         logItem.LoggedInUserRole = _loggedInUserRole;
                         logItem.LoggedInUserId = _loggedInUserId;
                     }
-                    if (searchFilters.IsExcelDownload)
-                    {
-                        await SetOverrideLogCosts(paginatedResult.Items as List<ORLogDetailViewModel>);
-                    }
+                    //if (searchFilters.IsExcelDownload)
+                    //{
+                    await SetOverrideLogCosts(paginatedResult.Items as List<ORLogDetailViewModel>);
+                    //}
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
@@ -725,6 +725,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                         cell.Value = "";
 
                     int currentColumn = 13;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalSTHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalOTHours;
+                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalDTHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalHeadCount;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].TotalCost.ToString("C");
@@ -763,6 +766,9 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             int currentColumn = 13;
 
             currentColumn += 1;
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "ST Hours";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "OT Hours";
+            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "DT Hours";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Hours";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Head Count";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Cost";

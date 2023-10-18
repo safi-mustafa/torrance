@@ -80,5 +80,7 @@ namespace Models.OverrideLogs
         public string? EmployeeNames { get; set; }
 
         public string? ClippedEmployeesUrl { get; set; }
+
+        public List<OverrideLogCost> Costs { get; set; }
     }
 }

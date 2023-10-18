@@ -94,6 +94,10 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
 
+        public double TotalSTHours { get => Costs.Count > 0 ? Costs.Sum(x => x.STHours) ?? 0 : 0; }
+        public double TotalOTHours { get => Costs.Count > 0 ? Costs.Sum(x => x.OTHours) ?? 0 : 0; }
+        public double TotalDTHours { get => Costs.Count > 0 ? Costs.Sum(x => x.DTHours) ?? 0 : 0; }
+
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
         [Display(Name = "Override Reason")]
