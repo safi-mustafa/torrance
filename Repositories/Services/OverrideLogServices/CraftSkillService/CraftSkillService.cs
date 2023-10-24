@@ -45,7 +45,6 @@ namespace Repositories.Services.OverrideLogServices.CraftSkillService
 
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
-
             try
             {
                 var searchFilters = search as CraftSkillSearchViewModel;
@@ -60,10 +59,10 @@ namespace Repositories.Services.OverrideLogServices.CraftSkillService
                                                 (string.IsNullOrEmpty(searchFilters.Search.value) || cs.Name.ToLower().Contains(searchFilters.Search.value.ToLower()))
                                                 &&
                                                 (string.IsNullOrEmpty(searchFilters.Name) || cs.Name.ToLower().Contains(searchFilters.Name.ToLower()))
-                                                &&
-                                                (
-                                                   searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || searchFilters.Company.Id == cc.CompanyId
-                                                )
+                                           //&&
+                                           //(
+                                           //   searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || searchFilters.Company.Id == cc.CompanyId
+                                           //)
                                            )
                                             select cs
                             ).GroupBy(x => x.Id)

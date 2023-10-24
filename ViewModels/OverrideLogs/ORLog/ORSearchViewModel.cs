@@ -19,8 +19,8 @@ namespace ViewModels.OverrideLogs.ORLog
             OrderByColumn = "CreatedOn";
             OrderDir = PaginationOrderCatalog.Desc;
         }
-        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false,"");
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false,"");
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public OverrideTypeCatalog? OverrideType { get; set; }
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");
@@ -28,7 +28,10 @@ namespace ViewModels.OverrideLogs.ORLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(false);
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
-        public Status? StatusNot { get; set; } = null;
+        public List<Status> StatusNot { get; set; } = new();
+
+        [Display(Name = "Show Archived")]
+        public bool IsArchived { get; set; }
 
         public bool IsExcelDownload { get; set; } = false;
 

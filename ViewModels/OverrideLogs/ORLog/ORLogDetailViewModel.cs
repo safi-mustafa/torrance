@@ -1,16 +1,10 @@
 ﻿using ViewModels.Shared;
 using System.ComponentModel.DataAnnotations;
-using ViewModels.WeldingRodRecord;
 using ViewModels.Common.Unit;
 using ViewModels.Common.Company;
 using ViewModels.TimeOnTools.Shift;
-using ViewModels.Authentication;
 using Enums;
-using Helpers.Extensions;
-using System.Globalization;
-using ViewModels.Authentication.User;
 using ViewModels.Common.Department;
-using ViewModels.TimeOnTools.PermitType;
 using ViewModels.TimeOnTools.ReworkDelay;
 using ViewModels.TimeOnTools.ShiftDelay;
 using ViewModels.TimeOnTools.StartOfWorkDelay;
@@ -89,11 +83,14 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReworkDelayBriefViewModel ReworkDelay { get; set; } = new ReworkDelayBriefViewModel();
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel();
-        public EmployeeBriefViewModel Employee { get; set; } = new();
 
         public CompanyBriefViewModel Company { get; set; } = new();
 
         public List<ORLogCostViewModel> Costs { get; set; } = new List<ORLogCostViewModel>();
+
+        public double TotalSTHours { get => (Costs != null && Costs.Count > 0) ? Costs.Sum(x => x.STHours) ?? 0 : 0; }
+        public double TotalOTHours { get => (Costs != null && Costs.Count > 0) ? Costs.Sum(x => x.OTHours) ?? 0 : 0; }
+        public double TotalDTHours { get => (Costs != null && Costs.Count > 0) ? Costs.Sum(x => x.DTHours) ?? 0 : 0; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
@@ -101,7 +98,15 @@ namespace ViewModels.OverrideLogs.ORLog
         public string? Reason { get; set; }
 
         public string PossibleApprovers { get; set; }
+
         [Display(Name = "Employee Name(s)")]
         public string EmployeeNames { get; set; }
+
+        [Display(Name = "Uploaded Form")]
+        public string ClippedEmployeesUrl { get; set; }
+
+        public string DomainUrl { get; set; }
+
+        public string FormattedClippedEmployeeUrl { get => string.IsNullOrEmpty(ClippedEmployeesUrl) ? "" : $"{DomainUrl}{ClippedEmployeesUrl}"; }
     }
 }

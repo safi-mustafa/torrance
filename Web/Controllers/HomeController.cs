@@ -22,9 +22,13 @@ namespace Web.Controllers
             _logger = logger;
             _dashboardService = dashboardService;
         }
-        [Authorize(Roles = "SuperAdmin,Administrator")]
+        [Authorize(Roles = "SuperAdmin,Administrator, Employee, Approver")]
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole("Employee"))
+            {
+                return RedirectToAction("Index", "OverrideLog");
+            }
             return View(await _dashboardService.GetDashboardData());
         }
 

@@ -18,6 +18,8 @@ using ViewModels.Shared;
 using Pagination;
 using Select2;
 using Newtonsoft.Json;
+using ViewModels.CRUD;
+using Humanizer;
 
 namespace Web.Controllers
 {
@@ -29,7 +31,13 @@ namespace Web.Controllers
         private readonly ILogger<RequestorController> _logger;
         private readonly UserManager<ToranceUser> _userManager;
 
-        public RequestorController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService, ILogger<RequestorController> logger, IMapper mapper, UserManager<ToranceUser> userManager) : base(employeeService, logger, mapper, userManager, "Requestor", "Requestor", RolesCatalog.Employee)
+        public RequestorController(
+            IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
+            IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
+            ILogger<RequestorController> logger,
+            IMapper mapper,
+            UserManager<ToranceUser> userManager
+            ) : base(employeeService, logger, mapper, userManager, "Requestor", "Requestor", RolesCatalog.Employee)
         {
             _employeeService = employeeService;
             _approverService = approverService ?? throw new ArgumentNullException(nameof(approverService));
@@ -37,28 +45,28 @@ namespace Web.Controllers
             _userManager = userManager;
         }
 
-
         public IActionResult ImportExcelSheet()
         {
             var model = new ExcelFileVM();
             return View(model);
         }
 
+        protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
+        {
+            vm.HideCreateButton = User.IsInRole("Approver") ? true : false;
+            return vm;
+        }
+
         public override Task<ActionResult> Create(EmployeeModifyViewModel model)
         {
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                model.Password = "Torrance";
+            }
             return base.Create(model);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> ImportExcelSheet(ExcelFileVM model)
-        {
-            if (await _employeeService.InitializeExcelContractData(model))
-            {
-                return RedirectToAction("Index");
-            }
-            return RedirectToAction("ImportExcelSheet");
-        }
     }
 }

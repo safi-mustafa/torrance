@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IMapService<MapModifyViewModel, MapModifyViewModel, MapDetailViewModel> _mapService;
         private readonly ILogger<MapController> _logger;
 
-        public MapController(IMapService<MapModifyViewModel, MapModifyViewModel, MapDetailViewModel> mapService, ILogger<MapController> logger, IMapper mapper) : base(mapService, logger, mapper, "Map", "Maps")
+        public MapController(IMapService<MapModifyViewModel, MapModifyViewModel, MapDetailViewModel> mapService, ILogger<MapController> logger, IMapper mapper) : base(mapService, logger, mapper, "Map", "Map")
         {
             _mapService = mapService;
             _logger = logger;

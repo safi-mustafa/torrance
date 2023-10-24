@@ -8,9 +8,9 @@
 
 <div class="row">
     @*<div class="col-lg-6">
-        <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
-        </div>
+    <div class="mb-3">
+    <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
+    </div>
     </div>*@
     <div class="col-lg-6">
         <div class="mb-3">
@@ -28,11 +28,18 @@
             <span asp-validation-for="Email" class="validation-invalid-label"></span>
         </div>
     </div>
+    <div class="col-lg-6">
+        <div class="mb-3">
+            <label asp-for="DisableNotifications" class="form-label fw-600"></label>
+            <input asp-for="DisableNotifications" class="form-control" style="width: 20px;" />
+            <span asp-validation-for="DisableNotifications" class="validation-invalid-label"></span>
+        </div>
+    </div>
 
 
     @if (Model.Id < 1)
     {
-       
+
 
         <div class="col-lg-6">
             <div class="mb-3">
@@ -49,13 +56,13 @@
             </div>
         </div>
 
-       @* <div class="col-lg-6">
-            <div class="mb-3">
-                <label asp-for="AccessCode" class="form-label fw-600"></label>
-                <input asp-for="AccessCode" type="text" class="form-control" placeholder="xxxx" />
-                <span asp-validation-for="AccessCode" class="validation-invalid-label"></span>
-            </div>
-        </div>*@
+        @* <div class="col-lg-6">
+    <div class="mb-3">
+    <label asp-for="AccessCode" class="form-label fw-600"></label>
+    <input asp-for="AccessCode" type="text" class="form-control" placeholder="xxxx" />
+    <span asp-validation-for="AccessCode" class="validation-invalid-label"></span>
+    </div>
+    </div>*@
     }
     <div class="col-lg-6">
         <label asp-for="ActiveStatus" class="form-label fw-600">Active Status</label>

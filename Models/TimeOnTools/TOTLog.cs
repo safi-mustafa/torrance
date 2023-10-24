@@ -15,7 +15,7 @@ namespace Models.TimeOnTools
         public string Twr { get; set; }
 
         public string? WorkScope { get; set; }
-        public long? ManHours { get; set; }
+        public double? ManHours { get; set; }
         public DateTime? StartOfWork { get; set; }
         public TimeSpan? TimeRequested { get; set; }
         public TimeSpan? TimeSigned { get; set; }
@@ -29,6 +29,7 @@ namespace Models.TimeOnTools
         public string? EquipmentNo { get; set; }
         public double HoursDelayed { get; set; }
         public Status Status { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("Department")]
         public long? DepartmentId { get; set; }

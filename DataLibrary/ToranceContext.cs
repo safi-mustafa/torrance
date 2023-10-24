@@ -1,6 +1,4 @@
-﻿using Helpers.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -13,17 +11,32 @@ using Models.WeldingRodRecord;
 using Models.AppSettings;
 using Models.OverrideLogs;
 using Models.FCO;
+using Newtonsoft.Json;
+using ViewModels.Shared;
+using CorrelationId.Abstractions;
+using Enums;
 
 namespace DataLibrary;
 
 public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICorrelationContextAccessor _correlationContext;
+    private long _userId
+    {
+        get
+        {
+            var userId = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdParsed = !string.IsNullOrEmpty(userId) ? long.Parse(userId) : 0;
+            return userIdParsed;
+        }
+    }
 
-    public ToranceContext(DbContextOptions<ToranceContext> options, IHttpContextAccessor httpContextAccessor)
+    public ToranceContext(DbContextOptions<ToranceContext> options, IHttpContextAccessor httpContextAccessor, ICorrelationContextAccessor correlationContext)
         : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
+        _correlationContext = correlationContext;
     }
 
     public DbSet<Contractor> Contractors { get; set; }
@@ -66,6 +79,7 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<ApproverAssociation> ApproverAssociations { get; set; }
     public DbSet<OngoingWorkDelay> OngoingWorkDelays { get; set; }
+    public DbSet<LogData> LogDatas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,6 +90,20 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
     {
         InitializeGlobalProperties();
         return base.SaveChanges();
+    }
+
+    public async virtual Task<int> SaveChangesAsync(IBaseCrudViewModel viewModel, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        try
+        {
+            InitializeGlobalProperties();
+            await OnBeforeSaveChanges(viewModel);
+            return await base.SaveChangesAsync(true, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return 0;
+        }
     }
     public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
@@ -110,5 +138,74 @@ public class ToranceContext : IdentityDbContext<ToranceUser, ToranceRole, long>
                 ((BaseDBModel)item.Entity).UpdatedOn = DateTime.UtcNow;
             }
         }
+    }
+
+    private async Task OnBeforeSaveChanges(IBaseCrudViewModel viewModel)
+    {
+        try
+        {
+            var correlationId = _correlationContext.CorrelationContext?.CorrelationId;
+            ChangeTracker.DetectChanges();
+            var auditEntries = new List<LogDataViewModel>();
+            var entries = ChangeTracker.Entries();
+            foreach (var entry in entries)
+            {
+                if (entry.Entity is LogData || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+                var auditEntry = new LogDataViewModel(entry);
+                auditEntry.TableName = entry.Entity.GetType().Name;
+                auditEntry.UserId = _userId;
+                auditEntry.CorrelationId = correlationId;
+                auditEntry.JsonDBModelData = JsonConvert.SerializeObject(entry.Entity, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                auditEntry.JsonViewModelData = JsonConvert.SerializeObject(viewModel, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                var currentEntryState = entry.State;
+                auditEntries.Add(auditEntry);
+
+                foreach (var property in entry.Properties)
+                {
+                    string propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                        continue;
+                    }
+                    switch (currentEntryState)
+                    {
+                        case EntityState.Added:
+                            auditEntry.AuditType = LogDataAction.Create;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            break;
+                        case EntityState.Deleted:
+                            auditEntry.AuditType = LogDataAction.Delete;
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            break;
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.ChangedColumns.Add(propertyName);
+                                auditEntry.AuditType = LogDataAction.Update;
+                                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            }
+                            break;
+                    }
+                }
+            }
+            foreach (var auditEntry in auditEntries)
+            {
+                LogDatas.Add(auditEntry.ToAudit());
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+
     }
 }

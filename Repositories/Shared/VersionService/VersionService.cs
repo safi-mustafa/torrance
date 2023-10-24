@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Repositories.Shared.UserInfoServices;
 
 namespace Repositories.Shared.VersionService
 {
@@ -7,21 +9,30 @@ namespace Repositories.Shared.VersionService
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger _logger;
+        private readonly IUserInfoService _userInfoService;
 
-        public VersionService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public VersionService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILogger<VersionService> logger, IUserInfoService userInfoService)
         {
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+            _userInfoService = userInfoService;
         }
 
         public string GetVersionNumber()
         {
             var versionHeader = _configuration.GetValue<string>("VersionHeader");
+            string version = "0.0.0";
             if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey(versionHeader))
             {
-                return _httpContextAccessor.HttpContext.Request.Headers[versionHeader];
+                version = _httpContextAccessor.HttpContext.Request.Headers[versionHeader].ToString();
+                if (string.IsNullOrEmpty(version))
+                    version = "0.0.0";
             }
-            return "0.0.0";
+
+            _logger.LogInformation($"LoggedInUserId: {_userInfoService.LoggedInUserId()}, LoggedInUser: {_userInfoService.LoggedInUserFullName()}, Version: {version}");
+            return version;
         }
 
         public bool GetIsUpdateForcible()

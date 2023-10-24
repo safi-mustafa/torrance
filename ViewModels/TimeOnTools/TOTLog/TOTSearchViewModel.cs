@@ -24,17 +24,18 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? EquipmentNo { get; set; }
         public StatusSearchEnum? Status { get; set; } = null;
         [Display(Name = "Status Is Not")]
-        public Status? StatusNot { get; set; } = null;
+        public List<Status> StatusNot { get; set; } = new();
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel(false);
         public DelayTypeBriefViewModel DelayType { get; set; } = new DelayTypeBriefViewModel(false);
         public PermitTypeBriefViewModel PermitType { get; set; } = new PermitTypeBriefViewModel(false);
-        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false);
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false, "");
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false, "");
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
         public bool IsExcelDownload { get; set; }
-
+        [Display(Name = "Show Archived")]
+        public bool IsArchived { get; set; }
         public List<string> SelectedIds { get; set; }
     }
 

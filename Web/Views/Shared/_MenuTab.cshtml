@@ -14,7 +14,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav-middle navbar-nav mb-2 mb-lg-0 flex-md-grow-1 nav-main-ul">
-                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator"))
+                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator") || User.IsInRole("Approver"))
                 {
                     <li class="nav-item"><a class="nav-link px-3" href="/">Dashboard</a></li>
                 }
@@ -29,23 +29,7 @@
                 <li class="nav-item"><a class="nav-link px-3" href="/OverrideLog/Index">Overrides</a></li>
                 @if (!User.IsInRole("CompanyManager"))
                 {
-                    <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Record</a></li>
-                }
-                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Approver") || User.IsInRole("Administrator"))
-                {
-                    @*<li class="nav-item"><a class="nav-link px-3" href="/FCOLog/Index">FCO Logs</a></li>*@
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            FCO
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item px-3" asp-controller="FCOLog" asp-action="Index">FCO Log</a>
-                            <a class="dropdown-item px-3" asp-controller="FCOLogRawReport" asp-action="Index">Raw Data</a>
-                            <a class="dropdown-item px-3" asp-controller="FCODashboard" asp-action="Index">Graphs</a>
-                        </div>
-                    </li>
-
+                    <li class="nav-item"><a class="nav-link px-3" href="/WRRLog/Index">Welding Rod Records</a></li>
                 }
 
 
@@ -56,10 +40,10 @@
                             User Setup
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item px-3" asp-controller="Administrator" asp-action="Index">Master Admin</a>
-                            <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approver</a>
-                            <a class="dropdown-item px-3" asp-controller="Requestor" asp-action="Index">Requestor </a>
-                            <a class="dropdown-item px-3" asp-controller="TimeKeeper" asp-action="Index">Time Keeper</a>
+                            <a class="dropdown-item px-3" asp-controller="Approver" asp-action="Index">Approvers</a>
+                            <a class="dropdown-item px-3" asp-controller="Administrator" asp-action="Index">Master Admins</a>
+                            <a class="dropdown-item px-3" asp-controller="Requestor" asp-action="Index">Requestors</a>
+                            <a class="dropdown-item px-3" asp-controller="TimeKeeper" asp-action="Index">Time Keepers</a>
 
                         </div>
                     </li>
@@ -72,23 +56,21 @@
                             @* <a class="dropdown-item" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <b>All</b>
                                 </a>*@
-                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Unit</a>
                             <a class="dropdown-item px-3" asp-controller="Company" asp-action="Index">Companies</a>
+                            <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Crafts</a>
                             <a class="dropdown-item px-3" asp-controller="Department" asp-action="Index">Departments</a>
-                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Type</a>
-                            @*<a class="dropdown-item px-3" asp-controller="DelayType" asp-action="Index">Delay Type</a>*@
-                            <a class="dropdown-item px-3" asp-controller="StartOfWorkDelay" asp-action="Index">Start Of Work Delay</a>
-                            <a class="dropdown-item px-3" asp-controller="OngoingWorkDelay" asp-action="Index">Ongoing Work Delay</a>
-                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delay</a>
-                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delay</a>
-                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Method</a>
-                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">Location</a>
-                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Type</a>
-                            <a class="dropdown-item px-3" asp-controller="FCOType" asp-action="Index">FCO Type</a>
-                            <a class="dropdown-item px-3" asp-controller="FCOReason" asp-action="Index">FCO Reason</a>
-                            <a class="dropdown-item px-3" asp-controller="ReasonForRequest" asp-action="Index">Reason for Request</a>
-                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts  </a>
-                            <a class="dropdown-item px-3" asp-controller="CraftSkill" asp-action="Index">Craft</a>
+                            <a class="dropdown-item px-3" asp-controller="OngoingWorkDelay" asp-action="Index">Ongoing Work Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="PermitType" asp-action="Index">Permit Types</a>
+                            <a class="dropdown-item px-3" asp-controller="ReasonForRequest" asp-action="Index">Reason for Requests</a>
+                            <a class="dropdown-item px-3" asp-controller="ReworkDelay" asp-action="Index">Rework Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="RodType" asp-action="Index">Rod Types</a>
+                            <a class="dropdown-item px-3" asp-controller="Shift" asp-action="Index">Shifts</a>
+                            <a class="dropdown-item px-3" asp-controller="ShiftDelay" asp-action="Index">Shift Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="StartOfWorkDelay" asp-action="Index">Start Of Work Delays</a>
+                            <a class="dropdown-item px-3" asp-controller="Unit" asp-action="Index">Units</a>
+                            <a class="dropdown-item px-3" asp-controller="WeldMethod" asp-action="Index">Weld Methods</a>
+                            <a class="dropdown-item px-3" asp-controller="Location" asp-action="Index">WRR Locations</a>
+
                             @*<a class="dropdown-item px-3" asp-controller="CraftRate" asp-action="Index">Craft Rate</a>*@
                             @*<a class="dropdown-item px-3" asp-controller="OverrideType" asp-action="Index">Override Type</a>*@
                         </div>

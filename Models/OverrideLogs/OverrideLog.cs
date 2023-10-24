@@ -16,6 +16,7 @@ namespace Models.OverrideLogs
         public int OverrideHours { get; set; }
         public long PoNumber { get; set; }
         public Status Status { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("Shift")]
         public long ShiftId { get; set; }
@@ -32,6 +33,7 @@ namespace Models.OverrideLogs
         [ForeignKey("ReasonForRequest")]
         public long? ReasonForRequestId { get; set; }
         public ReasonForRequest? ReasonForRequest { get; set; }
+
         [ForeignKey("DelayType")]
         public long? DelayTypeId { get; set; }
         public DelayType? DelayType { get; set; }
@@ -76,5 +78,7 @@ namespace Models.OverrideLogs
         public string? Reason { get; set; }
 
         public string? EmployeeNames { get; set; }
+
+        public string? ClippedEmployeesUrl { get; set; }
     }
 }

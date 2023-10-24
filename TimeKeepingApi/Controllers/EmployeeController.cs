@@ -23,7 +23,7 @@ namespace API.Controllers
         private readonly IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> _employeeService;
         private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IMapper mapper) : base(employeeService)
+        public EmployeeController(IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService, IMapper mapper, ILogger<EmployeeController> logger) : base(employeeService, logger, "Employee")
         {
             _employeeService = employeeService;
             _mapper = mapper;
@@ -32,9 +32,11 @@ namespace API.Controllers
         public override async Task<IActionResult> GetAll([FromQuery] EmployeeAPISearchViewModel search)
         {
             var mappedSearchModel = _mapper.Map<EmployeeSearchViewModel>(search);
+            mappedSearchModel.DisablePagination = true;
             var result = await _employeeService.GetAll<EmployeeDetailViewModel>(mappedSearchModel);
             return ReturnProcessedResponse<PaginatedResultModel<EmployeeDetailViewModel>>(result);
         }
+
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -60,7 +62,7 @@ namespace API.Controllers
                 {
                     mappedModel.Password = "TorrancePass";
                     mappedModel.ChangePassword = false;
-                    mappedModel.ActiveStatus=Enums.ActiveStatus.Active;
+                    mappedModel.ActiveStatus = Enums.ActiveStatus.Active;
                     var data = await _employeeService.Create(mappedModel);
                     if (data.Status == HttpStatusCode.OK)
                     {

@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> _ShiftDelayService;
         private readonly ILogger<ShiftDelayController> _logger;
 
-        public ShiftDelayController(IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> ShiftDelayService, ILogger<ShiftDelayController> logger, IMapper mapper) : base(ShiftDelayService, logger, mapper, "ShiftDelay", "Shift Delays")
+        public ShiftDelayController(IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> ShiftDelayService, ILogger<ShiftDelayController> logger, IMapper mapper) : base(ShiftDelayService, logger, mapper, "ShiftDelay", "Shift Delay")
         {
             _ShiftDelayService = ShiftDelayService;
             _logger = logger;

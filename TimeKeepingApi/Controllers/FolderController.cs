@@ -15,7 +15,7 @@ namespace API.Controllers
     {
         private readonly IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> _folderService;
 
-        public FolderController(IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService) : base(folderService)
+        public FolderController(IFolderService<FolderCreateViewModel, FolderModifyViewModel, FolderDetailViewModel> folderService, ILogger<FolderController> logger) : base(folderService, logger, "Folder")
         {
             _folderService = folderService;
         }

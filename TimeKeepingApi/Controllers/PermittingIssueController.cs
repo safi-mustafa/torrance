@@ -15,7 +15,7 @@ namespace API.Controllers
     [Authorize]
     public class PermittingIssueController : CrudBaseBriefController<PermittingIssueDetailViewModel, PermittingIssueSearchViewModel>
     {
-        public PermittingIssueController(IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> permitTypeService) : base(permitTypeService)
+        public PermittingIssueController(IPermittingIssueService<PermittingIssueModifyViewModel, PermittingIssueModifyViewModel, PermittingIssueDetailViewModel> permitTypeService, ILogger<PermittingIssueController> logger) : base(permitTypeService, logger, "PermittingIssue")
         {
         }
     }

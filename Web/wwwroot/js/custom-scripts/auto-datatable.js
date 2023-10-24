@@ -5,6 +5,7 @@ var isAjaxBasedCrud = true;
 var enableButtons = true;
 var isExcelDownloadAjaxBased = false;
 var isScrollableFixedHeaderEventAdded = false;
+var pageLength = 0;
 actionIcons["Update"] = "fa-solid fa-pen-to-square";
 actionIcons["Profile"] = "fa-solid fa-user-plus";
 actionIcons["Notes"] = "fa-solid fa-file";
@@ -31,6 +32,9 @@ CallBackFunctionality.prototype.GetFunctionality = function () {
 }
 
 function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true, isAjaxBasedCrudParam = true, isResponsive = false, selectableRow = false, isExcelDownloadAjaxBasedParam = false, pageLength = 25) {
+
+    pageLength = pageLength;
+
     isAjaxBasedCrud = isAjaxBasedCrudParam;
     enableButtons = enableButtonsParam;
     isExcelDownloadAjaxBased = isExcelDownloadAjaxBasedParam;
@@ -143,38 +147,9 @@ function InitializeDataTables(dtColumns, dataUrl = "", enableButtonsParam = true
         DeleteDataItem(deleteObj);
 
     });
-
-    $(document).off("click", '.image-container')
-    $(document).on("click", '.image-container', function () {
-        $(".fullsize").attr("src", $(this).find('.rounded-image').attr("src"));
-        $('.overlay').fadeIn();
-        $('.fullsize').fadeIn();
-    });
-    $(document).off("click", ".file-container");
-    $(document).on("click", ".file-container", function () {
-        var attachmentType = $(this).find('img').data("attachment-type");
-        var dataSrc = $(this).find('img').data("src");
-        var imageUrl = $(this).find('img').attr("src");
-
-        if (attachmentType === "file") {
-            // Open URL in new tab
-            window.open(dataSrc, "_blank");
-        } else if (attachmentType === "image") {
-            // Display image overlay
-            $(".fullsize").attr("src", imageUrl);
-            $('.overlay').fadeIn();
-            $('.fullsize').fadeIn();
-        }
-    });
-    $(document).off("click", '.overlay')
-    $(document).on("click", '.overlay', function () {
-        $('.overlay').fadeOut();
-        $('.fullsize').fadeOut();
-    });
-
-    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength);
+    FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow);
 }
-function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow, pageLength) {
+function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, isResponsive, selectableRow) {
     if (typeof isResponsive != "boolean") {
         isResponsive = isResponsive == "true";
     }
@@ -216,6 +191,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             "data": function (searchParams) {
                 $("#" + tableId + " td").removeAttr("colspan");
                 if ($("#loader").length > 0) {
+                    $('#' + tableId).css("min-height", "200px");
                     $('#' + tableId).block({
                         message: $("#loader"),
                         centerY: false,
@@ -235,7 +211,11 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                 if ($('#' + formId).length > 0) {
                     $('#' + formId + ' :input, #' + formId + ' select').each(function (key, val) {
                         if (val.value !== "") {
-                            searchParams[val.name] = $(val).val();
+                            if ($(val).is(":checkbox")) {
+                                searchParams[val.name] = $(val).is(":checked");
+                            }
+                            else
+                                searchParams[val.name] = $(val).val();
                         }
                     });
                 }
@@ -283,7 +263,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                                 return row[dtColumns[meta.col].exportColumn];
                             }
                             else {
-                                return RenderHtml(data, dtColumns, row, meta);
+                                return RenderHtml(data, dtColumns, meta);
                             }
                         }
                         else if (dtColumns[meta.col].format === 'numeric') {
@@ -293,13 +273,7 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
                             return '';
                         }
                         else {
-                            if (data == undefined || data == null) {
-                                return "-";
-                            }
-                            else {
-                                return data;
-                            }
-
+                            return data;
                         }
                     }
                     else {
@@ -420,20 +394,30 @@ function FilterDataTable(dataAjaxUrl, tableId, formId, actionsList, dtColumns, i
             $('input[type="search"]').attr('autocomplete', 'new-password');
         },
         "drawCallback": function (settings) {
+            $('#' + tableId).css("min-height", "auto");
             $('#' + tableId).unblock();
             new CallBackFunctionality().GetFunctionality();
             maskDatatableCurrency("td.dt-currency", ('#' + tableId));
+
 
             // Add scroll bar on top
             $('.dataTables_scrollHead').off('scroll');
             $('.dataTables_scrollHead').css({
                 'overflow-x': 'scroll'
             }).on('scroll', function (e) {
-                var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
-                scrollBody.scrollLeft = this.scrollLeft;
-                $(scrollBody).trigger('scroll');
+                var scrollLeft = this.scrollLeft;
+                if (!$('.dtfh-floatingparent.dtfh-floatingparenthead').is(':visible')) {
+                    var scrollBody = $(this).parent().find('.dataTables_scrollBody').get(0);
+                    scrollBody.scrollLeft = scrollLeft;
+                    $(scrollBody).trigger('scroll');
+                }
             });
         }
+    });
+    $('#' + tableId).off('length.dt');
+    $('#' + tableId).on('length.dt', function (e, settings, len) {
+        pageLength = len;
+        // You can perform custom actions here
     });
     new $.fn.dataTable.FixedHeader(dataTable, {
         // options
@@ -492,6 +476,10 @@ function GetHref(actionItem, cellData) {
         if (cellData[actionItem.HideBasedOn])
             return "";
     }
+    if (actionItem.ShowBasedOn != null && actionItem.ShowBasedOn != undefined && actionItem.ShowBasedOn != "") {
+        if (cellData[actionItem.ShowBasedOn] == false || cellData[actionItem.ShowBasedOn] == "false")
+            return "";
+    }
     var link = "javascript:void(0)";
     if (actionItem.Href !== '') {
         link = actionItem.Href;
@@ -534,15 +522,10 @@ function GetHref(actionItem, cellData) {
             customAttributes += "attr-" + v.toLowerCase() + '="' + GetCellObjectValue(cellData, v) + '" ';
         });
     }
-    let cssClass = getFinalCellClasses(appendClass, cellData);
     if (isAjaxBasedCrud && actionItem.Title != "Delete") {
-        return `<a href="#" onclick="loadUpdateAndDetailModalPanel('${link}')" ${dataAttributes} class="datatable-action ${cssClass}" ${customAttributes}> <i class="${actionIcons[actionItem.Title]}"></i>${actionItem.LinkTitle}</a>`
+        return `<a href="#" onclick="loadUpdateAndDetailModalPanel('${link}')" ${dataAttributes} class="datatable-action ${appendClass}" ${customAttributes}> <i class="${actionIcons[actionItem.Title]}"></i>${actionItem.LinkTitle}</a>`
     }
-
-    return `
-    <a href="${link}" ${dataAttributes} class="datatable-action ${cssClass}" ${customAttributes}>
-        <i class="${actionIcons[actionItem.Title]}"></i> ${actionItem.LinkTitle}
-    </a>`;
+    return '<a href="' + link + '" ' + dataAttributes + ' class="datatable-action ' + appendClass + '" ' + customAttributes + '> <i class="' + actionIcons[actionItem.Title] + '"></i> ' + actionItem.LinkTitle + '</a > ';
 }
 
 function GetCellObjectValue(cellData, Prop) {
@@ -553,25 +536,7 @@ function GetCellObjectValue(cellData, Prop) {
         return cellData['' + Prop];
     }
 }
-function getFinalCellClasses(cssClass, cellData) {
-    if (cssClass != null) {
-        const placeholders = cssClass.match(/@(\w+)/g); // Extract all placeholders
-        if (placeholders) {
-            placeholders.forEach(placeholder => {
-                const propertyName = placeholder.slice(1); // Remove the "@" symbol
-                if (cellData.hasOwnProperty(propertyName)) {
-                    cssClass = cssClass.replace(new RegExp(placeholder, 'g'), cellData[propertyName]);
-                }
-            });
-        }
-        return cssClass;
-    }
-    else {
-        return "";
-    }
-
-}
-function RenderHtml(data, dtColumns, row, meta) {
+function RenderHtml(data, dtColumns, meta) {
     if (dtColumns[meta.col].formatValue === "checkbox") {
         return '<input type="checkbox" class="checkbox-items ' + dtColumns[meta.col].className + '" value="' + data + '" />';
     }
@@ -585,25 +550,13 @@ function RenderHtml(data, dtColumns, row, meta) {
         return '<span class="badge ' + data + '">' + data + '</span>';
     }
     else if (dtColumns[meta.col].formatValue === "link") {
-        return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
+        if (data !== null && data !== undefined && data !== "")
+            return '<a href="' + data + '" target="_blank"><i class="fa-solid fa-link"></i></a>';
+        else
+            return '<a onclick="return false;"><i class="fa-solid fa-link disabled-link"></i></a>';
     }
     else if (dtColumns[meta.col].formatValue === "image") {
-        if (data != "" && data != null && data != undefined)
-            return '<div class="image-container"> <img src="' + data + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
-        else {
-            return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
-        }
-    }
-    else if (dtColumns[meta.col].formatValue === "file") {
-        let propertyName = dtColumns[meta.col].data.split(".")[0];
-        let imageUrl = row[propertyName] && row[propertyName].PreviewImgUrl;
-        let attachmentType = row[propertyName] && row[propertyName].AttachmentTypeStr;
-        if (data != "" && data != null && data != undefined)
-            return '<div class="file-container"> <img data-attachment-type="' + attachmentType + '" data-src="' + data + '" src="' + imageUrl + '" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
-        else {
-            return '<div class="image-container"> <img src="/img/no-img.jpg" class="rounded-image' + ' ' + dtColumns[meta.col].className + '" alt="Image"></div>';
-        }
-        return "";
+        return ' <img src="' + data + '" class="rounded" alt="Image">';
     }
     else if (dtColumns[meta.col].formatValue === "status") {
         return '<span class="badge ' + data + '"></span>';
@@ -641,6 +594,9 @@ function SetSearchFilters() {
                     }
                     else if ($(input).is('select')) {
                         value = $(input).find(":selected").text();
+                    }
+                    else if ($(input).is(':checkbox')) {
+                        value = $(input).is(":checked");
                     }
                     if (containerHtml == "") {
                         containerHtml = "<span class='mr-1'>Filters: </span>";
@@ -844,6 +800,7 @@ function customizePdfExport(doc) {
                 colCount.push('*');
             }
         }
+
     });
     if (colCount.length < 8)// Cuts columns for table with more than 8 columns
         doc.content[1].table.widths = colCount;

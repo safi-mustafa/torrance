@@ -371,3 +371,5 @@ FodyWeavers.xsd
 /TimeKeepingApi/wwwroot/ChargieStorage/Assets/Documents/638278760861820572.xlsx
 /TimeKeepingApi/wwwroot/ChargieStorage/Assets/Images
 /Web/Storage/*
+/Web/Storage/Assets/Images
+/Web/Storage/Assets/Others

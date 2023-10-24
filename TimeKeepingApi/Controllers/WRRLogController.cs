@@ -22,7 +22,7 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly IUserInfoService _userInfoService;
 
-        public WRRLogController(IWRRLogService<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wRRLogService, IMapper mapper, IUserInfoService userInfoService) : base(wRRLogService)
+        public WRRLogController(IWRRLogService<WRRLogCreateViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> wRRLogService, IMapper mapper, IUserInfoService userInfoService, ILogger<WRRLogController> logger) : base(wRRLogService, logger, "WRRLog")
         {
             _wRRLogService = wRRLogService;
             _mapper = mapper;
@@ -35,6 +35,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<WRRLogDetailViewModel>>(result);
         }
 
+        [HttpPost]
         public override Task<IActionResult> Post([FromBody] WRRLogCreateViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
@@ -46,9 +47,9 @@ namespace API.Controllers
                 {
                     var claims = User.Claims;
                     var companyIdClaim = claims.FirstOrDefault(c => c.Type == "CompanyId");
-                    model.Company.Id =string.IsNullOrEmpty(companyIdClaim.Value)?0:int.Parse(companyIdClaim.Value);
+                    model.Company.Id = string.IsNullOrEmpty(companyIdClaim.Value) ? 0 : int.Parse(companyIdClaim.Value);
                 }
-                
+
                 model.Employee.Id = parsedLoggedInId;
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
@@ -57,6 +58,7 @@ namespace API.Controllers
             return base.Post(model);
         }
 
+        [HttpPut]
         public override Task<IActionResult> Put([FromBody] WRRLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();

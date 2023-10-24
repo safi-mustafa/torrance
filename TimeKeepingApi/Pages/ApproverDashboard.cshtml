@@ -1,0 +1,153 @@
+﻿@page
+@model API.Pages.ApproverDashboardModel
+@{
+}
+<link href="~/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    body {
+        font-size: 16px; /* Base font size */
+    }
+
+    *[class^='progress-done-'] {
+        height: 100%;
+        width: 0;
+        opacity: 0;
+        background: linear-gradient(to left, #f2709c,#ff9472);
+        color: #fff;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fac090;
+        box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+        transition: 1s ease;
+    }
+
+    h3 {
+        font-size: 4.5vw;
+    }
+
+    .card {
+        margin-top: 20px;
+    }
+
+    .card-title {
+        text-align: center;
+        font-size: 4vw;
+    }
+
+    .am-chart {
+        width: 100%; /* 100% of the viewport width */
+        height: 50vh; /* 50% of the viewport height, change as needed */
+      /*  display:flex;
+        justify-content:center;
+        align-items:center;*/
+        position:relative;
+    }
+
+    .chart-loader {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin: 0px auto;
+    }
+
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0); /* Semi-transparent black overlay */
+        z-index: 999; /* Adjust the z-index to be higher than your other elements */
+        pointer-events: all; /* Enable pointer events on the overlay */
+    }
+</style>
+
+<div class="container-fluid" style="background-color:white;">
+    <main>
+        <div class="row dashboard-stats-row">
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <p class="card-title" style="font-size: 2.5vw;"> Total TOT's</p>
+                            <p class="card-text text-center" style="font-size: 3vw;">@Model.DashboardStats.TotalTotLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <p class="card-title" style="font-size: 2.5vw;">Total WRR's</p>
+                            <p class="card-text text-center" style="font-size: 3vw;">@Model.DashboardStats.TotalWRRLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="content">
+                            <p class="card-title" style="font-size: 2.5vw;">Total Overrides</p>
+                            <p class="card-text text-center" style="font-size: 3vw;">@Model.DashboardStats.TotalORLogs</p>
+                        </div>
+
+                        <div class="icon">
+                            <span class="tot"><i class="bi-file-text"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTStatusBarChart")
+            @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideStatusBarChart")
+            @await Html.PartialAsync("Shared/Dashboard/WRR/_WRRStatusBarChart")
+            @await Html.PartialAsync("Shared/Dashboard/Override/_OverrideCostBarCharts")
+            @await Html.PartialAsync("Shared/Dashboard/TOT/_TOTHoursBarCharts")
+        </div>
+
+    </main>
+</div>
+<script src="~/js/jquery.min.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="~/js/dashboard/am-chart.js"></script>
+<script src="~/js/dashboard/tot-chart.js"></script>
+<script src="~/js/dashboard/status-chart.js"></script>
+<script src="~/js/dashboard/override-chart.js"></script>
+<!-- Chart code -->
+<script>
+    $(function () {
+            
+        GenerateTOTBarChart(@Json.Serialize(Model.DashboardBarChartModel.TOTLogs.ChartData));
+        GenerateORBarChart(@Json.Serialize(Model.DashboardBarChartModel.ORLogs.ChartData));
+        GenerateWRRBarChart(@Json.Serialize(Model.DashboardBarChartModel.WRRLogs.ChartData));
+        GetTOTChartData(@Json.Serialize(Model.DashboardTOTModel));
+        GetOverrideChartData(@Json.Serialize(Model.DashboardORModel));
+        TOTDelayTypeHoursChart(@Json.Serialize(Model.DashboardTOTModel.DelayTypeHours));
+        TOTDelayTypeCostsChart(@Json.Serialize(Model.DashboardTOTModel.DelayTypeCosts));
+    });
+    function TOTDelayTypeHoursChart(seriesData) {
+        GenerateBarChart("tot-work-delay-hours", seriesData)
+    }
+    function TOTDelayTypeCostsChart(seriesData) {
+        GenerateBarChart("tot-work-delay-costs", seriesData)
+    }
+</script>

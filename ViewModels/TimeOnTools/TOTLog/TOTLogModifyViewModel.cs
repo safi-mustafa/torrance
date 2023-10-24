@@ -22,7 +22,7 @@ using ViewModels.TimeOnTools.StartOfWorkDelay;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier
+    public class TOTLogModifyViewModel : LogDelayReasonUpdateVM, IBaseCrudViewModel, IIdentitifier, ITOTLogNotificationViewModel
     {
         public DateTime? Date { get; set; } = DateTime.UtcNow;
         [Display(Name = "Twr", Prompt = "Add Twr")]
@@ -45,10 +45,12 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? WorkScope { get; set; }
         [Required]
         public string? Foreman { get; set; }
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
 
         [Display(Name = "Hours", Prompt = "Add Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
-        public long ManHours { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Hours must be greater than zero.")]
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.UtcNow;
         [Display(Name = "Time Requested")]
@@ -58,7 +60,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? Comment { get; set; }
 
         [Display(Name = "Reason", Prompt = "Add Delay Reason")]
-        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false,"");
+        public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
         [Required]
         [Display(Name = "Description", Prompt = "Add Description")]
         public string? JobDescription { get; set; }

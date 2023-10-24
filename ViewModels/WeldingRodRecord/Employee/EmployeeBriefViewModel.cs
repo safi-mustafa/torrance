@@ -6,12 +6,16 @@ namespace ViewModels.WeldingRodRecord
 {
     public class EmployeeBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public EmployeeBriefViewModel() : base(false, "")
+        public EmployeeBriefViewModel() : base(true, "The Requester field is required.")
         {
 
         }
 
-        public EmployeeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Employee field is required.")
+        public EmployeeBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Requester field is required.")
+        {
+
+        }
+        public EmployeeBriefViewModel(bool isValidationEnabled, string message) : base(isValidationEnabled, message)
         {
 
         }

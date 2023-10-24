@@ -1,15 +1,14 @@
-﻿using DataLibrary;
-using Microsoft.AspNetCore.Mvc;
+﻿using Centangle.Common.ResponseHelpers;
+using Centangle.Common.ResponseHelpers.Models;
+using DataLibrary;
+using Enums;
+using Helpers.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ViewModels;
 using ViewModels.Dashboard;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
@@ -20,11 +19,13 @@ namespace Repositories.Services.DashboardService
     {
         private readonly ToranceContext _db;
         private readonly ILogger<DashboardService> _logger;
+        private readonly IRepositoryResponse _response;
 
-        public DashboardService(ToranceContext db, ILogger<DashboardService> logger)
+        public DashboardService(ToranceContext db, ILogger<DashboardService> logger, IRepositoryResponse response)
         {
             _db = db;
             _logger = logger;
+            _response = response;
         }
 
         public async Task<TOTPieChartViewModel> GetTotChartsData(TOTLogSearchViewModel search)
@@ -33,121 +34,142 @@ namespace Repositories.Services.DashboardService
             var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
             model.Shift = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
-              .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.ShiftId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Shift.Name),
-                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Department = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
-              .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.DepartmentId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Department.Name),
-                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Unit = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
-              .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Unit.Name),
-                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.RequestReason = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
               .Include(x => x.DelayType)
-              .GroupBy(x => x.DelayTypeId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.DelayTypeId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.DelayType.Name),
-                  Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                  //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
+            await GetTOTDelayTypeDetailedCharts(search, model, totHours);
+
+            model.DelayTypeHours = await GetTOTDelayTypeHours(search);
+            model.DelayTypeCosts = await GetTOTDelayTypeCosts(search, totHours);
+
+            return model;
+
+        }
+
+        private async Task GetTOTDelayTypeDetailedCharts(TOTLogSearchViewModel search, TOTWorkDelayTypeDetailChartViewModel model, double? totHours)
+        {
             model.ShiftDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                       .Include(x => x.ShiftDelay)
-                                      .GroupBy(x => x.ShiftDelayId).Select(x => new LogPieChartViewModel
+                                      .GroupBy(x => x.ShiftDelayId).Select(x => new ChartViewModel
                                       {
-                                          Category = x.Max(y => y.ShiftDelay.Name)??"None",
-                                          Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                      }).ToListAsync();
+                                          Category = x.Max(y => y.ShiftDelay.Name) ?? "None",
+                                          Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                                          //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                      }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.ReworkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-                                     .Include(x => x.ReworkDelay)
-                                     .GroupBy(x => x.ReworkDelayId).Select(x => new LogPieChartViewModel
-                                     {
-                                         Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
-                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                     }).ToListAsync();
+                                                 .Include(x => x.ReworkDelay)
+                                                 .GroupBy(x => x.ReworkDelayId).Select(x => new ChartViewModel
+                                                 {
+                                                     Category = x.Max(y => y.ReworkDelay.Name) ?? "None",
+                                                     Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                                                     //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                                 }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.StartOfWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                      .Include(x => x.StartOfWorkDelay)
-                                     .GroupBy(x => x.StartOfWorkDelayId).Select(x => new LogPieChartViewModel
+                                     .GroupBy(x => x.StartOfWorkDelayId).Select(x => new ChartViewModel
                                      {
                                          Category = x.Max(y => y.StartOfWorkDelay.Name) ?? "None",
-                                         Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                     }).ToListAsync();
+                                         Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                                         //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                     }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+
             model.OngoingWorkDelay = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
                                     .Include(x => x.OngoingWorkDelay)
-                                    .GroupBy(x => x.OngoingWorkDelayId).Select(x => new LogPieChartViewModel
+                                    .GroupBy(x => x.OngoingWorkDelayId).Select(x => new ChartViewModel
                                     {
                                         Category = x.Max(y => y.OngoingWorkDelay.Name) ?? "None",
-                                        Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
-                                    }).ToListAsync();
-            return model;
-
+                                        Value = (double)(x.Sum(y => y.ManHours) ?? 0)
+                                        //Value = (double)((x.Sum(y => y.ManHours) * 100 / totHours) ?? 0)
+                                    }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
         }
 
         public async Task<OverridePieChartViewModel> GetOverrideChartsData(TOTLogSearchViewModel search)
         {
             var model = new OverridePieChartViewModel();
-            var totHours = await GetFilteredORLogs(search).IgnoreQueryFilters().SumAsync(x => x.TotalCost);
+            var totCost = await GetFilteredORLogs(search).IgnoreQueryFilters().SumAsync(x => x.TotalCost);
             model.Shift = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Shift)
-              .GroupBy(x => x.ShiftId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.ShiftId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Shift.Name),
-                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.TotalCost))
+                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Department = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Department)
-              .GroupBy(x => x.DepartmentId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.DepartmentId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Department.Name),
-                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.TotalCost))
+                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.Unit = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.Unit)
-              .GroupBy(x => x.UnitId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.UnitId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Unit.Name),
-                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.TotalCost))
+                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             model.RequestReason = await GetFilteredORLogs(search).IgnoreQueryFilters()
               .Include(x => x.ReasonForRequest)
-              .GroupBy(x => x.ReasonForRequestId).Select(x => new LogPieChartViewModel
+              .GroupBy(x => x.ReasonForRequestId).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.ReasonForRequest.Name),
-                  Value = x.Sum(y => y.TotalCost) * 100 / totHours
-              }).ToListAsync();
+                  Value = (double)(x.Sum(y => y.TotalCost))
+                  //Value = x.Sum(y => y.TotalCost) * 100 / totCost
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
 
             return model;
 
         }
 
-
-
         public async Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
             model.ChartData = await GetFilteredTOTLogs(search).IgnoreQueryFilters()
-              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              .GroupBy(x => x.Status).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
                   Value = x.Count()
-              }).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
+            SetDisplayNameForStatus(model.ChartData);
             return model;
         }
 
@@ -160,20 +182,19 @@ namespace Repositories.Services.DashboardService
                   StartOfWorkDelayName = x.Max(y => y.StartOfWorkDelay.Name),
                   StartOfWorkDelay = x.Key,
                   Value = x.Count()
-              }).ToListAsync();
+              }).OrderByDescending(x => x.Value).Take(10).ToListAsync();
         }
-
 
         public async Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search)
         {
             var model = new StatusChartViewModel();
             model.ChartData = await GetFilteredWrrLogs(search).IgnoreQueryFilters()
-              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              .GroupBy(x => x.Status).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
                   Value = x.Count()
               }).ToListAsync();
-
+            SetDisplayNameForStatus(model.ChartData);
             return model;
 
         }
@@ -182,16 +203,16 @@ namespace Repositories.Services.DashboardService
         {
             var model = new StatusChartViewModel();
             model.ChartData = await GetFilteredORLogs(search).IgnoreQueryFilters()
-              .GroupBy(x => x.Status).Select(x => new BarChartViewModel
+              .GroupBy(x => x.Status).Select(x => new ChartViewModel
               {
                   Category = x.Max(y => y.Status).ToString(),
                   Value = x.Count()
               }).ToListAsync();
+            SetDisplayNameForStatus(model.ChartData);
 
             return model;
 
         }
-
 
         public async Task<DashboardViewModel> GetDashboardData()
         {
@@ -199,9 +220,9 @@ namespace Repositories.Services.DashboardService
             {
                 var dashboardData = new DashboardViewModel
                 {
-                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false).CountAsync(),
-                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false).CountAsync(),
-                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false).CountAsync()
+                    TotalORLogs = await _db.OverrideLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
+                    TotalWRRLogs = await _db.WRRLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync(),
+                    TotalTotLogs = await _db.TOTLogs.Where(x => x.IsDeleted == false && x.IsArchived == false).CountAsync()
                 };
                 return dashboardData;
             }
@@ -215,7 +236,10 @@ namespace Repositories.Services.DashboardService
         private IQueryable<TOTLog> GetFilteredTOTLogs(TOTLogSearchViewModel search)
         {
             return _db.TOTLogs.Where(x =>
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     (search.DelayType.Id == null || search.DelayType.Id == x.DelayTypeId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == x.UnitId)
@@ -225,8 +249,10 @@ namespace Repositories.Services.DashboardService
         private IQueryable<OverrideLog> GetFilteredORLogs(TOTLogSearchViewModel search)
         {
             return _db.OverrideLogs.Where(x =>
-
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId
                 );
         }
@@ -234,13 +260,159 @@ namespace Repositories.Services.DashboardService
         private IQueryable<WRRLog> GetFilteredWrrLogs(WRRLogSearchViewModel search)
         {
             return _db.WRRLogs.Where(x =>
-                    x.IsDeleted == false &&
+                    x.IsDeleted == false
+                    &&
+                    x.IsArchived == false
+                    &&
                     (search.Department.Id == null || search.Department.Id == 0 || search.Department.Id == x.DepartmentId)
                     &&
                     (search.Unit.Id == null || search.Unit.Id == 0 || search.Unit.Id == x.UnitId)
                 );
         }
 
+        public async Task<IRepositoryResponse> GetTotDelayTypeDetailedChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeDetailChartViewModel();
+                var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+                await GetTOTDelayTypeDetailedCharts(search, model, totHours);
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeDetailChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
 
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetTotDelayTypeChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeChartViewModel();
+                List<ChartViewModel> chartData = await GetTOTDelayTypeHours(search);
+                model.ChartData = chartData;
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        private async Task<List<ChartViewModel>> GetTOTDelayTypeHours(TOTLogSearchViewModel search)
+        {
+            return await GetFilteredTOTLogs(search)
+                                .Include(x => x.DelayType)
+                                .GroupBy(x => x.DelayTypeId)
+                                .Select(x => new ChartViewModel
+                                {
+                                    Category = x.Max(c => c.DelayType.Name),
+                                    Value = x.Sum(y => y.ManHours) ?? 0
+                                })
+                                .IgnoreAutoIncludes()
+                                .ToListAsync();
+        }
+
+        public async Task<IRepositoryResponse> GetTotDelayTypeChartsCostsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = new TOTWorkDelayTypeChartViewModel();
+                var totHours = await GetFilteredTOTLogs(search).IgnoreQueryFilters().SumAsync(x => x.ManHours);
+                List<ChartViewModel> chartData = await GetTOTDelayTypeCosts(search, totHours);
+                model.ChartData = chartData;
+                var response = new RepositoryResponseWithModel<TOTWorkDelayTypeChartViewModel> { ReturnModel = model }; return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        private async Task<List<ChartViewModel>> GetTOTDelayTypeCosts(TOTLogSearchViewModel search, double? totHours)
+        {
+            return await GetFilteredTOTLogs(search)
+                                .Include(x => x.DelayType)
+                                .GroupBy(x => x.DelayTypeId)
+                                .Select(x => new ChartViewModel
+                                {
+                                    Category = x.Max(c => c.DelayType.Name),
+                                    Value = (x.Sum(y => y.ManHours) * 100 / totHours) ?? 0
+                                })
+                                .IgnoreQueryFilters()
+                                .ToListAsync();
+        }
+
+        public async Task<IRepositoryResponse> GetAPITotChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = await GetTotChartsData(search);
+                var response = new RepositoryResponseWithModel<TOTPieChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetAPIOverrideChartsData(TOTLogSearchViewModel search)
+        {
+            try
+            {
+                var model = await GetOverrideChartsData(search);
+                var response = new RepositoryResponseWithModel<OverridePieChartViewModel> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        public async Task<IRepositoryResponse> GetAPIBarChartsData()
+        {
+            try
+            {
+                var model = new APIBarChartsVM();
+                model.TOTLogs = await GetTotStatusChartData(new TOTLogSearchViewModel());
+                model.ORLogs = await GetOverrideStatusChartData(new TOTLogSearchViewModel());
+                model.WRRLogs = await GetWrrStatusChartData(new WRRLogSearchViewModel());
+                var response = new RepositoryResponseWithModel<APIBarChartsVM> { ReturnModel = model };
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Response.BadRequestResponse(_response);
+        }
+
+        private void SetDisplayNameForStatus(List<ChartViewModel> data)
+        {
+            data.ForEach(x =>
+            {
+                if (Status.TryParse(x.Category, out Status enumValue))
+                {
+                    x.Category = enumValue.GetDisplayName();
+                }
+            });
+        }
+    }
+
+    public class APIBarChartsVM
+    {
+        public StatusChartViewModel TOTLogs { get; set; }
+        public StatusChartViewModel ORLogs { get; set; }
+        public StatusChartViewModel WRRLogs { get; set; }
     }
 }

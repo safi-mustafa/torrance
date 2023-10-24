@@ -1,4 +1,4 @@
-﻿function GetTOTChartData(formData = "") {
+﻿function GetTOTChartData(isAdmin, isApprover, formData = "") {
     $.ajax({
         type: "GET",
         url: "/Home/GetTotChartsData",
@@ -14,6 +14,9 @@
             TOTReworkDelayChart(data.ReworkDelay);
             TOTStartOfWorkDelayChart(data.StartOfWorkDelay);
             TOTOngoingWorkDelayChart(data.OngoingWorkDelay);
+            TOTWorkDelayHours(data.DelayTypeHours);
+            TOTWorkDelayCosts(data.DelayTypeCosts);
+
         },
         error: function () {
             console.log("Error occured!!")
@@ -22,30 +25,36 @@
 }
 
 function TOTDepartmentChart(seriesData) {
-    GeneratePieChart("tot-department", seriesData)
+    GenerateBarChart("tot-department", seriesData)
 }
 function TOTUnitChart(seriesData) {
-    GeneratePieChart("tot-unit", seriesData)
+    GenerateBarChart("tot-unit", seriesData)
 }
 function TOTShiftChart(seriesData) {
 
-    GeneratePieChart("tot-shift", seriesData)
+    GenerateBarChart("tot-shift", seriesData)
 }
 function TOTRequestReasonChart(seriesData) {
-    GeneratePieChart("tot-request-reason", seriesData)
+    GenerateBarChart("tot-request-reason", seriesData)
 }
 
 function TOTShiftDelayChart(seriesData) {
-    GeneratePieChart("tot-shift-delay", seriesData)
+    GenerateBarChart("tot-shift-delay", seriesData)
 }
 function TOTReworkDelayChart(seriesData) {
-    console.log("HERE");
-    console.log(seriesData);
-    GeneratePieChart("tot-rework-delay", seriesData)
+    GenerateBarChart("tot-rework-delay", seriesData)
 }
 function TOTStartOfWorkDelayChart(seriesData) {
-    GeneratePieChart("tot-start-of-work-delay", seriesData)
+    GenerateBarChart("tot-start-of-work-delay", seriesData)
 }
 function TOTOngoingWorkDelayChart(seriesData) {
-    GeneratePieChart("tot-ongoing-work-delay", seriesData)
+    GenerateBarChart("tot-ongoing-work-delay", seriesData)
+}
+
+function TOTWorkDelayHours(seriesData) {
+    GenerateBarChart("tot-work-delay-hours", seriesData)
+}
+
+function TOTWorkDelayCosts(seriesData) {
+    GenerateBarChart("tot-work-delay-costs", seriesData)
 }

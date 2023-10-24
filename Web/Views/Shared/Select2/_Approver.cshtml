@@ -7,6 +7,7 @@
     var name = title + ".Name";
     var type = ViewData["Type"] != null && !string.IsNullOrEmpty(ViewData["Type"].ToString()) ? ViewData["Type"].ToString() : "Approver";
     var unitId = ViewData["UnitId"] != null && !string.IsNullOrEmpty(ViewData["UnitId"].ToString()) ? ViewData["UnitId"].ToString() : "unit-id";
+    var departmentId = ViewData["DepartmentId"] != null && !string.IsNullOrEmpty(ViewData["DepartmentId"].ToString()) ? ViewData["DepartmentId"].ToString() : "department-id";
     var label = "Select " + title;
     var isSearchForm = ViewData["IsSearchForm"] != null && !string.IsNullOrEmpty(ViewData["IsSearchForm"].ToString()) ? bool.Parse(ViewData["IsSearchForm"].ToString()) ? "true" : "false" : "false";
     var logType = ViewData["LogType"] != null && !string.IsNullOrEmpty(ViewData["LogType"].ToString()) ? ViewData["LogType"].ToString() : "None";
@@ -31,7 +32,7 @@
     data_val = Model.IsValidationEnabled.ToString().ToLower()
     })
     <input type="hidden" name="@name" value="@Model.Name" />
-    @* <span asp-validation-for="Id" class="validation-invalid-label"></span>*@
+    <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
 
 <script src="~/js/custom-scripts/Select2Methods.js"></script>
@@ -39,6 +40,7 @@
     $(function () {
         var id = "#" + "@elementId";
         var unitId = "#" + "@unitId";
+        var departmentId = "#" + "@departmentId";
         var pageSize = 10;
         var url = '/Approver/Select2';
         var dataArray = function (params) {
@@ -52,11 +54,13 @@
                     Unit: {
                         Id: $(unitId).val()
                     },
+                    Department: {
+                        Id: $(departmentId).val()
+                    },
                     IsSearchForm: "@isSearchForm",
                     LogType: "@logType",
                     ApproverType: "@approverType"
                 })
-
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "@label");

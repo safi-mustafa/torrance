@@ -21,6 +21,12 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
+            <label asp-for="Approver" class="form-label fw-600"></label>
+            <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? "-" : Model.Approver.Name)</div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
             <label asp-for="Shift" class="form-label fw-600"></label>
             <div>@(string.IsNullOrEmpty(Model.Shift.Name) ? "-" : Model.Shift.Name)</div>
         </div>
@@ -32,11 +38,11 @@
         </div>
     </div>
     @*  <div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
-    <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
-    </div>
-    </div>*@
+        <div class="mb-3">
+        <label asp-for="ReasonForRequest" class="form-label fw-600"></label>
+        <div>@(string.IsNullOrEmpty(Model.ReasonForRequest?.Name) ? "-" : Model.ReasonForRequest.Name)</div>
+        </div>
+        </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="WorkScope" class="form-label fw-600"></label>
@@ -44,35 +50,35 @@
         </div>
     </div>
     @*    <div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="DelayType" class="form-label fw-600"></label>
-    <div>@(string.IsNullOrEmpty(Model.DelayType?.Name) ? "-" : Model.DelayType.Name)</div>
-    </div>
-    </div>*@
+        <div class="mb-3">
+        <label asp-for="DelayType" class="form-label fw-600"></label>
+        <div>@(string.IsNullOrEmpty(Model.DelayType?.Name) ? "-" : Model.DelayType.Name)</div>
+        </div>
+        </div>*@
     @*<div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="DelayReason" class="form-label fw-600"></label>
-    <div>@(Model.DelayReason == null ? "-" : Model.DelayReason.ToString())</div>
-    </div>
-    </div>
-    <div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="StartOfWorkDelay" class="form-label fw-600">Start Of Work Delay</label>
-    <div>@(string.IsNullOrEmpty(Model.StartOfWorkDelay?.Name) ? "-" : Model.StartOfWorkDelay.Name)</div>
-    </div>
-    </div>
-    <div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="ShiftDelay" class="form-label fw-600">Shift Delay</label>
-    <div>@(string.IsNullOrEmpty(Model.ShiftDelay?.Name) ? "-" : Model.ShiftDelay.Name)</div>
-    </div>
-    </div>
-    <div class="col-lg-4">
-    <div class="mb-3">
-    <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
-    <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
-    </div>
-    </div>*@
+        <div class="mb-3">
+        <label asp-for="DelayReason" class="form-label fw-600"></label>
+        <div>@(Model.DelayReason == null ? "-" : Model.DelayReason.ToString())</div>
+        </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="mb-3">
+        <label asp-for="StartOfWorkDelay" class="form-label fw-600">Start Of Work Delay</label>
+        <div>@(string.IsNullOrEmpty(Model.StartOfWorkDelay?.Name) ? "-" : Model.StartOfWorkDelay.Name)</div>
+        </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="mb-3">
+        <label asp-for="ShiftDelay" class="form-label fw-600">Shift Delay</label>
+        <div>@(string.IsNullOrEmpty(Model.ShiftDelay?.Name) ? "-" : Model.ShiftDelay.Name)</div>
+        </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="mb-3">
+        <label asp-for="ReworkDelay" class="form-label fw-600">Rework Delay</label>
+        <div>@(string.IsNullOrEmpty(Model.ReworkDelay?.Name) ? "-" : Model.ReworkDelay.Name)</div>
+        </div>
+        </div>*@
     <div class="col-lg-4">
         <div class="mb-3">
             <label asp-for="Reason" class="form-label fw-600"></label>
@@ -105,8 +111,22 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
+            <label asp-for="ClippedEmployeesUrl" class="form-label fw-600"></label>
+            <div></div>
+            @if (string.IsNullOrEmpty(Model.ClippedEmployeesUrl))
+            {
+                <a onclick="return false;"><i class="fa-solid fa-link disabled-link"></i></a>
+            }
+            else
+            {
+                <a href="@Model.ClippedEmployeesUrl" target="_blank"><i class="fa-solid fa-link"></i></a>
+            }
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
             <label asp-for="Status" class="form-label fw-600"></label>
-            <div>@Model.Status</div>
+            <div>@Model.FormattedStatus</div>
         </div>
     </div>
     <div class="col-lg-4">
@@ -117,18 +137,18 @@
     </div>
 
 
-    <div class="col-lg-4">
-        <div class="mb-3">
-            <label asp-for="Approver" class="form-label fw-600"></label>
-            <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? Model.PossibleApprovers : Model.Approver.Name)</div>
+    @*<div class="col-lg-4">
+            <div class="mb-3">
+                <label asp-for="Approver" class="form-label fw-600"></label>
+                <div>@(string.IsNullOrEmpty(Model.Approver?.Name) ? Model.PossibleApprovers : Model.Approver.Name)</div>
+            </div>
         </div>
-    </div>
-    @*<div class="col-lg-12">
-    <div class="mb-3">
-    <label asp-for="Description" class="form-label fw-600"></label>
-    <div>@Model.Description</div>
-    </div>
-    </div>*@
+        <div class="col-lg-12">
+            <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-600"></label>
+            <div>@Model.Description</div>
+            </div>
+            </div>*@
     <div class="col-md-12 mt-3">
         <h4 class="col-md-12">Costs</h4>
 
@@ -136,10 +156,11 @@
             <table class="table text-nowrap">
                 <thead>
                     <tr>
-                        <th>Override Type</th>
+                        <th>ST Hours</th>
+                        <th>OT Hours</th>
+                        <th>DT Hours</th>
                         <th>Craft</th>
                         <th>Head Count</th>
-                        <th>Hours</th>
                         @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
                         {
                             <th>Cost</th>

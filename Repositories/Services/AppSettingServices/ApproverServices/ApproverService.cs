@@ -16,16 +16,14 @@ using Helpers.Extensions;
 using Repositories.Services.CommonServices.UserService;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Repositories.Services.CommonServices.ApprovalService.Interface;
 using ViewModels.Common.Department;
 using Repositories.Shared.UserInfoServices;
 using Enums;
 using Models.OverrideLogs;
 using Models.TimeOnTools;
 using Models.WeldingRodRecord;
-using DocumentFormat.OpenXml.Spreadsheet;
 using System.Linq.Dynamic.Core;
-
+using Microsoft.Extensions.Configuration;
 
 namespace Repositories.Services.AppSettingServices.ApproverService
 {
@@ -35,18 +33,24 @@ namespace Repositories.Services.AppSettingServices.ApproverService
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
+        private readonly UserManager<ToranceUser> userManager;
         private readonly ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identity;
         private readonly IRepositoryResponse _response;
+        private readonly IUserInfoService _userInfoService;
+        private readonly IConfiguration _configuration;
 
-        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
+        public ApproverService(ToranceContext db, UserManager<ToranceUser> userManager, ILogger<ApproverService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IIdentityService identity, IRepositoryResponse response, IUserInfoService userInfoService, IConfiguration configuration) : base(db, Enums.RolesCatalog.Approver, userManager, logger, mapper, identity, response, userInfoService)
         {
             _db = db;
+            this.userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _identity = identity;
             _response = response;
+            _userInfoService = userInfoService;
+            _configuration = configuration;
         }
         protected override async Task<bool> CreateUserAdditionalMappings(CreateViewModel viewModel, SignUpModel model)
         {
@@ -85,10 +89,14 @@ namespace Repositories.Services.AppSettingServices.ApproverService
 
         public async Task<IRepositoryResponse> GetAll<M>(IBaseSearchModel search)
         {
-
             try
             {
                 var searchFilter = search as ApproverSearchViewModel;
+                var setDepartmentFilter = _configuration.GetValue<bool>("SetDepartmentFilter");
+                if (setDepartmentFilter == false)
+                {
+                    searchFilter.Department = new();
+                }
                 var userQueryable = await GetPaginationDbSet(searchFilter);
                 searchFilter.IgnoreOrdering = true;
                 var users = await userQueryable.Paginate(searchFilter);
@@ -150,17 +158,19 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                 join r in _db.Roles on userRole.RoleId equals r.Id
                                 where
                                 (
-                                   (
-                                       string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
-                                   )
-                                   &&
-                                   (search.Unit.Id == null || search.Unit.Id == 0 || approverAssociation.UnitId == search.Unit.Id)
-                                   &&
-                                   ("Approver" == r.Name)
-                                   &&
-                                   (
-                                       string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
-                                   )
+                                    (
+                                        string.IsNullOrEmpty(search.Search.value) || user.Email.ToLower().Contains(search.Search.value.ToLower())
+                                    )
+                                    &&
+                                    (search.Unit.Id == null || search.Unit.Id == 0 || approverAssociation.UnitId == search.Unit.Id)
+                                    &&
+                                    (search.Department.Id == null || search.Department.Id == 0 || approverAssociation.DepartmentId == search.Department.Id)
+                                    &&
+                                    ("Approver" == r.Name)
+                                    &&
+                                    (
+                                        string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
+                                    )
                                )
                                 select user);
             //select new ApproverDetailViewModel { Id = user.Id });

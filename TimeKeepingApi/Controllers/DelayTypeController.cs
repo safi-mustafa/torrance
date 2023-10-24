@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class DelayTypeController : CrudBaseBriefController<DelayTypeDetailViewModel, DelayTypeSearchViewModel>
     {
-        public DelayTypeController(IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> permitTypeService) : base(permitTypeService)
+        public DelayTypeController(IDelayTypeService<DelayTypeModifyViewModel, DelayTypeModifyViewModel, DelayTypeDetailViewModel> permitTypeService, ILogger<DelayTypeController> logger) : base(permitTypeService, logger, "DelayType")
         {
         }
     }

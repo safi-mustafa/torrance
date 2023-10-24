@@ -14,7 +14,7 @@ namespace API.Controllers
     [Authorize(Roles = "SuperAdmin,Admin, Approver")]
     public class ApprovalController : CrudBaseBriefController<ApprovalDetailViewModel, ApprovalSearchViewModel>
     {
-        public ApprovalController(IApprovalService permitTypeService) : base(permitTypeService)
+        public ApprovalController(IApprovalService permitTypeService, ILogger<ApprovalController> logger) : base(permitTypeService, logger, "Approval")
         {
         }
     }

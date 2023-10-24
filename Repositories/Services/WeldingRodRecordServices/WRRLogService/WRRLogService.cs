@@ -4,7 +4,9 @@ using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
+using Helpers.ExcelReader;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,7 +23,9 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using ViewModels.Notification;
+using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
+using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.WeldingRodRecord.WRRLog;
 
@@ -29,8 +33,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 {
     public class WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<WRRLog, CreateViewModel, UpdateViewModel, DetailViewModel>, IWRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
         where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IWRRLogNotificationViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IWRRLogNotificationViewModel, IIdentitifier, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<WRRLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -40,6 +44,9 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IHostingEnvironment _env;
+        private readonly string _loggedInUserRole;
+        private readonly long _loggedInUserId;
 
         public WRRLogService(
                 ToranceContext db,
@@ -49,7 +56,8 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 IUserInfoService userInfoService,
                 INotificationService notificationService,
                 IHttpContextAccessor httpContextAccessor,
-                IPossibleApproverService possibleApproverService
+                IPossibleApproverService possibleApproverService,
+                IHostingEnvironment env
             ) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
@@ -60,34 +68,27 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _env = env;
+            _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
 
         public override Expression<Func<WRRLog, bool>> SetQueryFilter(IBaseSearchModel filters)
         {
             var searchFilters = filters as WRRLogSearchViewModel;
             //searchFilters.OrderByColumn = "Status";
-            var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var status = (Status?)((int?)searchFilters.Status);
-            var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
-            var parsedLoggedInId = long.Parse(loggedInUserId);
-            List<Status> statusNotList = new();
-            if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
+            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
             }
             else
             {
-                searchFilters.StatusNot = Status.Pending;
+                searchFilters.StatusNot.Add(Status.Pending);
+                searchFilters.StatusNot.Add(Status.InProcess);
             }
-
-            if (searchFilters.StatusNot != null)
-                statusNotList.Add(searchFilters.StatusNot.Value);
-            if (status != Status.Archived)
-                statusNotList.Add(Status.Archived);
-            statusNotList.Add(Status.Partial);
-
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Email.ToLower().Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Approver.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()) || x.Employee.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.Email) || x.Email.ToLower().Contains(searchFilters.Email.ToLower()))
                             &&
@@ -96,13 +97,13 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             (searchFilters.Unit.Id == null || searchFilters.Unit.Id == 0 || x.Unit.Id == searchFilters.Unit.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (_loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||
-                                (loggedInUserRole == RolesCatalog.Administrator.ToString())
+                                (_loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Approver.ToString() && (x.ApproverId == _loggedInUserId || x.EmployeeId == _loggedInUserId))
                                 ||
-                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                                (_loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == _loggedInUserId)
                             )
                             &&
                             (searchFilters.Location.Id == null || searchFilters.Location.Id == 0 || x.Location.Id == searchFilters.Location.Id)
@@ -117,9 +118,11 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (_loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == _loggedInUserId))
                             &&
                             x.IsDeleted == false
+                            &&
+                            x.IsArchived == searchFilters.IsArchived
             ;
         }
 
@@ -127,6 +130,9 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
         {
             try
             {
+                var isApprover = _userInfoService.LoggedInUserRole() == "Approver";
+                var loggedInUserId = _userInfoService.LoggedInUserId();
+                var parsedLoggedInUser = long.Parse(!string.IsNullOrEmpty(loggedInUserId) ? loggedInUserId : "0");
                 var dbModel = await _db.WRRLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
@@ -137,13 +143,25 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     .Include(x => x.Approver)
                     .Include(x => x.Contractor)
                     .Include(x => x.Company)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters().FirstOrDefaultAsync();
+                    .Where(x =>
+                        x.Id == id
+                        &&
+                        x.IsDeleted == false
+                        &&
+                        (
+                            isApprover == false
+                            ||
+                            (parsedLoggedInUser > 0 && (x.ApproverId == parsedLoggedInUser || x.EmployeeId == parsedLoggedInUser))
+                        )
+                    ).IgnoreQueryFilters().FirstOrDefaultAsync();
 
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<WRRLogDetailViewModel>(dbModel);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
-                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
+                    mappedModel.LoggedInUserRole = _loggedInUserRole;
+                    mappedModel.LoggedInUserId = _loggedInUserId;
+                    //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     var response = new RepositoryResponseWithModel<WRRLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -177,6 +195,12 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var item in paginatedResult.Items)
+                    {
+                        var logItem = item as LogCommonDetailViewModel;
+                        logItem.LoggedInUserRole = _loggedInUserRole;
+                        logItem.LoggedInUserId = _loggedInUserId;
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
@@ -201,8 +225,11 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     await SetRequesterId(mappedModel);
                     await _db.Set<WRRLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    await _notificationService.CreateLogNotification(notification);
+                    await _notificationService.CreateNotificationsForLogCreation(new WRRLogNotificationViewModel(model, mappedModel));
+                    if (mappedModel.ApproverId != null && mappedModel.ApproverId > 0)
+                    {
+                        await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, mappedModel));
+                    }
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -227,12 +254,30 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                     if (record != null)
                     {
 
+                        var previousApproverId = record.ApproverId;
+                        var previousStatus = record.Status;
                         var dbModel = _mapper.Map(model, record);
-                        if (record.ApproverId != updateModel.Approver?.Id)
+                        dbModel.Status = previousStatus;
+                        if (previousApproverId != updateModel.Approver?.Id)
                         {
-                            var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
-                            await _notificationService.Create(notification);
+                            if (record.ApproverId != null && record.ApproverId > 0)
+                            {
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new WRRLogNotificationViewModel(model, record));
+                            }
+
+                            //if (previousStatus == Status.Pending)
+                            //{
+                            //    dbModel.Status = Status.InProcess;
+                            //}
                         }
+                        else
+                        {
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new WRRLogNotificationViewModel(model, record));
+                            }
+                        }
+
                         await SetRequesterId(dbModel);
                         await _db.SaveChangesAsync();
                         var response = new RepositoryResponseWithModel<long> { ReturnModel = record.Id };
@@ -269,26 +314,27 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
             return check < 1;
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(WRRLog model, NotificationEventTypeCatalog eventType)
-        {
-            string userFullName = "";
-            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
-            }
-            return new NotificationViewModel()
-            {
-                LogId = model.Id,
-                EntityId = model.Id,
-                EventType = eventType,
-                EntityType = NotificationEntityType.WRRLog,
-                IdentifierKey = "TWR#",
-                IdentifierValue = model.Twr,
-                SendTo = model?.Approver?.Id.ToString(),
-                User = userFullName
-            };
-        }
+        //private async Task<NotificationViewModel> GetNotificationModel(WRRLog model, NotificationEventTypeCatalog eventType)
+        //{
+        //    string userFullName = "";
+        //    string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    if (!string.IsNullOrEmpty(userId))
+        //    {
+        //        userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
+        //    }
+        //    return new NotificationViewModel()
+        //    {
+        //        LogId = model.Id,
+        //        EntityId = model.Id,
+        //        EventType = eventType,
+        //        EntityType = NotificationEntityType.WRRLog,
+        //        IdentifierKey = "TWR#",
+        //        IdentifierValue = model.Twr,
+        //        SendTo = model?.Approver?.Id.ToString(),
+        //        Approver = userFullName,
+        //        RequestorId = model.EmployeeId
+        //    };
+        //}
 
         public async Task<XLWorkbook> DownloadExcel(WRRLogSearchViewModel searchModel)
         {
@@ -300,6 +346,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("WeldingRodRecordLogs");
+                LogExcelHelper.AddLogo(worksheet, _env);
 
                 var columnHeaders = new List<string>
                 {
@@ -337,7 +384,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
         private void AddDataRows(IXLWorksheet worksheet, List<WRRLogDetailViewModel> items)
         {
-            var row = 2;
+            var row = 3;
             foreach (var item in items)
             {
                 var logIndex = 0;
@@ -349,7 +396,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 worksheet.Cell(row, ++logIndex).SetValue(item.FormattedCreatedTime);
                 worksheet.Cell(row, ++logIndex).Value = item.Unit != null ? item.Unit.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.FormattedCalibrationDate;
-                worksheet.Cell(row, ++logIndex).Value = item.FumeControlUsed;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedFumeControlUsed;
                 worksheet.Cell(row, ++logIndex).Value = item.RodType != null ? item.RodType.Name : "-";
                 worksheet.Cell(row, ++logIndex).Value = item.Twr;
                 worksheet.Cell(row, ++logIndex).Value = item.WeldMethod != null ? item.WeldMethod.Name : "-";
@@ -358,15 +405,15 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
                 worksheet.Cell(row, ++logIndex).Value = item.RodCheckedOutLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.RodReturnedWasteLbs;
                 worksheet.Cell(row, ++logIndex).Value = item.DateRodReturned;
-                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedStatus;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }
         }
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
-            var row = worksheet.Row(1);
-            //  row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+            var row = worksheet.Row(2);
+            worksheet.Row(2).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             for (int i = 0; i < headers.Count; i++)
             {
                 row.Cell(i + 1).Value = headers[i];

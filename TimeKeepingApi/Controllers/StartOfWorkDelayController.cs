@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class StartOfWorkDelayController : CrudBaseBriefController<StartOfWorkDelayDetailViewModel, StartOfWorkDelaySearchViewModel>
     {
-        public StartOfWorkDelayController(IStartOfWorkDelayService<StartOfWorkDelayModifyViewModel, StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel> shiftDelayService) : base(shiftDelayService)
+        public StartOfWorkDelayController(IStartOfWorkDelayService<StartOfWorkDelayModifyViewModel, StartOfWorkDelayModifyViewModel, StartOfWorkDelayDetailViewModel> shiftDelayService, ILogger<StartOfWorkDelayController> logger) : base(shiftDelayService, logger, "StartOfWorkDelay")
         {
         }
     }

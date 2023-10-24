@@ -21,6 +21,7 @@ using static Repositories.Services.CommonServices.ApprovalService.ApprovalServic
 using ViewModels.Authentication.User;
 using ViewModels;
 using Repositories.Services.AppSettingServices.WRRLogService;
+using Humanizer;
 
 namespace Web.Controllers
 {
@@ -48,7 +49,7 @@ namespace Web.Controllers
             IFCOLogService<FCOLogModifyViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> fcoService,
             ILogger<ApprovalController> logger,
             IMapper mapper
-            ) : base(approvaleService, logger, mapper, "Approval", "Approvals", true)
+            ) : base(approvaleService, logger, mapper, "Approval", "Approval", true)
         {
             _approvalService = approvaleService;
             _totService = totService;
@@ -61,7 +62,8 @@ namespace Web.Controllers
         protected override ApprovalSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.Status = Status.Pending;
+            var status = (Status?)((int?)filters.Status);
+            status = Status.Pending;
             return filters;
         }
 
@@ -257,18 +259,19 @@ namespace Web.Controllers
         {
             return new List<DataTableViewModel>()
             {
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Date",data = "FormattedDate",sortingColumn = "Date", orderable=true},
                 new DataTableViewModel{title = "Type",data = "FormattedLogType", sortingColumn = "Type", orderable=true},
-                new DataTableViewModel{title = "Requester",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Requester",sortingColumn="Employee.FullName", orderable=true},
                 //new DataTableViewModel{title = "Approver",data = "Approver"},
                 new DataTableViewModel{title = "Department",data = "Department",orderable=true},
                 //new DataTableViewModel{title = "Contractor",data = "Contractor"},
                 new DataTableViewModel{title = "Unit",data = "Unit", orderable=true},
+                new DataTableViewModel{title = "Approver" ,data = "Approver"},
                 //new DataTableViewModel{title = "TWR",data = "TWR"},
                 //new DataTableViewModel{title = "Reason",data = "Reason", orderable=true},
-                new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
-                new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
+                //new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
+                //new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
                 new DataTableViewModel{title = "Action",data = null,className="text-right exclude-from-export"}
 
@@ -290,7 +293,7 @@ namespace Web.Controllers
             return vm;
         }
 
-        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model, bool isApproval)
+        protected virtual CrudDetailViewModel SetDetailViewModel(IBaseCrudViewModel model, bool isApproval, LogType type)
         {
             CrudDetailViewModel vm = new CrudDetailViewModel()
             {
@@ -308,7 +311,7 @@ namespace Web.Controllers
             {
                 var parsedResponse = response as RepositoryResponseWithModel<DetailViewModel>;
                 var model = parsedResponse?.ReturnModel ?? new();
-                var vm = SetDetailViewModel(model, isApproval);
+                var vm = SetDetailViewModel(model, isApproval, type);
                 return View(view, vm);
             }
             else
@@ -325,17 +328,27 @@ namespace Web.Controllers
             ViewBag.IgnoreLayout = true;
             if (type == LogType.TimeOnTools)
             {
+                _detailTitle = "TOTLog";
                 _detailViewPath = "~/Views/TOTLog/_Detail.cshtml";
                 response = await _totService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<TOTLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<TOTLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
             else if (type == LogType.WeldingRodRecord)
             {
+                _detailTitle = "WRRLog";
                 _detailViewPath = "~/Views/WRRLog/_Detail.cshtml";
                 response = await _wrrService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<WRRLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<WRRLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
@@ -349,9 +362,14 @@ namespace Web.Controllers
             }
             else
             {
+                _detailTitle = "OverrideLog";
                 _detailViewPath = "~/Views/OverrideLog/_Detail.cshtml";
                 response = await _overrideLogService.GetById(id);
                 var parsedModel = response as RepositoryResponseWithModel<ORLogDetailViewModel>;
+                if (approverId > 0 && parsedModel?.ReturnModel != null && approverId != parsedModel.ReturnModel.Approver.Id)
+                {
+                    return View("ApproverReassigned");
+                }
                 isApproval = SetApproverValues(isUnauthenticatedApproval, notificationId, approverId, parsedModel);
                 return GetDetailView<ORLogDetailViewModel>(parsedModel, id, type, isApproval, view);
             }
@@ -363,12 +381,13 @@ namespace Web.Controllers
             bool isApproval = false;
             if (!isUnauthenticatedApproval)
                 return true;
+
             if (approverId > 0 && isUnauthenticatedApproval && parsedModel != null)
             {
-                parsedModel.ReturnModel.Approver = new ApproverBriefViewModel { Id = approverId };
+                parsedModel.ReturnModel.Approver = new ApproverBriefViewModel(false, "") { Id = approverId };
                 parsedModel.ReturnModel.IsUnauthenticatedApproval = isUnauthenticatedApproval;
                 parsedModel.ReturnModel.NotificationId = notificationId;
-                isApproval = parsedModel.ReturnModel.Status == Status.Pending;
+                isApproval = (parsedModel.ReturnModel.CanProcess);
             }
             return isApproval;
         }

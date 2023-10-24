@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class OngoingWorkDelayController : CrudBaseBriefController<OngoingWorkDelayDetailViewModel, OngoingWorkDelaySearchViewModel>
     {
-        public OngoingWorkDelayController(IOngoingWorkDelayService<OngoingWorkDelayModifyViewModel, OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel> shiftDelayService) : base(shiftDelayService)
+        public OngoingWorkDelayController(IOngoingWorkDelayService<OngoingWorkDelayModifyViewModel, OngoingWorkDelayModifyViewModel, OngoingWorkDelayDetailViewModel> shiftDelayService, ILogger<OngoingWorkDelayController> logger) : base(shiftDelayService, logger, "OnGoingWorkDelay")
         {
         }
     }

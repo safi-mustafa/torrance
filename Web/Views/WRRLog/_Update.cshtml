@@ -4,6 +4,10 @@
 @{
     Layout = null;
     var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
+
+    //this check is placed so that no one can change Approver unless it is an Admin and Log is updated and Status is Pending and inProcess
+    //var canModifyApprover = isAdmin && (Model.Status == Status.Pending || Model.Status == Status.InProcess) && Model.Id > 0;
+    var canModifyApprover = Model.Status == Status.Pending || Model.Status == Status.InProcess;
 }
 <div class="row">
     <div class="col-lg-12">
@@ -18,34 +22,45 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
-            @*@if (isAdmin)
+            @if (canModifyApprover)
             {
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-            </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <label class="form-label fw-600">Company</label>
-            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-            </div>
-            </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+                    </div>
+                </div>
             }
-            *@
-
-            <div class="col-lg-6">
-                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
-                {
+            else
+            {
+                <input asp-for="Approver.Id" type="hidden" />
+            }
+            @if (isAdmin)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                    </div>
+                </div>
+                @* <div class="col-lg-6">
+                    <div class="mb-3">
                     <label class="form-label fw-600">Company</label>
-                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
-                    <input asp-for="Company.Id" type="hidden" />
-                }
-                else
-                {
+                    <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+                    </div>
+                    </div>*@
+            }
+            else
+            {
+                <input asp-for="Employee.Id" type="hidden" />
+            }
+
+
+            @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+            {
+                <div class="col-lg-6">
                     <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
-                }
-            </div>
+                </div>
+            }
+
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -98,12 +113,12 @@
                 </div>
             </div>
             @* <div class="col-lg-6">
-            <div class="mb-3">
-            <label asp-for="Email" class="form-label fw-600"></label>
-            <input asp-for="Email" type="email" class="form-control" />
-            <span asp-validation-for="Email" class="validation-invalid-label"></span>
-            </div>
-            </div>*@
+                <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-600"></label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="validation-invalid-label"></span>
+                </div>
+                </div>*@
 
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -140,29 +155,16 @@
                     <span asp-validation-for="DateRodReturned" class="validation-invalid-label"></span>
                 </div>
             </div>
-            @*@if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
-            {
-            <div class="col-lg-6">
-            <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-            </div>
-            </div>
-            }
-            else
-            {
-            <input asp-for="Approver.Id" type="hidden" />
-            }*@
-            <input asp-for="Approver.Id" type="hidden" />
+            @*<input asp-for="Approver.Id" type="hidden" />*@
         </div>
     </div>
 </div>
 
 <input asp-for="Status" type="hidden" id="status-id" />
-<input asp-for="Employee.Id" type="hidden" />
+<input asp-for="Company.Id" type="hidden" />
 <input asp-for="Id" type="hidden" />
 
-<script>
-    $(function () {
+<script>$(function () {
         $('#requester-id').on('change.select2', function (e) {
             if ($(this).select2('data')[0] === undefined) {
                 $("#requestor-company").val("");

@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class WeldMethodController : CrudBaseBriefController<WeldMethodDetailViewModel, WeldMethodSearchViewModel>
     {
-        public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> weldMethodService) : base(weldMethodService)
+        public WeldMethodController(IWeldMethodService<WeldMethodModifyViewModel, WeldMethodModifyViewModel, WeldMethodDetailViewModel> weldMethodService, ILogger<WeldMethodController> logger) : base(weldMethodService, logger, "Weld Method")
         {
         }
     }

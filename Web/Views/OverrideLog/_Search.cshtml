@@ -20,16 +20,16 @@
     </div>
     <div class="col-lg-4">
         <div class="mb-3">
-            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requestor" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" },{ "IsSearchForm", "true" }, { "LogType", "Override" }  }' />
+            <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Requestor" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requestor" },{ "IsSearchForm", "true" }, { "LogType", "Override" }  }' />
         </div>
     </div>
-    
+
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, { "LogType", "Override" } }' />
         </div>
     </div>
-   
+
     <div class="col-lg-4">
         <div class="mb-3">
             <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
@@ -59,4 +59,20 @@
             <input type="hidden" asp-for="StatusNot" />
         </div>
     </div>
+    <div class="col-lg-4">
+        <div class="form-group profile-input">
+            <label asp-for="IsArchived" class="control-label form-label fw-600"></label>
+            <input type="checkbox" id="show-archive" name="IsArchived" value="false" style="display: block;" />
+        </div>
+    </div>
+
 </div>
+<script>$(function () {
+        //$(document).on("click", "#show-archive", function () {
+        //    if ($(this).is(":checked")) {
+        //        $(this).val(true);
+        //    }
+        //    else
+        //        $(this).val(false);
+        //})
+    })</script>

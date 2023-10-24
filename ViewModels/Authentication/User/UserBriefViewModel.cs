@@ -12,20 +12,25 @@ namespace ViewModels.Authentication.User
         public UserBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled)
         {
         }
-        public UserBriefViewModel(bool isValidationEnabled, string errorMessage) :
-            base(isValidationEnabled, errorMessage)
+        public UserBriefViewModel(bool isValidationEnabled, string errorMessage) : base(isValidationEnabled, errorMessage)
         {
         }
         public override string? Name { get; set; }
     }
     public class ApproverBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
-        public ApproverBriefViewModel() : base(false, "")
+
+        public ApproverBriefViewModel() : base(true, "The Approver field is required.")
         {
         }
-        public ApproverBriefViewModel(bool isValidationEnabled = false) : base(isValidationEnabled, "The Approver field is required.")
+        public ApproverBriefViewModel(bool isValidationEnabled) : base(isValidationEnabled, "The Approver field is required.")
         {
         }
+        public ApproverBriefViewModel(bool isValidationEnabled, string message) : base(isValidationEnabled, message)
+        {
+        }
+
+        private string? name;
 
         [DisplayName("Approver")]
         public override string? Name { get; set; }
@@ -52,7 +57,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Area Execution Lead")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
     }
     public class BusinessTeamLeaderBriefViewModel : BaseBriefVM, IApproverBaseBriefViewModel
     {
@@ -64,7 +69,7 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Business Team Leader")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
     }
     public class RejecterBriefViewModel : BaseBriefVM
     {
@@ -76,7 +81,9 @@ namespace ViewModels.Authentication.User
         }
 
         [DisplayName("Rejecter")]
-        public string? Name { get; set; }
+        public override string? Name { get; set; }
+
+        public string? Email { get; set; }
     }
 
 }

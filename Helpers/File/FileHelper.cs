@@ -1,11 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Helpers.File
@@ -15,7 +9,7 @@ namespace Helpers.File
         string Save(IFileModel model, string existingUrl = "", string baseFolder = "", string namePrefix = "");
         bool Delete(string url);
 
-        void GetFilePath(string extension, string _baseFolder, string namePrefix, out string subPath, out string uniqueFileName, out string filePath, out string basePath);
+        void GetFilePath(string extension, string _baseFolder, string prefix, out string subPath, out string uniqueFileName, out string filePath, out string basePath);
     }
     public class FileHelper : IFileHelper
     {
@@ -36,19 +30,21 @@ namespace Helpers.File
             {
                 if (model.File != null)
                 {
-                    string _baseFolder = model.GetBaseFolder();
+
+                    string _baseFolder = string.IsNullOrEmpty(baseFolder) ? model.GetBaseFolder() : baseFolder;
                     var extension = Path.GetExtension(model.File.FileName);
                     _logger.LogDebug("File Save method, extension trimmed", extension);
-                    string subPath, uniqueFileName, filePath, basePathStorage;
+
+                    string subPath, filePath, uniqueFileName, basePathStorage;
                     GetFilePath(extension, _baseFolder, namePrefix, out subPath, out uniqueFileName, out filePath, out basePathStorage);
                     if (!string.IsNullOrEmpty(existingUrl))
                     {
                         Delete(existingUrl);
                     }
                     _logger.LogDebug("File Save method, created filepath", filePath);
-
-                    var absolutePath = _env.ContentRootPath;
-                    var savedDirectory = Path.Combine(absolutePath, filePath);
+                    var directoryPath = _configuration.GetValue<string>("DirectoryPath");
+                    //var absolutePath = //_env.ContentRootPath;
+                    var savedDirectory = Path.Combine(directoryPath, filePath);
                     FileInfo file = new FileInfo(savedDirectory);
                     file.Directory.Create(); // If the directory already exists, this method does nothing.
                     _logger.LogDebug("File Save method, creating file directory");

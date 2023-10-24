@@ -4,13 +4,14 @@ using Centangle.Common.ResponseHelpers.Models;
 using ClosedXML.Excel;
 using DataLibrary;
 using Enums;
+using Helpers.ExcelReader;
 using Helpers.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.Common.Interfaces;
 using Models.TimeOnTools;
-using Models.WeldingRodRecord;
 using Pagination;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared;
@@ -21,9 +22,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Security.Claims;
-using ViewModels.Notification;
-using ViewModels.OverrideLogs.ORLog;
 using ViewModels.Shared;
 using ViewModels.Shared.Interfaces;
 using ViewModels.TimeOnTools.TOTLog;
@@ -31,9 +29,9 @@ using ViewModels.TimeOnTools.TOTLog;
 namespace Repositories.Services.TimeOnToolServices.TOTLogService
 {
     public class TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel> : ApproveBaseService<TOTLog, CreateViewModel, UpdateViewModel, DetailViewModel>, ITOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>
-        where DetailViewModel : class, IBaseCrudViewModel, new()
-        where CreateViewModel : class, IBaseCrudViewModel, IDelayType, new()
-        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, new()
+        where DetailViewModel : class, IBaseCrudViewModel, ILoggedInUserRole, new()
+        where CreateViewModel : class, IBaseCrudViewModel, IDelayType, ITOTLogNotificationViewModel, new()
+        where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, IDelayType, ITOTLogNotificationViewModel, new()
     {
         private readonly ToranceContext _db;
         private readonly ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> _logger;
@@ -43,8 +41,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPossibleApproverService _possibleApproverService;
+        private readonly IHostingEnvironment _env;
+        private readonly string _loggedInUserRole;
+        private readonly long _loggedInUserId;
 
-        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService) : base(db, logger, mapper, response, userInfoService, notificationService)
+        public TOTLogService(ToranceContext db, ILogger<TOTLogService<CreateViewModel, UpdateViewModel, DetailViewModel>> logger, IMapper mapper, IRepositoryResponse response, IUserInfoService userInfoService, INotificationService notificationService, IHttpContextAccessor httpContextAccessor, IPossibleApproverService possibleApproverService, IHostingEnvironment env) : base(db, logger, mapper, response, userInfoService, notificationService)
         {
             _db = db;
             _logger = logger;
@@ -54,6 +55,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _possibleApproverService = possibleApproverService;
+            _env = env;
+            _loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
+            _loggedInUserId = long.Parse(_userInfoService.LoggedInUserId() ?? "0"); ;
         }
 
         public override Expression<Func<TOTLog, bool>> SetQueryFilter(IBaseSearchModel filters)
@@ -63,23 +67,18 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
             var loggedInUserId = loggedInUserRole == "Employee" ? _userInfoService.LoggedInEmployeeId() : _userInfoService.LoggedInUserId();
             var parsedLoggedInId = long.Parse(loggedInUserId);
-            List<Status> statusNotList = new();
             if (loggedInUserRole == RolesCatalog.Employee.ToString() || loggedInUserRole == RolesCatalog.CompanyManager.ToString() || searchFilters.IsExcelDownload)
             {
                 searchFilters.StatusNot = null;
             }
             else
             {
-                searchFilters.StatusNot = Status.Pending;
+                searchFilters.StatusNot.Add(Status.Pending);
+                searchFilters.StatusNot.Add(Status.InProcess);
             }
-            if (searchFilters.StatusNot != null)
-                statusNotList.Add(searchFilters.StatusNot.Value);
-            if (status != Status.Archived)
-                statusNotList.Add(Status.Archived);
-            statusNotList.Add(Status.Partial);
 
             return x =>
-                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.EquipmentNo.Contains(searchFilters.Search.value.ToLower()))
+                            (string.IsNullOrEmpty(searchFilters.Search.value) || x.Employee.FullName.ToLower().Contains(searchFilters.Search.value.ToLower()))
                             &&
                             (string.IsNullOrEmpty(searchFilters.EquipmentNo) || x.EquipmentNo.ToLower().Contains(searchFilters.EquipmentNo.ToLower()))
                             &&
@@ -100,23 +99,24 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                             (searchFilters.Company.Id == null || searchFilters.Company.Id == 0 || x.Company.Id == searchFilters.Company.Id)
                             &&
                             (
-                                (loggedInUserRole == "SuperAdmin")
+                                (loggedInUserRole == RolesCatalog.SuperAdmin.ToString())
                                 ||
-                                 (loggedInUserRole == RolesCatalog.Administrator.ToString())
+                                (loggedInUserRole == RolesCatalog.Administrator.ToString())
                                 ||
-
-                                (loggedInUserRole == "Approver" && x.ApproverId == parsedLoggedInId)
+                                (loggedInUserRole == RolesCatalog.Approver.ToString() && (x.ApproverId == parsedLoggedInId || x.EmployeeId == parsedLoggedInId))
                                 ||
-                                (loggedInUserRole == "Employee" && x.EmployeeId == parsedLoggedInId)
+                                (loggedInUserRole == RolesCatalog.Employee.ToString() && x.EmployeeId == parsedLoggedInId)
                             )
                             &&
                             (searchFilters.SelectedIds == null || searchFilters.SelectedIds.Count <= 0 || searchFilters.SelectedIds.Contains(x.Id.ToString()) || x.Status == Status.Pending)
                             &&
                             (status == null || status == x.Status)
                             &&
-                            (statusNotList.Count == 0 || !statusNotList.Contains(x.Status))
+                            (searchFilters.StatusNot == null || searchFilters.StatusNot.Count == 0 || !searchFilters.StatusNot.Contains(x.Status) || (loggedInUserRole == RolesCatalog.Approver.ToString() && x.EmployeeId == parsedLoggedInId))
                             &&
                             x.IsDeleted == false
+                            &&
+                            x.IsArchived == searchFilters.IsArchived
             ;
         }
 
@@ -124,6 +124,9 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
         {
             try
             {
+                var isApprover = _userInfoService.LoggedInUserRole() == "Approver";
+                var loggedInUserId = _userInfoService.LoggedInUserId();
+                var parsedLoggedInUser = long.Parse(!string.IsNullOrEmpty(loggedInUserId) ? loggedInUserId : "0");
                 var queryable = _db.TOTLogs
                     .Include(x => x.Unit)
                     .Include(x => x.Department)
@@ -140,13 +143,25 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.PermittingIssue)
                     .Include(x => x.DelayType)
                     .Include(x => x.ReasonForRequest)
-                    .Where(x => x.Id == id && x.IsDeleted == false).IgnoreQueryFilters();
+                    .Where(x =>
+                        x.Id == id
+                        &&
+                        x.IsDeleted == false
+                        &&
+                        (
+                            isApprover == false
+                            ||
+                            (parsedLoggedInUser > 0 && (x.ApproverId == parsedLoggedInUser || x.EmployeeId == parsedLoggedInUser))
+                        )
+                    ).IgnoreQueryFilters();
                 var dbModel = await queryable.FirstOrDefaultAsync();
                 if (dbModel != null)
                 {
                     var mappedModel = _mapper.Map<TOTLogDetailViewModel>(dbModel);
-                    mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
+                    //mappedModel.PossibleApprovers = await _possibleApproverService.GetPossibleApprovers(mappedModel.Unit.Id, mappedModel.Department.Id);
                     mappedModel.TWRModel = new TWRViewModel(mappedModel.Twr);
+                    mappedModel.LoggedInUserRole = _loggedInUserRole;
+                    mappedModel.LoggedInUserId = _loggedInUserId;
                     var response = new RepositoryResponseWithModel<TOTLogDetailViewModel> { ReturnModel = mappedModel };
                     return response;
                 }
@@ -179,13 +194,19 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     .Include(x => x.Company)
                     .Include(x => x.ReasonForRequest)
                     .Include(x => x.Approver)
-                    .Where(filters).IgnoreQueryFilters();
-                //var query = resultQuery.ToQueryString();
+                    .Where(filters)
+                    .IgnoreQueryFilters();
                 var result = await resultQuery.Paginate(search);
                 if (result != null)
                 {
                     var paginatedResult = new PaginatedResultModel<M>();
                     paginatedResult.Items = _mapper.Map<List<M>>(result.Items.ToList());
+                    foreach (var item in paginatedResult.Items)
+                    {
+                        var logItem = item as LogCommonDetailViewModel;
+                        logItem.LoggedInUserRole = _loggedInUserRole;
+                        logItem.LoggedInUserId = _loggedInUserId;
+                    }
                     paginatedResult._meta = result._meta;
                     paginatedResult._links = result._links;
                     var response = new RepositoryResponseWithModel<PaginatedResultModel<M>> { ReturnModel = paginatedResult };
@@ -212,8 +233,11 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     SetDelayReasonFields(mappedModel, model);
                     await _db.Set<TOTLog>().AddAsync(mappedModel);
                     var result = await _db.SaveChangesAsync() > 0;
-                    var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created);
-                    await _notificationService.CreateLogNotification(notification);
+                    await _notificationService.CreateNotificationsForLogCreation(new TOTLogNotificationViewModel(model, mappedModel));
+                    if (mappedModel.ApproverId != null && mappedModel.ApproverId > 0)
+                    {
+                        await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, mappedModel));
+                    }
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -237,12 +261,29 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     var record = await _db.Set<TOTLog>().FindAsync(updateModel?.Id);
                     if (record != null)
                     {
+                        var previousApproverId = record.ApproverId;
+                        var previousStatus = record.Status;
                         var dbModel = _mapper.Map(model, record);
-                        if (record.ApproverId != updateModel.Approver?.Id)
+                        dbModel.Status = previousStatus;
+                        if (previousApproverId != updateModel.Approver?.Id)
                         {
-                            var notification = await GetNotificationModel(dbModel, NotificationEventTypeCatalog.Updated);
-                            await _notificationService.Create(notification);
+                            if (record.ApproverId != null && record.ApproverId > 0)
+                            {
+                                await _notificationService.CreateNotificationsForLogApproverAssignment(new TOTLogNotificationViewModel(model, record));
+                            }
+                            //if (previousStatus == Status.Pending)
+                            //{
+                            //    dbModel.Status = Status.InProcess;
+                            //}
                         }
+                        else
+                        {
+                            if (previousStatus == Status.Pending || previousStatus == Status.InProcess)
+                            {
+                                await _notificationService.CreateNotificationsForLogUpdation(new TOTLogNotificationViewModel(model, record));
+                            }
+                        }
+
                         await SetRequesterId(dbModel);
                         SetDelayReasonFields(dbModel, model);
                         await _db.SaveChangesAsync();
@@ -297,7 +338,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                     mappedModel.StartOfWorkDelayId = null;
                     mappedModel.OngoingWorkDelayId = null;
                 }
-                else if (delayType.DelayType.Identifier == DelayReasonCatalog.OngoingWork.ToString())
+                else if (delayType.DelayType.Identifier == DelayReasonCatalog.OnGoingWork.ToString())
                 {
                     mappedModel.ShiftDelayId = null;
                     mappedModel.StartOfWorkDelayId = null;
@@ -409,28 +450,27 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-        private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
-        {
-            string userFullName = "";
-            string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
-            }
-            return new NotificationViewModel()
-            {
-                LogId = model.Id,
-                EntityId = model.Id,
-                EventType = eventType,
-                EntityType = NotificationEntityType.TOTLog,
-                IdentifierKey = "Permit#",
-                IdentifierValue = model.PermitNo,
-                SendTo = model?.Approver?.Id.ToString(),
-                User = userFullName
-            };
-        }
-
-
+        //private async Task<NotificationViewModel> GetNotificationModel(TOTLog model, NotificationEventTypeCatalog eventType)
+        //{
+        //    string userFullName = "";
+        //    string userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    if (!string.IsNullOrEmpty(userId))
+        //    {
+        //        userFullName = await _db.Users.Where(x => x.Id == long.Parse(userId)).Select(x => x.FullName).FirstOrDefaultAsync();
+        //    }
+        //    return new NotificationViewModel()
+        //    {
+        //        LogId = model.Id,
+        //        EntityId = model.Id,
+        //        EventType = eventType,
+        //        EntityType = NotificationEntityType.TOTLog,
+        //        IdentifierKey = "Permit#",
+        //        IdentifierValue = model.PermitNo,
+        //        SendTo = model?.Approver?.Id.ToString(),
+        //        Approver = userFullName,
+        //        RequestorId = model.EmployeeId
+        //    };
+        //}
 
         public async Task<XLWorkbook> DownloadExcel(TOTLogSearchViewModel searchModel)
         {
@@ -442,6 +482,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("TimeOnToolLogs");
+                LogExcelHelper.AddLogo(worksheet, _env);
 
                 var columnHeaders = new List<string>
                 {
@@ -484,7 +525,7 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
 
         private void AddDataRows(IXLWorksheet worksheet, List<TOTLogDetailViewModel> items)
         {
-            var row = 2;
+            var row = 3;
             foreach (var item in items)
             {
                 var logIndex = 0;
@@ -510,14 +551,16 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
                 worksheet.Cell(row, ++logIndex).Value = item.ManHours;
                 worksheet.Cell(row, ++logIndex).Value = item.TotalHours;
                 worksheet.Cell(row, ++logIndex).Value = item.DelayDescription;
-                worksheet.Cell(row, ++logIndex).Value = item.Status;
+                worksheet.Cell(row, ++logIndex).Value = item.FormattedStatus;
                 worksheet.Cell(row, ++logIndex).Value = item.Approver != null ? item.Approver.Name : "-";
                 row++;
             }
         }
         private void AddColumnHeaders(IXLWorksheet worksheet, List<string> headers)
         {
-            var row = worksheet.Row(1);
+            var row = worksheet.Row(2);
+            worksheet.Row(2).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
+
             //row.Style.Font.Bold = true; // uncomment it to bold the text of headers row 
             for (int i = 0; i < headers.Count; i++)
             {
@@ -525,77 +568,6 @@ namespace Repositories.Services.TimeOnToolServices.TOTLogService
             }
         }
 
-        public async Task<XLWorkbook> InitializeData()
-        {
-            try
-            {
-                var alphabeticTextList = GetTWRAlphabeticList().Select(x => x.text).ToList();
-                var numericTextList = GetTWRNumericList().Select(x => x.text).ToList();
 
-                var aCount = alphabeticTextList.Count;
-                var nCount = numericTextList.Count;
-
-
-                List<TWRExcelViewModel> list = new();
-                var maxCount = Math.Max(aCount, nCount);
-                for (int i = 0; i < maxCount; i++)
-                {
-                    var item = new TWRExcelViewModel();
-                    if (aCount > i)
-                    {
-                        item.AlphabeticPart = alphabeticTextList[i];
-                    }
-                    if (nCount > i)
-                    {
-                        item.NumericPart = numericTextList[i];
-                    }
-                    list.Add(item);
-                }
-
-
-                var workbook = new XLWorkbook();
-                var worksheet = workbook.Worksheets.Add("TWR");
-                var columnHeaders = new List<string>
-                {
-                    "Alphabetic List",
-                    "Numeric List",
-                };
-                AddColumnHeaders(worksheet, columnHeaders);
-                ChangeBackgroudColor(worksheet, 1, XLColor.FromArgb(0, 0, 0));
-                AddTWRDataRows(worksheet, list);
-
-                return workbook;
-            }
-            catch (Exception ex)
-            {
-                // handle exception
-                return null;
-            }
-        }
-
-        private static void ChangeBackgroudColor(IXLWorksheet worksheet, int row, XLColor? rowColor)
-        {
-            if (rowColor != null)
-            {
-                int columnCount = worksheet.ColumnsUsed().Count();
-                var range = worksheet.Range(row, 1, row, columnCount);
-                range.Style.Fill.BackgroundColor = rowColor;
-                range.Style.Font.FontColor = XLColor.White;
-                range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                range.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            }
-        }
-
-        private void AddTWRDataRows(IXLWorksheet worksheet, List<TWRExcelViewModel> items)
-        {
-            var row = 2;
-            foreach (var item in items)
-            {
-                var logIndex = 0;
-                worksheet.Cell(row, ++logIndex).Value = item.AlphabeticPart;
-                worksheet.Cell(row, ++logIndex).Value = item.NumericPart;
-                row++;
-            }
-        }
     }
 }

@@ -22,7 +22,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
         [Display(Name = "Requestor")]
 
-        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Requestor { get; set; } = new EmployeeBriefViewModel(false, "");
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 
@@ -31,8 +31,12 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public StatusSearchEnum? Status { get; set; } = null;
 
         [Display(Name = "Status Is Not")]
-        public Status? StatusNot { get; set; } = null;
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public List<Status> StatusNot { get; set; } = new();
+
+        [Display(Name = "Show Archived")]
+        public bool IsArchived { get; set; }
+
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false, "");
         public List<string> SelectedIds { get; set; }
     }
 

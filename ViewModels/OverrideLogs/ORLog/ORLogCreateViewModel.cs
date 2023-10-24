@@ -10,7 +10,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.OverrideLogs.ORLog
 {
-    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost
+    public class ORLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IORLogCost, IClippedAttachment, IORLogNotificationViewModel
     {
 
         [Display(Name = "Work Date")]
@@ -23,6 +23,7 @@ namespace ViewModels.OverrideLogs.ORLog
         //[Required]
         public string? Description { get; set; }
 
+        [Required]
         [Display(Name = "Workscope")]
         public string? WorkScope { get; set; }
 
@@ -32,10 +33,10 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public ReasonForRequestBriefViewModel ReasonForRequest { get; set; } = new ReasonForRequestBriefViewModel(false, "");
 
-        public EmployeeBriefViewModel Employee { get; set; } = new();
+        public EmployeeBriefViewModel Employee { get; set; } = new(true);
         public CompanyBriefViewModel Company { get; set; } = new();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
@@ -45,6 +46,8 @@ namespace ViewModels.OverrideLogs.ORLog
         [Required]
         public string? EmployeeNames { get; set; }
 
+        [Display(Name = "Upload Form")]
+        public ClipEmployeeModifyViewModel? ClippedEmployees { get; set; } = new();
 
         [Required]
         [Display(Name = "Override Reason")]

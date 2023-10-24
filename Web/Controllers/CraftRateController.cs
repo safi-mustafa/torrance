@@ -12,7 +12,7 @@
 //        //private readonly ICraftRateService<CraftRateModifyViewModel, CraftRateModifyViewModel, CraftRateDetailViewModel> _craftRateService;
 //        private readonly ILogger<CraftRateController> _logger;
 
-//        public CraftRateController(ICraftRateService<CraftRateModifyViewModel, CraftRateModifyViewModel, CraftRateDetailViewModel> craftRateService, ILogger<CraftRateController> logger, IMapper mapper) : base(craftRateService, logger, mapper, "CraftRate", "Craft Rates")
+//        public CraftRateController(ICraftRateService<CraftRateModifyViewModel, CraftRateModifyViewModel, CraftRateDetailViewModel> craftRateService, ILogger<CraftRateController> logger, IMapper mapper) : base(craftRateService, logger, mapper, "CraftRate", "Craft Rate")
 //        {
 //            _craftRateService = craftRateService;
 //            _logger = logger;

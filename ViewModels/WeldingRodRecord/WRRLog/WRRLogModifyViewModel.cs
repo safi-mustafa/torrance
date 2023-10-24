@@ -15,10 +15,11 @@ using ViewModels.Authentication;
 using ViewModels.Authentication.User;
 using ViewModels.TimeOnTools.TOTLog;
 using ViewModels.Common.Company;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove
+    public class WRRLogModifyViewModel : BaseUpdateVM, IBaseCrudViewModel, IIdentitifier, IApprove, IWRRLogNotificationViewModel
     {
         [Display(Name = "Rod Returned")]
         [Required]
@@ -56,12 +57,13 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
         public double RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-        private EmployeeBriefViewModel? _employee;
-        public EmployeeBriefViewModel? Employee { get => _employee == null ? new EmployeeBriefViewModel() : _employee; set => _employee = value; }
-
+        //private EmployeeBriefViewModel? _employee;
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

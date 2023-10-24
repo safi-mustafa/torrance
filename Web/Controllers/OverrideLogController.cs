@@ -40,9 +40,9 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn="CreatedOn", orderable=true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
                 new DataTableViewModel{title = "Department",data = "Department.Name",orderable=true},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
@@ -53,6 +53,10 @@ namespace Web.Controllers
                 new DataTableViewModel{title = "Company",data = "Company.Name", orderable = true},
                 new DataTableViewModel{title = "PO Number",data = "PoNumber", orderable=true},
                 new DataTableViewModel{title = "Employee Name(s)",data = "EmployeeNames", orderable=true},
+                new DataTableViewModel{title = "Clipped Employee(s)",data = "ClippedEmployeesUrl",format="html",formatValue="link"},
+                new DataTableViewModel{title = "ST Hours",data = "TotalSTHours", orderable=true},
+                new DataTableViewModel{title = "OT Hours",data = "TotalOTHours", orderable=true},
+                new DataTableViewModel{title = "DT Hours",data = "TotalDTHours", orderable=true},
                 new DataTableViewModel{title = "Total Hours",data = "TotalHours", orderable=true},
                 new DataTableViewModel{title = "Total Head Count",data = "TotalHeadCount", orderable=true},
                 new DataTableViewModel{title = "Total Cost",data = "TotalCost", orderable=true, className="dt-currency"},
@@ -70,17 +74,15 @@ namespace Web.Controllers
             //    actions.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
             //}
             result.ActionsList.Add(new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/OverrideLog/Detail/Id" });
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id", HideBasedOn = "IsEditRestricted" });
-            }
-            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id" });
-            //result.ActionsList = actions;
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/OverrideLog/Update/Id", ShowBasedOn = "CanUpdate" });
+            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/OverrideLog/Delete/Id", ShowBasedOn = "CanDelete" });
+
+
         }
         protected override ORLogSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.StatusNot = Enums.Status.Pending;
+            filters.StatusNot.Add(Status.Pending);
             return filters;
         }
 
@@ -126,10 +128,14 @@ namespace Web.Controllers
         }
         public override Task<ActionResult> Create(ORLogModifyViewModel model)
         {
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
+            {
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
+            }
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Requester.Id");
-                ModelState.Remove("Requester.Name");
+                ModelState.Remove("Company.Id");
                 ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
@@ -140,8 +146,8 @@ namespace Web.Controllers
         {
             if (User.IsInRole("Employee"))
             {
-                ModelState.Remove("Requester.Id");
-                ModelState.Remove("Requester.Name");
+                ModelState.Remove("Employee.Id");
+                ModelState.Remove("Employee.Name");
                 ModelState.Remove("Approver.Name");
             }
             ModelState.Remove("Company.Name");
@@ -196,6 +202,17 @@ namespace Web.Controllers
                 }
             }
             return model;
+        }
+
+        public async Task MergeCostsForCraft()
+        {
+            await _overrideLogService.MergeCostsForCraft();
+        }
+
+        public async Task CalculateTotals()
+        {
+            await _overrideLogService.CalculateTotalCostAndHours();
+            RedirectToAction("Index");
         }
     }
 

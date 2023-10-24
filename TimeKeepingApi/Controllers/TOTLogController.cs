@@ -21,7 +21,7 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly IUserInfoService _userInfoService;
 
-        public TOTLogController(ITOTLogService<TOTLogCreateViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> tOTLogService, IMapper mapper, IUserInfoService userInfoService) : base(tOTLogService)
+        public TOTLogController(ITOTLogService<TOTLogCreateViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> tOTLogService, IMapper mapper, IUserInfoService userInfoService, ILogger<TOTLogController> logger) : base(tOTLogService, logger, "TOTLog")
         {
             _tOTLogService = tOTLogService;
             _mapper = mapper;
@@ -52,6 +52,7 @@ namespace API.Controllers
             return ReturnProcessedResponse<PaginatedResultModel<Select2ViewModel>>(result);
         }
 
+        [HttpPost]
         public override Task<IActionResult> Post([FromBody] TOTLogCreateViewModel model)
         {
 
@@ -69,6 +70,7 @@ namespace API.Controllers
             return base.Post(model);
         }
 
+        [HttpPut]
         public override Task<IActionResult> Put([FromBody] TOTLogModifyViewModel model)
         {
             var loggedInUserRole = _userInfoService.LoggedInUserRole() ?? _userInfoService.LoggedInWebUserRole();
@@ -103,7 +105,7 @@ namespace API.Controllers
                 modelState.AddModelError("AlphabeticPart", "Required");
             if (model.NumericPart == null || string.IsNullOrEmpty(model.NumericPart.id) || model.NumericPart.id == "0")
                 modelState.AddModelError("NumericPart", "Required");
-            
+
         }
     }
 }

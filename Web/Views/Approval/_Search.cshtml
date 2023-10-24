@@ -25,13 +25,17 @@
             <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" }, {"ShowUnApproved","true"}, { "LogType", "All" } }' />
         </div>
     </div>
-@*
     <div class="col-lg-4">
-        <div class="form-group profile-input">
-            <label asp-for="Status" class="control-label form-label fw-600"></label>
-            <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(Status))" class="form-control">
-                <option value="">Select Status</option>
-            </select>
+        <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='@new ViewDataDictionary(ViewData) { { "IsSearchForm", "true" } }' />
         </div>
-    </div>*@
+    </div>
+    @*<div class="col-lg-4">
+            <div class="form-group profile-input">
+                <label asp-for="Status" class="control-label form-label fw-600"></label>
+                <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(ApprovalStatus))" class="form-control">
+                    <option value="">Select Status</option>
+                </select>
+            </div>
+        </div>*@
 </div>

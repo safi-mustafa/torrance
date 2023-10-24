@@ -582,227 +582,254 @@ namespace DataLibrary.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("Models.FCO.FCOComment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+            modelBuilder.Entity("Models.LogData", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("ActiveStatus")
-                        .HasColumnType("int");
+                b.Property<int>("Action")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<int>("ActiveStatus")
+                    .HasColumnType("int");
 
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
+                b.Property<string>("AffectedColumns")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                b.Property<string>("CorrelationId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("FCOLogId")
-                        .HasColumnType("bigint");
+                b.Property<long>("CreatedBy")
+                    .HasColumnType("bigint");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                b.Property<DateTime>("CreatedOn")
+                    .HasColumnType("datetime2");
 
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                b.Property<string>("JsonDBModelData")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.Property<string>("JsonViewModelData")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("FCOLogId");
+                b.Property<string>("NewValues")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("FCOComments");
-                });
+                b.Property<string>("OldValues")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<long>("PrimaryKey")
+                    .HasColumnType("bigint");
+
+                b.Property<string>("TableName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Type")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<long>("UpdatedBy")
+                    .HasColumnType("bigint");
+
+                b.Property<DateTime>("UpdatedOn")
+                    .HasColumnType("datetime2");
+
+                b.Property<long>("UserId")
+                    .HasColumnType("bigint");
+
+                b.HasKey("Id");
+
+                b.ToTable("LogDatas");
+            });
 
             modelBuilder.Entity("Models.FCOLog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("ActiveStatus")
-                        .HasColumnType("int");
+                b.Property<int>("ActiveStatus")
+                    .HasColumnType("int");
 
-                    b.Property<string>("AdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("AdditionalInformation")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("AnalysisOfAlternatives")
-                        .HasColumnType("bit");
+                b.Property<bool>("AnalysisOfAlternatives")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime?>("ApprovalDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("ApprovalDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("AreaExecutionLeadApprovalDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("AreaExecutionLeadApprovalDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<long?>("AreaExecutionLeadId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("AreaExecutionLeadId")
+                    .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("BusinessTeamLeaderApprovalDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("BusinessTeamLeaderApprovalDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<long?>("BusinessTeamLeaderId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("BusinessTeamLeaderId")
+                    .HasColumnType("bigint");
 
-                    b.Property<long>("CompanyId")
-                        .HasColumnType("bigint");
+                b.Property<long>("CompanyId")
+                    .HasColumnType("bigint");
 
-                    b.Property<double>("Contingency")
-                        .HasColumnType("float");
+                b.Property<double>("Contingency")
+                    .HasColumnType("float");
 
-                    b.Property<long?>("ContractorId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("ContractorId")
+                    .HasColumnType("bigint");
 
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
+                b.Property<long>("CreatedBy")
+                    .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedOn")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("Date")
+                    .HasColumnType("datetime2");
 
-                    b.Property<long>("DaysImpacted")
-                        .HasColumnType("bigint");
+                b.Property<long>("DaysImpacted")
+                    .HasColumnType("bigint");
 
-                    b.Property<long?>("DepartmentId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("DepartmentId")
+                    .HasColumnType("bigint");
 
-                    b.Property<string>("DescriptionOfFinding")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("DescriptionOfFinding")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("DesignatedCoordinatorId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("DesignatedCoordinatorId")
+                    .HasColumnType("bigint");
 
-                    b.Property<bool>("DrawingsAttached")
-                        .HasColumnType("bit");
+                b.Property<bool>("DrawingsAttached")
+                    .HasColumnType("bit");
 
-                    b.Property<int?>("DuringExecution")
-                        .HasColumnType("int");
+                b.Property<int?>("DuringExecution")
+                    .HasColumnType("int");
 
-                    b.Property<long?>("EmployeeId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("EmployeeId")
+                    .HasColumnType("bigint");
 
-                    b.Property<bool>("EquipmentFailureReport")
-                        .HasColumnType("bit");
+                b.Property<bool>("EquipmentFailureReport")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("EquipmentName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("EquipmentName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EquipmentNumber")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("EquipmentNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("EquipmentRate")
-                        .HasColumnType("float");
+                b.Property<double>("EquipmentRate")
+                    .HasColumnType("float");
 
-                    b.Property<long?>("FCOReasonId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("FCOReasonId")
+                    .HasColumnType("bigint");
 
-                    b.Property<long?>("FCOTypeId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("FCOTypeId")
+                    .HasColumnType("bigint");
 
-                    b.Property<bool>("ISOAttached")
-                        .HasColumnType("bit");
+                b.Property<bool>("ISOAttached")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDeleted")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Location")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MaterialName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("MaterialName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("MaterialRate")
-                        .HasColumnType("float");
+                b.Property<double>("MaterialRate")
+                    .HasColumnType("float");
 
-                    b.Property<bool>("PAndIdAttached")
-                        .HasColumnType("bit");
+                b.Property<bool>("PAndIdAttached")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("PreTA")
-                        .HasColumnType("bit");
+                b.Property<bool>("PreTA")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime?>("RejecterDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("RejecterDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<long?>("RejecterId")
-                        .HasColumnType("bigint");
+                b.Property<long?>("RejecterId")
+                    .HasColumnType("bigint");
 
-                    b.Property<bool>("ScaffoldRequired")
-                        .HasColumnType("bit");
+                b.Property<bool>("ScaffoldRequired")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("ScheduleImpact")
-                        .HasColumnType("bit");
+                b.Property<bool>("ScheduleImpact")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("ShopName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ShopName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ShopRate")
-                        .HasColumnType("float");
+                b.Property<double>("ShopRate")
+                    .HasColumnType("float");
 
-                    b.Property<bool>("ShutdownRequired")
-                        .HasColumnType("bit");
+                b.Property<bool>("ShutdownRequired")
+                    .HasColumnType("bit");
 
-                    b.Property<long>("SrNo")
-                        .HasColumnType("bigint");
+                b.Property<long>("SrNo")
+                    .HasColumnType("bigint");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                b.Property<int>("Status")
+                    .HasColumnType("int");
 
-                    b.Property<double>("TotalCost")
-                        .HasColumnType("float");
+                b.Property<double>("TotalCost")
+                    .HasColumnType("float");
 
-                    b.Property<double>("TotalHeadCount")
-                        .HasColumnType("float");
+                b.Property<double>("TotalHeadCount")
+                    .HasColumnType("float");
 
-                    b.Property<double>("TotalHours")
-                        .HasColumnType("float");
+                b.Property<double>("TotalHours")
+                    .HasColumnType("float");
 
-                    b.Property<long>("UnitId")
-                        .HasColumnType("bigint");
+                b.Property<long>("UnitId")
+                    .HasColumnType("bigint");
 
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
+                b.Property<long>("UpdatedBy")
+                    .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedOn")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("AreaExecutionLeadId");
+                b.HasIndex("AreaExecutionLeadId");
 
-                    b.HasIndex("BusinessTeamLeaderId");
+                b.HasIndex("BusinessTeamLeaderId");
 
-                    b.HasIndex("CompanyId");
+                b.HasIndex("CompanyId");
 
-                    b.HasIndex("ContractorId");
+                b.HasIndex("ContractorId");
 
-                    b.HasIndex("DepartmentId");
+                b.HasIndex("DepartmentId");
 
-                    b.HasIndex("DesignatedCoordinatorId");
+                b.HasIndex("DesignatedCoordinatorId");
 
-                    b.HasIndex("EmployeeId");
+                b.HasIndex("EmployeeId");
 
-                    b.HasIndex("FCOReasonId");
+                b.HasIndex("FCOReasonId");
 
-                    b.HasIndex("FCOTypeId");
+                b.HasIndex("FCOTypeId");
 
-                    b.HasIndex("RejecterId");
+                b.HasIndex("RejecterId");
 
-                    b.HasIndex("UnitId");
+                b.HasIndex("UnitId");
 
-                    b.ToTable("FCOLogs");
-                });
+                b.ToTable("FCOLogs");
+            });
 
             modelBuilder.Entity("Models.FCOSection", b =>
                 {
@@ -869,6 +896,14 @@ namespace DataLibrary.Migrations
                     b.HasIndex("FCOLogId");
 
                     b.ToTable("FCOSections");
+=======
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LogDatas");
+>>>>>>> dev
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
@@ -1019,6 +1054,9 @@ namespace DataLibrary.Migrations
                     b.Property<long?>("ApproverId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ClippedEmployeesUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
@@ -1048,6 +1086,9 @@ namespace DataLibrary.Migrations
 
                     b.Property<string>("EmployeeNames")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1143,8 +1184,14 @@ namespace DataLibrary.Migrations
                     b.Property<long?>("CraftSkillId")
                         .HasColumnType("bigint");
 
+                    b.Property<double?>("DTHours")
+                        .HasColumnType("float");
+
                     b.Property<int?>("HeadCount")
                         .HasColumnType("int");
+
+                    b.Property<double?>("OTHours")
+                        .HasColumnType("float");
 
                     b.Property<double?>("OverrideHours")
                         .HasColumnType("float");
@@ -1154,6 +1201,9 @@ namespace DataLibrary.Migrations
 
                     b.Property<int?>("OverrideType")
                         .HasColumnType("int");
+
+                    b.Property<double?>("STHours")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -1612,14 +1662,17 @@ namespace DataLibrary.Migrations
                     b.Property<double>("HoursDelayed")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("JobDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("ManHours")
-                        .HasColumnType("bigint");
+                    b.Property<double?>("ManHours")
+                        .HasColumnType("float");
 
                     b.Property<long>("ManPowerAffected")
                         .HasColumnType("bigint");
@@ -1782,6 +1835,9 @@ namespace DataLibrary.Migrations
 
                     b.Property<string>("DeviceId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DisableNotifications")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -2145,6 +2201,9 @@ namespace DataLibrary.Migrations
 
                     b.Property<int>("FumeControlUsed")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

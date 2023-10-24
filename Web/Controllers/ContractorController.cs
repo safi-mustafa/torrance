@@ -12,7 +12,7 @@ namespace Web.Controllers
         private readonly IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> _ContractorService;
         private readonly ILogger<ContractorController> _logger;
 
-        public ContractorController(IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> ContractorService, ILogger<ContractorController> logger, IMapper mapper) : base(ContractorService, logger, mapper, "Contractor", "Contractors")
+        public ContractorController(IContractorService<ContractorModifyViewModel, ContractorModifyViewModel, ContractorDetailViewModel> ContractorService, ILogger<ContractorController> logger, IMapper mapper) : base(ContractorService, logger, mapper, "Contractor", "Contractor")
         {
             _ContractorService = ContractorService;
             _logger = logger;

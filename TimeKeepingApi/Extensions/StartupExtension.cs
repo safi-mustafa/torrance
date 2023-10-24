@@ -51,7 +51,6 @@ using Repositories.Services.AppSettingServices.EmployeeService;
 using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.CommonServices.UserService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
-using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
 using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
@@ -60,6 +59,9 @@ using Repositories.Services.AppSettingServices.FCOReasonService;
 using Repositories.Services.AppSettingServices.FCOTypeService;
 using Repositories.Services.AppSettingServices.FCOLogService;
 using Repositories.Services.AppSettingServices;
+using Repositories.Services.DashboardService;
+using CorrelationId.DependencyInjection;
+using System.Security.Claims;
 
 namespace Web.Extensions
 {
@@ -102,8 +104,56 @@ namespace Web.Extensions
                     ValidateIssuer = false,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
-                    ClockSkew = TimeSpan.FromMinutes(5)
+                    ClockSkew = TimeSpan.FromMinutes(5),
+
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        try
+                        {
+                            var strId = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+                            int.TryParse(strId, out int id);
+                            if (id > 0)
+                            {
+                                var serviceProvider = context.HttpContext.RequestServices;
+                                var dbContext = serviceProvider.GetRequiredService<ToranceContext>(); // Replace YourDbContext with your actual DbContext type
+                                var user = await dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+                                if (user == null || user.IsDeleted == true || user.ActiveStatus == Enums.ActiveStatus.Inactive)
+                                {
+                                    context.Fail("User is deleted or In-active.");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                context.Fail("No such user exists.");
+                                return;
+                            }
+
+                            var currentVersion = configuration["JWT:Version"] ?? "null"; // Default version if not specified in settings
+                            var tokenVersionClaim = context.Principal?.Claims?.FirstOrDefault(claim => claim.Type == "Version")?.Value;
+                            if (tokenVersionClaim == null)
+                            {
+                                tokenVersionClaim = "null";
+                            }
+                            // Compare token version with the stored version
+                            if (tokenVersionClaim != currentVersion)
+                            {
+                                context.Fail("Token is using an outdated version.");
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle exceptions appropriately, log them, etc.
+                            context.Fail($"An error occurred: {ex.Message}");
+                        }
+                        return;
+                    }
+                };
+
             });
             services.AddAuthorization();
 
@@ -191,7 +241,6 @@ namespace Web.Extensions
 
         public static void ConfigureDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IExcelReader, ExcelReaderService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
@@ -234,10 +283,13 @@ namespace Web.Extensions
             services.AddScoped(typeof(IUserService<,,>), typeof(UserService<,,>));
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IUserInfoService, UserInfoService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IVersionService, VersionService>();
             services.AddScoped(typeof(IOngoingWorkDelayService<,,>), typeof(OngoingWorkDelayService<,,>));
+            services.AddDefaultCorrelationId();
 
         }
+
     }
 }

@@ -63,7 +63,7 @@ namespace Torrance.Api.Controllers
                 IApproverService<ApproverModifyViewModel, ApproverModifyViewModel, ApproverDetailViewModel> approverService,
                 IEmployeeService<EmployeeModifyViewModel, EmployeeModifyViewModel, EmployeeDetailViewModel> employeeService,
                 ICompanyManagerService<CompanyManagerModifyViewModel, CompanyManagerModifyViewModel, CompanyManagerDetailViewModel> companyManagerService
-            )
+            ) : base(logger, "Account")
         {
             _configuration = configuration;
             _db = db;
@@ -253,6 +253,7 @@ namespace Torrance.Api.Controllers
 
             if (user != null)
             {
+                var currentTokenVersion = _configuration["JWT:Version"] ?? "1.0.0";
                 user.DeviceId = deviceId;
                 await _db.SaveChangesAsync();
                 var name = User?.Identity?.Name;
@@ -268,6 +269,7 @@ namespace Torrance.Api.Controllers
                             new Claim("FullName", user.FullName),
                             new Claim("CompanyId", companyId),
                             new Claim("ShowLogForms", user.CanAddLogs.ToString()),
+                            new Claim("Version", currentTokenVersion),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
                         };

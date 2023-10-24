@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ViewModels.Dashboard
+﻿namespace ViewModels.Dashboard
 {
     public class DashboardViewModel
     {
@@ -14,61 +8,34 @@ namespace ViewModels.Dashboard
     }
     public class StatusChartViewModel
     {
-        public List<BarChartViewModel> ChartData { get; set; }
+        public List<ChartViewModel> ChartData { get; set; }
     }
-    public class TOTPieChartViewModel
+    public class TOTPieChartViewModel : TOTWorkDelayTypeDetailChartViewModel
     {
-        public List<LogPieChartViewModel> Shift { get; set; }
-        public List<LogPieChartViewModel> Unit { get; set; }
-        public List<LogPieChartViewModel> Department { get; set; }
-        public List<LogPieChartViewModel> RequestReason { get; set; }
-        public List<LogPieChartViewModel> ShiftDelay { get; set; }
-        public List<LogPieChartViewModel> ReworkDelay { get; set; }
-        public List<LogPieChartViewModel> StartOfWorkDelay { get; set; }
-        public List<LogPieChartViewModel> OngoingWorkDelay { get; set; }
+        public List<ChartViewModel> Shift { get; set; }
+        public List<ChartViewModel> Unit { get; set; }
+        public List<ChartViewModel> Department { get; set; }
+        public List<ChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> DelayTypeHours { get; set; }
+        public List<ChartViewModel> DelayTypeCosts { get; set; }
     }
 
 
     public class OverridePieChartViewModel
     {
-        public List<LogPieChartViewModel> Shift { get; set; }
-        public List<LogPieChartViewModel> Unit { get; set; }
-        public List<LogPieChartViewModel> Department { get; set; }
-        public List<LogPieChartViewModel> RequestReason { get; set; }
+        public List<ChartViewModel> Shift { get; set; }
+        public List<ChartViewModel> Unit { get; set; }
+        public List<ChartViewModel> Department { get; set; }
+        public List<ChartViewModel> RequestReason { get; set; }
     }
 
     public class WrrPieChartViewModel
     {
-        public List<LogPieChartViewModel> WeldMethods { get; set; }
-        public List<LogPieChartViewModel> RodTypes { get; set; }
+        public List<ChartViewModel> WeldMethods { get; set; }
+        public List<ChartViewModel> RodTypes { get; set; }
     }
 
-    public class LogPieChartViewModel
-    {
-        private bool _isCurrencyValue { get; set; }
-        public LogPieChartViewModel()
-        {
-            _isCurrencyValue = false;
-        }
-        public LogPieChartViewModel(bool isCurrencyValue)
-        {
-            _isCurrencyValue = isCurrencyValue;
-        }
-        public string Category { get; set; }
-        public double Value { get; set; }
-
-        public string FormattedValue
-        {
-            get
-            {
-                if (_isCurrencyValue)
-                    return Value.ToString("C");
-                return Value.ToString("0.00") + "%";
-            }
-        }
-    }
-
-    public class BarChartViewModel
+    public class ChartViewModel
     {
         public string Category { get; set; }
         public double Value { get; set; }

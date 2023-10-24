@@ -5,6 +5,10 @@
 @{
     Layout = null;
     var isAdmin = User.IsInRole("SuperAdmin") || User.IsInRole("Administrator");
+    //this check is placed so that no one can change Approver unless it is an Admin and Log is updated and Status is Pending and inProcess
+    //var canModifyApprover = isAdmin && (Model.Status == Status.Pending || Model.Status == Status.InProcess) && Model.Id > 0;
+    var canModifyApprover = Model.Status == Status.Pending || Model.Status == Status.InProcess;
+
 }
 <div class="row">
     <div class="col-lg-12">
@@ -21,12 +25,24 @@
                     <partial name="~/Views/Shared/Select2/_Unit.cshtml" for="Unit" />
                 </div>
             </div>
+            @if (canModifyApprover)
+            {
+                <div class="col-lg-4">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Approver.Id" type="hidden" />
+            }
             <div class="col-lg-4">
                 <div class="mb-3">
                     <partial name="~/Views/Shared/Select2/_Shift.cshtml" for="Shift" />
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="WorkCompletedDate" class="form-label fw-600"></label>
                     <input asp-for="WorkCompletedDate" type="date" class="form-control" />
@@ -38,7 +54,7 @@
                 <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
                 </div>
                 </div>*@
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="WorkScope" class="form-label fw-600"></label>
                     <input asp-for="WorkScope" type="text" class="form-control" />
@@ -81,34 +97,25 @@
                 </div>
                 </div>*@
 
-            @* @if (isAdmin)
-                {
-                <div class="col-lg-4">
-                <div class="mb-3">
+            @if (isAdmin)
+            {
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Employee.Id" type="hidden" />
+            }
 
-                <partial name="~/Views/Shared/Select2/_Employee.cshtml" for="Employee" view-data='@new ViewDataDictionary(ViewData) { { "Id", "requester-id" }, { "Heading", "Requester" } }' />
-                </div>
-                </div>
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <label class="form-label fw-600">Company</label>
-                <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-                <input type="hidden" class="form-control" id="company-id" value="@Model.Company.Id" readonly />
-                </div>
-                </div>
-                }*@
-            <div class="col-lg-6">
-                @if (User.IsInRole(RolesCatalog.Employee.ToString()))
-                {
-                    <label class="form-label fw-600">Company</label>
-                    <input asp-for="Company.Name" readonly type="text" class="form-control" />
-                    <input asp-for="Company.Id" type="hidden" />
-                }
-                else
-                {
+            @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
+            {
+                <div class="col-lg-6">
                     <partial name="~/Views/Shared/Select2/_Company.cshtml" for="Company" />
-                }
-            </div>
+                </div>
+            }
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label asp-for="PoNumber" class="form-label fw-600"></label>
@@ -123,6 +130,13 @@
                     <span asp-validation-for="EmployeeNames" class="validation-invalid-label"></span>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label asp-for="ClippedEmployees" class="form-label fw-600"></label>
+                    <input type="file" id="clipped-employees" asp-for="ClippedEmployees.File" class="form-control" accept="image/*" />
+                    <span asp-validation-for="ClippedEmployees" class="validation-invalid-label"></span>
+                </div>
+            </div>
 
             @* <div class="col-lg-12">
                 <div class="mb-3">
@@ -132,37 +146,35 @@
                 </div>
                 </div>*@
 
-            @*   @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
-                {
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Approver.cshtml" for="Approver" view-data='new ViewDataDictionary(ViewData) { { "Id", "approver-id"}, { "UserTitle", "Approver"}, {"Type", "Approver"}, {"UnitId","unit-id"} }' />
-                </div>
-                </div>
-                }
-                else
-                {
-                <input asp-for="Approver.Id" type="hidden" />
-                }*@
-            <input asp-for="Approver.Id" type="hidden" />
+
+            @*<input asp-for="Approver.Id" type="hidden" />*@
+
             <div class="col-md-12 mt-3">
                 <div class="form-group costs-inputs-container row">
                     <h4 class="col-md-12">Costs</h4>
-                    <span class="cost-override-type-td col-md-3">
-                        <label class="form-label fw-600">Override Type<span style="color:red"> *</span></label>
-                        <select asp-items="Html.GetEnumSelectList(typeof (OverrideTypeCatalog))" id="cost-override-type" class="cost-type form-control simple-dd"></select>
+
+                    <span class="cost-st-hours-td col-md-2">
+                        <label class="form-label fw-600">ST Hours<span style="color:red"> *</span></label>
+                        <input type="number" name="cost-st-hours" id="cost-st-hours" class="form-control cost-st-hours cost" placeholder="ST Hours" />
                     </span>
+
+                    <span class="cost-ot-hours-td col-md-2">
+                        <label class="form-label fw-600">OT Hours<span style="color:red"> *</span></label>
+                        <input type="number" name="cost-ot-hours" id="cost-ot-hours" class="form-control cost-ot-hours cost" placeholder="OT Hours" />
+                    </span>
+
+                    <span class="cost-dt-hours-td col-md-2">
+                        <label class="form-label fw-600">DT Hours<span style="color:red"> *</span></label>
+                        <input type="number" name="cost-dt-hours" id="cost-dt-hours" class="form-control cost-dt-hours cost" placeholder="DT Hours" />
+                    </span>
+
+                    <span class="cost-craft-skill-td col-md-2">
+                        @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
+                    </span>
+
                     <span class="cost-head-count-td col-md-2">
                         <label class="form-label fw-600">Head Count<span style="color:red"> *</span></label>
                         <input type="text" name="head-count" value="" id="head-count" class="form-control head-count cost" placeholder="Head Count" />
-                    </span>
-                    <span class="cost-hours-td col-md-2">
-                        <label class="form-label fw-600">Hours<span style="color:red"> *</span></label>
-                        <input type="text" name="cost-hours" value="" id="cost-hours" class="form-control cost-hours cost" placeholder="Hours" />
-                    </span>
-                    <span class="cost-craft-skill-td col-md-3">
-                        @*<partial name="~/Views/Shared/Select2/_CraftSkill.cshtml" model='@(new ViewModels.OverrideLogs.CraftSkillBriefViewModel())' />*@
-                        @await Html.PartialAsync("~/Views/Shared/Select2/_CraftSkill.cshtml", (new ViewModels.OverrideLogs.CraftSkillBriefViewModel()), "CraftSkill")
                     </span>
 
                     <span class="text-center col-md-2">
@@ -175,10 +187,11 @@
                 <table class="table text-nowrap">
                     <thead>
                         <tr>
-                            <th>Override Type</th>
+                            <th>ST Hours</th>
+                            <th>OT Hours</th>
+                            <th>DT Hours</th>
                             <th>Craft</th>
                             <th>Head Count</th>
-                            <th>Hours</th>
                             @if (!User.IsInRole(RolesCatalog.Employee.ToString()))
                             {
                                 <th>Cost</th>
@@ -199,6 +212,7 @@
 </div>
 <input asp-for="Id" type="hidden" />
 <input asp-for="Employee.Id" type="hidden" />
+<input asp-for="Company.Id" type="hidden" />
 
 <script>$(function () {
         DelayReasonChanged();
@@ -226,18 +240,41 @@
             $(this).closest("tr").remove();
             RefreshInputIndexes();
         });
+        //$(document).off("change", "#clipped-employees-temp");
+        //$(document).on("change", "#clipped-employees-temp", function (e) {
+        //    var imgFile = e.target.files[0];
+        //    if (imgFile) {
+        //        // Get the original image size
+        //        new Compressor(imgFile, {
+        //            quality: 0.5,
+        //            maxWidth: 1200,
+        //            success(result) {
+        //                // Convert the compressed image data to Base64
+        //                var reader = new FileReader();
+        //                reader.readAsDataURL(result);
+        //                reader.onloadend = function () {
+        //                    var base64data = reader.result;
+
+        //                    // Set the Base64 data as the value of the hidden input
+        //                    $("#clipped-employees").val(base64data);
+        //                };
+        //            }
+        //        });
+        //    }
+        //});
     });
     function AddCost(element) {
         var thisElement = $(element);
-        var overrideType = $("#cost-override-type").val();
-        var costHours = $("#cost-hours").val();
+        var costSTHours = parseToFloat($("#cost-st-hours").val());
+        var costOTHours = parseToFloat($("#cost-ot-hours").val());
+        var costDTHours = parseToFloat($("#cost-dt-hours").val());
         var headCount = $("#head-count").val();
         var costCraftId = $('#craft-skill-id').select2('data')[0].id;
         var costCraftName = $('#craft-skill-id').select2('data')[0].text;
-        if (overrideType !== null && overrideType !== "" && costHours != null && headCount != "" && headCount > 0 && costHours != "" && costHours > 0 && costCraftId != null && costCraftId != "") {
+        var totalCost = costSTHours + costOTHours + costDTHours;
+        if (totalCost != null && headCount != "" && headCount > 0 && totalCost != "" && totalCost > 0 && costCraftId != null && costCraftId != "") {
             var rowNumber = $(".cost-row").length;
             var obj = {
-                'OverrideType': overrideType,
                 'CraftSkill': {
                     'Id': costCraftId,
                     'Name': costCraftName,
@@ -246,7 +283,9 @@
                     'DTRate': $("#craft-skill-id").select2('data')[0].additionalAttributesModel.DTRate,
                 },
                 'HeadCount': headCount,
-                'OverrideHours': costHours
+                'STHours': costSTHours,
+                'OTHours': costOTHours,
+                'DTHours': costDTHours
             }
             AddCosttRow(obj, rowNumber);
             ResetCostInputs();
@@ -254,7 +293,7 @@
         else {
             swal.fire({
                 title: 'Validation Error',
-                text: "OverrideType, Craft, Head Count & Hours are required fields.",
+                text: "Craft, Head Count and Hours are required fields.",
                 type: 'error',
                 showCancelButton: true,
                 confirmButtonText: "Okay",
@@ -267,7 +306,30 @@
     }
     function ResetCostInputs() {
         $('.costs-inputs-container').find(':input').val(null);
-        $("#craft-skill-id").val('').trigger('change')
+        $("#craft-skill-id").val('').trigger('change');
+    }
+
+    function parseToInt(input) {
+        // Use parseInt to attempt to parse the input as an integer
+        const parsedInt = parseInt(input);
+
+        // Check if parsedInt is NaN
+        if (isNaN(parsedInt)) {
+            return 0; // Return 0 if it's NaN
+        } else {
+            return parsedInt; // Return the parsed integer if it's a valid number
+        }
+    }
+    function parseToFloat(input) {
+        // Use parseFloat to attempt to parse the input as a float
+        const parsedFloat = parseFloat(input);
+
+        // Check if parsedFloat is NaN
+        if (isNaN(parsedFloat)) {
+            return 0.0; // Return 0.0 if it's NaN
+        } else {
+            return parsedFloat; // Return the parsed float if it's a valid number
+        }
     }
 
     function AddCosttRow(obj, rowNumber) {
@@ -277,7 +339,7 @@
             data: { model: obj, 'rowNumber': rowNumber },
             dataType: "html",
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 $('#cost-table tbody').append(response);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -308,7 +370,6 @@
             }
         });
     }
-
     function DelayReasonChanged() {
         var ele = $("#delay-reason");
         if ($(ele).val() === '0') {

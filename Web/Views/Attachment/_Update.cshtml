@@ -40,7 +40,8 @@
             onAttachmentTypeChange($(this).val());
         });
     });
-    function onAttachmentTypeChange(selectedValue){
+    function onAttachmentTypeChange(selectedValue) {
+        debugger;
         if (@((int)AttachmentTypeCatalog.File)== selectedValue) {
             $("#link-container").hide();
             $("#file-container").show();

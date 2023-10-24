@@ -1,65 +1,104 @@
 ﻿using Enums;
-using Helpers.Extensions;
-using Models;
-using Models.Common;
-using Models.OverrideLogs;
-using Models.TimeOnTools;
-using ViewModels.Authentication.Approver;
+using Microsoft.Extensions.Configuration;
 
 namespace ViewModels.Notification
 {
     public class LogEmailViewModel : EmailBaseModel
     {
         private readonly NotificationViewModel _notification;
-        private readonly ToranceUser _sentUser;
-        private readonly ApproverAssociationNotificationViewModel? _approver;
-        private readonly string _approvalLink;
-        public LogEmailViewModel()
-        {
+        private readonly NotificationSendToModel _sendTo;
+        private readonly string _publicLink;
+        private readonly IConfiguration _configuration;
+        private readonly Guid _notificationId;
 
-        }
-        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociationNotificationViewModel? approver, string approvalLink)
+        public LogEmailViewModel(NotificationViewModel notification, NotificationSendToModel sendTo, Guid notificationId, IConfiguration configuration)
         {
             _notification = notification;
-            _approver = approver;
-            _approvalLink = approvalLink;
+            _sendTo = sendTo;
+            _configuration = configuration;
+            _notificationId = notificationId;
+            _publicLink = GetPublicLink();
             Subject = GetSubject();
             Body = GetEmailBody();
         }
-        //To send Requestor email after log processing. SentEmailType is there for future email types
-        public LogEmailViewModel(NotificationViewModel notification, ApproverAssociationNotificationViewModel? approver, SentEmailType emailType)
-        {
-            _notification = notification;
-            _approver = approver;
-            Subject = GetProcessedLogSubject();
-            Body = GetEmailBodyForProcessedLog();
-        }
 
 
-        public string GetEmailBodyForProcessedLog()
-        {
-            return $@"<div class=""container"">
-						<p>Dear {_notification.User},</p>
-						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_approver?.Approver?.Name}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
-					</div>";
-            //         <p>Best regards,</p>
-            //<p>Torrance</p>
-        }
-        public string GetProcessedLogSubject()
-        {
-            return $"{_notification.EntityType.GetDisplayName()} log with {_notification.IdentifierKey}-{_notification.IdentifierValue} {_notification.EventType}";
-        }
         public string GetSubject()
         {
-            return $"{_notification.EntityType.GetDisplayName()} request submitted";
+            if (_notification.EventType == NotificationEventTypeCatalog.Created)
+            {
+                return $"{_notification.EntityType.GetDisplayName()} request submitted";
+            }
+            else if (_notification.EventType == NotificationEventTypeCatalog.Updated)
+            {
+                return $"{_notification.EntityType.GetDisplayName()} request updated by {_notification.User}";
+            }
+            else if (_notification.EventType == NotificationEventTypeCatalog.Approved || _notification.EventType == NotificationEventTypeCatalog.Rejected)
+            {
+                return $"{_notification.EntityType.GetDisplayName()} log with {_notification.IdentifierKey}-{_notification.IdentifierValue} {_notification.EventType}";
+            }
+            return "";
+
         }
         public string GetEmailBody()
         {
-            return $@"<div class=""container"">
-						<p>Dear {_approver?.Approver?.Name},</p>
-						<p>A new <strong>{_notification.EntityType.GetDisplayName()}</strong> request is submitted by <strong>{_notification.User}</strong> from department (<strong>{_approver?.Department?.Name}</strong>) and unit (<strong>{_approver?.Unit?.Name}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
-						<p>Please click <a href=""{_approvalLink}"">here</a> to approve/reject this request. </p>
+            if (_notification.EventType == NotificationEventTypeCatalog.Created)
+            {
+                return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p>A new <strong>{_notification.EntityType.GetDisplayName()}</strong> request is submitted by <strong>{_notification.Requestor}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
 					</div>";
+                //<p>Please click <a href=""{_publicLink}"">here</a> to approve/reject this request. </p>
+            }
+            else if (_notification.EventType == NotificationEventTypeCatalog.Updated)
+            {
+                return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p>A <strong>{_notification.EntityType.GetDisplayName()}</strong> request is updated by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+					</div>";
+            }
+            if (_notification.EventType == NotificationEventTypeCatalog.ApproverAssigned)
+            {
+                if (_sendTo.Id == _notification.ApproverId) //send to assigned approver
+                {
+                    return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p>You have been assigned to <strong>{_notification.EntityType.GetDisplayName()}</strong> submitted by <strong>{_notification.Requestor}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+                        <p>Please click <a href=""{_publicLink}"">here</a> to approve/reject this request. </p>
+					</div>";
+                }
+                else// Send to requestor
+                {
+                    return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p>Your request for <strong>{_notification.EntityType.GetDisplayName()}</strong> is assigned to approver for department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+					</div>";
+                    //<p>Please click <a href=""{_publicLink}"">here</a> to approve/reject this request. </p>
+                }
+
+            }
+            else if (_notification.EventType == NotificationEventTypeCatalog.Approved || _notification.EventType == NotificationEventTypeCatalog.Rejected)
+            {
+                if (_notification.RequestorId.ToString() == _sendTo.Id)
+                {
+                    return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p>Your <strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+					</div>";
+                }
+                else
+                {
+                    return $@"<div class=""container"">
+						<p>Dear {_sendTo.Name},</p>
+						<p><strong>{_notification.EntityType.GetDisplayName()}</strong> request is <strong>{_notification.EventType}</strong> by <strong>{_notification.User}</strong> from department (<strong>{_notification.Department}</strong>) and unit (<strong>{_notification.Unit}</strong>) under {_notification.IdentifierKey} (<strong>{_notification.IdentifierValue}</strong>).</p>
+					</div>";
+                }
+
+                //         <p>Best regards,</p>
+                //<p>Torrance</p>
+            }
+            return "";
+
             //         <p>Best regards,</p>
             //<p>Torrance - Time on Tools</p>
         }
@@ -67,6 +106,16 @@ namespace ViewModels.Notification
         private LogType GetLogType(NotificationEntityType type)
         {
             return type == NotificationEntityType.TOTLog ? LogType.TimeOnTools : type == NotificationEntityType.OverrideLog ? LogType.Override : LogType.WeldingRodRecord;
+        }
+
+        public string GetPublicLink()
+        {
+            if (_notification.EventType == NotificationEventTypeCatalog.ApproverAssigned)
+            {
+                var domain = _configuration["WebUrl"];
+                return $"{domain}/Approval/ApproveByNotification?id={_notificationId}";
+            }
+            return null;
         }
     }
 }

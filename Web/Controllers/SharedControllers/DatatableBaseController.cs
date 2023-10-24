@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Centangle.Common.ResponseHelpers.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Models.Common.Interfaces;
 using Pagination;
@@ -34,11 +35,10 @@ namespace Web.Controllers.SharedControllers
             _mapper = mapper;
         }
 
-
         public virtual ActionResult Index()
         {
             var vm = new CrudListViewModel();
-            vm.Title = _title;
+            vm.Title = _title.Pluralize();
             vm.Filters = SetDefaultFilters();
             vm.DatatableColumns = GetColumns();
             vm.DisableSearch = false;
@@ -84,7 +84,6 @@ namespace Web.Controllers.SharedControllers
             }
         }
 
-
         protected DatatablePaginatedResultModel<T> ConvertToDataTableModel<T>(PaginatedResultModel<T> model, IBaseSearchModel searchModel) where T : new()
         {
             return new DatatablePaginatedResultModel<T>(searchModel.Draw, model._meta.TotalCount, model.Items);
@@ -99,10 +98,10 @@ namespace Web.Controllers.SharedControllers
         {
             result.ActionsList = new List<DataTableActionViewModel>()
             {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/{_controllerName}/Detail/Id"},
-                    new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/{_controllerName}/Update/Id"},
-                    new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/{_controllerName}/Delete/Id"},
-                };
+                new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/{_controllerName}/Detail/Id"},
+                new DataTableActionViewModel() {Action="Update",Title="Update",Href=$"/{_controllerName}/Update/Id"},
+                new DataTableActionViewModel() {Action="Delete",Title="Delete",Href=$"/{_controllerName}/Delete/Id"}
+            };
         }
 
         public ActionResult DataTableIndexViewForApproval(CrudListViewModel vm)

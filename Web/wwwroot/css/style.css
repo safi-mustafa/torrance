@@ -20,9 +20,9 @@ body {
     }
 }
 
-height: max-content;
+/*height: max-content;
 overflow: auto;
-}
+}*/
 
 a,
 a:hover,
@@ -1229,6 +1229,16 @@ header {
     vertical-align: middle;
 }
 
+.badge.InProcess {
+    color: purple;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: purple;
+    vertical-align: middle;
+}
+
 .badge.Rejected {
     color: red;
     display: inline-block;
@@ -1239,6 +1249,7 @@ header {
     vertical-align: middle;
 }
 
+<<<<<<< HEAD
 .badge.Partial {
     color: orange;
     display: inline-block;
@@ -1250,7 +1261,10 @@ header {
 }
 
 .badge.Archived {
-    color: blue;
+    ======= .badge.IsArchived
+
+{
+    >>>>>>> dev color: blue;
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -1475,4 +1489,10 @@ header {
 
 .doc-icon {
     height: 50px;
+}
+
+.disabled-link {
+    pointer-events: none; /* Disable mouse events */
+    color: gray; /* Change text color to gray or a less prominent color */
+    text-decoration: none; /* Remove underlines or other decorations */
 }

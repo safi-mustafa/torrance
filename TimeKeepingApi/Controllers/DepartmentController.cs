@@ -12,7 +12,7 @@ namespace API.Controllers
     [Authorize]
     public class DepartmentController : CrudBaseBriefController<DepartmentDetailViewModel, DepartmentSearchViewModel>
     {
-        public DepartmentController(IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> departmentService) : base(departmentService)
+        public DepartmentController(IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> departmentService, ILogger<DepartmentController> logger) : base(departmentService, logger, "Department")
         {
         }
     }

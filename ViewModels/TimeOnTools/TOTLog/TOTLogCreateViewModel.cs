@@ -14,7 +14,7 @@ using ViewModels.WeldingRodRecord;
 
 namespace ViewModels.TimeOnTools.TOTLog
 {
-    public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel
+    public class TOTLogCreateViewModel : LogDelayReasonCreateVM, IBaseCrudViewModel, ITOTLogNotificationViewModel
     {
         public DateTime? Date { get; set; } = DateTime.UtcNow;
         public string? Twr
@@ -37,8 +37,8 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string? WorkScope { get; set; }
 
         [Display(Name = "Total Manhours", Prompt = "Add Man Hours")]
-        [Range(1, long.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
-        public long ManHours { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "The Man Hours must be greater than zero.")]
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; } = DateTime.UtcNow;
         [Display(Name = "Time Requested")]
@@ -70,11 +70,11 @@ namespace ViewModels.TimeOnTools.TOTLog
         public ShiftBriefViewModel Shift { get; set; } = new ShiftBriefViewModel();
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
 
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(true);
         [Required]
         public string? Foreman { get; set; }
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 

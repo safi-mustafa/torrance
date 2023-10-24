@@ -2,6 +2,7 @@
 using Centangle.Common.ResponseHelpers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 using ViewModels.Shared;
 
@@ -10,6 +11,14 @@ namespace Torrance.Api.Controllers
     [Authorize]
     public class TorranceController : ControllerBase
     {
+        private readonly ILogger _logger;
+        private readonly string _controllerName;
+        public TorranceController(ILogger logger, string controllerName)
+        {
+
+            _logger = logger;
+            _controllerName = controllerName;
+        }
         protected IActionResult ReturnProcessedResponse(IRepositoryResponse response)
         {
             switch (response.Status)
@@ -68,6 +77,26 @@ namespace Torrance.Api.Controllers
                         return BadRequest();
                     }
             }
+        }
+
+        protected virtual void LogModelStateError(object model, string action)
+        {
+            var errors = "{";
+            foreach (var e in ModelState)
+            {
+                errors += $"'{e.Key}': '{e.Value.ValidationState}',";
+                if (e.Value.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid && e.Value.Errors.Count > 0)
+                {
+                    errors += ", Error Message: ";
+                    foreach (var m in e.Value.Errors)
+                    {
+                        errors += $"*{m.ErrorMessage};";
+                    }
+                }
+            }
+            errors += "}";
+
+            _logger.LogCritical($"ModelState Validation Error!: {_controllerName} -> {action}: {JsonConvert.SerializeObject(model)}, ModelStateError: {errors}");
         }
     }
 }

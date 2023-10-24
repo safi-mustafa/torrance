@@ -13,7 +13,7 @@ namespace Web.Controllers
         private readonly IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> _DepartmentService;
         private readonly ILogger<DepartmentController> _logger;
 
-        public DepartmentController(IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> DepartmentService, ILogger<DepartmentController> logger, IMapper mapper) : base(DepartmentService, logger, mapper, "Department", "Departments")
+        public DepartmentController(IDepartmentService<DepartmentModifyViewModel, DepartmentModifyViewModel, DepartmentDetailViewModel> DepartmentService, ILogger<DepartmentController> logger, IMapper mapper) : base(DepartmentService, logger, mapper, "Department", "Department")
         {
             _DepartmentService = DepartmentService;
             _logger = logger;

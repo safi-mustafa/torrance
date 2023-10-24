@@ -17,7 +17,7 @@ using ViewModels.WeldingRodRecord.WeldMethod;
 
 namespace ViewModels.WeldingRodRecord.WRRLog
 {
-    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove
+    public class WRRLogCreateViewModel : BaseCreateVM, IBaseCrudViewModel, IApprove, IWRRLogNotificationViewModel
     {
         [Required]
         public DateTime? DateRodReturned { get; set; }
@@ -48,10 +48,12 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Range(1, float.MaxValue, ErrorMessage = "The Rod Returned Waste lbs must be greater than zero.")]
         public double RodReturnedWasteLbs { get; set; }
         public Status Status { get; set; }
+        [Display(Name = "Is Archived")]
+        public bool IsArchived { get; set; }
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(true);
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel(true);
 
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
         public RodTypeBriefViewModel RodType { get; set; } = new RodTypeBriefViewModel();
@@ -60,7 +62,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public LocationBriefViewModel Location { get; set; } = new LocationBriefViewModel();
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
-        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
     }

@@ -15,8 +15,8 @@
     });
 }
 function WeldMethodChart(seriesData) {
-    GeneratePieChart("wrr-weld-method", seriesData)
+    GenerateBarChart("wrr-weld-method", seriesData)
 }
 function RodTypeChart(seriesData) {
-    GeneratePieChart("wrr-rod-type", seriesData)
+    GenerateBarChart("wrr-rod-type", seriesData)
 }

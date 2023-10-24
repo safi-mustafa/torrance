@@ -1,5 +1,6 @@
 ﻿using Enums;
 using Helpers.Datetime;
+using Helpers.Extensions;
 using Models.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -18,10 +19,6 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 {
     public class WRRLogDetailViewModel : LogCommonDetailViewModel, IApprove
     {
-        public WRRLogDetailViewModel()
-        {
-            Approver = new ApproverBriefViewModel();
-        }
         public long Id { get; set; }
         public DateTime CreatedOn { get; set; }
 
@@ -81,6 +78,13 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         [Required]
         [DisplayName("Fume Control Used")]
         public FumeControlUsedCatalog FumeControlUsed { get; set; }
+        public new string FormattedFumeControlUsed
+        {
+            get
+            {
+                return FumeControlUsed.GetDisplayName();
+            }
+        }
         public string Twr { get; set; }
 
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
@@ -102,7 +106,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
 
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel();
 
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
+        
         public ContractorBriefViewModel Contractor { get; set; } = new ContractorBriefViewModel();
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel();
 

@@ -3,7 +3,18 @@
 $.getScript("/js/crud/validation-summary.js", function () {
 });
 
+$(function () {
+    $(document).on('keydown', "#crudModalPanelBody form", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            //var childElement = $(this).children().first();
+            //updateRecord(childElement);
+        }
+    })
+})
+
 function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
+    debugger;
     $.ajax({
         type: "GET",
         url: contentUrl,
@@ -72,8 +83,8 @@ function sendApproveAjax(status, approverType = "") {
     });
 }
 
-function updateRecord(element, modalPanelId = "crudModalPanel") {
-    var form = element.closest("form")
+async function updateRecord(element, modalPanelId = "crudModalPanel") {
+    var form = element.closest("form");
     var updateUrl = form.action;
     removeCurrencyMasking();
     var formData = $(form).serializeFiles();
@@ -81,33 +92,88 @@ function updateRecord(element, modalPanelId = "crudModalPanel") {
     $.validator.unobtrusive.parse($(form));
     if ($(form).valid()) {
         clearValidationSummary(form);
-        $.ajax({
-            type: "POST",
-            url: updateUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                disableControls(form);
-            },
-            success: function (result) {
-                if (!result.Success) {
-                    createValidationSummary(form, result.Errors)
-                }
-                else {
-                    ReInitializeDataTables();
+        disableControls(form);
+        try {
+            const compressedImages = await compressAllImages(formData);
+
+            // Loop through compressed images and update formData
+            for (var i = 0; i < compressedImages.length; i++) {
+                // Create a new input element with the compressed image data
+                const { key, compressedImage } = compressedImages[i];
+                formData.set(key, compressedImage);
+            }
+            $.ajax({
+                type: "POST",
+                url: updateUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (!result.Success) {
+                        createValidationSummary(form, result.Errors)
+                    }
+                    else {
+                        ReInitializeDataTables();
+                        enableControls(form);
+                        $("#" + modalPanelId).modal("toggle");
+                    }
+                },
+                complete: function () {
+                    addCurrencyMasking();
                     enableControls(form);
-                    $("#" + modalPanelId).modal("toggle");
-                }
-            },
-            complete: function () {
-                addCurrencyMasking();
-                enableControls(form);
-            },
-        });
+                },
+            });
+        }
+        catch {
+            enableControls(form);
+        }
+
     }
     addCurrencyMasking();
 
+}
+
+
+async function compressImageAsync(file) {
+    return new Promise((resolve, reject) => {
+        new Compressor(file, {
+            quality: 0.5,
+            maxWidth: 1200,
+            success(result) {
+                const compressedFile = new File([result], file.name, {
+                    type: file.type,
+                });
+                resolve(compressedFile);
+            },
+            error(error) {
+                reject(error);
+            },
+        });
+    });
+}
+
+async function compressAllImages(formData) {
+    const compressedImages = [];
+
+    for (var pair of formData.entries()) {
+        var [key, value] = pair;
+
+        if (value instanceof File && value.type.startsWith("image/")) {
+            try {
+                const compressedImage = await compressImageAsync(value);
+                console.log(compressedImage);
+                formData.set(pair[0], compressedImage);
+                compressedImages.push({ key, compressedImage });
+            } catch (error) {
+                console.error("Error during image compression:", error);
+            }
+        }
+    }
+
+    return compressedImages;
 }
 function disableControls(form) {
     DisableProperty(form, ".approve-btns", true);

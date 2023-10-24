@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class ShiftDelayController : CrudBaseBriefController<ShiftDelayDetailViewModel, ShiftDelaySearchViewModel>
     {
-        public ShiftDelayController(IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> shiftDelayService) : base(shiftDelayService)
+        public ShiftDelayController(IShiftDelayService<ShiftDelayModifyViewModel, ShiftDelayModifyViewModel, ShiftDelayDetailViewModel> shiftDelayService, ILogger<ShiftDelayController> logger) : base(shiftDelayService, logger, "ShiftDelay")
         {
         }
     }

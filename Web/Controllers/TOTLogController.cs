@@ -36,7 +36,7 @@ namespace Web.Controllers
         private readonly UserManager<ToranceUser> _userManager;
         private readonly IBaseApprove _baseApprove;
 
-        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Logs", userInfo)
+        public TOTLogController(ITOTLogService<TOTLogModifyViewModel, TOTLogModifyViewModel, TOTLogDetailViewModel> TOTLogService, ILogger<TOTLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(TOTLogService, logger, mapper, "TOTLog", "Time On Tool Log", userInfo)
         {
             _TOTLogService = TOTLogService;
             _logger = logger;
@@ -84,7 +84,7 @@ namespace Web.Controllers
         protected override TOTLogSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.StatusNot = Enums.Status.Pending;
+            filters.StatusNot.Add(Status.Pending);
             return filters;
         }
         public override List<DataTableViewModel> GetColumns()
@@ -93,9 +93,9 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
                 new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true},
@@ -127,10 +127,15 @@ namespace Web.Controllers
         }
         public override Task<ActionResult> Create(TOTLogModifyViewModel model)
         {
-            if (User.IsInRole("Employee"))
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
+            }
+            if (User.IsInRole("Employee"))
+            {
+                ModelState.Remove("Company.Id");
+                ModelState.Remove("Company.Name");
             }
             model.Validate(ModelState);
             return base.Create(model);
@@ -154,15 +159,12 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            result.ActionsList = new List<DataTableActionViewModel>()
+            result.ActionsList = new List<DataTableActionViewModel>
             {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/TOTLog/Detail/Id"},
+                new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/TOTLog/Detail/Id" },
+                new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", ShowBasedOn = "CanUpdate" },
+                new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id",ShowBasedOn="CanDelete" }
             };
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/TOTLog/Update/Id", HideBasedOn = "IsEditRestricted" });
-            }
-            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/TOTLog/Delete/Id" });
         }
 
         public async Task<JsonResult> GetTWRNumericValues(string prefix, int pageSize, int pageNumber, string customParams)

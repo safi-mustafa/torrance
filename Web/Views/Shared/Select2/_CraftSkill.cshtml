@@ -40,11 +40,11 @@
                 prefix: params.term,
                 pageSize: pageSize,
                 pageNumber: params.page,
-                customParams: JSON.stringify({
-                    Company: {
-                        Id: $(companyId).val()
-                    }
-                })
+                //customParams: JSON.stringify({
+                //    Company: {
+                //        Id: $(companyId).val()
+                //    }
+                //})
             };
         };
         Select2AutoCompleteAjax(id, url, dataArray, pageSize, "Select Craft Skill");

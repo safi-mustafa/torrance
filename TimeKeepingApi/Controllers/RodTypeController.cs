@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class RodTypeController : CrudBaseBriefController<RodTypeDetailViewModel, RodTypeSearchViewModel>
     {
-        public RodTypeController(IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> rodTypeService) : base(rodTypeService)
+        public RodTypeController(IRodTypeService<RodTypeModifyViewModel, RodTypeModifyViewModel, RodTypeDetailViewModel> rodTypeService, ILogger<RodTypeController> logger) : base(rodTypeService, logger, "Rodtype")
         {
         }
     }

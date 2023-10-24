@@ -51,15 +51,14 @@ using Repositories.Services.AppSettingServices.CompanyManagerService;
 using Repositories.Services.AppSettingServices.ForemanService;
 using Repositories.Services.TimeOnToolServices.StartOfWorkDelayService;
 using Repositories.Services.AppSettingServices.AdministratorService;
-using ExcelReader.Repository;
 using Repositories.Services.CommonServices.PossibleApproverService;
-using Repositories.Shared.VersionService;
 using Repositories.Services.TimeOnToolServices.OngoingWorkDelayService;
 using Repositories.Services.AppSettingServices.FCOTypeService;
 using Repositories;
 using Repositories.Services.AppSettingServices.FCOReasonService;
 using Repositories.Services.AppSettingServices.FCOLogService;
 using Repositories.Services.AppSettingServices;
+using CorrelationId.DependencyInjection;
 
 namespace Web.Extensions
 {
@@ -117,7 +116,6 @@ namespace Web.Extensions
         }
         public static void ConfigureDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IExcelReader, ExcelReaderService>();
             services.AddScoped<IRepositoryResponse, RepositoryResponse>();
             services.AddScoped<IUserStore<ToranceUser>, UserStore<ToranceUser, ToranceRole, ToranceContext, long>>();
             services.AddHostedService<SeedWorker>();
@@ -169,6 +167,8 @@ namespace Web.Extensions
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserInfoService, UserInfoService>();
             services.AddScoped(typeof(IOngoingWorkDelayService<,,>), typeof(OngoingWorkDelayService<,,>));
+            services.AddDefaultCorrelationId();
+
         }
     }
 }

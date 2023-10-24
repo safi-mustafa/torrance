@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Enums;
 using Pagination;
+using ViewModels.Authentication.User;
 using ViewModels.Common.Company;
 using ViewModels.Common.Department;
 using ViewModels.Common.Unit;
@@ -15,13 +16,14 @@ namespace ViewModels.Common
         {
         }
         public LogType? Type { get; set; }
-        public Status Status { get; set; } = Status.Pending;
+        public ApprovalStatus? Status { get; set; } 
 
         [Display(Name = "Requestor")]
-        public EmployeeBriefViewModel Employee { get; set; } = new();
+        public EmployeeBriefViewModel Employee { get; set; } = new(false,"");
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel(false, "");
         public DepartmentBriefViewModel Department { get; set; } = new DepartmentBriefViewModel(false);
         public UnitBriefViewModel Unit { get; set; } = new UnitBriefViewModel(false);
+        public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel(false);
     }
 }
 

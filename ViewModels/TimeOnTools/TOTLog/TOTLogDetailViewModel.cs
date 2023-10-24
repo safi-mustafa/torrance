@@ -62,14 +62,14 @@ namespace ViewModels.TimeOnTools.TOTLog
 
         [Display(Name = "Delay Description")]
         public string? DelayDescription { get; set; }
-        [Display(Name = "Workscope")]
+        [Display(Name = "Work Scope")]
         public string? WorkScope { get; set; }
         public string Twr { get; set; }
 
         public TWRViewModel TWRModel { get; set; } = new TWRViewModel();
 
         [Display(Name = "Hours")]
-        public long ManHours { get; set; }
+        public double ManHours { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartOfWork { get; set; }
         public string FormattedStartOfWork
@@ -107,7 +107,7 @@ namespace ViewModels.TimeOnTools.TOTLog
         [Display(Name = "Head Count")]
         public long ManPowerAffected { get; set; }
         [Display(Name = "Total Hours")]
-        public long TotalHours
+        public double TotalHours
         {
             get
             {
@@ -167,6 +167,5 @@ namespace ViewModels.TimeOnTools.TOTLog
         public string PossibleApprovers { get; set; }
         public string Foreman { get; set; }
         public PermittingIssueBriefViewModel PermittingIssue { get; set; } = new PermittingIssueBriefViewModel();
-        public EmployeeBriefViewModel Employee { get; set; } = new EmployeeBriefViewModel();
     }
 }

@@ -26,7 +26,7 @@ namespace Web.Controllers
         private readonly string _loggedInUserRole;
         private readonly IBaseApprove _approveService;
 
-        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Logs", userInfo)
+        public WRRLogController(IWRRLogService<WRRLogModifyViewModel, WRRLogModifyViewModel, WRRLogDetailViewModel> WRRLogService, ILogger<WRRLogController> logger, IMapper mapper, IUserInfoService userInfo, UserManager<ToranceUser> userManager) : base(WRRLogService, logger, mapper, "WRRLog", "Welding Rod Record Log", userInfo)
         {
             _WRRLogService = WRRLogService;
             _logger = logger;
@@ -37,7 +37,7 @@ namespace Web.Controllers
         protected override WRRLogSearchViewModel SetDefaultFilters()
         {
             var filters = base.SetDefaultFilters();
-            filters.StatusNot = Enums.Status.Pending;
+            filters.StatusNot.Add(Status.Pending);
             return filters;
         }
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
@@ -81,9 +81,9 @@ namespace Web.Controllers
             dataColumns.AddRange(new List<DataTableViewModel>()
             {
                 new DataTableViewModel{title = "<input type='checkbox' class='select-all-checkbox' onclick='selectAllCheckBoxChanged(this)'>",className="text-right exclude-from-export", data = ""},//
-                new DataTableViewModel{title = "Status",data = "FormattedStatus",format="html",formatValue="status",exportColumn="FormattedStatus"},
+                new DataTableViewModel{title = "Status",data = "FormattedStatusForView",format="html",formatValue="status",exportColumn="FormattedStatus"},
                 new DataTableViewModel{title = "Submitted",data = "FormattedCreatedOn", sortingColumn ="CreatedOn", orderable = true},
-                new DataTableViewModel{title = "Requester",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
+                new DataTableViewModel{title = "Requestor",data = "Employee.Name",sortingColumn="Employee.FullName", orderable=true},
                 new DataTableViewModel{title = "Approver",data = "Approver.Name",sortingColumn="Approver.FullName", orderable=true},
                 new DataTableViewModel{title = "Department",data = "Department.Name",className="exclude-form-table include-in-export"},
                 new DataTableViewModel{title = "Unit",data = "Unit.Name", orderable=true,className="exclude-form-table include-in-export"},
@@ -120,13 +120,19 @@ namespace Web.Controllers
         [HttpPost]
         public override Task<ActionResult> Create(WRRLogModifyViewModel model)
         {
-            if (User.IsInRole("Employee"))
+            if (User.IsInRole("Employee") || User.IsInRole("Approver"))
             {
                 ModelState.Remove("Employee.Id");
                 ModelState.Remove("Employee.Name");
             }
+            if (User.IsInRole("Employee"))
+            {
+                ModelState.Remove("Company.Id");
+                ModelState.Remove("Company.Name");
+            }
             return base.Create(model);
         }
+
         public override ActionResult DataTableIndexView(CrudListViewModel vm)
         {
             return View("~/Views/WRRLog/_Index.cshtml", vm);
@@ -134,16 +140,12 @@ namespace Web.Controllers
 
         protected override void SetDatatableActions<T>(DatatablePaginatedResultModel<T> result)
         {
-            result.ActionsList = new List<DataTableActionViewModel>()
+            result.ActionsList = new List<DataTableActionViewModel>
             {
-                    new DataTableActionViewModel() {Action="Detail",Title="Detail",Href=$"/WRRLog/Detail/Id"},
-
+                new DataTableActionViewModel() { Action = "Detail", Title = "Detail", Href = $"/WRRLog/Detail/Id" },
+                new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", ShowBasedOn = "CanUpdate" },
+                new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id", ShowBasedOn = "CanDelete" }
             };
-            if (_loggedInUserRole == RolesCatalog.Employee.ToString() || _loggedInUserRole == RolesCatalog.CompanyManager.ToString())
-            {
-                result.ActionsList.Add(new DataTableActionViewModel() { Action = "Update", Title = "Update", Href = $"/WRRLog/Update/Id", HideBasedOn = "IsEditRestricted" });
-            }
-            result.ActionsList.Add(new DataTableActionViewModel() { Action = "Delete", Title = "Delete", Href = $"/WRRLog/Delete/Id" });
         }
 
         private async Task<WRRLogModifyViewModel> GetCreateViewModel()
