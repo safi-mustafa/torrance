@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class FCOReasonController : CrudBaseBriefController<FCOReasonDetailViewModel, FCOReasonSearchViewModel>
     {
-        public FCOReasonController(IFCOReasonService<FCOReasonModifyViewModel, FCOReasonModifyViewModel, FCOReasonDetailViewModel> service) : base(service)
+        public FCOReasonController(IFCOReasonService<FCOReasonModifyViewModel, FCOReasonModifyViewModel, FCOReasonDetailViewModel> service, ILogger<FCOReasonController> logger) : base(service, logger, "FCO Reason")
         {
         }
     }

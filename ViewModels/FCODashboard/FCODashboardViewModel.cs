@@ -14,10 +14,10 @@ namespace ViewModels.FCODashboard
 
     public class FCOPieChartViewModel
     {
-        public List<LogPieChartViewModel> Status { get; set; }
-        public List<LogPieChartViewModel> Requestor { get; set; }
-        public List<LogPieChartViewModel> AreaExecutionLead { get; set; }
-        public List<LogPieChartViewModel> BusinessTeamLeader { get; set; }
-        public List<LogPieChartViewModel> Company { get; set; }
+        public List<ChartViewModel> Status { get; set; }
+        public List<ChartViewModel> Requestor { get; set; }
+        public List<ChartViewModel> AreaExecutionLead { get; set; }
+        public List<ChartViewModel> BusinessTeamLeader { get; set; }
+        public List<ChartViewModel> Company { get; set; }
     }
 }

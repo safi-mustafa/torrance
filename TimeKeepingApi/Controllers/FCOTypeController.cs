@@ -11,7 +11,7 @@ namespace API.Controllers
     [Authorize]
     public class FCOTypeController : CrudBaseBriefController<FCOTypeDetailViewModel, FCOTypeSearchViewModel>
     {
-        public FCOTypeController(IFCOTypeService<FCOTypeModifyViewModel, FCOTypeModifyViewModel, FCOTypeDetailViewModel> service) : base(service)
+        public FCOTypeController(IFCOTypeService<FCOTypeModifyViewModel, FCOTypeModifyViewModel, FCOTypeDetailViewModel> service, ILogger<FCOTypeController> logger) : base(service, logger, "FCO Type")
         {
         }
     }

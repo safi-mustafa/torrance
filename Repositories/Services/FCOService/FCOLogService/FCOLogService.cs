@@ -276,7 +276,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                     await AddAttachment(model.File, mappedModel.Id);
                     string fcoIdentifier = await GetFCONumber((long)model.Unit.Id, mappedModel.SrNo);
                     var notification = await GetNotificationModel(mappedModel, NotificationEventTypeCatalog.Created, fcoIdentifier);
-                    await _notificationService.CreateLogNotification(notification);
+                    //await _notificationService.CreateLogNotification(notification);
                     await transaction.CommitAsync();
                     var response = new RepositoryResponseWithModel<long> { ReturnModel = mappedModel.Id };
                     return response;
@@ -548,7 +548,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                                     IdentifierValue = identifier,
                                     User = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.FullName).FirstOrDefaultAsync()
                                 };
-                                await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.AreaExecutionLeadId ?? logRecord.BusinessTeamLeaderId ?? 0);
+                                //await _notificationService.CreateProcessedLogNotification(notificationToRequestor, logRecord.AreaExecutionLeadId ?? logRecord.BusinessTeamLeaderId ?? 0);
                             }
                             await transaction.CommitAsync();
                             return _response;
@@ -641,7 +641,7 @@ namespace Repositories.Services.AppSettingServices.FCOLogService
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Name;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].MN;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].DU;
-                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].OverrideType;
+                            overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].OverrideType.GetDisplayName();
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Craft.Name;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].RateFormatted;
                             overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = logs.ReturnModel.Items[l].FCOSections[i].Estimate;

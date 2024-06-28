@@ -22,8 +22,9 @@ namespace API.Controllers
         private readonly IFCOLogService<FCOLogCreateViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> _fCOLogService;
         private readonly IMapper _mapper;
         private readonly IUserInfoService _userInfoService;
+        private readonly ILogger<FCOLogController> logger;
 
-        public FCOLogController(IFCOLogService<FCOLogCreateViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, IMapper mapper, IUserInfoService userInfoService) : base(FCOLogService)
+        public FCOLogController(IFCOLogService<FCOLogCreateViewModel, FCOLogModifyViewModel, FCOLogDetailViewModel> FCOLogService, IMapper mapper, IUserInfoService userInfoService, ILogger<FCOLogController> logger) : base(FCOLogService, logger, "FCO Log")
         {
             _fCOLogService = FCOLogService;
             _mapper = mapper;

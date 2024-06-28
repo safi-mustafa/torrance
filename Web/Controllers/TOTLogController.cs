@@ -275,27 +275,27 @@ namespace Web.Controllers
             return File(new MemoryStream(fileBytes), contentType, fileName);
         }
 
-        public async Task<ActionResult> ExportTWRExcelSheet()
-        {
-            var workBook = await _TOTLogService.InitializeData();
-            if (workBook == null)
-            {
-                return Json(true);
-            }            // Convert the workbook to a byte array
-            byte[] fileBytes;
-            using (var stream = new MemoryStream())
-            {
-                workBook.SaveAs(stream);
-                fileBytes = stream.ToArray();
-            }
+        //public async Task<ActionResult> ExportTWRExcelSheet()
+        //{
+        //    var workBook = await _TOTLogService.InitializeData();
+        //    if (workBook == null)
+        //    {
+        //        return Json(true);
+        //    }            // Convert the workbook to a byte array
+        //    byte[] fileBytes;
+        //    using (var stream = new MemoryStream())
+        //    {
+        //        workBook.SaveAs(stream);
+        //        fileBytes = stream.ToArray();
+        //    }
 
-            // Set the content type and file name for the Excel file
-            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = "TWR - Torrance.xlsx";
+        //    // Set the content type and file name for the Excel file
+        //    string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //    string fileName = "TWR - Torrance.xlsx";
 
-            // Return the Excel file as a FileStreamResult
-            return File(new MemoryStream(fileBytes), contentType, fileName);
-        }
+        //    // Return the Excel file as a FileStreamResult
+        //    return File(new MemoryStream(fileBytes), contentType, fileName);
+        //}
     }
 
 }

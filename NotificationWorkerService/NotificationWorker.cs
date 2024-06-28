@@ -1,8 +1,6 @@
 ﻿using Enums;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Models;
-using Models.Common.Interfaces;
 using Newtonsoft.Json;
 using NotificationWorkerService.Context;
 using NotificationWorkerService.Interface;

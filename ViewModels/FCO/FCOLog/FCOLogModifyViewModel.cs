@@ -64,6 +64,7 @@ namespace ViewModels
         public string? ShopName { get; set; }
         [Display(Name = "Shop Rate")]
         public double ShopRate { get; set; }
+        public bool IsArchived { get; set; }
 
         public ContractorBriefViewModel Contractor { get; set; } = new();
         public CompanyBriefViewModel Company { get; set; } = new(true, "The Company field is required.");

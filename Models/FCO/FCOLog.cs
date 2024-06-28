@@ -41,6 +41,7 @@ namespace Models
         public double EquipmentRate { get; set; }
         public string? ShopName { get; set; }
         public double ShopRate { get; set; }
+        public bool IsArchived { get; set; }
 
         [ForeignKey("DesignatedCoordinator")]
         public long? DesignatedCoordinatorId { get; set; }

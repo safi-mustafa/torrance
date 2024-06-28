@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using ViewModels.Shared;
 using CorrelationId.Abstractions;
 using Enums;
+using Helpers.Extensions;
 
 namespace DataLibrary;
 

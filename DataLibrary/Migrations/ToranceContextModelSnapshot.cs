@@ -896,14 +896,6 @@ namespace DataLibrary.Migrations
                     b.HasIndex("FCOLogId");
 
                     b.ToTable("FCOSections");
-=======
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LogDatas");
->>>>>>> dev
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
