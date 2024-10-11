@@ -5,7 +5,8 @@
     var createUrl = HttpUtility.UrlDecode(Url.Action("Create", Model.ControllerName));
 
 }
-<script>$(document).ready(function () {
+<script>
+    $(document).ready(function () {
         //$('[data-toggle="tooltip"]').tooltip();
     });
     function loadCreateModalPanel(contentUrl) {
@@ -16,8 +17,8 @@
     <div class="row col-12 p-0 m-0">
         @if (string.IsNullOrEmpty(Model.DataTableHeaderHtml))
         {
-            <div class="selected-filters-container col-10 mt-2 p-0"></div>
-            <div class="row col-2 p-0  m-0">
+            <div class="selected-filters-container col-md-10 col-sm-12 mt-2 p-0"></div>
+            <div class="row col-md-2 col-sm-12 p-0 m-0">
                 <div class="col-12">
                     @if (!string.IsNullOrEmpty(Model.DataTableHeaderHtml))
                     {
@@ -36,12 +37,12 @@
         }
         else
         {
-            <div class="selected-filters-container col-7 mt-2 p-0"></div>
-            <div class="row col-5 p-0  m-0">
-                <div class="col-lg-9 d-flex flex-row-reverse">
+            <div class="selected-filters-container col-md-7 col-sm-12 mt-2 p-0"></div>
+            <div class="row col-md-5 col-sm-12 p-0 m-0">
+                <div class="col-md-9 col-sm-12 d-flex flex-row-reverse">
                     @Html.Raw(Model.DataTableHeaderHtml)
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 col-sm-12">
                     @if (Model.DisableSearch == false)
                     {
                         <button type="button" id="search-filters" class="btn-circle mb-2 float-right" data-toggle="tooltip" title="Search"><i class="icon-filter3 icon-1x"></i></button>
