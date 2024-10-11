@@ -171,6 +171,8 @@ namespace Repositories.Services.AppSettingServices.ApproverService
                                     (
                                         string.IsNullOrEmpty(search.Email) || user.Email.ToLower().Contains(search.Email.ToLower())
                                     )
+                                    &&
+                                    (search.ActiveStatus == null || user.ActiveStatus == search.ActiveStatus)
                                )
                                 select user);
             //select new ApproverDetailViewModel { Id = user.Id });

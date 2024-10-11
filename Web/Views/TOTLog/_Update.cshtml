@@ -42,18 +42,18 @@
             </div>
 
             @*     <div class="col-lg-4">
-                <div class="mb-3">
-                <label asp-for="StartOfWork" class="form-label fw-600"></label>
-                <input asp-for="StartOfWork" type="date" class="form-control" />
-                <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
-                </div>
-                </div>
+            <div class="mb-3">
+            <label asp-for="StartOfWork" class="form-label fw-600"></label>
+            <input asp-for="StartOfWork" type="date" class="form-control" />
+            <span asp-validation-for="StartOfWork" class="validation-invalid-label"></span>
+            </div>
+            </div>
 
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
-                </div>
-                </div>*@
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_RequestReason.cshtml" for="ReasonForRequest" />
+            </div>
+            </div>*@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label asp-for="PermitNo" class="form-label fw-600"></label>
@@ -92,7 +92,7 @@
                 <label class="form-label fw-600">TWR</label>
 
                 <div class="mb-3 d-flex justify-content-start">
-                    <div class="col-2">
+                    <div class="col-2 pl-0">
                         <input type="text" value="TWR" class="form-control" readonly />
                     </div>
 
@@ -117,12 +117,12 @@
                 </div>
             </div>
             @*<div class="col-lg-6">
-                <div class="mb-3">
-                <label class="form-label fw-600">Delay Type</label>
-                <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
-                <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label class="form-label fw-600">Delay Type</label>
+            <select asp-for="DelayReason" asp-items="Html.GetEnumSelectList(typeof (DelayReasonCatalog))" id="delay-reason" class="form-control"></select>
+            <span asp-validation-for="DelayReason" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             <div class="col-lg-6" id="shift-delay-container">
                 <div class="mb-3">
@@ -153,11 +153,11 @@
                     </div>
                 </div>
                 @*<div class="col-lg-4">
-                    <div class="mb-3">
-                    <label class="form-label fw-600">Company</label>
-                    <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
-                    </div>
-                    </div>*@
+            <div class="mb-3">
+            <label class="form-label fw-600">Company</label>
+            <input type="text" class="form-control" id="requestor-company" name=requestor-company value="@Model.Company.Name" readonly />
+            </div>
+            </div>*@
             }
             else
             {
@@ -165,12 +165,12 @@
             }
 
             @*       <div class="col-lg-6">
-                <div class="mb-3">
-                <label asp-for="EquipmentNo" class="form-label fw-600"></label>
-                <input asp-for="EquipmentNo" type="text" class="form-control" />
-                <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="EquipmentNo" class="form-label fw-600"></label>
+            <input asp-for="EquipmentNo" type="text" class="form-control" />
+            <span asp-validation-for="EquipmentNo" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -189,12 +189,12 @@
             </div>
 
             @* <div class="col-lg-6">
-                <div class="mb-3">
-                <label asp-for="WorkScope" class="form-label fw-600"></label>
-                <input asp-for="WorkScope" type="text" class="form-control" />
-                <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="WorkScope" class="form-label fw-600"></label>
+            <input asp-for="WorkScope" type="text" class="form-control" />
+            <span asp-validation-for="WorkScope" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             <div class="col-lg-4">
                 <div class="mb-3">
@@ -207,68 +207,68 @@
             @*<input asp-for="Approver.Id" type="hidden" />*@
             <input asp-for="Company.Id" type="hidden" />
             @* <div class="col-lg-12">
-                <div class="mb-3">
-                <label asp-for="JobDescription" class="form-label fw-600"></label>
-                <input asp-for="JobDescription" type="text" class="form-control" />
-                <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="JobDescription" class="form-label fw-600"></label>
+            <input asp-for="JobDescription" type="text" class="form-control" />
+            <span asp-validation-for="JobDescription" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
 
 
             @*  <div class="col-lg-4">
-                <div class="mb-3">
-                <label asp-for="HoursDelayed" class="form-label fw-600"></label>
-                <input asp-for="HoursDelayed" type="number" class="form-control" />
-                <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="HoursDelayed" class="form-label fw-600"></label>
+            <input asp-for="HoursDelayed" type="number" class="form-control" />
+            <span asp-validation-for="HoursDelayed" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
 
             @*          <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
-                </div>
-                </div>
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_PermittingIssue.cshtml" for="PermittingIssue" />
+            </div>
+            </div>
             *@
 
 
             @*   <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
-                </div>
-                </div>
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Department.cshtml" for="Department" />
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_Contractor.cshtml" for="Contractor" />
+            </div>
+            </div>*@
             @*<div class="col-lg-4">
-                <div class="mb-3">
-                <label asp-for="Date" class="form-label fw-600"></label>
-                <input asp-for="Date" type="date" class="form-control" />
-                <span asp-validation-for="Date" class="validation-invalid-label"></span>
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <label asp-for="Date" class="form-label fw-600"></label>
+            <input asp-for="Date" type="date" class="form-control" />
+            <span asp-validation-for="Date" class="validation-invalid-label"></span>
+            </div>
+            </div>*@
             @* <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
-                </div>
-                </div>
-                <div class="col-lg-4">
-                <div class="mb-3">
-                <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
-                </div>
-                </div>*@
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ShiftDelay.cshtml" for="ShiftDelay" />
+            </div>
+            </div>
+            <div class="col-lg-4">
+            <div class="mb-3">
+            <partial name="~/Views/Shared/Select2/_ReworkDelay.cshtml" for="ReworkDelay" />
+            </div>
+            </div>*@
             @*<div class="col-lg-4">
-                <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
-                <input asp-for="TimeSigned" type="time" class="form-control" />
-                <span asp-validation-for="TimeSigned" class="text-danger"></span>
-                </div>
-                <div class="col-lg-4">
-                <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
-                <input asp-for="TimeRequested" type="time" class="form-control" />
-                <span asp-validation-for="TimeRequested" class="text-danger"></span>
-                </div>*@
+            <label asp-for="TimeSigned" class="control-label form-label fw-600"></label>
+            <input asp-for="TimeSigned" type="time" class="form-control" />
+            <span asp-validation-for="TimeSigned" class="text-danger"></span>
+            </div>
+            <div class="col-lg-4">
+            <label asp-for="TimeRequested" class="control-label form-label fw-600"></label>
+            <input asp-for="TimeRequested" type="time" class="form-control" />
+            <span asp-validation-for="TimeRequested" class="text-danger"></span>
+            </div>*@
         </div>
     </div>
 </div>
@@ -316,6 +316,22 @@
             $('#start-of-work-delay-container').hide();
             $('#ongoing-work-delay-container').show();
         }
+    }
+
+    function validateCustomConditions() {
+        $(".delay-type").each(function () {
+            // Find the corresponding validation label
+            let $validationLabel = $(this).parent().find('.validation-invalid-label');
+            // Remove the HTML content of the validation label and hide it
+            $validationLabel.html('').hide();
+        });
+        if (!$(".delay-type:visible").val()) {
+            let message = $(".delay-type:visible").data('val-required');
+            $(".delay-type:visible").parent().find('.validation-invalid-label').html(message);
+            $(".delay-type:visible").parent().find('.validation-invalid-label').show();
+            return false;
+        }
+        return true;
     }
 
 

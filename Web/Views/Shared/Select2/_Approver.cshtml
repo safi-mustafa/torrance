@@ -23,13 +23,13 @@
     Text = (Model!=null&&Model.Id > 0)?Model.Name:"",
     Selected = (Model!=null&&Model.Id > 0)?true:false,
     }},
-    new
-    {
-    @id = elementId,
-    @class = "form-control disable-field",
-    data_val_required = Model.IsValidationEnabled ? Model.ErrorMessage : "",
-    data_val = Model.IsValidationEnabled.ToString().ToLower()
-    })
+            new
+            {
+                @id = elementId,
+                @class = "form-control disable-field",
+                data_val_required = Model.IsValidationEnabled ? Model.ErrorMessage : "",
+                data_val = Model.IsValidationEnabled.ToString().ToLower()
+            })
     <input type="hidden" name="@name" value="@Model.Name" />
     <span asp-validation-for="Id" class="validation-invalid-label"></span>
 </div>
@@ -57,7 +57,8 @@
                         Id: $(departmentId).val()
                     },
                     IsSearchForm: "@isSearchForm",
-                    LogType: "@logType"
+                    LogType: "@logType",
+                    ActiveStatus: "@Enums.ActiveStatus.Active"
                 })
             };
         };

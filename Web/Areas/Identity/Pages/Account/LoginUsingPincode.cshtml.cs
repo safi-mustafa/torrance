@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Services.CommonServices.UserService;
 using Helpers.Extensions;
 using System.Security.Claims;
+using Enums;
 
 namespace Web.Areas.Identity.Pages.Account
 {
@@ -107,6 +108,12 @@ namespace Web.Areas.Identity.Pages.Account
                 var user = await _db.Users.Where(x => x.AccessCode == encodedPin).FirstOrDefaultAsync();
                 if(user != null)
                 {
+                    if (user.ActiveStatus == ActiveStatus.Inactive || user.ActiveStatus == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "You can't login. Your status is inactive.");
+                        return Page();
+                    }
+
                     await _signInManager.SignInAsync(user, true);
                     var customClaims = new[] { new Claim("CanAddLogs", user.CanAddLogs.ToString().ToLower()),
                                 new Claim(ClaimTypes.Email, user.Email) };

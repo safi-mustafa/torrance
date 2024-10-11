@@ -5,7 +5,7 @@ namespace ViewModels.TimeOnTools.OngoingWorkDelay
 {
     public class OngoingWorkDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public OngoingWorkDelayBriefViewModel() : base(false, "")
+        public OngoingWorkDelayBriefViewModel() : base(false, "The field Ongoing Work is required.")
         {
 
         }

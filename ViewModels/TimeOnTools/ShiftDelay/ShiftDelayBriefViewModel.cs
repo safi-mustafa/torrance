@@ -5,7 +5,7 @@ namespace ViewModels.TimeOnTools.ShiftDelay
 {
     public class ShiftDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public ShiftDelayBriefViewModel() : base(false, "")
+        public ShiftDelayBriefViewModel() : base(false, "The field Shift Delay is required.")
         {
 
         }

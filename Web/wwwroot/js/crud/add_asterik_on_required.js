@@ -3,7 +3,6 @@
 });
 function addAsterikToRequiredFields() {
     $('input,select,textarea').each(function () {
-        debugger;
         var req = $(this).attr('data-val-required');
         if (undefined != req && req != "" && $(this).attr('type') != "hidden") {
             var label = $(this).siblings(".form-label");

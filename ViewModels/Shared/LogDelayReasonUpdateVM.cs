@@ -34,7 +34,7 @@ namespace ViewModels.Shared
             {
                 if ((ReworkDelay == null || ReworkDelay.Id == null || ReworkDelay?.Id < 1))
                 {
-                    modelState.AddModelError("ReworkDelay.Id", "The field Rework Delay is required");
+                    modelState.AddModelError("ReworkDelay.Id", "The field Rework Delay is required.");
                 }
 
             }
@@ -42,7 +42,7 @@ namespace ViewModels.Shared
             {
                 if (ShiftDelay == null || ShiftDelay.Id == null || ShiftDelay?.Id < 1)
                 {
-                    modelState.AddModelError("ShiftDelay.Id", "The field Shift Delay is required");
+                    modelState.AddModelError("ShiftDelay.Id", "The field Shift Delay is required.");
                 }
 
             }

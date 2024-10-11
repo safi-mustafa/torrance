@@ -9,6 +9,7 @@ namespace ViewModels.Authentication.Approver
     {
         public UnitBriefViewModel Unit { get; set; } = new();
         public DepartmentBriefViewModel Department { get; set; } = new();
+        public ActiveStatus? ActiveStatus { get; set; }
 
         public bool IsSearchForm { get; set; }
         public FilterLogType LogType { get; set; }

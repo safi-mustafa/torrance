@@ -14,7 +14,6 @@ $(function () {
 })
 
 function loadModalPanel(contentUrl, modalPanelId, modalPanelBody) {
-    debugger;
     $.ajax({
         type: "GET",
         url: contentUrl,
@@ -84,7 +83,9 @@ async function updateRecord(element, modalPanelId = "crudModalPanel") {
     var formData = $(form).serializeFiles();
     $(form).removeData("validator").removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse($(form));
-    if ($(form).valid()) {
+    let isFormValid = $(form).valid();
+    let areCustomConditionsValid = validateCustomConditions();
+    if (isFormValid && areCustomConditionsValid) {// its set in variables so that both validation messages are shown at once
         clearValidationSummary(form);
         disableControls(form);
         try {
@@ -223,4 +224,8 @@ function removeCurrencyMasking() {
 }
 function addCurrencyMasking() {
     maskCurrency(".input-currency");
+}
+
+function validateCustomConditions() {
+    return true;
 }

@@ -5,7 +5,7 @@ namespace ViewModels.TimeOnTools.StartOfWorkDelay
 {
     public class StartOfWorkDelayBriefViewModel : BaseBriefVM, ISelect2Data
     {
-        public StartOfWorkDelayBriefViewModel() : base(false, "")
+        public StartOfWorkDelayBriefViewModel() : base(false, "The field Start Of Work is required.")
         {
 
         }
