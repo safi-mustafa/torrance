@@ -14,13 +14,19 @@
                 <p>SigIn to your Account</p>
                 <form id="account" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @Model.SuccessMessage
+                        </div>
+                    }
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
                             </div>
                             <input asp-for="Input.Email" placeholder="E-mail" class="form-control" autocomplete="username" aria-required="true" />
-                            
+
                         </div>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
@@ -44,8 +50,11 @@
                         </div>
                     </div>
                     <div class="form-group row">
-
                         <input id="login-submit" type="submit" class="btn col-md-12" value="Log in" />
+                        <div class="mt-1">
+                            Don't have an account?
+                            <a class="link-dark" style="color:#0057af;" asp-area="Identity" asp-page="/Account/EmployeeSignup" title="Resgiter Account">Register Now!</a>
+                        </div>
                     </div>
                 </form>
                 <p style="text-align:center;">

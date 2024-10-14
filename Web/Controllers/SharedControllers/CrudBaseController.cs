@@ -134,7 +134,7 @@ namespace Web.Controllers
 
             return GetErrors("Update", model);
         }
-        private ActionResult PostModify(long id, IBaseCrudViewModel model, string action)
+        protected ActionResult PostModify(long id, IBaseCrudViewModel model, string action)
         {
             if (id > 0)
             {
@@ -336,7 +336,7 @@ namespace Web.Controllers
             return svm;
         }
 
-        private ActionResult GetErrors(string action, IBaseCrudViewModel model, List<string> customErrors = null)
+        protected ActionResult GetErrors(string action, IBaseCrudViewModel model, List<string> customErrors = null)
         {
             if (Request.IsAjaxRequest())
             {
