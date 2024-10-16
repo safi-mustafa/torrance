@@ -76,6 +76,11 @@ namespace Web.Areas.Identity.Pages.Account
             [Remote(action: "ValidateAccessCode", controller: "User", AdditionalFields = "Id,AccessCode", ErrorMessage = "Access Code already in use.")]
             public string AccessCode { get; set; }
 
+            [DisplayName("Confirm Access Code")]
+            [RegularExpression(@"^(\d{4})$", ErrorMessage = "Confirm Access Code must be of 4-digits.")]
+            [Compare("AccessCode", ErrorMessage = "The Access Code and Confirm Access Code do not match.")]
+            public string ConfirmAccessCode { get; set; }
+
         }
 
 
