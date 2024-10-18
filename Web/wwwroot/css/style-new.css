@@ -14,6 +14,10 @@ label {
     font-weight: 500;
 }
 
+.login-box {
+    opacity: 0.8;
+}
+
 .status-filter .stat-square {
     display: inline-block;
     width: 25px;
@@ -128,7 +132,8 @@ label {
         text-align: center;
         margin-bottom: 30px;
     }
-        .login-page .login-form h2 {
+
+    .login-page .login-form h2 {
         color: #263871;
         font-size: 30px;
         font-weight: 700;
@@ -711,11 +716,12 @@ label {
     font-size: 18px;
     top: 10px;
 }
+
 .login-navbar {
-    justify-content:center;
-    margin-top:50px;
+    justify-content: center;
+    margin-top: 50px;
 }
+
     .login-navbar .navbar-brand {
         padding: 0;
     }
-
