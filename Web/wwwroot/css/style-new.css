@@ -118,31 +118,39 @@ label {
     }
     /**/
     .login-page .login-box .login-form {
-        width: 100%;
+/*        width: 100%;
         max-width: 550px;
         margin: 30px auto;
         padding: 40px;
         border-radius: 5px;
         background-color: white;
         box-shadow: 0 0.15rem 1.75rem 0 rgb(196 205 224 / 20%);
-        border-radius: 13px;
+        border-radius: 13px;*/
+        width: 100%;
+        max-width: 400px;
+        margin: 30px auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.7);
     }
 
     .login-page .login-form p {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+        color:white;
     }
 
     .login-page .login-form h2 {
-        color: #263871;
-        font-size: 30px;
-        font-weight: 700;
+        margin: 0 0 5px 0;
+        color: #fff;
         text-align: center;
-        margin-top: 20px;
+        font-size: 2rem;
+        font-weight: 500;
     }
 
     .login-page .login-form .form-group {
         margin-bottom: 20px;
+        color:white;
     }
 
     .login-page .login-form .form-control {
@@ -155,7 +163,7 @@ label {
 
     .login-page .login-form .form-check label {
         font-size: 14px;
-        color: #333;
+        color: white;
     }
 
     .login-page .login-form .forgot-pass {
@@ -172,10 +180,9 @@ label {
 
     .login-page .login-form .btn {
         height: 40px;
-        width: 100px;
         padding: 6px 15px;
-        background-color: #0057af;
-        border: #0057af;
+        background-color: #5b9bd5;
+        border: #5b9bd5;
         box-shadow: none;
         font-size: 16px;
         font-weight: 600;
@@ -186,8 +193,8 @@ label {
 
         .login-page .login-form .btn:hover {
             background-color: transparent;
-            color: #0057af;
-            border: 2px solid #0057af;
+            color: #5b9bd5;
+            border: 2px solid #5b9bd5;
         }
     /**/
     .login-page footer {
@@ -718,7 +725,6 @@ label {
 }
 
 .login-navbar {
-    justify-content: center;
     margin-top: 50px;
 }
 
