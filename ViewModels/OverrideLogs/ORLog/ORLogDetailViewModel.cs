@@ -108,5 +108,8 @@ namespace ViewModels.OverrideLogs.ORLog
         public string DomainUrl { get; set; }
 
         public string FormattedClippedEmployeeUrl { get => string.IsNullOrEmpty(ClippedEmployeesUrl) ? "" : $"{DomainUrl}{ClippedEmployeesUrl}"; }
+
+        public string? Comment { get; set; }
+
     }
 }

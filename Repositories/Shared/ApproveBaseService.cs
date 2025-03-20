@@ -18,6 +18,7 @@ using Repositories.Common;
 using Repositories.Shared.Interfaces;
 using Repositories.Shared.NotificationServices;
 using Repositories.Shared.UserInfoServices;
+using ViewModels.Common.Approval;
 using ViewModels.Notification;
 using ViewModels.Shared;
 
@@ -89,24 +90,25 @@ namespace Repositories.Shared
             }
         }
 
-        public async Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid())
+        public async Task<IRepositoryResponse> SetApproveStatus(ApprovalModifyViewModel model)
         {
             using (var transaction = await _db.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var allowUnauthenticatedApproval = (isUnauthenticatedApproval && approverId > 0 && notificationId != new Guid());
-                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == notificationId && x.SendTo == approverId.ToString() && x.EntityId == id) : false;
+                    var allowUnauthenticatedApproval = (model.IsUnauthenticatedApproval && model.ApproverId > 0 && model.NotificationId != new Guid());
+                    allowUnauthenticatedApproval = allowUnauthenticatedApproval ? await _db.Notifications.AsNoTracking().AnyAsync(x => x.Id == model.NotificationId && x.SendTo == model.ApproverId.ToString() && x.EntityId == model.Id) : false;
 
-                    if (isUnauthenticatedApproval == false || allowUnauthenticatedApproval)
+                    if (model.IsUnauthenticatedApproval == false || allowUnauthenticatedApproval)
                     {
-                        var logRecord = await _db.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+                        var logRecord = await _db.Set<TEntity>().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                         if (logRecord != null)
                         {
-                            logRecord.Status = status;
+                            logRecord.Status = model.Status;
+                            logRecord.Comment = model.Comment;
                             if (allowUnauthenticatedApproval)
                             {
-                                logRecord.ApproverId = approverId;
+                                logRecord.ApproverId = model.ApproverId;
                             }
                             else if (logRecord.ApproverId == null)
                             {
@@ -138,8 +140,8 @@ namespace Repositories.Shared
                                 identifier = (logRecord as WRRLog).Twr.ToString();
                                 notificationEntityType = NotificationEntityType.WRRLog;
                             }
-                            var eventType = (status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
-                            string notificationTitle = $"{type} Log {status}";
+                            var eventType = (model.Status == Status.Approved ? NotificationEventTypeCatalog.Approved : NotificationEventTypeCatalog.Rejected);
+                            string notificationTitle = $"{type} Log {model.Status}";
                             //string notificationMessage = $"The {type} Log with {identifierKey}# ({identifier}) has been {status}";
                             //var userId = await _db.Users.Where(x => x.Id == logRecord.EmployeeId).Select(x => x.Id).FirstOrDefaultAsync();
                             //var notification = new NotificationViewModel()
@@ -190,7 +192,7 @@ namespace Repositories.Shared
                             await transaction.CommitAsync();
                             return _response;
                         }
-                        _logger.LogWarning($"No record found for id:{id} for {typeof(TEntity).FullName} in SetApproveStatus()");
+                        _logger.LogWarning($"No record found for id:{model.Id} for {typeof(TEntity).FullName} in SetApproveStatus()");
 
                         await transaction.RollbackAsync();
                     }

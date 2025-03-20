@@ -65,5 +65,7 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public ApproverBriefViewModel Approver { get; set; } = new ApproverBriefViewModel();
 
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
+
+        public string? Comment { get; set; }
     }
 }

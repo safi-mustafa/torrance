@@ -109,11 +109,20 @@ namespace Web.Controllers
 
         }
         [AllowAnonymous]
-        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId)
+        public async Task<bool> ApproveStatus(long id, Status status, bool isUnauthenticatedApproval, long approverId, Guid notificationId, string comment)
         {
             try
             {
-                var response = await _service.SetApproveStatus(id, status, isUnauthenticatedApproval, approverId, notificationId);
+                var model = new ViewModels.Common.Approval.ApprovalModifyViewModel
+                {
+                    Id = id,
+                    Status = status,
+                    IsUnauthenticatedApproval = isUnauthenticatedApproval,
+                    ApproverId = approverId,
+                    NotificationId = notificationId,
+                    Comment = comment
+                };
+                var response = await _service.SetApproveStatus(model);
                 if (response.Status == System.Net.HttpStatusCode.OK)
                 {
                     _logger.LogInformation($"{_controllerName}: Record with id: {id} Approved Successfully at " + DateTime.UtcNow);

@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="Attachment\" />
-    <Folder Include="Common\Approval\" />
     <Folder Include="OverrideLogs\ReasonForRequest\" />
     <Folder Include="OverrideLogs\CraftSkill\" />
     <Folder Include="OverrideLogs\CraftRates\" />

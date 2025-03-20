@@ -1,5 +1,6 @@
 ﻿using Centangle.Common.ResponseHelpers.Models;
 using Enums;
+using ViewModels.Common.Approval;
 
 namespace Repositories.Shared.Interfaces
 {
@@ -7,6 +8,6 @@ namespace Repositories.Shared.Interfaces
     {
         Task<List<long>> GetApprovedRecordIds();
         Task ApproveRecords(List<long> ids, bool Status);
-        Task<IRepositoryResponse> SetApproveStatus(long id, Status status, bool isUnauthenticatedApproval = false, long approverId = 0, Guid notificationId = new Guid());
+        Task<IRepositoryResponse> SetApproveStatus(ApprovalModifyViewModel model);
     }
 }

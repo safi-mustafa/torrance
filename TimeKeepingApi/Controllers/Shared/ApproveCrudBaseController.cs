@@ -67,10 +67,11 @@ namespace Torrance.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public virtual async Task<IActionResult> Approve(long id, Status status)
+        public virtual async Task<IActionResult> Approve(long id, Status status, [FromQuery] string? comment)
         {
             _logger.LogInformation($"{_controllerName} -> Approve(id: {id}, status:{status})");
-            var result = await _service.SetApproveStatus(id, status);
+            var model = new ViewModels.Common.Approval.ApprovalModifyViewModel { Id = id, Status = status, Comment = comment };
+            var result = await _service.SetApproveStatus(model);
             return ReturnProcessedResponse(result);
         }
 

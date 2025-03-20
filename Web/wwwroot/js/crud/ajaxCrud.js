@@ -35,23 +35,75 @@ function rejectRecord(element, modalPanelId = "crudModalPanel") {
 }
 
 function approveDetail(element) {
-    sendApproveAjax(1);
+    showApprovalConfirmation(1);
 }
 
 function rejectDetail(element) {
-    sendApproveAjax(2);
+    showApprovalConfirmation(2);
 }
+function showApprovalConfirmation(status) {
+    let title = status == 1 ? "Approve this log?" : "Reject this log?";
+    let confirmButtonText = status == 1 ? "Yes, Approve" : "Yes, Reject";
+    let confirmButtonClass = status == 1 ? 'btn btn-success mx-2 px-4' : 'btn btn-danger mx-2 px-4';
+    let icon = status == 1 ? "success" : "warning";
 
-function sendApproveAjax(status) {
+    // Custom class for the textarea to make it more prominent
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: confirmButtonClass,
+            cancelButton: 'btn btn-secondary mx-2',
+            input: 'form-control shadow-sm',
+            popup: 'swal-modal-custom'
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: `<strong>${title}</strong>`,
+        icon: icon,
+        html: `
+            <p class="mb-3">Please provide a comment for this action:</p>
+            <div class="form-group">
+                <textarea id="swal-comment" class="form-control" 
+                    placeholder="Enter your comment here..." 
+                    style="min-height: 100px; border: 1px solid #ced4da; border-radius: 4px;"></textarea>
+            </div>
+        `,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: `<i class="fa ${status == 1 ? 'fa-check' : 'fa-times'}"></i> ${confirmButtonText}`,
+        cancelButtonText: `<i class="fa fa-ban"></i> Cancel`,
+        reverseButtons: false,
+        backdrop: `rgba(0,0,0,0.6)`,
+        allowOutsideClick: false,
+        allowEscapeKey: true,
+        didOpen: () => {
+            // Focus on the textarea when the dialog opens
+            document.getElementById('swal-comment').focus();
+        },
+        preConfirm: () => {
+            const commentValue = document.getElementById('swal-comment').value || "";
+            return commentValue;
+        }
+    }).then((result) => {
+        if (result.value !== undefined && !result.dismiss) {
+            sendApproveAjax(status, result.value);
+        } else {
+            console.log("Dialog was dismissed/canceled");
+        }
+    }).catch(error => {
+        console.error("SweetAlert error:", error);
+    });
+}
+function sendApproveAjax(status, comment) {
     var controller = $("#controller-name").val();
     var id = $("#log-id").val();
     var isUnauthenticatedApproval = $("#is-unauthenticated-approval").val().toLowerCase();
     var approverId = $("#approver-id").val();
     var notificationId = $("#notification-id").val();
     //var reqEmail = $("#log-requestor").val();
-    debugger;
     var url = "/" + controller + "/ApproveStatus";
-    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId };
+    var data = { status: status, id: id, isUnauthenticatedApproval: isUnauthenticatedApproval, approverId: approverId, notificationId: notificationId, comment: comment };
 
     $.ajax({
         type: "Get",

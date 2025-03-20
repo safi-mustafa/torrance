@@ -61,5 +61,8 @@ namespace Models.WeldingRodRecord
         [ForeignKey("Approver")]
         public long? ApproverId { get; set; }
         public ToranceUser? Approver { get; set; }
+
+        public string? Comment { get; set; }
+
     }
 }

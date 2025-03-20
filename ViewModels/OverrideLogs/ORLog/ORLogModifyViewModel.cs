@@ -63,5 +63,8 @@ namespace ViewModels.OverrideLogs.ORLog
 
         public Status? Status { get; set; } = Enums.Status.Pending;
 
+        public string? Comment { get; set; }
+
+
     }
 }

@@ -118,5 +118,8 @@ namespace ViewModels.WeldingRodRecord.WRRLog
         public CompanyBriefViewModel Company { get; set; } = new CompanyBriefViewModel();
 
         public string PossibleApprovers { get; set; }
+
+        public string? Comment { get; set; }
+
     }
 }

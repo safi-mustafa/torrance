@@ -23,8 +23,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="text-center">
-                            <button type="button" onclick="rejectDetail(this)" class="btn btn-danger form-btn" id="reject-btn">Reject</button>
                             <button type="button" onclick="approveDetail(this)" class="btn blue-btn form-btn" id="approve-btn">Approve</button>
+                            <button type="button" onclick="rejectDetail(this)" class="btn btn-danger form-btn" id="reject-btn">Reject</button>
                         </div>
                     </div>
                 </div>
@@ -46,3 +46,18 @@
 
 <script src="~/js/crud/ajaxCrud.js"></script>
 <script src="/js/masking/initiate-masking.js"></script>
+<script>
+    $(function()){
+        // Initialize all tooltips on the page
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    html: true,
+                    boundary: 'window'
+                })
+            })
+        });
+    }
+   
+</script>
