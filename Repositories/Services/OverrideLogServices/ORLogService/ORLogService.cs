@@ -689,7 +689,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
 
                 // Add a new worksheet to the workbook and set its name
                 var overrideLogSheet = workbook.Worksheets.Add("OverrideLogs");
-                //LogExcelHelper.AddLogo(overrideLogSheet, _env);
+                LogExcelHelper.AddLogo(overrideLogSheet, _env);
 
                 var rowNumber = 2;
                 SetExcelHeaders(overrideLogSheet, rowNumber);

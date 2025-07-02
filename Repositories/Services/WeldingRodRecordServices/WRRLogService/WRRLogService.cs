@@ -346,7 +346,7 @@ namespace Repositories.Services.AppSettingServices.WRRLogService
 
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("WeldingRodRecordLogs");
-                //LogExcelHelper.AddLogo(worksheet, _env);
+                LogExcelHelper.AddLogo(worksheet, _env);
 
                 var columnHeaders = new List<string>
                 {
