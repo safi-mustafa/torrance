@@ -8,7 +8,7 @@ namespace Helpers.ExcelReader
     {
         public static void AddLogo(IXLWorksheet overrideLogSheet, IHostingEnvironment env)
         {
-            var logoUrl = env.ContentRootPath + "/wwwroot/img/logo.png";
+            var logoUrl = env.ContentRootPath + "/wwwroot/img/pbf-logo.png";
 
             // Add the image to the worksheet
             var picture = overrideLogSheet.AddPicture(logoUrl)
