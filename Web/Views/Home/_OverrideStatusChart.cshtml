@@ -1,13 +1,13 @@
-﻿<div class="col-sm-4">
-    <div class="card">
+﻿@{
+    var columnClass = ViewData["ColumnClass"]?.ToString() ?? "col-sm-4";
+}
+<div class="@columnClass">
+    <div class="card w-100">
         <div class="card-body">
-            <h5 class="card-title">
-               Override
-            </h5>
+            <h5 class="card-title">Override</h5>
             <p class="card-text">
-                <div class="am-chart" id="override-status"></div>
+            <div class="am-chart" id="override-status"></div>
             </p>
-
         </div>
     </div>
 </div>

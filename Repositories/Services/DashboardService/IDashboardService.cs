@@ -7,7 +7,7 @@ namespace Repositories.Services.DashboardService
 {
     public interface IDashboardService
     {
-        Task<DashboardViewModel> GetDashboardData();
+        Task<DashboardViewModel> GetDashboardData(TOTLogSearchViewModel search = null);
         Task<StatusChartViewModel> GetTotStatusChartData(TOTLogSearchViewModel search);
         Task<StatusChartViewModel> GetOverrideStatusChartData(TOTLogSearchViewModel search);
         Task<StatusChartViewModel> GetWrrStatusChartData(WRRLogSearchViewModel search);

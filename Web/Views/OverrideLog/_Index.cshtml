@@ -8,7 +8,9 @@
 <link href="~/css/bundles/datatable-buttons.css" rel="stylesheet" />
 <link href="~/css/datatable/extensions/fixed_header.min.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-6"><h1 class="model-title-heading">@Model.Title</h1></div>
+    <div class="col-md-6">
+        <h1 class="model-title-heading">@Model.Title</h1>
+    </div>
 </div>
 
 <div class="card datatable">
@@ -19,7 +21,8 @@
             @await Html.PartialAsync("~/Views/Shared/Crud/ListView/Common/_Header.cshtml", Model)
             <div class="dataTables_wrapper no-footer" style="min-height:300px;">
                 <div class="datatable-scroll">
-                    <table class="table datatable-basic dataTable" id="crud-list-table" role="grid" aria-describedby="DataTables_Table_0_info">
+                    <table class="table datatable-basic dataTable" id="crud-list-table" role="grid"
+                        aria-describedby="DataTables_Table_0_info">
                     </table>
                 </div>
             </div>
@@ -39,7 +42,8 @@
             <div id="crudModalPanelBody" class="modal-body">
                 <div id="crudDeleteModalError">
                 </div>
-                <input name="Password" type="password" id="user-password" class="form-control" placeholder="Password" autocomplete="new-password" />
+                <input name="Password" type="password" id="user-password" class="form-control" placeholder="Password"
+                    autocomplete="new-password" />
                 <br />
                 <div class="text-center">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
@@ -52,6 +56,8 @@
 @section Scripts {
     <script src="~/js/bundles/datatable.js"></script>
     <script src="~/js/bundles/datatable-buttons.js"></script>
+    <script src="~/js/datatable-buttons/pdfmake.min.js"></script>
+    <script src="~/js/datatable-buttons/vfs_fonts.js"></script>
     <script src="~/js/datatables/extensions/fixed_header.min.js"></script>
     <script src="~/js/bundles/custom-datatable.js"></script>
     <script src="~/js/crud/ajaxCrud.js"></script>
@@ -68,10 +74,15 @@
                 $("#" + dataTableId).dataTable().fnDestroy();
                 $("#crud-list-table").addClass("dataTable");
             }
-            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())', true, '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())', -1);
+
+            // Debug: Check PDF functionality
+            console.log('IsPDFDownloadAjaxBased:', '@(Model.IsPDFDownloadAjaxBased.ToString().ToLower())');
+            console.log('IsExcelDownloadAjaxBased:', '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())');
+
+            InitializeDataTables(@Html.Raw(Model.DatatableColumnsJson), '@Model.DataUrl', true, true, '@(Model.IsResponsiveDatatable.ToString().ToLower())', true, '@(Model.IsExcelDownloadAjaxBased.ToString().ToLower())', -1, '@(Model.IsPDFDownloadAjaxBased.ToString().ToLower())');
         }
 
     </script>
     <script src="~/js/custom-scripts/approval-script.js"></script>
-    
+
 }

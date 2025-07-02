@@ -15,6 +15,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
         where UpdateViewModel : class, IBaseCrudViewModel, IIdentitifier, new()
     {
         Task<XLWorkbook> DownloadExcel(ORLogSearchViewModel searchModel);
+        Task<byte[]> DownloadPDF(ORLogSearchViewModel searchModel);
         Task<IRepositoryResponse> GetOverrideTypes<BaseBriefVM>(IBaseSearchModel search);
         Task<bool> MergeCostsForCraft();
         Task CalculateTotalCostAndHours();

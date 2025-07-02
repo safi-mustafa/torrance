@@ -89,6 +89,7 @@ namespace Web.Controllers
         protected override CrudListViewModel OverrideCrudListVM(CrudListViewModel vm)
         {
             vm.IsExcelDownloadAjaxBased = true;
+            vm.IsPDFDownloadAjaxBased = true;
             return base.OverrideCrudListVM(vm);
         }
         public override async Task<ActionResult> Create()
@@ -147,6 +148,24 @@ namespace Web.Controllers
             // Return the Excel file as a FileStreamResult
             return File(new MemoryStream(fileBytes), contentType, fileName);
         }
+
+        public async Task<IActionResult> DownloadPDF(ORLogSearchViewModel searchModel)
+        {
+            var pdfBytes = await _overrideLogService.DownloadPDF(searchModel);
+
+            if (pdfBytes == null)
+            {
+                return BadRequest("Error generating PDF");
+            }
+
+            // Set the content type and file name for the PDF file
+            string contentType = "application/pdf";
+            string fileName = "override-logs.pdf";
+
+            // Return the PDF file as a FileStreamResult
+            return File(new MemoryStream(pdfBytes), contentType, fileName);
+        }
+
         public IActionResult _CostRow(ORLogCostViewModel model, int rowNumber)
         {
             ViewData["RowNumber"] = rowNumber;

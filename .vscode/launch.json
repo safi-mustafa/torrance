@@ -1,0 +1,26 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C#: Web Project (Hot Reload)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Web/Web.csproj",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "C#: Torrance Debug",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Torrance/Torrance.csproj",
+      "preLaunchTask": "build"
+    }
+  ]
+}

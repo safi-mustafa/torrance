@@ -1,52 +1,42 @@
-﻿<div class="col-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">
-                Cost By Department (Override)
-            </h5>
-            <p class="card-text">
-                <div class="am-pie-chart" id="override-department"></div>
-            </p>
+﻿@model ViewModels.Dashboard.DashboardViewModel
+@{
+    var columnClass = ViewData["ColumnClass"]?.ToString() ?? "col-12";
+}
 
+@if (User.IsInRole("SuperAdmin") || User.IsInRole("Administrator") || User.IsInRole("Approver"))
+{
+    <div class="@columnClass">
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Count by Unit</h5>
+                <p class="card-text">
+                <div class="am-chart" id="override-unit-count"></div>
+                </p>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">
-                Cost By Unit (Override)
-            </h5>
-            <p class="card-text">
-                <div class="am-pie-chart" id="override-unit"></div>
-            </p>
-
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Total Hours by Unit (Override)
+                </h5>
+                <p class="card-text">
+                <div class="am-chart" id="override-unit-hours"></div>
+                </p>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">
-                Cost By Shift (Override)
-            </h5>
-            <p class="card-text">
-                <div class="am-pie-chart" id="override-shift"></div>
-            </p>
-
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Total Cost by Unit (Override)
+                </h5>
+                <p class="card-text">
+                <div class="am-chart" id="override-unit-cost"></div>
+                </p>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">
-                Cost By Request Reason (Override)
-            </h5>
-            <p class="card-text">
-                <div class="am-pie-chart" id="override-request-reason"></div>
-            </p>
-
-        </div>
-    </div>
-</div>
+}
