@@ -5,6 +5,7 @@
     var accessAllowed = ViewData["AccessAllowed"] != null && !string.IsNullOrEmpty(ViewData["AccessAllowed"].ToString()) ? bool.Parse(ViewData["AccessAllowed"].ToString()) : false;
     var multiSelect = ViewData["MultiSelect"] != null && !string.IsNullOrEmpty(ViewData["MultiSelect"].ToString()) ? bool.Parse(ViewData["MultiSelect"].ToString()) : false;
     var elementId = ViewData["Id"] != null && !string.IsNullOrEmpty(ViewData["Id"].ToString()) ? ViewData["Id"].ToString() : "multiple-unit-id";
+    var isRequired = ViewData["IsRequired"] != null && !string.IsNullOrEmpty(ViewData["IsRequired"].ToString()) ? bool.Parse(ViewData["IsRequired"].ToString()) : false;
     var selectedItems = Model.Units.Select(m =>
     new SelectListItem()
             {
@@ -17,7 +18,7 @@
 <div class="form-group">
     <label class="form-label fw-600">Unit(s)  </label>
 
-    <select class="form-control disable-field select2-hidden-accessible" id="@elementId" multiple="" data-val="true" data-val-required="At least one unit is required." name="UnitIds" aria-hidden="true">
+    <select class="form-control disable-field select2-hidden-accessible" id="@elementId" multiple="" data-val="@(isRequired.ToString().ToLower())" data-val-required="@(isRequired?"At least one unit is required.":"")" name="UnitIds" aria-hidden="true">
         @foreach (var item in selectedItems)
         {
             <option selected=@(item.Selected ? "selected" : "") value="@item.Value">@item.Text</option>

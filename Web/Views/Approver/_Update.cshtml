@@ -75,7 +75,7 @@
                     </span>
                     <span class="col-md-4">
                         @await Html.PartialAsync("~/Views/Shared/Select2/_UnitMultiSelect.cshtml", Model, new
-                                                ViewDataDictionary(ViewData) { { "MultiSelect", true}, { "Id", "unit-multiselect-id" } })
+                                 ViewDataDictionary(ViewData) { { "MultiSelect", true }, { "Id", "unit-multiselect-id" }, { "IsRequired", "false" } })
                     </span>
 
                     <span class="text-center col-md-4">
