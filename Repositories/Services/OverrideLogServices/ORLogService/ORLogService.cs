@@ -630,7 +630,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalDTHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalHours;
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalHeadCount;
-                    overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalCost.ToString("C");
+                    //overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.TotalCost.ToString("C");
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.FormattedStatus ?? "";
                     overrideLogSheet.Cell(rowNumber, ++currentColumn).Value = log.Approver?.Name ?? "";
                 }
@@ -716,12 +716,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 <th>Override Reason</th>
                 <th>Company</th>
                 <th>PO Number</th>
+                <th>Employee</th>
                 <th>ST Hours</th>
                 <th>OT Hours</th>
                 <th>DT Hours</th>
                 <th>Total Hours</th>
                 <th>Head Count</th>
-                <th>Total Cost</th>
             </tr>
         </thead>
         <tbody>";
@@ -742,22 +742,18 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 <td>{(item.Reason ?? "").Replace("<", "&lt;").Replace(">", "&gt;")}</td>
                 <td>{item.Company?.Name ?? ""}</td>
                 <td>{item.PoNumber.ToString() ?? ""}</td>
+                <td>{item.EmployeeNames ?? ""}</td>
                 <td>{item.TotalSTHours}</td>
                 <td>{item.TotalOTHours}</td>
                 <td>{item.TotalDTHours}</td>
                 <td>{item.TotalHours}</td>
                 <td>{item.TotalHeadCount.ToString()}</td>
-                <td>{item.TotalCost:C}</td>
             </tr>";
             }
 
             html += @"
         </tbody>
     </table>
-    <script>
-        // Auto-print when loaded (optional)
-        // window.onload = function() { window.print(); }
-    </script>
 </body>
 </html>";
 
@@ -851,12 +847,12 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     ExecutablePath = executablePath,
                     Args = new[]
                     {
-                        "--no-sandbox",
-                        "--disable-setuid-sandbox",
-                        "--disable-dev-shm-usage",
-                        "--disable-web-security",
-                        "--disable-features=VizDisplayCompositor"
-                    }
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-web-security",
+                "--disable-features=VizDisplayCompositor"
+            }
                 };
 
                 using var browser = await Puppeteer.LaunchAsync(launchOptions);
@@ -870,17 +866,22 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                     WaitUntil = new[] { WaitUntilNavigation.Networkidle0 }
                 });
 
-                // Generate PDF
+                // Wait for content to render
+                await page.WaitForTimeoutAsync(1000);
+
+                // Generate PDF with landscape configuration
                 var pdfBytes = await page.PdfDataAsync(new PdfOptions
                 {
                     Format = PuppeteerSharp.Media.PaperFormat.A4,
+                    Landscape = true,
+                    PreferCSSPageSize = false, 
                     PrintBackground = true,
                     MarginOptions = new PuppeteerSharp.Media.MarginOptions
                     {
-                        Top = "20px",
-                        Right = "20px",
-                        Bottom = "20px",
-                        Left = "20px"
+                        Top = "0.5in",
+                        Right = "0.5in",
+                        Bottom = "0.5in",
+                        Left = "0.5in"
                     }
                 });
 
@@ -892,7 +893,6 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
                 throw;
             }
         }
-
         private void SetExcelHeaders(IXLWorksheet overrideLogSheet, int rowNumber)
         {
             overrideLogSheet.Row(rowNumber).Style.Font.Bold = true; // uncomment it to bold the text of headers row 
@@ -919,7 +919,7 @@ namespace Repositories.Services.OverrideLogServices.ORLogService
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "DT Hours";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Hours";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Head Count";
-            overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Cost";
+            //overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Total Cost";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Status";
             overrideLogSheet.Cell(rowNumber, currentColumn++).Value = "Approver";
 
